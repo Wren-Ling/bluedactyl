@@ -1,0 +1,62 @@
+/vendor
+.git/
+.env
+.github/workflows/ci.yaml
+
+
+# Elytra and Wings binary
+elytra
+!elytra/
+wings
+!wings
+bin/
+
+*.DS_Store*
+!.env.ci
+.env*
+!.env.example
+.vagrant/
+storage/framework/*
+/.idea
+/nbproject
+/.direnv
+
+node_modules
+*.log
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
+.yarn
+public/assets/manifest.json
+
+# For local development with docker
+docker-compose.yml
+local_docker
+/srv
+/var
+/data
+
+# for image related files
+misc
+.php-cs-fixer.cache
+coverage.xml
+resources/lang/locales.js
+.phpunit.result.cache
+
+/public/build
+/public/hot
+result
+#docker-compose.yaml
+.swc/
+.turbo
+# Sentry Config File
+.env.sentry-build-plugin
+
+# Nix specific stuff
+nix/docker/wings/pterodactyl
+nix/docker/maria/mariadata
+nix/docker/wings/etc/
+nix/docker/wings/lib/
+nix/docker/maria/mariadb_data/
+nix/mariadb/
+mariadb_data/

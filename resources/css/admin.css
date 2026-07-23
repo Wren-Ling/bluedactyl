@@ -1,0 +1,8 @@
+@import 'tailwindcss';
+@import 'basecoat-css';
+
+/* 暗色模式 sidebar logo: 白底黑图标 */
+.dark .sidebar header .size-8 {
+    background-color: white;
+    color: black;
+}
