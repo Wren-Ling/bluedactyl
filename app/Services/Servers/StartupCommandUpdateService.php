@@ -18,14 +18,13 @@ class StartupCommandUpdateService
     /**
      * Updates the startup command for a server and syncs the configuration with Wings.
      *
-     * @throws \Pterodactyl\Exceptions\Http\Connection\DaemonConnectionException
      * @throws \Throwable
      */
     public function handle(Server $server, string $startup): Server
     {
         $original = $server->startup;
 
-        return $this->connection->transaction(function () use ($server, $startup, $original) {
+        $server = $this->connection->transaction(function () use ($server, $startup, $original) {
             $server->update(['startup' => $startup]);
 
             // Log the activity
@@ -37,10 +36,21 @@ class StartupCommandUpdateService
                 ])
                 ->log();
 
-            // Sync the server configuration with Wings daemon
-            $this->daemonServerRepository->setServer($server)->sync();
-
             return $server->refresh();
         });
+
+        // Attempt to sync with Wings daemon, but don't break the request if it fails.
+        // The sync can time out when Wings is busy (e.g. installing), and we don't
+        // want that to prevent the database update from completing.
+        try {
+            $this->daemonServerRepository->setServer($server)->sync();
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Failed to sync startup command to Wings', [
+                'server' => $server->uuid,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return $server;
     }
 }

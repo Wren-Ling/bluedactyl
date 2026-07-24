@@ -1,7 +1,6 @@
-import { ArrowLeft, ArrowRight } from '@gravity-ui/icons';
-import styled from 'styled-components';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-import Button from '@/components/elements/Button';
+import { Button } from '@/components/ui/button';
 
 import { PaginatedResult } from '@/api/http';
 
@@ -18,8 +17,6 @@ interface Props<T> {
     onPageSelect: (page: number) => void;
     children: (props: RenderFuncProps<T>) => React.ReactNode;
 }
-
-const Block = styled(Button)``;
 
 function Pagination<T>({ data: { items, pagination }, onPageSelect, children }: Props<T>) {
     const isFirstPage = pagination.currentPage === 1;
@@ -42,54 +39,40 @@ function Pagination<T>({ data: { items, pagination }, onPageSelect, children }: 
             {children({ items, isFirstPage, isLastPage })}
             {pages.length > 1 && (
                 <div className={`flex justify-center mt-4`}>
-                    <div
-                        className={`flex justify-center gap-3 p-[4px] w-fit bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#00000017] rounded-md`}
-                    >
-                        <Block
-                            isSecondary
-                            color={'primary'}
+                    <div className='flex justify-center gap-1 p-1 w-fit bg-muted/30 border border-border rounded-md'>
+                        <Button
+                            variant='ghost'
+                            size='sm'
+                            disabled={pagination.currentPage <= 1}
                             onClick={() =>
                                 pagination.currentPage > 1 &&
                                 pagination.totalPages > 1 &&
                                 onPageSelect(pagination.currentPage - 1)
                             }
                         >
-                            <ArrowLeft
-                                width={22}
-                                height={22}
-                                fill={'currentColor'}
-                                className={`${pagination.currentPage === 1 ? 'text-neutral-500 cursor-not-allowed' : 'text-white'}`}
-                            />
-                        </Block>
+                            <ChevronLeft className='size-4' />
+                        </Button>
                         {pages.map((i) => (
-                            <Block
-                                isSecondary={pagination.currentPage !== i}
-                                color={'primary'}
+                            <Button
+                                variant={pagination.currentPage === i ? 'default' : 'ghost'}
+                                size='sm'
                                 key={`block_page_${i}`}
                                 onClick={() => onPageSelect(i)}
                             >
-                                {i === pagination.currentPage ? (
-                                    <span className='text-neutral-500 cursor-not-allowed'>{i}</span>
-                                ) : (
-                                    i
-                                )}
-                            </Block>
+                                {i}
+                            </Button>
                         ))}
-                        <Block
-                            isSecondary
-                            color={'primary'}
+                        <Button
+                            variant='ghost'
+                            size='sm'
+                            disabled={pagination.currentPage >= pagination.totalPages}
                             onClick={() =>
                                 pagination.currentPage < pagination.totalPages &&
                                 onPageSelect(pagination.currentPage + 1)
                             }
                         >
-                            <ArrowRight
-                                width={22}
-                                height={22}
-                                fill={'currentColor'}
-                                className={`${pagination.currentPage === pagination.totalPages ? 'text-neutral-500 cursor-not-allowed' : 'text-white'}`}
-                            />
-                        </Block>
+                            <ChevronRight className='size-4' />
+                        </Button>
                     </div>
                 </div>
             )}

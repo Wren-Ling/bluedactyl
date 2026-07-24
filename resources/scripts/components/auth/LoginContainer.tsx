@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
 
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
-import Button from '@/components/elements/Button';
+import { Button } from '@/components/ui/button';
 import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
 import Field from '@/components/elements/Field';
 import Logo from '@/components/elements/PyroLogo';
@@ -125,9 +125,9 @@ function LoginContainer() {
 
                     <div className={`mt-6`}>
                         <Button
-                            className={`relative mt-4 w-full rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer`}
-                            type={'submit'}
-                            size={'xlarge'}
+                            className='relative mt-4 w-full rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer'
+                            type='submit'
+                            size='lg'
                             isLoading={isSubmitting}
                             disabled={isSubmitting}
                         >

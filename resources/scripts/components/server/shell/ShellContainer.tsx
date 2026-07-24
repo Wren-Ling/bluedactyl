@@ -15,7 +15,7 @@ import {
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Spinner from '@/components/elements/Spinner';
-import { Switch } from '@/components/elements/SwitchV2';
+import { Switch } from '@/components/ui/switch';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import OperationProgressModal from '@/components/server/operations/OperationProgressModal';
 import WingsOperationProgressModal from '@/components/server/operations/WingsOperationProgressModal';

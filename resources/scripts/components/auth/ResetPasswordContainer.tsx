@@ -4,11 +4,11 @@ import { Link, useParams } from 'react-router-dom';
 import { object, ref, string } from 'yup';
 
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
-import Button from '@/components/elements/Button';
+import { Button } from '@/components/ui/button';
 import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
 import ContentBox from '@/components/elements/ContentBox';
 import Field from '@/components/elements/Field';
-import Input from '@/components/elements/Input';
+import { Input } from '@/components/ui/input';
 
 import CaptchaManager from '@/lib/captcha';
 
@@ -140,8 +140,8 @@ function ResetPasswordContainer() {
                         <div className={`mt-6`}>
                             <Button
                                 className='w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2'
-                                size={'xlarge'}
-                                type={'submit'}
+                                size='lg'
+                                type='submit'
                                 disabled={isSubmitting}
                                 isLoading={isSubmitting}
                             >

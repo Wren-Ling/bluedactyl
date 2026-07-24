@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { object, string } from 'yup';
 
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
-import Button from '@/components/elements/Button';
+import { Button } from '@/components/ui/button';
 import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
 import ContentBox from '@/components/elements/ContentBox';
 import Field from '@/components/elements/Field';
@@ -92,9 +92,9 @@ const ForgotPasswordContainer = () => {
 
                         <div className='mt-6'>
                             <Button
-                                className={`w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2`}
+                                className='w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2'
                                 type='submit'
-                                size='xlarge'
+                                size='lg'
                                 isLoading={isSubmitting}
                                 disabled={isSubmitting}
                             >

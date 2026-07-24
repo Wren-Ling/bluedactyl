@@ -12,6 +12,7 @@ wings
 bin/
 
 *.DS_Store*
+tmp/
 !.env.ci
 .env*
 !.env.example

@@ -2,7 +2,7 @@ import { useField } from 'formik';
 import { memo, useCallback } from 'react';
 import isEqual from 'react-fast-compare';
 
-import Input from '@/components/elements/Input';
+import { Input } from '@/components/ui/input';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 
 interface Props {

@@ -7,7 +7,7 @@ import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import Code from '@/components/elements/Code';
 import CopyOnClick from '@/components/elements/CopyOnClick';
-import { Textarea } from '@/components/elements/Input';
+import { Textarea } from '@/components/ui/textarea';
 import InputSpinner from '@/components/elements/InputSpinner';
 import Spinner from '@/components/elements/Spinner';
 import { Dialog } from '@/components/elements/dialog';

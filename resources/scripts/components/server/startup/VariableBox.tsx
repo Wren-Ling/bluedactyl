@@ -12,7 +12,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/elements/DropdownMenu';
 import InputSpinner from '@/components/elements/InputSpinner';
-import { Switch } from '@/components/elements/SwitchV2';
+import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/elements/TextInput';
 
 import { ServerEggVariable } from '@/api/server/types';

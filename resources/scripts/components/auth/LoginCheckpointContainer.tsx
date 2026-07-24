@@ -5,7 +5,7 @@ import type { Location, RouteProps } from 'react-router-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
-import Button from '@/components/elements/Button';
+import { Button } from '@/components/ui/button';
 import ContentBox from '@/components/elements/ContentBox';
 import Field from '@/components/elements/Field';
 
@@ -62,8 +62,8 @@ function LoginCheckpointForm() {
                 <div className={`mt-6`}>
                     <Button
                         className='w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2'
-                        size={'xlarge'}
-                        type={'submit'}
+                        size='lg'
+                        type='submit'
                         disabled={isSubmitting}
                         isLoading={isSubmitting}
                     >

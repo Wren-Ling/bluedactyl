@@ -1,4 +1,4 @@
-import { Checkbox } from '@/components/elements/CheckboxNew';
+import { Checkbox } from '@/components/ui/checkbox';
 
 import { ServerContext } from '@/state/server';
 

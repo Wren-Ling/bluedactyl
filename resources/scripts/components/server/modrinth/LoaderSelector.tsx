@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { Checkbox } from '@/components/elements/CheckboxLabel';
-import Input from '@/components/elements/Input';
+import { Input } from '@/components/ui/input';
 
 import { ServerContext } from '@/state/server';
 

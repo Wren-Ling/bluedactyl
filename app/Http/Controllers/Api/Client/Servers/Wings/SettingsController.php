@@ -17,6 +17,7 @@ use Pterodactyl\Http\Requests\Api\Client\Servers\Settings\RenameServerRequest;
 use Pterodactyl\Http\Requests\Api\Client\Servers\Settings\SetDockerImageRequest;
 use Pterodactyl\Http\Requests\Api\Client\Servers\Settings\SetEggRequest;
 use Pterodactyl\Http\Requests\Api\Client\Servers\Settings\PreviewEggRequest;
+use Pterodactyl\Http\Requests\Api\Client\Servers\Settings\RevertDockerImageRequest;
 use Pterodactyl\Http\Requests\Api\Client\Servers\Settings\ApplyEggChangeRequest;
 use Pterodactyl\Http\Requests\Api\Client\Servers\Settings\ReinstallServerRequest;
 
@@ -96,6 +97,33 @@ class SettingsController extends ClientApiController
                 ->property(['old' => $original, 'new' => $request->input('docker_image')])
                 ->log();
         }
+
+        return new JsonResponse([], Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * Reverts the Docker image back to the egg's default image.
+     *
+     * @throws \Throwable
+     */
+    public function revertDockerImage(RevertDockerImageRequest $request, Server $server): JsonResponse
+    {
+        $original = $server->image;
+        $defaultImage = $server->getDefaultDockerImage();
+
+        if (empty($defaultImage)) {
+            throw new BadRequestHttpException('No default docker image available for this server\'s egg.');
+        }
+
+        $server->forceFill(['image' => $defaultImage])->saveOrFail();
+
+        Activity::event('server:startup.image.reverted')
+            ->property([
+                'old' => $original,
+                'new' => $defaultImage,
+                'reverted_to_egg_default' => true,
+            ])
+            ->log();
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }

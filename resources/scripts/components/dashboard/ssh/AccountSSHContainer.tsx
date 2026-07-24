@@ -9,7 +9,7 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import Code from '@/components/elements/Code';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
-import Input from '@/components/elements/Input';
+import { Input } from '@/components/ui/input';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';

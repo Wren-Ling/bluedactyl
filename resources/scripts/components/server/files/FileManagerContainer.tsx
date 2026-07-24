@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import Can from '@/components/elements/Can';
-import { Checkbox } from '@/components/elements/CheckboxNew';
+import { Checkbox } from '@/components/ui/checkbox';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import { ServerError } from '@/components/elements/ScreenBlock';

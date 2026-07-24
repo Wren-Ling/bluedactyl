@@ -127,11 +127,12 @@
                 <section>
                     <div role="group" class="field">
                         <label for="pAllocationIP" >IP Address</label>
-                        <select class="select" name="allocation_ip" id="pAllocationIP">
+                        <input type="text" class="input" name="allocation_ip" id="pAllocationIP" list="pAllocationIPList" placeholder="Select or type an IP address" />
+                        <datalist id="pAllocationIPList">
                             @foreach($allocations as $allocation)
-                                <option value="{{ $allocation->ip }}">{{ $allocation->ip }}</option>
+                                <option value="{{ $allocation->ip }}">
                             @endforeach
-                        </select>
+                        </datalist>
                         <p class="text-sm text-muted-foreground">Select an IP address to assign ports to.</p>
                     </div>
                     <div role="group" class="field">

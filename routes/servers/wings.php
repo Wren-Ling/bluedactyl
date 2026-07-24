@@ -113,6 +113,7 @@ Route::group([
         Route::post('/rename', [Wings\SettingsController::class, 'rename']);
         Route::post('/reinstall', [Wings\SettingsController::class, 'reinstall']);
         Route::put('/docker-image', [Wings\SettingsController::class, 'dockerImage']);
+        Route::post('/docker-image/revert', [Wings\SettingsController::class, 'revertDockerImage']);
         Route::put('/egg', [Wings\SettingsController::class, 'changeEgg']);
         Route::post('/egg/preview', [Wings\SettingsController::class, 'previewEggChange'])
             ->middleware('server.operation.rate-limit');

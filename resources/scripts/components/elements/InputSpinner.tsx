@@ -1,27 +1,13 @@
-import styled, { css } from 'styled-components';
+import { cn } from '@/lib/utils';
 
-import Select from '@/components/elements/Select';
 import Spinner from '@/components/elements/Spinner';
 
 import FadeTransition from './transitions/FadeTransition';
 
-const Container = styled.div<{ visible?: boolean }>`
-    position: relative
-        ${(props) =>
-            props.visible &&
-            css`
-                & ${Select} {
-                    background-image: none;
-                }
-            `};
-`;
-
 const InputSpinner = ({ visible, children }: { visible: boolean; children: React.ReactNode }) => (
-    <Container visible={visible}>
+    <div className={cn('relative', visible && '[&_select]:appearance-none')}>
         <FadeTransition
-            css={`
-                position: relative;
-            `}
+            className='relative'
             show={visible}
             duration='duration-150'
             appear
@@ -32,7 +18,7 @@ const InputSpinner = ({ visible, children }: { visible: boolean; children: React
             </div>
         </FadeTransition>
         {children}
-    </Container>
+    </div>
 );
 
 export default InputSpinner;

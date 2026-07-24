@@ -18,207 +18,237 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-$(document).ready(function() {
-    $('#pNestId').select2({
-        placeholder: 'Select a Nest',
-    }).change();
+var allAllocations = [];
+var allocPage = 0;
+var allocPageSize = 10;
+var selectedAllocs = {};
 
-    $('#pEggId').select2({
-        placeholder: 'Select a Nest Egg',
-    });
-
-    $('#pPackId').select2({
-        placeholder: 'Select a Service Pack',
-    });
-
-    $('#pNodeId').select2({
-        placeholder: 'Select a Node',
-    }).change();
-
-    $('#pAllocation').select2({
-        placeholder: 'Select a Default Allocation',
-    });
-
-    $('#pAllocationAdditional').select2({
-        placeholder: 'Select Additional Allocations',
-    });
-});
-
-let lastActiveBox = null;
-$(document).on('click', function(event) {
-    if (lastActiveBox !== null) {
-        lastActiveBox.removeClass('box-primary');
+function populateOptions($select, items, placeholder) {
+    $select.html('');
+    if (placeholder) {
+        $select.append($('<option>', { value: '', text: placeholder }));
     }
-
-    lastActiveBox = $(event.target).closest('.box');
-    lastActiveBox.addClass('box-primary');
-});
-$('#pNodeId').on('change', function() {
-    currentNode = $(this).val();
-
-    $.each(Pyrodactyl.nodeData, function(i, v) {
-        if (v.id == currentNode) {
-            $('#pAllocation').html('').select2({
-                data: v.allocations,
-                placeholder: 'Select a Default Allocation',
-            });
-
-            updateAdditionalAllocations();
-        }
-    });
-});
-
-$('#pNestId').on('change', function(event) {
-    const nestId = $(this).val();
-    $('#pEggId').html('').select2({
-        data: $.map(_.get(Pyrodactyl.nests, $(this).val() + '.eggs', []), function(item) {
-            return {
-                id: item.id,
-                text: item.name,
-            };
-        }),
-    }).change();
-});
-
-$('#pEggId').on('change', function(event) {
-    let parentChain = _.get(Pyrodactyl.nests, $('#pNestId').val(), null);
-    let objectChain = _.get(parentChain, 'eggs.' + $(this).val(), null);
-
-    const images = _.get(objectChain, 'docker_images', {})
-    $('#pDefaultContainer').html('');
-    const keys = Object.keys(images);
-    for (let i = 0; i < keys.length; i++) {
-        let opt = document.createElement('option');
-        opt.value = images[keys[i]];
-        opt.innerText = keys[i] + " (" + images[keys[i]] + ")";
-        $('#pDefaultContainer').append(opt);
-    }
-
-    if (!_.get(objectChain, 'startup', false)) {
-        $('#pStartup').val(_.get(parentChain, 'startup', 'ERROR: Startup Not Defined!'));
-    } else {
-        $('#pStartup').val(_.get(objectChain, 'startup'));
-    }
-
-    $('#pPackId').html('').select2({
-        data: [{ id: 0, text: 'No Service Pack' }].concat(
-            $.map(_.get(objectChain, 'packs', []), function(item, i) {
-                return {
-                    id: item.id,
-                    text: item.name + ' (' + item.version + ')',
-                };
-            })
-        ),
-    });
-
-    function escapeHtml(str) {
-        var div = document.createElement('div');
-        div.appendChild(document.createTextNode(str));
-        return div.innerHTML;
-    }
-
-    const variableIds = {};
-    $('#appendVariablesTo').html('');
-    $.each(_.get(objectChain, 'variables', []), function(i, item) {
-        variableIds[item.env_variable] = 'var_ref_' + item.id;
-
-        let isRequired = (item.required === 1) ? '<span class="label label-danger">Required</span> ' : '';
-        let dataAppend = ' \
-            <div class="form-group col-sm-6"> \
-                <label for="var_ref_' + escapeHtml(item.id) + '" class="control-label">' + isRequired + escapeHtml(item.name) + '</label> \
-                <input type="text" id="var_ref_' + escapeHtml(item.id) + '" autocomplete="off" name="environment[' + escapeHtml(item.env_variable) + ']" class="form-control" value="' + escapeHtml(item.default_value) + '" /> \
-                <p class="text-muted small">' + escapeHtml(item.description) + '<br /> \
-                <strong>Access in Startup:</strong> <code>{{' + escapeHtml(item.env_variable) + '}}</code><br /> \
-                <strong>Validation Rules:</strong> <code>' + escapeHtml(item.rules) + '</code></small></p> \
-            </div> \
-        ';
-        $('#appendVariablesTo').append(dataAppend);
-    });
-
-    // If you receive a warning on this line, it should be fine to ignore. this function is
-    // defined in "resources/views/admin/servers/new.blade.php" near the bottom of the file.
-    serviceVariablesUpdated($('#pEggId').val(), variableIds);
-});
-
-$('#pAllocation').on('change', function() {
-    updateAdditionalAllocations();
-});
-
-function updateAdditionalAllocations() {
-    let currentAllocation = $('#pAllocation').val();
-    let currentNode = $('#pNodeId').val();
-
-    $.each(Pyrodactyl.nodeData, function(i, v) {
-        if (v.id == currentNode) {
-            let allocations = [];
-
-            for (let i = 0; i < v.allocations.length; i++) {
-                const allocation = v.allocations[i];
-
-                if (allocation.id != currentAllocation) {
-                    allocations.push(allocation);
-                }
-            }
-
-            $('#pAllocationAdditional').html('').select2({
-                data: allocations,
-                placeholder: 'Select Additional Allocations',
-            });
-        }
+    $.each(items, function(i, item) {
+        $select.append($('<option>', { value: item.id, text: item.text }));
     });
 }
 
-function initUserIdSelect(data) {
-    function escapeHtml(str) {
-        var div = document.createElement('div');
-        div.appendChild(document.createTextNode(str));
-        return div.innerHTML;
+function updateAllocSummary() {
+    var ids = Object.keys(selectedAllocs);
+    var $summary = $('#pAllocSummary');
+    var $hidden = $('#pAllocation');
+    var $additional = $('#pAllocationAdditional');
+    var count = ids.length;
+
+    if (count === 0) {
+        $summary.text('No allocations selected');
+        $hidden.val('');
+        $additional.html('');
+        return;
+    }
+    var firstId = ids[0];
+    var firstText = selectedAllocs[firstId];
+    $hidden.val(firstId);
+    $summary.html(count + ' selected (Default: <strong>' + firstText + '</strong>)');
+    $additional.html('');
+    for (var i = 1; i < ids.length; i++) {
+        $additional.append($('<option>', { value: ids[i], selected: true }));
+    }
+}
+
+function renderAllocPage() {
+    var start = allocPage * allocPageSize;
+    var pageItems = allAllocations.slice(start, start + allocPageSize);
+    var totalPages = Math.ceil(allAllocations.length / allocPageSize);
+    var $list = $('#pAllocationsList').empty();
+    var $empty = $('#pAllocEmpty');
+    var $loader = $('#pAllocLoader');
+
+    $loader.addClass('hidden');
+
+    if (allAllocations.length === 0) {
+        $empty.removeClass('hidden');
+        renderPagination(0);
+        return;
+    }
+    $empty.addClass('hidden');
+
+    $.each(pageItems, function(i, a) {
+        var id = String(a.id);
+        var checked = selectedAllocs.hasOwnProperty(id);
+        var isDefault = checked && id === Object.keys(selectedAllocs)[0];
+        var $row = $('<label class="alloc-row">');
+        var $cb = $('<input type="checkbox" value="' + id + '"' + (checked ? ' checked' : '') + '>');
+        $cb.on('change', function() {
+            if (this.checked) {
+                selectedAllocs[id] = a.text;
+            } else {
+                delete selectedAllocs[id];
+            }
+            renderAllocPage();
+            updateAllocSummary();
+        });
+        $row.append($cb);
+        $row.append('<span class="flex-1 text-sm">' + a.text + '</span>');
+        if (isDefault) {
+            $row.append('<span class="badge" data-variant="primary">Default</span>');
+        } else if (checked) {
+            $row.append('<span class="badge" data-variant="outline">Additional</span>');
+        }
+        $list.append($row);
+    });
+
+    $('#pAllocSelectedCount').text(Object.keys(selectedAllocs).length + ' selected');
+    renderPagination(totalPages);
+}
+
+function renderPagination(totalPages) {
+    var $nav = $('#pAllocPagination').empty();
+    if (totalPages <= 1) return;
+
+    $nav.append(
+        '<li><button type="button" class="btn" data-size="sm" data-variant="ghost"' +
+        (allocPage === 0 ? ' disabled' : '') +
+        ' onclick="goAllocPage(' + (allocPage - 1) + ')"><svg class="size-4 lucide lucide-chevron-left" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button></li>'
+    );
+
+    for (var p = 0; p < totalPages; p++) {
+        $nav.append(
+            '<li><button type="button" class="btn" data-size="sm" data-variant="' +
+            (p === allocPage ? 'outline' : 'ghost') +
+            '" data-size="icon" onclick="goAllocPage(' + p + ')">' + (p + 1) + '</button></li>'
+        );
     }
 
-    $('#pUserId').select2({
-        ajax: {
-            url: '/admin/users/accounts.json',
-            dataType: 'json',
-            delay: 250,
+    $nav.append(
+        '<li><button type="button" class="btn" data-size="sm" data-variant="ghost"' +
+        (allocPage >= totalPages - 1 ? ' disabled' : '') +
+        ' onclick="goAllocPage(' + (allocPage + 1) + ')"><svg class="size-4 lucide lucide-chevron-right" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button></li>'
+    );
+}
 
-            data: function(params) {
-                return {
-                    filter: { email: params.term },
-                    page: params.page,
-                };
-            },
+function goAllocPage(page) {
+    allocPage = page;
+    renderAllocPage();
+}
 
-            processResults: function(data, params) {
-                return { results: data };
-            },
+function confirmAllocations() {
+    updateAllocSummary();
+    document.getElementById('allocModal').close();
+}
 
-            cache: true,
-        },
+function openAllocModal() {
+    var nodeId = $('#pNodeId').val();
+    var data = window.Pyrodactyl && Pyrodactyl.nodeData ? Pyrodactyl.nodeData : [];
+    var node = data.find(function(v) { return v.id == nodeId; });
 
-        data: data,
-        escapeMarkup: function(markup) { return markup; },
-        minimumInputLength: 2,
-        templateResult: function(data) {
-            if (data.loading) return escapeHtml(data.text);
+    if (!node || !node.allocations || node.allocations.length === 0) {
+        allAllocations = [];
+        renderAllocPage();
+        document.getElementById('allocModalNodeName').textContent = node ? node.text : 'N/A';
+        document.getElementById('allocModal').showModal();
+        return;
+    }
+    document.getElementById('allocModalNodeName').textContent = node.text;
+    allAllocations = node.allocations;
+    allocPage = 0;
+    renderAllocPage();
+    document.getElementById('allocModal').showModal();
+}
 
-            return '<div class="user-block"> \
-                <img class="img-circle img-bordered-xs" src="https://cravatar.cn/avatar/' + escapeHtml(data.md5) + '?s=120" alt="User Image"> \
-                <span class="username"> \
-                    <a href="#">' + escapeHtml(data.name_first) + ' ' + escapeHtml(data.name_last) + '</a> \
-                </span> \
-                <span class="description"><strong>' + escapeHtml(data.email) + '</strong> - ' + escapeHtml(data.username) + '</span> \
-            </div>';
-        },
-        templateSelection: function(data) {
-            return '<div> \
-                <span> \
-                    <img class="img-rounded img-bordered-xs" src="https://cravatar.cn/avatar/' + escapeHtml(data.md5) + '?s=120" style="height:28px;margin-top:-4px;" alt="User Image"> \
-                </span> \
-                <span style="padding-left:5px;"> \
-                    ' + escapeHtml(data.name_first) + ' ' + escapeHtml(data.name_last) + ' (<strong>' + escapeHtml(data.email) + '</strong>) \
-                </span> \
-            </div>';
+$(document).ready(function() {
+    $('#pNodeId').on('change', function() {
+        var nodeId = $(this).val();
+        selectedAllocs = {};
+        var data = window.Pyrodactyl && Pyrodactyl.nodeData ? Pyrodactyl.nodeData : [];
+        var node = data.find(function(v) { return v.id == nodeId; });
+        if (!node) {
+            $('#pAllocation').val('');
+            $('#pAllocationAdditional').html('');
+            $('#pAllocSummary').text('Select a node first');
+            return;
+        }
+        $('#pAllocSummary').text('No allocations selected');
+    });
+
+    $('#openAllocBtn').on('click', function() {
+        var nodeId = $('#pNodeId').val();
+        if (!nodeId) {
+            alert('Please select a node first.');
+            return;
+        }
+        openAllocModal();
+    });
+
+    $('#pNestId').on('change', function() {
+        const nestId = $(this).val();
+        if (!nestId) {
+            populateOptions($('#pEggId'), [], 'Select a nest first');
+            $('#pEggId').trigger('change');
+            return;
+        }
+        const nests = window.Pyrodactyl && Pyrodactyl.nests ? Pyrodactyl.nests : {};
+        const eggs = _.get(nests, nestId + '.eggs', []);
+        const eggOptions = $.map(eggs, function(item) {
+            return { id: item.id, text: item.name };
+        });
+        populateOptions($('#pEggId'), eggOptions, 'Select a Nest Egg');
+        $('#pEggId').trigger('change');
+    });
+
+    $('#pEggId').on('change', function() {
+        const nests = window.Pyrodactyl && Pyrodactyl.nests ? Pyrodactyl.nests : {};
+        const parentChain = _.get(nests, $('#pNestId').val(), null);
+        const objectChain = _.get(parentChain, 'eggs.' + $(this).val(), null);
+
+        const $container = $('#pDefaultContainer');
+        $container.html('');
+        if (!objectChain) {
+            $container.append($('<option>', { value: '', text: 'Select an egg first' }));
+            $('#pStartup').val('');
+            $('#appendVariablesTo').html('');
+            return;
         }
 
+        const images = _.get(objectChain, 'docker_images', {});
+        const keys = Object.keys(images);
+        for (let i = 0; i < keys.length; i++) {
+            $container.append($('<option>', {
+                value: images[keys[i]],
+                text: keys[i] + ' (' + images[keys[i]] + ')',
+            }));
+        }
+
+        if (!_.get(objectChain, 'startup', false)) {
+            $('#pStartup').val(_.get(parentChain, 'startup', 'ERROR: Startup Not Defined!'));
+        } else {
+            $('#pStartup').val(_.get(objectChain, 'startup'));
+        }
+
+        const variableIds = {};
+        $('#appendVariablesTo').html('');
+        $.each(_.get(objectChain, 'variables', []), function(i, item) {
+            variableIds[item.env_variable] = 'var_ref_' + item.id;
+
+            let isRequired = (item.required === 1) ? '<span class="badge" data-variant="destructive">Required</span> ' : '';
+            let dataAppend = ' \
+                <div role="group" class="field"> \
+                    <label for="var_ref_' + escapeHtml(item.id) + '">' + isRequired + escapeHtml(item.name) + '</label> \
+                    <input type="text" id="var_ref_' + escapeHtml(item.id) + '" autocomplete="off" name="environment[' + escapeHtml(item.env_variable) + ']" value="' + escapeHtml(item.default_value) + '" /> \
+                    <p class="text-sm text-muted-foreground">' + escapeHtml(item.description) + '<br /> \
+                    <strong>Access in Startup:</strong> <code>{{' + escapeHtml(item.env_variable) + '}}</code><br /> \
+                    <strong>Validation Rules:</strong> <code>' + escapeHtml(item.rules) + '</code></p> \
+                </div> \
+            ';
+            $('#appendVariablesTo').append(dataAppend);
+        });
+
+        serviceVariablesUpdated($('#pEggId').val(), variableIds);
     });
+});
+
+function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
 }

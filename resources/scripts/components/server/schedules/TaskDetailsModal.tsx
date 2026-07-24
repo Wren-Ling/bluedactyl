@@ -9,7 +9,7 @@ import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import FormikSwitchV2 from '@/components/elements/FormikSwitchV2';
-import { Textarea } from '@/components/elements/Input';
+import { Textarea } from '@/components/ui/textarea';
 import Select from '@/components/elements/Select';
 
 import asModal from '@/hoc/asModal';

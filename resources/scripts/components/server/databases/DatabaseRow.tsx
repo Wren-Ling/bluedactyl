@@ -9,7 +9,7 @@ import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import Field from '@/components/elements/Field';
-import Input from '@/components/elements/Input';
+import { Input } from '@/components/ui/input';
 import Modal from '@/components/elements/Modal';
 import Spinner from '@/components/elements/Spinner';
 import { PageListItem } from '@/components/elements/pages/PageList';

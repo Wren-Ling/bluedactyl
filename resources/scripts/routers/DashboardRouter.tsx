@@ -1,41 +1,105 @@
-import { Ellipsis, Gear, House, Key, Lock } from '@gravity-ui/icons';
 import { useStoreState } from 'easy-peasy';
-import { Fragment, Suspense, useEffect, useRef, useState } from 'react';
+import {
+    BadgeCheck,
+    ChevronsUpDown,
+    Cuboid,
+    KeyRound,
+    LogOut,
+    Server,
+    Settings2,
+    User,
+    UserKey,
+} from 'lucide-react';
+import { Fragment, useRef } from 'react';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
+
+import { AnimatedThemeToggler as ModeToggle } from '@/components/ui/animated-theme-toggler';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarGroup,
+    SidebarHeader,
+    SidebarInset,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarProvider,
+    SidebarRail,
+    SidebarTrigger,
+    useSidebar,
+} from '@/components/ui/sidebar';
 
 import routes from '@/routers/routes';
 
 import DashboardContainer from '@/components/dashboard/DashboardContainer';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/elements/DropdownMenu';
-import MainSidebar from '@/components/elements/MainSidebar';
-import MainWrapper from '@/components/elements/MainWrapper';
-import { DashboardMobileMenu } from '@/components/elements/MobileFullScreenMenu';
-import MobileTopBar from '@/components/elements/MobileTopBar';
-import Logo from '@/components/elements/PyroLogo';
 import { NotFound } from '@/components/elements/ScreenBlock';
 
 import http from '@/api/http';
 
-const DashboardRouter = () => {
-    const location = useLocation();
+function AppSidebarHeader() {
+    return (
+        <SidebarHeader className='border-b border-border/50'>
+            <SidebarMenu>
+                <SidebarMenuItem>
+                    <SidebarMenuButton
+                        size='lg'
+                        className='data-[slot=sidebar-menu-button]:p-1.5!'
+                        render={<a href='#' />}
+                    >
+                        <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground'>
+                            <Cuboid className='size-5' />
+                        </div>
+                        <div className='grid flex-1 text-left text-sm leading-tight'>
+                            <span className='truncate font-semibold'>Pyrodactyl</span>
+                            <span className='truncate text-xs text-muted-foreground'>Management</span>
+                        </div>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+            </SidebarMenu>
+        </SidebarHeader>
+    );
+}
+
+function AppSidebarItems() {
+    const navItems = [
+        { title: 'Servers', url: '/', icon: <Server /> },
+        { title: 'API Keys', url: '/account/api', icon: <UserKey /> },
+        { title: 'SSH Keys', url: '/account/ssh', icon: <KeyRound /> },
+        { title: 'Settings', url: '/account', icon: <Settings2 /> },
+    ];
+
+    return (
+        <SidebarGroup>
+            <SidebarContent className='flex flex-col gap-2'>
+                {navItems.map((item) => (
+                    <NavLink to={item.url} end key={item.title}>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton tooltip={item.title}>
+                                {item.icon}
+                                <span>{item.title}</span>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </NavLink>
+                ))}
+            </SidebarContent>
+        </SidebarGroup>
+    );
+}
+
+function AppSidebarUser() {
+    const { isMobile } = useSidebar();
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
-
-    // Mobile menu state
-    const [isMobileMenuVisible, setMobileMenuVisible] = useState(false);
-
-    const toggleMobileMenu = () => {
-        setMobileMenuVisible(!isMobileMenuVisible);
-    };
-
-    const closeMobileMenu = () => {
-        setMobileMenuVisible(false);
-    };
+    const name = useStoreState((state) => state.user.data!.username);
 
     const onTriggerLogout = () => {
         http.post('/auth/logout').finally(() => {
@@ -45,152 +109,154 @@ const DashboardRouter = () => {
     };
 
     const onSelectAdminPanel = () => {
-        window.open(`/admin`);
+        window.open('/admin');
     };
-
-    // Define refs for navigation buttons.
-    const NavigationHome = useRef(null);
-    const NavigationSettings = useRef(null);
-    const NavigationApi = useRef(null);
-    const NavigationSSH = useRef(null);
-
-    const calculateTop = (pathname: string) => {
-        // Get currents of navigation refs.
-        const ButtonHome = NavigationHome.current;
-        const ButtonSettings = NavigationSettings.current;
-        const ButtonApi = NavigationApi.current;
-        const ButtonSSH = NavigationSSH.current;
-
-        // Perfectly center the page highlighter with simple math.
-        // Height of navigation links (56) minus highlight height (40) equals 16. 16 devided by 2 is 8.
-        const HighlightOffset: number = 8;
-
-        if (pathname.endsWith(`/`) && ButtonHome != null) return (ButtonHome as any).offsetTop + HighlightOffset;
-        if (pathname.endsWith(`/account`) && ButtonSettings != null)
-            return (ButtonSettings as any).offsetTop + HighlightOffset;
-        if (pathname.endsWith('/api') && ButtonApi != null) return (ButtonApi as any).offsetTop + HighlightOffset;
-        if (pathname.endsWith('/ssh') && ButtonSSH != null) return (ButtonSSH as any).offsetTop + HighlightOffset;
-        return '0';
-    };
-
-    const top = calculateTop(location.pathname);
-
-    const [height, setHeight] = useState('40px');
-
-    useEffect(() => {
-        setHeight('34px');
-        const timeoutId = setTimeout(() => setHeight('40px'), 200);
-        return () => clearTimeout(timeoutId);
-    }, [top]);
 
     return (
-        <Fragment key={'dashboard-router'}>
-            {/* Mobile Top Bar */}
-            <MobileTopBar
-                onMenuToggle={toggleMobileMenu}
-                onTriggerLogout={onTriggerLogout}
-                onSelectAdminPanel={onSelectAdminPanel}
-                rootAdmin={rootAdmin}
-            />
-
-            {/* Mobile Full Screen Menu */}
-            <DashboardMobileMenu isVisible={isMobileMenuVisible} onClose={closeMobileMenu} />
-
-            <div className='flex flex-row w-full lg:pt-0 pt-16'>
-                {/* Desktop Sidebar */}
-                <MainSidebar className='hidden lg:flex lg:relative lg:shrink-0 w-[300px] bg-[#1a1a1a]'>
-                    <div
-                        className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none '
-                        style={{
-                            top,
-                            height,
-                            opacity: top === '0' ? 0 : 1,
-                            transition:
-                                'linear(0,0.006,0.025 2.8%,0.101 6.1%,0.539 18.9%,0.721 25.3%,0.849 31.5%,0.937 38.1%,0.968 41.8%,0.991 45.7%,1.006 50.1%,1.015 55%,1.017 63.9%,1.001) 390ms',
-                        }}
+        <SidebarMenu>
+            <SidebarMenuItem>
+                <DropdownMenu>
+                    <DropdownMenuTrigger
+                        render={
+                            <SidebarMenuButton
+                                size='lg'
+                                className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+                            >
+                                <div className='flex aspect-square size-8 items-center justify-center rounded-full bg-muted text-muted-foreground'>
+                                    <User className='size-4' />
+                                </div>
+                                <div className='grid flex-1 text-left text-sm leading-tight'>
+                                    <span className='truncate font-medium'>{name}</span>
+                                    <span className='truncate text-xs'>{rootAdmin ? 'Admin' : 'User'}</span>
+                                </div>
+                                <ChevronsUpDown className='ml-auto size-4' />
+                            </SidebarMenuButton>
+                        }
                     />
-                    <div
-                        className='absolute bg-brand w-12 h-10 blur-2xl left-0 rounded-full pointer-events-none'
-                        style={{
-                            top,
-                            opacity: top === '0' ? 0 : 0.5,
-                            transition:
-                                'top linear(0,0.006,0.025 2.8%,0.101 6.1%,0.539 18.9%,0.721 25.3%,0.849 31.5%,0.937 38.1%,0.968 41.8%,0.991 45.7%,1.006 50.1%,1.015 55%,1.017 63.9%,1.001) 390ms',
-                        }}
-                    />
-                    <div className='relative flex flex-row items-center justify-between h-8'>
-                        <NavLink to={'/'} className='flex shrink-0 h-8 w-fit'>
-                            <Logo uniqueId='desktop-sidebar' />
-                            {/* <h1 className='text-[35px] font-semibold leading-[98%] tracking-[-0.05rem] mb-8'>Panel</h1> */}
-                        </NavLink>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <button className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-white/10 p-2 cursor-pointer'>
-                                    {' '}
-                                    <Ellipsis fill='currentColor' width={26} height={22} />
-                                </button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className='z-99999' sideOffset={8}>
-                                {rootAdmin && (
-                                    <DropdownMenuItem onSelect={onSelectAdminPanel}>
-                                        Admin Panel
-                                        <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
-                                            Staff
-                                        </span>
-                                    </DropdownMenuItem>
-                                )}
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem onSelect={onTriggerLogout}>Log Out</DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
-                    <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
-                    <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper'>
-                        <NavLink to={'/'} end className='flex flex-row items-center' ref={NavigationHome}>
-                            <House width={22} height={22} fill='currentColor' />
-                            <p>Servers</p>
-                        </NavLink>
-                        <NavLink to={'/account/api'} end className='flex flex-row items-center' ref={NavigationApi}>
-                            <Lock width={22} height={22} fill='currentColor' />
-                            <p>API Keys</p>
-                        </NavLink>
-                        <NavLink to={'/account/ssh'} end className='flex flex-row items-center' ref={NavigationSSH}>
-                            <Key width={22} height={22} fill='currentColor' />
-                            <p>SSH Keys</p>
-                        </NavLink>
-                        <NavLink to={'/account'} end className='flex flex-row items-center' ref={NavigationSettings}>
-                            <Gear width={22} height={22} fill='currentColor' />
-                            <p>Settings</p>
-                        </NavLink>
-                    </ul>
-                </MainSidebar>
+                    <DropdownMenuContent
+                        className='w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg'
+                        side={isMobile ? 'bottom' : 'right'}
+                        align='end'
+                        sideOffset={4}
+                    >
+                        <DropdownMenuLabel className='p-0 font-normal'>
+                            <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
+                                <div className='flex aspect-square size-8 items-center justify-center rounded-full bg-muted text-muted-foreground'>
+                                    <User className='size-4' />
+                                </div>
+                                <div className='grid flex-1 text-left text-sm leading-tight'>
+                                    <span className='truncate font-medium'>{name}</span>
+                                    <span className='truncate text-xs'>{rootAdmin ? 'Admin' : 'User'}</span>
+                                </div>
+                            </div>
+                        </DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuGroup>
+                            {rootAdmin && (
+                                <DropdownMenuItem onClick={onSelectAdminPanel}>
+                                    <BadgeCheck className='mr-2 size-4' />
+                                    Admin Panel
+                                </DropdownMenuItem>
+                            )}
+                        </DropdownMenuGroup>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={onTriggerLogout}>
+                            <LogOut className='mr-2 size-4' />
+                            Log out
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </SidebarMenuItem>
+        </SidebarMenu>
+    );
+}
 
-                <Suspense fallback={null}>
-                    <MainWrapper className='w-full'>
-                        <main
-                            data-pyro-main=''
-                            data-pyro-transitionrouter=''
-                            className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
-                        >
-                            <Routes>
-                                <Route path='' element={<DashboardContainer />} />
+function AppSidebar() {
+    return (
+        <Sidebar variant='sidebar' collapsible='offcanvas'>
+            <AppSidebarHeader />
+            <SidebarContent>
+                <AppSidebarItems />
+            </SidebarContent>
+            <SidebarFooter>
+                <AppSidebarUser />
+            </SidebarFooter>
+            <SidebarRail />
+        </Sidebar>
+    );
+}
 
-                                {routes.account.map(({ route, component: Component }) => (
-                                    <Route
-                                        key={route}
-                                        path={`/account/${route}`.replace('//', '/')}
-                                        element={<Component />}
-                                    />
+function DashboardRouter() {
+    const location = useLocation();
+
+    const getBreadcrumbs = () => {
+        const paths = location.pathname.split('/').filter(Boolean);
+        if (paths.length === 0) return [{ title: 'Dashboard', active: true }];
+
+        const breadcrumbs = [{ title: 'Dashboard', url: '/', active: false }];
+        paths.forEach((path, index) => {
+            const url = `/${paths.slice(0, index + 1).join('/')}`;
+            const title = path.charAt(0).toUpperCase() + path.slice(1);
+            breadcrumbs.push({
+                title,
+                url,
+                active: index === paths.length - 1,
+            });
+        });
+        return breadcrumbs;
+    };
+
+    return (
+        <Fragment>
+            <SidebarProvider>
+                <AppSidebar />
+                <SidebarInset>
+                    <header className='flex h-16 shrink-0 items-center gap-2 border-b px-4'>
+                        <SidebarTrigger className='-ml-1' />
+                        <nav aria-label='Breadcrumb'>
+                            <ol className='flex flex-wrap items-center gap-1.5 break-words text-sm text-muted-foreground sm:gap-2.5'>
+                                {getBreadcrumbs().map((crumb, i, arr) => (
+                                    <li key={i} className='inline-flex items-center gap-1.5 sm:gap-2.5'>
+                                        {crumb.active ? (
+                                            <span className='font-normal text-foreground'>{crumb.title}</span>
+                                        ) : (
+                                            <>
+                                                <NavLink
+                                                    to={crumb.url || '#'}
+                                                    className='transition-colors hover:text-foreground'
+                                                >
+                                                    {crumb.title}
+                                                </NavLink>
+                                                <span role='presentation' aria-hidden='true' className='[&>svg]:size-3.5'>
+                                                    /
+                                                </span>
+                                            </>
+                                        )}
+                                    </li>
                                 ))}
-
-                                <Route path='*' element={<NotFound />} />
-                            </Routes>
-                        </main>
-                    </MainWrapper>
-                </Suspense>
-            </div>
+                            </ol>
+                        </nav>
+                        <div className='ml-auto'>
+                            <ModeToggle />
+                        </div>
+                    </header>
+                    <main className='flex-1 min-w-0 overflow-hidden bg-background text-foreground'>
+                        <Routes>
+                            <Route path='' element={<DashboardContainer />} />
+                            {routes.account.map(({ route, component: Component }) => (
+                                <Route
+                                    key={route}
+                                    path={`/account/${route}`.replace('//', '/')}
+                                    element={<Component />}
+                                />
+                            ))}
+                            <Route path='*' element={<NotFound />} />
+                        </Routes>
+                    </main>
+                </SidebarInset>
+            </SidebarProvider>
         </Fragment>
     );
-};
+}
 
 export default DashboardRouter;

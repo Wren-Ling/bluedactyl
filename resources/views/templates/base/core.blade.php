@@ -1,6 +1,4 @@
-@extends('templates/wrapper', [
-    'css' => ['body' => 'bg-black'],
-])
+@extends('templates/wrapper')
 
 @section('container')
     <div data-pyro-app id="app"></div>

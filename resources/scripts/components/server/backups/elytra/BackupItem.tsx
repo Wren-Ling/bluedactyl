@@ -2,7 +2,7 @@ import { Cloud, CloudArrowUpIn, Lock } from '@gravity-ui/icons';
 import { format, formatDistanceToNow } from 'date-fns';
 
 import Can from '@/components/elements/Can';
-import { Checkbox } from '@/components/elements/CheckboxNew';
+import { Checkbox } from '@/components/ui/checkbox';
 import Spinner from '@/components/elements/Spinner';
 import { PageListItem } from '@/components/elements/pages/PageList';
 

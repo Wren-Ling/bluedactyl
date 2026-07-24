@@ -1,7 +1,5 @@
 import { Field, FieldProps } from 'formik';
 
-import Input from '@/components/elements/Input';
-
 interface Props {
     name: string;
     value: string;
@@ -22,7 +20,7 @@ const Checkbox = ({ name, value, className, ...props }: Props & InputProps) => (
             }
 
             return (
-                <Input
+                <input
                     {...field}
                     {...props}
                     className={className}

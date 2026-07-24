@@ -1,6 +1,6 @@
 import debounce from 'debounce';
 import { useCallback, useEffect, useState } from 'react';
-import { Toaster, toast } from 'sonner';
+import { toast } from 'sonner';
 
 import Can from '@/components/elements/Can';
 import ContentBox from '@/components/elements/ContentBox';
@@ -102,7 +102,6 @@ const ModrinthContainerInner = () => {
 
     return (
         <PageContentBlock title={'Mods/Plugins'}>
-            <Toaster />
             <ContentBox className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl mb-5'>
                 {/* TODO: Add a navbar to cycle between Downloaded, Download, and Dependency resolver */}
             </ContentBox>

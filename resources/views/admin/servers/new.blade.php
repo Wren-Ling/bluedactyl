@@ -4,6 +4,17 @@
     New Server
 @endsection
 
+@section('scripts')
+    @parent
+<style>
+#pAllocationsList { counter-reset: alloc-page; }
+.alloc-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.375rem 0.5rem; border-radius: 0.375rem; cursor: pointer; }
+.alloc-row:hover { background: var(--color-accent); }
+.alloc-row input[type="checkbox"] { flex-shrink: 0; }
+.alloc-row .badge { font-size: 0.625rem; padding: 0.125rem 0.375rem; }
+</style>
+@endsection
+
 @section('content-header')
     <h1 class="text-xl font-bold">Create Server</h1>
     <p class="text-sm text-muted-foreground">Add a new server to the panel.</p>
@@ -36,7 +47,17 @@
 
                             <div role="group" class="field">
                                 <label for="pUserId">Server Owner</label>
-                                <select id="pUserId" name="owner_id" class="select pl-0"></select>
+                                <input type="hidden" name="owner_id" id="pUserId" value="{{ old('owner_id') }}">
+                                <div class="flex items-center gap-2">
+                                    <span id="pUserDisplay" class="text-muted-foreground text-sm">
+                                        @if (old('owner_id'))
+                                            Loading...
+                                        @else
+                                            No owner selected
+                                        @endif
+                                    </span>
+                                    <button type="button" class="btn" data-size="sm" data-variant="outline" id="openUserSearchBtn">Select Owner</button>
+                                </div>
                                 <p class="text-sm text-muted-foreground">Email address of the Server Owner.</p>
                             </div>
                         </div>
@@ -89,15 +110,14 @@
                         </div>
 
                         <div role="group" class="field">
-                            <label for="pAllocation">Default Allocation</label>
-                            <select id="pAllocation" name="allocation_id" class="select"></select>
-                            <p class="text-sm text-muted-foreground">The main allocation that will be assigned to this server.</p>
-                        </div>
-
-                        <div role="group" class="field">
-                            <label for="pAllocationAdditional">Additional Allocation(s)</label>
-                            <select id="pAllocationAdditional" name="allocation_additional[]" class="select" multiple></select>
-                            <p class="text-sm text-muted-foreground">Additional allocations to assign to this server on creation.</p>
+                            <label>Allocations</label>
+                            <div class="flex items-center gap-2">
+                                <span id="pAllocSummary" class="text-sm text-muted-foreground">No allocations selected</span>
+                                <button type="button" class="btn" data-size="sm" data-variant="outline" id="openAllocBtn">Select Allocations</button>
+                            </div>
+                            <input type="hidden" name="allocation_id" id="pAllocation" value="">
+                            <select multiple name="allocation_additional[]" id="pAllocationAdditional" class="hidden"></select>
+                            <p class="text-sm text-muted-foreground">Choose which allocations to assign. The first one you select becomes the default.</p>
                         </div>
                     </div>
                 </section>
@@ -108,7 +128,6 @@
     <div class="grid gap-6">
         <div class="col-span-full">
             <div class="card">
-                <div class="overlay hidden" id="allocationLoader"><x-icon name="refresh-cw" class="size-4 animate-spin" /></div>
                 <header>
                     <h3 class="text-lg font-semibold">Application Feature Limits</h3>
                 </header>
@@ -266,7 +285,9 @@
 
                         <div role="group" class="field">
                             <label for="pEggId">Egg</label>
-                            <select id="pEggId" name="egg_id" class="select"></select>
+                            <select id="pEggId" name="egg_id" class="select">
+                                <option value="">Select a nest first</option>
+                            </select>
                             <p class="text-sm text-muted-foreground">Select the Egg that will define how this server should operate.</p>
                         </div>
                         <div role="group" class="field" data-orientation="horizontal">
@@ -289,7 +310,9 @@
                     <div class="grid gap-6">
                         <div role="group" class="field">
                             <label for="pDefaultContainer">Docker Image</label>
-                            <select id="pDefaultContainer" name="image" class="select"></select>
+                            <select id="pDefaultContainer" name="image" class="select">
+                                <option value="">Select an egg first</option>
+                            </select>
                             <input id="pDefaultContainerCustom" name="custom_image" value="{{ old('custom_image') }}" class="input mt-4" placeholder="Or enter a custom image..."/>
                             <p class="text-sm text-muted-foreground">This is the default Docker image that will be used to run this server. Select an image from the dropdown above, or enter a custom image in the text field above.</p>
                         </div>
@@ -330,11 +353,66 @@
         </div>
     </div>
 </form>
+
+<dialog class="dialog" id="userSearchModal" aria-labelledby="userSearchModal-title" aria-describedby="userSearchModal-desc" onclick="if (event.target === this) this.close()">
+    <div class="sm:max-w-md">
+        <header>
+            <h2 id="userSearchModal-title">Select Server Owner</h2>
+            <p id="userSearchModal-desc">Search for a user by email address.</p>
+        </header>
+        <section>
+            <div role="group" class="field">
+                <label for="pUserSearch">Search by email</label>
+                <input type="text" id="pUserSearch" placeholder="Type at least 2 characters..." autocomplete="off">
+            </div>
+            <div id="pUserSearchResults" class="mt-2 space-y-1 max-h-64 overflow-y-auto"></div>
+            <div id="pUserSearchEmpty" class="hidden text-sm text-muted-foreground text-center py-4">No users found.</div>
+            <div id="pUserSearchLoading" class="hidden text-sm text-muted-foreground text-center py-4 flex items-center justify-center gap-2">
+                <svg aria-label="Loading" role="status" class="size-4 animate-spin" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
+                Searching...
+            </div>
+        </section>
+        <footer>
+            <button type="button" class="btn" data-variant="outline" onclick="this.closest('dialog').close()">Cancel</button>
+        </footer>
+        <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" aria-label="Close dialog" onclick="this.closest('dialog').close()"><x-icon name="x" class="size-4" /></button>
+    </div>
+</dialog>
+
+<dialog class="dialog" id="allocModal" aria-labelledby="allocModal-title" onclick="if (event.target === this) this.close()">
+    <div class="sm:max-w-lg">
+        <header>
+            <h2 id="allocModal-title">Select Allocations</h2>
+            <p class="text-sm text-muted-foreground">Select allocations for node <strong id="allocModalNodeName"></strong></p>
+        </header>
+        <section>
+            <div id="pAllocationsList" class="divide-y"></div>
+            <div id="pAllocEmpty" class="hidden text-sm text-muted-foreground text-center py-8">No available allocations for this node.</div>
+            <div id="pAllocLoader" class="hidden text-sm text-muted-foreground text-center py-8">Loading...</div>
+        </section>
+        <footer class="flex items-center justify-between">
+            <nav role="navigation" aria-label="pagination">
+                <ul class="flex flex-row items-center gap-1" id="pAllocPagination"></ul>
+            </nav>
+            <div class="flex items-center gap-2">
+                <span id="pAllocSelectedCount" class="text-xs text-muted-foreground">0 selected</span>
+                <button type="button" class="btn" onclick="confirmAllocations()">Confirm</button>
+            </div>
+        </footer>
+        <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" aria-label="Close" onclick="this.closest('dialog').close()"><x-icon name="x" class="size-4" /></button>
+    </div>
+</dialog>
 @endsection
 
 @section('footer-scripts')
     @parent
     {!! Theme::js('vendor/lodash/lodash.js') !!}
+
+    <script>
+    window.Pyrodactyl = window.Pyrodactyl || {};
+    Pyrodactyl.nodeData = {!! $nodeDataJson !!};
+    Pyrodactyl.nests = {!! $nestsDataJson !!};
+    </script>
 
     <script type="application/javascript">
         // Persist 'Service Variables'
@@ -358,58 +436,128 @@
         // END Persist 'Service Variables'
     </script>
 
-    {!! Theme::js('js/admin/new-server.js?v=20220530') !!}
+    {!! Theme::js('js/admin/new-server.js?v=20260724') !!}
 
     <script type="application/javascript">
+        function selectUser(user) {
+            $('#pUserId').val(user.id);
+            var html = '<span class="inline-flex items-center gap-2 rounded-md border px-3 py-1.5"> \
+                <img class="size-6 rounded-full" src="https://cravatar.cn/avatar/' + escapeHtml(user.md5) + '?s=48" alt=""> \
+                <span>' + escapeHtml(user.name_first) + ' ' + escapeHtml(user.name_last) + '</span> \
+                <span class="text-muted-foreground">(' + escapeHtml(user.email) + ')</span> \
+            </span>';
+            $('#pUserDisplay').html(html);
+            document.getElementById('userSearchModal').close();
+        }
+
         $(document).ready(function() {
-            // Persist 'Server Owner' select2
+            // Bind modal open button
+            document.getElementById('openUserSearchBtn').onclick = function() {
+                document.getElementById('userSearchModal').showModal();
+            };
+
+            // Persist 'Server Owner'
             @if (old('owner_id'))
                 $.ajax({
                     url: '/admin/users/accounts.json?user_id={{ old('owner_id') }}',
                     dataType: 'json',
                 }).then(function (data) {
-                    initUserIdSelect([ data ]);
+                    selectUser(data);
                 });
-            @else
-                initUserIdSelect();
             @endif
-            // END Persist 'Server Owner' select2
 
-            // Persist 'Node' select2
+            // Persist 'Node'
             @if (old('node_id'))
                 $('#pNodeId').val('{{ old('node_id') }}').change();
 
-                // Persist 'Default Allocation' select2
-                @if (old('allocation_id'))
-                    $('#pAllocation').val('{{ old('allocation_id') }}').change();
+                @if (old('allocation_id') || old('allocation_additional'))
+                    setTimeout(function() {
+                        var data = window.Pyrodactyl && Pyrodactyl.nodeData ? Pyrodactyl.nodeData : [];
+                        var node = data.find(function(v) { return v.id == '{{ old('node_id') }}'; });
+                        if (node) {
+                            allAllocations = node.allocations;
+                            @if (old('allocation_id'))
+                                var firstId = '{{ old('allocation_id') }}';
+                                $.each(node.allocations, function(i, a) {
+                                    if (a.id == firstId) {
+                                        selectedAllocs[firstId] = a.text;
+                                    }
+                                });
+                            @endif
+                            @if (old('allocation_additional'))
+                                @foreach (old('allocation_additional') as $id)
+                                    $.each(node.allocations, function(i, a) {
+                                        if (a.id == '{{ $id }}') {
+                                            selectedAllocs['{{ $id }}'] = a.text;
+                                        }
+                                    });
+                                @endforeach
+                            @endif
+                            updateAllocSummary();
+                        }
+                    }, 50);
                 @endif
-                // END Persist 'Default Allocation' select2
-
-                // Persist 'Additional Allocations' select2
-                @if (old('allocation_additional'))
-                    const additional_allocations = [];
-
-                    @for ($i = 0; $i < count(old('allocation_additional')); $i++)
-                        additional_allocations.push('{{ old('allocation_additional.'.$i)}}');
-                    @endfor
-
-                    $('#pAllocationAdditional').val(additional_allocations).change();
-                @endif
-                // END Persist 'Additional Allocations' select2
             @endif
-            // END Persist 'Node' select2
 
-            // Persist 'Nest' select2
+            // Persist 'Nest'
             @if (old('nest_id'))
                 $('#pNestId').val('{{ old('nest_id') }}').change();
 
-                // Persist 'Egg' select2
                 @if (old('egg_id'))
                     $('#pEggId').val('{{ old('egg_id') }}').change();
                 @endif
-                // END Persist 'Egg' select2
             @endif
-            // END Persist 'Nest' select2
+
+            // Initial population of dependent selects (matches original Pterodactyl behavior)
+            $('#pNodeId').change();
+            $('#pNestId').change();
+        });
+
+        // User search in modal
+        var searchTimeout;
+        $('#pUserSearch').on('input', function() {
+            clearTimeout(searchTimeout);
+            var term = $(this).val();
+            if (term.length < 2) {
+                $('#pUserSearchResults').empty();
+                $('#pUserSearchEmpty').addClass('hidden');
+                $('#pUserSearchLoading').addClass('hidden');
+                return;
+            }
+            $('#pUserSearchResults').empty();
+            $('#pUserSearchEmpty').addClass('hidden');
+            $('#pUserSearchLoading').removeClass('hidden');
+            searchTimeout = setTimeout(function() {
+                $.ajax({
+                    url: '/admin/users/accounts.json',
+                    data: { 'filter[email]': term },
+                    dataType: 'json',
+                }).done(function(data) {
+                    $('#pUserSearchLoading').addClass('hidden');
+                    var users = data && data.data ? data.data : data;
+                    if (!users || users.length === 0) {
+                        $('#pUserSearchEmpty').removeClass('hidden');
+                        return;
+                    }
+                    var $results = $('#pUserSearchResults').empty();
+                    $.each(users, function(i, user) {
+                        var card = $('<div>').addClass('flex items-center gap-3 rounded-md border p-3 cursor-pointer hover:bg-accent')
+                            .attr('data-user-id', user.id)
+                            .on('click', function() { selectUser(user); });
+                        var img = $('<img>').addClass('size-10 rounded-full')
+                            .attr('src', 'https://cravatar.cn/avatar/' + escapeHtml(user.md5) + '?s=80')
+                            .attr('alt', '');
+                        var info = $('<div>').addClass('flex-1 min-w-0');
+                        $('<div>').addClass('font-medium truncate').text(user.name_first + ' ' + user.name_last).appendTo(info);
+                        $('<div>').addClass('text-sm text-muted-foreground truncate').text(user.email + ' — ' + user.username).appendTo(info);
+                        card.append(img, info);
+                        $results.append(card);
+                    });
+                }).fail(function() {
+                    $('#pUserSearchLoading').addClass('hidden');
+                    $('#pUserSearchResults').html('<div class="text-sm text-destructive text-center py-2">Failed to search users.</div>');
+                });
+            }, 300);
         });
     </script>
 

@@ -42,19 +42,24 @@ class CreateServerController extends Controller
         }
 
         $nests = $this->nestRepository->getWithEggs();
+        $nodeData = $this->nodeRepository->getNodesForServerCreation();
+
+        $nestsData = $nests->map(function ($item) {
+            return array_merge($item->toArray(), [
+                'eggs' => $item->eggs->keyBy('id')->toArray(),
+            ]);
+        })->keyBy('id');
 
         \JavaScript::put([
-            'nodeData' => $this->nodeRepository->getNodesForServerCreation(),
-            'nests' => $nests->map(function ($item) {
-                return array_merge($item->toArray(), [
-                    'eggs' => $item->eggs->keyBy('id')->toArray(),
-                ]);
-            })->keyBy('id'),
+            'nodeData' => $nodeData,
+            'nests' => $nestsData,
         ]);
 
         return $this->view->make('admin.servers.new', [
             'locations' => Location::all(),
             'nests' => $nests,
+            'nodeDataJson' => $nodeData->toJson(),
+            'nestsDataJson' => $nestsData->toJson(),
         ]);
     }
 

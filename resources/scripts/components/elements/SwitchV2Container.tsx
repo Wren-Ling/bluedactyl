@@ -1,5 +1,5 @@
 import ItemContainer from '@/components/elements/ItemContainer';
-import { Switch } from '@/components/elements/SwitchV2';
+import { Switch } from '@/components/ui/switch';
 
 export interface SwitchProps {
     name: string;
