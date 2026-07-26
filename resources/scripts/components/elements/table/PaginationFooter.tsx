@@ -1,7 +1,7 @@
-import { ChevronLeft, ChevronRight } from '@gravity-ui/icons';
-import clsx from 'clsx';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 
 import { PaginationDataSet } from '@/api/http';
 
@@ -32,64 +32,62 @@ const PaginationFooter = ({ pagination, className, onPageSelect }: Props) => {
     }
 
     return (
-        <div className={clsx('flex items-center justify-between my-2', className)}>
-            <p className={'text-sm text-zinc-500'}>
+        <div className={cn('flex items-center justify-between my-2', className)}>
+            <p className={'text-sm text-muted-foreground'}>
                 Showing&nbsp;
-                <span className={'font-semibold text-zinc-400'}>{Math.max(start, Math.min(pagination.total, 1))}</span>
+                <span className={'font-semibold text-foreground'}>{Math.max(start, Math.min(pagination.total, 1))}</span>
                 &nbsp;to&nbsp;
-                <span className={'font-semibold text-zinc-400'}>{end}</span> of&nbsp;
-                <span className={'font-semibold text-zinc-400'}>{pagination.total}</span> results.
+                <span className={'font-semibold text-foreground'}>{end}</span> of&nbsp;
+                <span className={'font-semibold text-foreground'}>{pagination.total}</span> results.
             </p>
             {pagination.totalPages > 1 && (
                 <div className={'flex space-x-1'}>
-                    <ActionButton
-                        variant='secondary'
-                        size='sm'
+                    <Button
+                        variant='outline'
+                        size='icon'
                         onClick={() => onPageSelect(current - 1)}
                         disabled={current <= 1}
-                        className=' p-0 flex items-center justify-center'
                     >
-                        <ChevronLeft width={22} height={22} fill='currentColor' />
-                    </ActionButton>
+                        <ChevronLeft className='size-4' />
+                    </Button>
                     {pages.previous.reverse().map((value) => (
-                        <ActionButton
+                        <Button
                             key={`previous-${value}`}
-                            variant='secondary'
+                            variant='outline'
                             size='sm'
                             onClick={() => onPageSelect(value)}
-                            className='w-8 h-8 p-0 flex items-center justify-center'
+                            className='w-8'
                         >
                             {value}
-                        </ActionButton>
+                        </Button>
                     ))}
-                    <ActionButton
-                        variant='primary'
+                    <Button
+                        variant='default'
                         size='sm'
-                        className='w-8 h-8 p-0 flex items-center justify-center'
+                        className='w-8'
                         disabled
                     >
                         {current}
-                    </ActionButton>
+                    </Button>
                     {pages.next.map((value) => (
-                        <ActionButton
+                        <Button
                             key={`next-${value}`}
-                            variant='secondary'
+                            variant='outline'
                             size='sm'
                             onClick={() => onPageSelect(value)}
-                            className='w-8 h-8 p-0 flex items-center justify-center'
+                            className='w-8'
                         >
                             {value}
-                        </ActionButton>
+                        </Button>
                     ))}
-                    <ActionButton
-                        variant='secondary'
-                        size='sm'
+                    <Button
+                        variant='outline'
+                        size='icon'
                         onClick={() => onPageSelect(current + 1)}
                         disabled={current >= total}
-                        className='p-0 flex items-center justify-center'
                     >
-                        <ChevronRight width={22} height={22} fill='currentColor' />
-                    </ActionButton>
+                        <ChevronRight className='size-4' />
+                    </Button>
                 </div>
             )}
         </div>

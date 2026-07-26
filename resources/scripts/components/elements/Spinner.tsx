@@ -1,7 +1,10 @@
 import { Suspense } from 'react';
-import styled, { css, keyframes } from 'styled-components';
+
+import { cn } from '@/lib/utils';
 
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
+import PyroLogo from '@/components/elements/PyroLogo';
+import { Spinner as ShadcnSpinner, type SpinnerSize } from '@/components/ui/spinner';
 
 export type SpinnerSize = 'small' | 'base' | 'large';
 
@@ -9,56 +12,35 @@ interface Props {
     size?: SpinnerSize;
     visible?: boolean;
     centered?: boolean;
-    isBlue?: boolean;
     children?: React.ReactNode;
 }
 
 interface Spinner extends React.FC<Props> {
     Size: Record<'SMALL' | 'BASE' | 'LARGE', SpinnerSize>;
-    Suspense: React.FC<{ children: React.ReactNode }>; // ✅ Correct
+    Suspense: React.FC<{ children: React.ReactNode }>;
 }
 
-const spin = keyframes`
-    to { transform: rotate(360deg); }
-`;
+const sizeMap: Record<SpinnerSize, string> = {
+    small: 'size-4',
+    base: 'size-8',
+    large: 'size-16',
+};
 
-const SpinnerComponent = styled.div<Props>`
-    width: 32px;
-    height: 32px;
-    border-width: 3px;
-    border-radius: 50%;
-    animation: ${spin} 1s cubic-bezier(0.55, 0.25, 0.25, 0.7) infinite;
-    aspect-ratio: 1 / 1;
+const Spinner: Spinner = ({ centered, visible = true, size = 'base' }) => {
+    if (!visible) return null;
 
-    ${(props) =>
-        props.size === 'small'
-            ? `width: 16px; height: 16px; border-width: 2px;`
-            : props.size === 'large'
-              ? css`
-                    width: 64px;
-                    height: 64px;
-                    border-width: 6px;
-                `
-              : null};
+    const spinner = <ShadcnSpinner className={cn(sizeMap[size])} />;
 
-    border-color: ${(props) => (!props.isBlue ? 'rgba(255, 255, 255, 0.2)' : 'hsla(212, 92%, 43%, 0.2)')};
-    border-top-color: ${(props) => (!props.isBlue ? 'rgb(255, 255, 255)' : 'hsl(212, 92%, 43%)')};
-`;
+    if (centered) {
+        return (
+            <div className='flex justify-center items-center w-full sm:absolute sm:inset-0 sm:z-50'>
+                {spinner}
+            </div>
+        );
+    }
 
-const Spinner: Spinner = ({ centered, visible = true, ...props }) =>
-    visible &&
-    (centered ? (
-        <div
-            className={`
-              flex justify-center items-center w-full
-              sm:absolute sm:inset-0 sm:z-50
-          `}
-        >
-            <SpinnerComponent {...props} />
-        </div>
-    ) : (
-        <SpinnerComponent {...props} />
-    ));
+    return spinner;
+};
 
 Spinner.displayName = 'Spinner';
 
@@ -69,7 +51,20 @@ Spinner.Size = {
 };
 
 Spinner.Suspense = ({ children }) => (
-    <Suspense fallback={<Spinner centered size={Spinner.Size.LARGE} />}>
+    <Suspense
+        fallback={
+            <div className='flex min-h-screen items-center justify-center bg-background'>
+                <div className='flex flex-col items-center gap-4'>
+                    <div className='flex items-center gap-2'>
+                        <PyroLogo className='size-8 text-foreground' />
+                        <span className='text-lg font-semibold tracking-tight text-foreground'>Pyrodactyl</span>
+                    </div>
+                    <ShadcnSpinner className='size-5 text-muted-foreground' />
+                    <p className='text-sm text-muted-foreground animate-pulse'>Loading&hellip;</p>
+                </div>
+            </div>
+        }
+    >
         <ErrorBoundary>{children}</ErrorBoundary>
     </Suspense>
 );

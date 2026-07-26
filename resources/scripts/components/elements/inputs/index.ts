@@ -10,4 +10,3 @@ const Input: { Text: typeof InputField; Checkbox: typeof Checkbox } = Object.ass
 );
 
 export { Input };
-export { default as styles } from './styles.module.css';

@@ -1,10 +1,9 @@
-import { ChevronLeft, Person } from '@gravity-ui/icons';
+import { ArrowLeft, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
-import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import UserFormComponent from '@/components/server/users/UserFormComponent';
 
 import { ServerContext } from '@/state/server';
@@ -18,11 +17,9 @@ const EditUserContainer = () => {
     const serverId = ServerContext.useStoreState((state) => state.server.data!.id);
     const subusers = ServerContext.useStoreState((state) => state.subusers.data);
 
-    // Find the subuser by UUID
     const subuser = subusers.find((s: Subuser) => s.uuid === id);
 
     useEffect(() => {
-        // If subuser not found, redirect back to users list
         if (!subuser && subusers.length > 0) {
             navigate(`/server/${serverId}/users`);
         }
@@ -36,68 +33,66 @@ const EditUserContainer = () => {
         navigate(`/server/${serverId}/users`);
     };
 
-    // Show loading state while we're waiting for subusers to load
     if (!subuser && subusers.length === 0) {
         return (
-            <ServerContentBlock title={'Edit User'}>
+            <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
                 <MainPageHeader title={'Edit User'}>
-                    <ActionButton
-                        variant='secondary'
+                    <Button
+                        variant='outline'
                         onClick={() => navigate(`/server/${serverId}/users`)}
                         className='flex items-center gap-2'
                     >
-                        <ChevronLeft width={22} height={22} fill='currentColor' />
+                        <ArrowLeft className='size-4' />
                         Back to Users
-                    </ActionButton>
+                    </Button>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
-                    <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-brand'></div>
+                    <div className='size-8 animate-spin rounded-full border-b-2 border-primary' />
                 </div>
-            </ServerContentBlock>
+            </div>
         );
     }
 
-    // If subuser not found after loading, show not found message
     if (!subuser) {
         return (
-            <ServerContentBlock title={'Edit User'}>
+            <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
                 <MainPageHeader title={'Edit User'}>
-                    <ActionButton
-                        variant='secondary'
+                    <Button
+                        variant='outline'
                         onClick={() => navigate(`/server/${serverId}/users`)}
                         className='flex items-center gap-2'
                     >
-                        <ChevronLeft width={22} height={22} className='w-4 h-4' fill='currentColor' />
+                        <ArrowLeft className='size-4' />
                         Back to Users
-                    </ActionButton>
+                    </Button>
                 </MainPageHeader>
-                <div className='flex flex-col items-center justify-center py-12 px-4'>
+                <div className='flex flex-col items-center justify-center px-4 py-12'>
                     <div className='text-center'>
-                        <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
-                            <Person width={22} height={22} className='w-8 h-8 text-zinc-400' fill='currentColor' />
+                        <div className='mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-muted'>
+                            <Users className='size-8 text-muted-foreground' />
                         </div>
-                        <h3 className='text-lg font-medium text-zinc-200 mb-2'>User not found</h3>
-                        <p className='text-sm text-zinc-400 max-w-sm'>
+                        <h3 className='mb-2 text-lg font-medium text-foreground'>User not found</h3>
+                        <p className='max-w-sm text-sm text-muted-foreground'>
                             The user you&apos;re trying to edit could not be found.
                         </p>
                     </div>
                 </div>
-            </ServerContentBlock>
+            </div>
         );
     }
 
     return (
-        <ServerContentBlock title={'Edit User'}>
+        <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
             <MainPageHeader title={`Edit User: ${subuser.email}`}>
-                <ActionButton
-                    variant='secondary'
+                <Button
+                    variant='outline'
                     onClick={() => navigate(`/server/${serverId}/users`)}
                     className='flex items-center gap-2'
                     disabled={isSubmitting}
                 >
-                    <ChevronLeft width={22} height={22} className='w-4 h-4' fill='currentColor' />
+                    <ArrowLeft className='size-4' />
                     Back to Users
-                </ActionButton>
+                </Button>
             </MainPageHeader>
 
             <UserFormComponent
@@ -108,7 +103,7 @@ const EditUserContainer = () => {
                 isSubmitting={isSubmitting}
                 setIsSubmitting={setIsSubmitting}
             />
-        </ServerContentBlock>
+        </div>
     );
 };
 

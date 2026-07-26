@@ -1,6 +1,6 @@
 import ModalContext from '@/context/ModalContext';
 import { TZDate } from '@date-fns/tz';
-import { Link, TriangleExclamation } from '@gravity-ui/icons';
+import { Link, TriangleAlert } from 'lucide-react';
 import { toString } from 'cronstrue';
 import { format } from 'date-fns';
 import { useStoreState } from 'easy-peasy';
@@ -8,7 +8,7 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import { useContext, useEffect, useMemo } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Field from '@/components/elements/Field';
 import FormikSwitchV2 from '@/components/elements/FormikSwitchV2';
 import ItemContainer from '@/components/elements/ItemContainer';
@@ -234,10 +234,8 @@ const EditScheduleModal = ({ schedule }: Props) => {
                         {timezoneInfo.isDifferent && (
                             <div className={'bg-blue-900/20 border border-blue-400/30 rounded-lg p-4 my-2'}>
                                 <div className={'flex items-start gap-3'}>
-                                    <TriangleExclamation
-                                        width={22}
-                                        height={22}
-                                        fill='currentColor'
+                                    <TriangleAlert
+                                        size={22}
                                         className={'text-blue-400 mt-0.5 flex-shrink-0 h-5 w-5'}
                                     />
                                     <div className={'text-sm'}>
@@ -287,7 +285,7 @@ const EditScheduleModal = ({ schedule }: Props) => {
                                     // onChange={() => setShowCheetsheet((s) => !s)}
                                     labelClasses='cursor-pointer'
                                 >
-                                    <Link width={22} height={22} fill='currentColor' className={`px-5 h-5 w-5`} />
+                                    <Link size={22} className={`px-5 h-5 w-5`} />
                                 </ItemContainer>
                             </a>
                             {/* This table would be pretty awkward to make look nice
@@ -309,14 +307,13 @@ const EditScheduleModal = ({ schedule }: Props) => {
                             />
                         </div>
                         <div className={`mb-6 text-right`}>
-                            <ActionButton
-                                variant='primary'
+                            <Button
                                 className={'w-full sm:w-auto'}
                                 type={'submit'}
                                 disabled={isSubmitting}
                             >
                                 {schedule ? 'Save changes' : 'Create schedule'}
-                            </ActionButton>
+                            </Button>
                         </div>
                     </Form>
                 );

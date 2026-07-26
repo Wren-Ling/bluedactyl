@@ -1,9 +1,9 @@
-import { AntennaSignal, Check, Copy, CrownDiamond, TrashBin, Xmark } from '@gravity-ui/icons';
+import { Check, Copy, Crown, Trash2, Wifi, X } from 'lucide-react';
 import debounce from 'debounce';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import Code from '@/components/elements/Code';
 import CopyOnClick from '@/components/elements/CopyOnClick';
@@ -107,8 +107,8 @@ const AllocationRow = ({ allocation }: Props) => {
             <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full'>
                 <div className='flex-1 min-w-0'>
                     <div className='flex items-center gap-3 mb-3'>
-                        <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
-                            <AntennaSignal width={22} height={22} fill='currentColor' className='text-zinc-400' />
+                        <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center'>
+                            <Wifi size={22} className='text-zinc-400' />
                         </div>
                         <div className='min-w-0 flex-1'>
                             <div className='flex items-center flex-wrap gap-2'>
@@ -118,16 +118,14 @@ const AllocationRow = ({ allocation }: Props) => {
                                             {allocation.alias ? allocation.alias : ip(allocation.ip)}:{allocation.port}
                                         </h3>
                                         <Copy
-                                            fill='currentColor'
-                                            width={22}
-                                            height={22}
-                                            className='text-zinc-500 group-hover:text-zinc-400 transition-colors'
+                                            size={22}
+                                            className='text-zinc-500 transition-colors group-hover:text-zinc-400'
                                         />
                                     </div>
                                 </CopyOnClick>
                                 {allocation.isDefault && (
-                                    <span className='flex items-center gap-1 text-xs text-brand font-medium bg-brand/10 px-2 py-1 rounded'>
-                                        <CrownDiamond width={22} height={22} fill='currentColor' className='' />
+                                    <span className='flex items-center gap-1 text-xs text-foreground font-medium bg-secondary px-2 py-1 rounded'>
+                                        <Crown size={22} />
                                         Primary
                                     </span>
                                 )}
@@ -144,7 +142,7 @@ const AllocationRow = ({ allocation }: Props) => {
                                 <InputSpinner visible={loading}>
                                     <Textarea
                                         ref={textareaRef}
-                                        className='w-full bg-[#ffffff06] border border-[#ffffff08] rounded-lg p-3 text-sm text-zinc-300 placeholder-zinc-500 resize-none focus:ring-1 focus:ring-[#ffffff20] focus:border-[#ffffff20] transition-all'
+                                        className='w-full bg-white/5 border border-white/5 rounded-lg p-3 text-sm text-foreground placeholder-muted-foreground resize-none focus:ring-1 focus:ring-ring focus:border-ring transition-all'
                                         placeholder='Add notes for this allocation...'
                                         value={notesValue}
                                         onChange={(e) => setNotesValue(e.currentTarget.value)}
@@ -152,24 +150,24 @@ const AllocationRow = ({ allocation }: Props) => {
                                     />
                                 </InputSpinner>
                                 <div className='flex items-center gap-2'>
-                                    <ActionButton variant='primary' size='sm' onClick={saveNotes} disabled={loading}>
+                                    <Button size='sm' onClick={saveNotes} disabled={loading}>
                                         {loading ? (
                                             <Spinner size='small' />
                                         ) : (
-                                            <Check fill='currentColor' className='w-3 h-3 mr-1' />
+                                            <Check className='mr-1 size-3' />
                                         )}
                                         Save
-                                    </ActionButton>
-                                    <ActionButton variant='secondary' size='sm' onClick={cancelEdit} disabled={loading}>
-                                        <Xmark width={22} height={22} fill='currentColor' className='mr-1' />
+                                    </Button>
+                                    <Button variant='secondary' size='sm' onClick={cancelEdit} disabled={loading}>
+                                        <X className='mr-1' size={22} />
                                         Cancel
-                                    </ActionButton>
+                                    </Button>
                                 </div>
                             </div>
                         ) : (
                             <Can action={'allocation.update'}>
                                 <div
-                                    className={`min-h-[2.5rem] p-3 rounded-lg border border-[#ffffff08] bg-[#ffffff03] cursor-pointer hover:border-[#ffffff15] transition-colors ${allocation.notes ? 'text-sm text-zinc-300' : 'text-sm text-zinc-500 italic'}`}
+                                    className={`min-h-[2.5rem] p-3 rounded-lg border border-white/5 bg-background cursor-pointer hover:border-white/10 transition-colors ${allocation.notes ? 'text-sm text-foreground' : 'text-sm text-muted-foreground italic'}`}
                                     onClick={startEdit}
                                 >
                                     {allocation.notes || 'Click to add notes...'}
@@ -181,7 +179,7 @@ const AllocationRow = ({ allocation }: Props) => {
 
                 <div className='flex items-center justify-center gap-2 sm:flex-col sm:gap-3'>
                     <Can action={'allocation.update'}>
-                        <ActionButton
+                        <Button
                             variant='secondary'
                             size='sm'
                             onClick={setPrimaryAllocation}
@@ -192,14 +190,14 @@ const AllocationRow = ({ allocation }: Props) => {
                                     : 'Make this the primary allocation'
                             }
                         >
-                            <CrownDiamond width={22} height={22} fill='currentColor' className='mr-1' />
+                            <Crown size={22} className='mr-1' />
                             <span className='hidden sm:inline'>Make Primary</span>
                             <span className='sm:hidden'>Primary</span>
-                        </ActionButton>
+                        </Button>
                     </Can>
                     <Can action={'allocation.delete'}>
-                        <ActionButton
-                            variant='danger'
+                        <Button
+                            variant='destructive'
                             size='sm'
                             onClick={() => setShowDeleteDialog(true)}
                             disabled={allocation.isDefault || deleteLoading}
@@ -210,10 +208,10 @@ const AllocationRow = ({ allocation }: Props) => {
                             {deleteLoading ? (
                                 <Spinner size='small' />
                             ) : (
-                                <TrashBin width={22} height={22} fill='currentColor' className='mr-1' />
+                                <Trash2 size={22} className='mr-1' />
                             )}
                             <span className='hidden sm:inline'>Delete</span>
-                        </ActionButton>
+                        </Button>
                     </Can>
                 </div>
             </div>

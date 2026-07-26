@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import MainPage from '@/components/elements/MainPage';
+import { cn } from '@/lib/utils';
 
 export interface PageContentBlockProps {
     title?: string;
@@ -18,12 +19,10 @@ const PageContentBlock: React.FC<PageContentBlockProps> = ({ title, showFlashKey
     }, [title]);
 
     return (
-        <>
-            <MainPage className={`${className || ''} max-w-[120rem] w-full mx-auto px-2 sm:px-14 py-2 sm:py-14`}>
-                {showFlashKey && <FlashMessageRender byKey={showFlashKey} />}
-                {children}
-            </MainPage>
-        </>
+        <MainPage className={cn('mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10', className)}>
+            {showFlashKey && <FlashMessageRender byKey={showFlashKey} />}
+            {children}
+        </MainPage>
     );
 };
 

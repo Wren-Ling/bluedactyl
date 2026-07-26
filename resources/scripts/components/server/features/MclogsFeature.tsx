@@ -1,8 +1,8 @@
-import { Check, Link, TriangleExclamation } from '@gravity-ui/icons';
+import { Check, Link, TriangleAlert } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Modal from '@/components/elements/Modal';
 import Spinner from '@/components/elements/Spinner';
 import { Alert } from '@/components/elements/alert';
@@ -212,7 +212,7 @@ export const CrashAnalysisCard = () => {
 
     return (
         <>
-            <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-3 sm:p-4 hover:border-[#ffffff20] transition-all duration-150 shadow-sm'>
+            <div className='bg-white/5 border border-white/10 rounded-xl p-3 sm:p-4 hover:border-white/15 transition-all duration-150'>
                 <Alert type={getCardType()}>
                     <div className='flex items-center justify-between gap-3'>
                         <div className='flex-1'>
@@ -221,13 +221,13 @@ export const CrashAnalysisCard = () => {
                         </div>
                         <div className='flex items-center gap-2 flex-shrink-0'>
                             {canViewAnalysis && (
-                                <ActionButton variant='secondary' onClick={() => setModalVisible(true)} size='sm'>
+                                <Button variant='secondary' onClick={() => setModalVisible(true)} size='sm'>
                                     View Details
-                                </ActionButton>
+                                </Button>
                             )}
-                            <ActionButton variant='secondary' onClick={dismissCard} size='sm'>
+                            <Button variant='secondary' onClick={dismissCard} size='sm'>
                                 Dismiss
-                            </ActionButton>
+                            </Button>
                         </div>
                     </div>
                 </Alert>
@@ -284,11 +284,9 @@ const AnalysisModal = ({
         <div className='space-y-6'>
             <div className='bg-red-500/10 border border-red-500/20 rounded-lg p-4'>
                 <div className='flex items-start gap-3'>
-                    <TriangleExclamation
-                        width={22}
-                        height={22}
+                    <TriangleAlert
+                        size={22}
                         className='w-6 h-6 text-red-400 flex-shrink-0 mt-0.5'
-                        fill='currentColor'
                     />
                     <div className='flex-1'>
                         <h3 className='font-semibold text-red-400 text-lg'>Analysis Failed</h3>
@@ -323,7 +321,7 @@ const AnalysisModal = ({
                         rel='noopener noreferrer'
                         className='text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1.5 transition-colors'
                     >
-                        <Link width={22} height={22} className='w-4 h-4' />
+                        <Link size={22} className='w-4 h-4' />
                         Powered by mclo.gs
                     </a>
                 </div>
@@ -374,10 +372,8 @@ const AnalysisModal = ({
                 <div className='bg-green-500/10 border border-green-500/20 rounded-lg p-4 mb-6'>
                     <div className='flex items-start gap-3'>
                         <Check
-                            width={22}
-                            height={22}
+                            size={22}
                             className='w-6 h-6 text-green-400 flex-shrink-0 mt-0.5'
-                            fill='currentColor'
                         />
                         <div>
                             <h3 className='font-semibold text-green-400 text-lg'>No Issues Detected</h3>
@@ -400,11 +396,9 @@ const AnalysisModal = ({
                         <div key={idx} className='bg-red-500/10 border border-red-500/20 rounded-lg overflow-hidden'>
                             <div className='p-4'>
                                 <div className='flex items-start gap-3'>
-                                    <TriangleExclamation
-                                        width={22}
-                                        height={22}
+                                    <TriangleAlert
+                                        size={22}
                                         className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5'
-                                        fill='currentColor'
                                     />
                                     <div className='flex-1'>
                                         <h4 className='font-medium text-red-400 mb-2'>{problem.message}</h4>
@@ -455,10 +449,8 @@ const AnalysisModal = ({
                             <div key={idx} className='flex items-start gap-3'>
                                 <div className='bg-green-500/20 rounded-full p-1 flex-shrink-0 mt-0.5'>
                                     <Check
-                                        width={22}
-                                        height={22}
+                                        size={22}
                                         className='w-4 h-4 text-green-400'
-                                        fill='currentColor'
                                     />
                                 </div>
                                 <div className='flex-1'>
@@ -505,12 +497,12 @@ const AnalysisModal = ({
                 {renderContent()}
 
                 <div className='flex justify-center gap-3 mt-8 pt-4 border-t border-neutral-700'>
-                    <ActionButton variant='secondary' onClick={manualAnalyze} disabled={analyzing}>
+                    <Button variant='secondary' onClick={manualAnalyze} disabled={analyzing}>
                         {analyzing ? 'Analyzing...' : 'Analyze Again'}
-                    </ActionButton>
-                    <ActionButton variant='primary' onClick={closeModal} disabled={analyzing}>
+                    </Button>
+                    <Button onClick={closeModal} disabled={analyzing}>
                         Close
-                    </ActionButton>
+                    </Button>
                 </div>
             </div>
         </Modal>

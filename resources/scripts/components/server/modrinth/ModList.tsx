@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import ActionButton from '@/components/elements/ActionButton';
-import ContentBox from '@/components/elements/ContentBox';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 import { ModCard } from './ModCard';
 import { ModrinthService, useGlobalStateContext } from './config';
@@ -164,21 +164,21 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
 };
 
 const LoadingSpinner = () => (
-    <ContentBox>
+    <Card>
         <div className='flex justify-center py-8'>
-            <div className='animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-brand'></div>
+            <div className='animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-foreground'></div>
         </div>
-    </ContentBox>
+    </Card>
 );
 
 const ErrorDisplay = ({ message }: { message: string }) => (
-    <ContentBox>
+    <Card>
         <div className='text-red-500 p-4'>{message}</div>
-    </ContentBox>
+    </Card>
 );
 
 const EmptyState = () => (
-    <ContentBox>
+    <Card>
         <div className='text-gray-400 p-4 text-center'>No mods found matching your criteria</div>
-    </ContentBox>
+    </Card>
 );

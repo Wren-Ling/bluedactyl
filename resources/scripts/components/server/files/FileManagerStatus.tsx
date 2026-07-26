@@ -1,12 +1,10 @@
-import { Xmark } from '@gravity-ui/icons';
-import * as Tooltip from '@radix-ui/react-tooltip';
-import { useContext, useEffect, useState } from 'react';
+import { X } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Code from '@/components/elements/Code';
-import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
-
-import asDialog from '@/hoc/asDialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 import { ServerContext } from '@/state/server';
 
@@ -44,8 +42,7 @@ const CircleProgress = ({ progress, className }: { progress: number; className?:
     );
 };
 
-const FileUploadList = () => {
-    const { close } = useContext(DialogWrapperContext);
+const FileUploadList = ({ onClose }: { onClose: () => void }) => {
     const cancelFileUpload = ServerContext.useStoreActions((actions) => actions.files.cancelFileUpload);
     const clearFileUploads = ServerContext.useStoreActions((actions) => actions.files.clearFileUploads);
     const uploads = ServerContext.useStoreState((state) =>
@@ -53,69 +50,50 @@ const FileUploadList = () => {
     );
 
     return (
-        <Tooltip.Provider>
+        <TooltipProvider>
             <div className={'space-y-2 mt-6'}>
                 {uploads.map(([name, file]) => (
-                    <div key={name} className={'flex items-center space-x-3 bg-zinc-700 p-3 rounded-sm'}>
-                        <Tooltip.Root delayDuration={200}>
-                            <Tooltip.Trigger asChild>
+                    <div key={name} className={'flex items-center space-x-3 bg-card p-3 rounded-sm border border-border'}>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
                                 <div className={'shrink-0'}>
                                     <CircleProgress progress={(file.loaded / file.total) * 100} className={'w-6 h-6'} />
                                 </div>
-                            </Tooltip.Trigger>
-                            <Tooltip.Portal>
-                                <Tooltip.Content
-                                    side='left'
-                                    className='px-2 py-1 text-sm bg-gray-800 text-gray-100 rounded shadow-lg z-9999'
-                                    sideOffset={5}
-                                >
-                                    {`${Math.floor((file.loaded / file.total) * 100)}%`}
-                                    <Tooltip.Arrow className='fill-gray-800' />
-                                </Tooltip.Content>
-                            </Tooltip.Portal>
-                        </Tooltip.Root>
+                            </TooltipTrigger>
+                            <TooltipContent side='left' sideOffset={5}>
+                                {`${Math.floor((file.loaded / file.total) * 100)}%`}
+                            </TooltipContent>
+                        </Tooltip>
                         <Code className={'flex-1 truncate'}>{name}</Code>
-                        <Tooltip.Root delayDuration={200}>
-                            <Tooltip.Trigger asChild>
-                                <ActionButton
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
                                     variant='secondary'
                                     size='sm'
                                     onClick={cancelFileUpload.bind(this, name)}
                                     className='hover:!text-red-400'
                                 >
-                                    <Xmark />
-                                </ActionButton>
-                            </Tooltip.Trigger>
-                            <Tooltip.Portal>
-                                <Tooltip.Content
-                                    side='right'
-                                    className='px-2 py-1 text-sm bg-gray-800 text-red-400 rounded shadow-lg z-9999'
-                                    sideOffset={5}
-                                >
-                                    Cancel
-                                    <Tooltip.Arrow className='fill-gray-800' />
-                                </Tooltip.Content>
-                            </Tooltip.Portal>
-                        </Tooltip.Root>
+                                    <X size={16} />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent side='right' sideOffset={5}>
+                                Cancel
+                            </TooltipContent>
+                        </Tooltip>
                     </div>
                 ))}
-                <Dialog.Footer>
-                    <ActionButton variant='danger' onClick={() => clearFileUploads()}>
-                        Cancel Uploads
-                    </ActionButton>
-                    <ActionButton variant='secondary' onClick={close}>
-                        Close
-                    </ActionButton>
-                </Dialog.Footer>
             </div>
-        </Tooltip.Provider>
+            <DialogFooter>
+                <Button variant='destructive' onClick={() => clearFileUploads()}>
+                    Cancel Uploads
+                </Button>
+                <Button variant='secondary' onClick={onClose}>
+                    Close
+                </Button>
+            </DialogFooter>
+        </TooltipProvider>
     );
 };
-
-const FileUploadListDialog = asDialog({
-    title: 'File Uploads',
-    description: 'The following files are being uploaded to your server.',
-})(FileUploadList);
 
 const FileManagerStatus = () => {
     const [open, setOpen] = useState(false);
@@ -130,11 +108,11 @@ const FileManagerStatus = () => {
 
     return (
         <>
-            <Tooltip.Provider>
+            <TooltipProvider>
                 {count > 0 && (
-                    <Tooltip.Root delayDuration={200}>
-                        <Tooltip.Trigger asChild>
-                            <ActionButton
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button
                                 variant='secondary'
                                 size='sm'
                                 className='w-10 h-10 p-0'
@@ -143,7 +121,7 @@ const FileManagerStatus = () => {
                                 }}
                             >
                                 <svg
-                                    className='animate-spin h-5 w-5 text-white'
+                                    className='animate-spin h-5 w-5 text-foreground'
                                     xmlns='http://www.w3.org/2000/svg'
                                     fill='none'
                                     viewBox='0 0 24 24'
@@ -162,21 +140,21 @@ const FileManagerStatus = () => {
                                         d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
                                     ></path>
                                 </svg>
-                            </ActionButton>
-                        </Tooltip.Trigger>
-                        <Tooltip.Portal>
-                            <Tooltip.Content
-                                side='top'
-                                className='px-2 py-1 text-sm bg-gray-800 text-gray-100 rounded shadow-lg'
-                                sideOffset={5}
-                            >
-                                {`${count} files are uploading, click to view`}
-                            </Tooltip.Content>
-                        </Tooltip.Portal>
-                    </Tooltip.Root>
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side='top' sideOffset={5}>
+                            {`${count} files are uploading, click to view`}
+                        </TooltipContent>
+                    </Tooltip>
                 )}
-                <FileUploadListDialog open={open} onClose={() => setOpen(false)} />
-            </Tooltip.Provider>
+                <Dialog open={open} onOpenChange={setOpen}>
+                    <DialogContent>
+                        <DialogHeader><DialogTitle>File Uploads</DialogTitle></DialogHeader>
+                        <p className='text-sm text-muted-foreground'>The following files are being uploaded to your server.</p>
+                        <FileUploadList onClose={() => setOpen(false)} />
+                    </DialogContent>
+                </Dialog>
+            </TooltipProvider>
         </>
     );
 };

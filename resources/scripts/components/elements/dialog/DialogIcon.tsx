@@ -1,25 +1,23 @@
-import { Shield } from '@gravity-ui/icons';
-import clsx from 'clsx';
+import { ShieldAlert } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { useContext, useEffect } from 'react';
 
-import { DialogContext, DialogIconProps, styles } from './';
-
-// const icons = {
-//     danger: ShieldExclamationIcon,
-//     warning: ExclamationIcon,
-//     success: CheckIcon,
-//     info: InformationCircleIcon,
-// };
+import { DialogContext, DialogIconProps } from './';
 
 export default ({ type, position, className }: DialogIconProps) => {
     const { setIcon, setIconPosition } = useContext(DialogContext);
 
     useEffect(() => {
-        // const Icon = icons[type];
+        const typeStyles: Record<string, string> = {
+            danger: 'bg-destructive text-destructive-foreground',
+            warning: 'bg-yellow-600 text-yellow-50',
+            success: 'bg-green-600 text-green-50',
+            info: 'bg-muted text-muted-foreground',
+        };
 
         setIcon(
-            <div className={clsx(styles.dialog_icon, styles[type], className)}>
-                <Shield width={22} height={22} fill='currentColor' />
+            <div className={cn('mr-4 flex h-10 w-10 items-center justify-center rounded-full', typeStyles[type], className)}>
+                <ShieldAlert className='size-5' />
             </div>,
         );
     }, [type, className]);

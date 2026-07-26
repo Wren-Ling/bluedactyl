@@ -37,7 +37,7 @@ const NotFound = () => {
                         may have been removed. Here are some helpful links instead:
                     </p>
                     <div className='flex flex-col gap-2'>
-                        <Link to={'/'} className='text-brand'>
+                        <Link to={'/'} className='text-foreground'>
                             Your Servers
                         </Link>
                     </div>

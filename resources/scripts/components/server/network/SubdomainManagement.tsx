@@ -1,10 +1,10 @@
-import { Link } from '@gravity-ui/icons';
+import { Link } from 'lucide-react';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 
 import {
@@ -204,10 +204,10 @@ const SubdomainManagement = () => {
 
     if (!subdomainInfo) {
         return (
-            <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-6 shadow-sm'>
+            <div className='bg-white/5 border border-white/10 rounded-xl p-6'>
                 <div className='flex items-center justify-center py-12'>
                     <div className='flex flex-col items-center gap-3'>
-                        <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-brand'></div>
+                        <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-foreground'></div>
                         <p className='text-sm text-neutral-400'>Loading subdomain configuration...</p>
                     </div>
                 </div>
@@ -221,14 +221,14 @@ const SubdomainManagement = () => {
 
     if (!subdomainInfo?.available_domains || subdomainInfo.available_domains.length === 0) {
         return (
-            <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-6 shadow-sm'>
+            <div className='bg-white/5 border border-white/10 rounded-xl p-6'>
                 <div className='flex items-center justify-between mb-6'>
                     <h3 className='text-xl font-extrabold tracking-tight'>Subdomain Management</h3>
                 </div>
                 <div className='flex flex-col items-center justify-center py-12'>
                     <div className='text-center'>
-                        <div className='w-12 h-12 mx-auto mb-3 rounded-full bg-[#ffffff11] flex items-center justify-center'>
-                            <svg className='w-6 h-6 text-zinc-400' fill='currentColor' viewBox='0 0 20 20'>
+                        <div className='w-12 h-12 mx-auto mb-3 rounded-full bg-white/5 flex items-center justify-center'>
+                            <svg className='w-6 h-6 text-muted-foreground' fill='currentColor' viewBox='0 0 20 20'>
                                 <path
                                     fillRule='evenodd'
                                     d='M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z'
@@ -247,9 +247,9 @@ const SubdomainManagement = () => {
     }
 
     return (
-        <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-6 shadow-sm'>
+        <div className='bg-white/5 border border-white/10 rounded-xl p-6'>
             <div className='flex items-center gap-3 mb-6'>
-                <Link className='w-6 h-6 text-zinc-400' fill='currentColor' />
+                <Link className='size-6 text-zinc-400' />
                 <h3 className='text-xl font-extrabold tracking-tight'>Subdomain Management</h3>
                 {subdomainInfo?.current_subdomain && (
                     <div className='flex items-center gap-2 text-sm ml-auto'>
@@ -272,35 +272,34 @@ const SubdomainManagement = () => {
             {subdomainInfo?.current_subdomain && !isEditing ? (
                 /* Current Subdomain Display Mode */
                 <div className='space-y-4'>
-                    <div className='bg-[#ffffff08] border border-[#ffffff15] rounded-lg p-4'>
+                    <div className='bg-white/5 border border-white/10 rounded-lg p-4'>
                         <div className='flex items-center justify-between'>
                             <div>
-                                <p className='text-sm text-zinc-400 mb-2'>Current Subdomain</p>
-                                <p className='text-lg font-medium text-white font-mono'>
+                                <p className='text-sm text-muted-foreground mb-2'>Current Subdomain</p>
+                                <p className='text-lg font-medium text-foreground font-mono'>
                                     {subdomainInfo?.current_subdomain?.attributes?.full_domain}
                                 </p>
                             </div>
                         </div>
                     </div>
-                    <div className='flex items-center justify-end gap-3 pt-4 border-t border-[#ffffff15]'>
-                        <ActionButton
+                    <div className='flex items-center justify-end gap-3 pt-4 border-t border-white/10'>
+                        <Button
                             type='button'
-                            variant='danger'
+                            variant='destructive'
                             onClick={handleDeleteSubdomain}
                             disabled={loading}
                             size='sm'
                         >
                             {loading ? 'Deleting...' : 'Delete Subdomain'}
-                        </ActionButton>
-                        <ActionButton
+                        </Button>
+                        <Button
                             type='button'
-                            variant='primary'
                             onClick={() => setIsEditing(true)}
                             disabled={loading}
                             size='sm'
                         >
                             Edit Subdomain
-                        </ActionButton>
+                        </Button>
                     </div>
                 </div>
             ) : (
@@ -328,7 +327,7 @@ const SubdomainManagement = () => {
                                     label='Subdomain'
                                     description='Choose a unique name for your subdomain. Only lowercase letters, numbers, and hyphens are allowed.'
                                 >
-                                    <div className='flex items-center border border-[#ffffff15] overflow-hidden hover:border-[#ffffff25] transition-colors'>
+                                    <div className='flex items-center border border-white/10 overflow-hidden hover:border-white/20 transition-colors'>
                                         <Field
                                             as={CleanInput}
                                             name='subdomain'
@@ -347,7 +346,7 @@ const SubdomainManagement = () => {
                                                 }
                                             }}
                                         />
-                                        <div className='border-l border-[#ffffff15]'>
+                                        <div className='border-l border-white/10'>
                                             <Field
                                                 as={CleanSelect}
                                                 name='domain_id'
@@ -399,10 +398,10 @@ const SubdomainManagement = () => {
                             </div>
 
                             {/* Action Buttons */}
-                            <div className='flex items-center justify-end gap-3 pt-6 border-t border-[#ffffff15]'>
+                            <div className='flex items-center justify-end gap-3 pt-6 border-t border-white/10'>
                                 {isEditing ? (
                                     <>
-                                        <ActionButton
+                                        <Button
                                             type='button'
                                             variant='secondary'
                                             size='sm'
@@ -414,10 +413,9 @@ const SubdomainManagement = () => {
                                             disabled={isSubmitting || loading}
                                         >
                                             Cancel
-                                        </ActionButton>
-                                        <ActionButton
+                                        </Button>
+                                        <Button
                                             type='submit'
-                                            variant='primary'
                                             size='sm'
                                             disabled={
                                                 isSubmitting ||
@@ -429,12 +427,11 @@ const SubdomainManagement = () => {
                                             }
                                         >
                                             {isSubmitting ? 'Saving...' : 'Save Changes'}
-                                        </ActionButton>
+                                        </Button>
                                     </>
                                 ) : (
-                                    <ActionButton
+                                    <Button
                                         type='submit'
-                                        variant='primary'
                                         size='sm'
                                         disabled={
                                             isSubmitting ||
@@ -446,7 +443,7 @@ const SubdomainManagement = () => {
                                         }
                                     >
                                         {isSubmitting ? 'Creating...' : 'Create Subdomain'}
-                                    </ActionButton>
+                                    </Button>
                                 )}
                             </div>
                         </Form>

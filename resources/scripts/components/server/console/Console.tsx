@@ -3,7 +3,6 @@ import { SearchAddon } from '@xterm/addon-search';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import { ITerminalOptions, Terminal } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
-import clsx from 'clsx';
 import debounce from 'debounce';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -15,8 +14,6 @@ import { ServerContext } from '@/state/server';
 import useEventListener from '@/plugins/useEventListener';
 import { usePermissions } from '@/plugins/usePermissions';
 import { usePersistedState } from '@/plugins/usePersistedState';
-
-import styles from './style.module.css';
 
 const theme = {
     // background: 'rgba(0, 0, 0, 0)',
@@ -202,7 +199,7 @@ const Console = () => {
     }, [connected, instance]);
 
     return (
-        <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl hover:border-[#ffffff20] transition-all duration-150 overflow-hidden shadow-sm'>
+        <div className='bg-white/5 border border-white/10 rounded-xl hover:border-white/15 transition-all duration-150 overflow-hidden'>
             <div className='relative'>
                 <SpinnerOverlay visible={!connected} size={'large'} />
                 <div className='bg-[#131313] min-h-[280px] sm:min-h-[380px] p-3 sm:p-4 font-mono overflow-hidden'>
@@ -211,9 +208,9 @@ const Console = () => {
                     </div>
                 </div>
                 {canSendCommands && (
-                    <div className='relative border-t-[1px] border-[#ffffff11] bg-[#0f0f0f]'>
+                    <div className='relative border-t border-white/5 bg-black/5'>
                         <input
-                            className='w-full bg-transparent px-3 py-2.5 sm:px-4 sm:py-3 font-mono text-xs sm:text-sm text-zinc-100 placeholder-zinc-500 border-0 outline-none focus:ring-0 focus:outline-none focus:bg-[#1a1a1a] transition-colors duration-150'
+                            className='w-full bg-transparent px-3 py-2.5 sm:px-4 sm:py-3 font-mono text-xs sm:text-sm text-muted-foreground placeholder-muted-foreground border-0 outline-none focus:ring-0 focus:outline-none focus:bg-black/10 transition-colors duration-150'
                             type='text'
                             placeholder='Enter a command...'
                             aria-label='Console command input.'

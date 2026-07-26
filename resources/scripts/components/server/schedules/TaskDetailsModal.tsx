@@ -1,11 +1,10 @@
 import ModalContext from '@/context/ModalContext';
 import { Form, Formik, Field as FormikField, FormikHelpers, useField } from 'formik';
 import { useContext, useEffect } from 'react';
-import styled from 'styled-components';
 import { boolean, number, object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Field from '@/components/elements/Field';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import FormikSwitchV2 from '@/components/elements/FormikSwitchV2';
@@ -23,15 +22,8 @@ import { ServerContext } from '@/state/server';
 import useFlash from '@/plugins/useFlash';
 
 // TODO: Port modern dropdowns to Formik and integrate them
-// import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@/components/elements/DropdownMenu';
+// import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem } from '@/components/ui/dropdown-menu';
 // import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
-
-const Label = styled.label`
-    display: inline-block;
-    color: #ffffff77;
-    font-size: 0.875rem;
-    padding-bottom: 0.5rem;
-`;
 
 interface Props {
     schedule: Schedule;
@@ -141,11 +133,11 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                         <FlashMessageRender byKey={'schedule:task'} />
                         <div className={`flex flex-col gap-3`}>
                             <div>
-                                <Label>Action</Label>
+                                <label className='inline-block text-muted-foreground text-sm pb-2'>Action</label>
                                 <ActionListener />
                                 <FormikFieldWrapper name={'action'}>
                                     <FormikField
-                                        className='px-4 py-2 bg-[#ffffff11] rounded-lg min-w-full'
+                                        className='px-4 py-2 bg-white/5 rounded-lg min-w-full'
                                         as={Select}
                                         name={'action'}
                                     >
@@ -174,10 +166,10 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                         <div className={`my-6`}>
                             {values.action === 'command' ? (
                                 <div>
-                                    <Label>Payload</Label>
+                                    <label className='inline-block text-muted-foreground text-sm pb-2'>Payload</label>
                                     <FormikFieldWrapper name={'payload'}>
                                         <FormikField
-                                            className='w-full rounded-xl p-2 bg-[#ffffff11]'
+                                            className='w-full rounded-xl p-2 bg-white/5'
                                             as={Textarea}
                                             name={'payload'}
                                             rows={6}
@@ -186,10 +178,10 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                                 </div>
                             ) : values.action === 'power' ? (
                                 <div>
-                                    <Label>Payload</Label>
+                                    <label className='inline-block text-muted-foreground text-sm pb-2'>Payload</label>
                                     <FormikFieldWrapper name={'payload'}>
                                         <FormikField
-                                            className='px-4 py-2 bg-[#ffffff11] rounded-lg min-w-full'
+                                            className='px-4 py-2 bg-white/5 rounded-lg min-w-full'
                                             as={Select}
                                             name={'payload'}
                                         >
@@ -210,7 +202,7 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                                 </div>
                             ) : (
                                 <div>
-                                    <Label>Ignored files (optional)</Label>
+                                    <label className='inline-block text-muted-foreground text-sm pb-2'>Ignored files (optional)</label>
                                     <FormikFieldWrapper
                                         name={'payload'}
                                         description={
@@ -218,7 +210,7 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                                         }
                                     >
                                         <FormikField
-                                            className='w-full rounded-2xl bg-[#ffffff11]'
+                                            className='w-full rounded-2xl bg-white/5'
                                             as={Textarea}
                                             name={'payload'}
                                             rows={6}
@@ -233,9 +225,9 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                             label={'Continue on Failure'}
                         />
                         <div className={`flex justify-end my-6`}>
-                            <ActionButton variant='primary' type={'submit'} disabled={isSubmitting}>
+                            <Button type={'submit'} disabled={isSubmitting}>
                                 {task ? 'Save Changes' : 'Create Task'}
-                            </ActionButton>
+                            </Button>
                         </div>
                     </Form>
                 )}

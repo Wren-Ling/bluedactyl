@@ -4,7 +4,7 @@ import isEqual from 'react-fast-compare';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import ItemContainer from '@/components/elements/ItemContainer';
 import PageContentBlock from '@/components/elements/PageContentBlock';
@@ -94,7 +94,7 @@ const ScheduleEditContainer = () => {
             ) : (
                 <div className={`rounded-sm shadow-sm flex flex-col gap-6`}>
                     <div
-                        className={`bg-[#ffffff09] border-[1px] border-[#ffffff11] flex items-center place-content-between flex-col md:flex-row gap-6 p-6 rounded-2xl overflow-hidden`}
+                        className='bg-white/5 border border-white/5 flex items-center place-content-between flex-col md:flex-row gap-6 p-6 rounded-2xl overflow-hidden'
                     >
                         <div className={`flex-none self-start`}>
                             <h3 className={`flex items-center text-neutral-100 text-2xl`}>
@@ -130,20 +130,19 @@ const ScheduleEditContainer = () => {
                         </div>
                         <div className={`flex gap-2 flex-col md:flex-row md:min-w-0 min-w-full`}>
                             <Can action={'schedule.update'}>
-                                <ActionButton
+                                <Button
                                     variant='secondary'
                                     onClick={toggleEditModal}
                                     className={'flex-1 min-w-max'}
                                 >
                                     Edit
-                                </ActionButton>
-                                <ActionButton
-                                    variant='primary'
+                                </Button>
+                                <Button
                                     onClick={() => setShowTaskModal(true)}
                                     className={'flex-1 min-w-max'}
                                 >
                                     New Task
-                                </ActionButton>
+                                </Button>
                             </Can>
                         </div>
                     </div>
@@ -180,14 +179,14 @@ const ScheduleEditContainer = () => {
                         {schedule.tasks.length > 0 && (
                             <Can action={'schedule.update'}>
                                 <SpinnerOverlay visible={runLoading} size={'large'} />
-                                <ActionButton
+                                <Button
                                     variant='secondary'
                                     className={'flex-1 sm:flex-none'}
                                     disabled={schedule.isProcessing}
                                     onClick={onTriggerExecute}
                                 >
                                     Run Now
-                                </ActionButton>
+                                </Button>
                             </Can>
                         )}
                     </div>

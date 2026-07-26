@@ -1,8 +1,8 @@
-import { Pencil } from '@gravity-ui/icons';
+import { Pencil } from 'lucide-react';
 import { useStoreState } from 'easy-peasy';
 import { useNavigate } from 'react-router-dom';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import { PageListItem } from '@/components/elements/pages/PageList';
 import RemoveSubuserButton from '@/components/server/users/RemoveSubuserButton';
@@ -46,16 +46,16 @@ const UserRow = ({ subuser }: Props) => {
                     <>
                         <div className='flex align-middle items-center justify-center gap-2'>
                             <Can action={'user.update'}>
-                                <ActionButton
+                                <Button
                                     variant='secondary'
                                     size='sm'
                                     className='flex items-center gap-2'
                                     onClick={handleEditClick}
                                     aria-label='Edit subuser'
                                 >
-                                    <Pencil width={22} height={22} fill='currentColor' />
+                                    <Pencil size={22} />
                                     Edit
-                                </ActionButton>
+                                </Button>
                             </Can>
                             <Can action={'user.delete'}>
                                 <RemoveSubuserButton subuser={subuser} />

@@ -1,16 +1,16 @@
 import {
     Box,
-    BranchesDown,
-    ClockArrowRotateLeft,
-    CloudArrowUpIn,
+    CloudUpload,
     Database,
     FolderOpen,
-    Gear,
+    GitBranch,
+    History,
     House,
-    PencilToLine,
-    Persons,
+    Pencil,
+    Settings,
     Terminal,
-} from '@gravity-ui/icons';
+    Users,
+} from 'lucide-react';
 import type { ComponentType, SVGProps } from 'react';
 import { lazy } from 'react';
 
@@ -41,7 +41,7 @@ import UsersContainer from '@/components/server/users/UsersContainer';
 const FileEditContainer = lazy(() => import('@/components/server/files/FileEditContainer'));
 const ScheduleEditContainer = lazy(() => import('@/components/server/schedules/ScheduleEditContainer'));
 
-// Icon component type that works with Gravity UI icons
+// Icon component type for sidebar navigation icons
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
 
 // Feature limit types for visibility conditions
@@ -164,7 +164,7 @@ const routes: Routes = {
             permission: 'backup.*',
             name: 'Backups',
             component: BackupContainer,
-            icon: CloudArrowUpIn,
+            icon: CloudUpload,
             featureLimit: 'backups',
             end: true,
         },
@@ -174,7 +174,7 @@ const routes: Routes = {
             permission: 'allocation.*',
             name: 'Networking',
             component: NetworkContainer,
-            icon: BranchesDown,
+            icon: GitBranch,
             featureLimit: 'network',
             end: true,
         },
@@ -184,7 +184,7 @@ const routes: Routes = {
             permission: 'user.*',
             name: 'Users',
             component: UsersContainer,
-            icon: Persons,
+            icon: Users,
             end: true,
         },
         {
@@ -216,7 +216,7 @@ const routes: Routes = {
             permission: 'schedule.*',
             name: 'Schedules',
             component: ScheduleContainer,
-            icon: ClockArrowRotateLeft,
+            icon: History,
             highlightPatterns: [/^\/server\/[^/]+\/schedules(\/\d+)?$/],
         },
         {
@@ -232,7 +232,7 @@ const routes: Routes = {
             permission: ['settings.*', 'file.sftp'],
             name: 'Settings',
             component: SettingsContainer,
-            icon: Gear,
+            icon: Settings,
             end: true,
         },
         {
@@ -241,7 +241,7 @@ const routes: Routes = {
             permission: 'activity.*',
             name: 'Activity',
             component: ServerActivityLogContainer,
-            icon: PencilToLine,
+            icon: Pencil,
             end: true,
         },
         {

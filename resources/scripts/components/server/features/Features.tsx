@@ -14,6 +14,8 @@ const Features = ({ enabled }: { enabled: string[] }) => {
             .reduce((arr, key) => [...arr, [key, features[key]]] as ListItems, [] as ListItems);
     }, [enabled]);
 
+    if (mapped.length === 0) return null;
+
     return (
         <Suspense fallback={null}>
             {mapped.map(([key, Component]) => (

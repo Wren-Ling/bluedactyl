@@ -8,12 +8,7 @@ import { NotFound } from '@/components/elements/ScreenBlock';
 
 const AuthenticationRouter = () => {
     return (
-        <div
-            style={{
-                background: 'radial-gradient(124.75% 124.75% at 50.01% -10.55%, #121212 0%, #000000 100%)',
-            }}
-            className={'w-full h-full flex justify-center items-center rounded-md'}
-        >
+        <div className='flex min-h-screen items-center justify-center bg-background'>
             <Routes>
                 <Route path='login' element={<LoginContainer />} />
                 <Route path='login/checkpoint/*' element={<LoginCheckpointContainer />} />

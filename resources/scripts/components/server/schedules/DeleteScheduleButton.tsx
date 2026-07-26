@@ -1,7 +1,7 @@
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';
 
@@ -51,9 +51,9 @@ const DeleteScheduleButton = ({ scheduleId, onDeleted }: Props) => {
             >
                 All tasks will be removed and any running processes will be terminated.
             </Dialog.Confirm>
-            <ActionButton variant='danger' className={'flex-1 sm:flex-none'} onClick={() => setVisible(true)}>
+            <Button variant='destructive' className={'flex-1 sm:flex-none'} onClick={() => setVisible(true)}>
                 Delete
-            </ActionButton>
+            </Button>
         </>
     );
 };

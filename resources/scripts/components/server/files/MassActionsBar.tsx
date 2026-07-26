@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Spinner from '@/components/elements/Spinner';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Dialog } from '@/components/elements/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
 import RenameFileModal from '@/components/server/files/RenameFileModal';
 
@@ -69,24 +69,24 @@ const MassActionsBar = () => {
                 <SpinnerOverlay visible={loading} size={'large'} fixed>
                     {loadingMessage}
                 </SpinnerOverlay>
-                <Dialog.Confirm
-                    title={'Delete Files'}
-                    open={showConfirm}
-                    confirm={'Delete'}
-                    onClose={() => setShowConfirm(false)}
-                    onConfirmed={onClickConfirmDeletion}
-                    loading={loading}
-                >
-                    <p className={'mb-2'}>
-                        Are you sure you want to delete&nbsp;
-                        <span className={'font-semibold text-zinc-50'}>{selectedFiles.length} files</span>? This is a
-                        permanent action and the files cannot be recovered.
-                    </p>
-                    {selectedFiles.slice(0, 15).map((file) => (
-                        <li key={file}>{file}</li>
-                    ))}
-                    {selectedFiles.length > 15 && <li>and {selectedFiles.length - 15} others</li>}
-                </Dialog.Confirm>
+                <Dialog open={showConfirm} onOpenChange={setShowConfirm}>
+                    <DialogContent>
+                        <DialogHeader><DialogTitle>Delete Files</DialogTitle></DialogHeader>
+                        <p className={'mb-2'}>
+                            Are you sure you want to delete&nbsp;
+                            <span className={'font-semibold text-foreground'}>{selectedFiles.length} files</span>? This is a
+                            permanent action and the files cannot be recovered.
+                        </p>
+                        {selectedFiles.slice(0, 15).map((file) => (
+                            <li key={file}>{file}</li>
+                        ))}
+                        {selectedFiles.length > 15 && <li>and {selectedFiles.length - 15} others</li>}
+                        <DialogFooter>
+                            <Button variant='outline' onClick={() => setShowConfirm(false)}>Cancel</Button>
+                            <Button variant='destructive' onClick={onClickConfirmDeletion} disabled={loading}>Delete</Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
                 {showMove && (
                     <RenameFileModal
                         files={selectedFiles}
@@ -103,18 +103,18 @@ const MassActionsBar = () => {
                         }
                     >
                         <div className={`flex items-center space-x-4 pointer-events-auto rounded-sm p-4 bg-black/50`}>
-                            <ActionButton onClick={() => setShowMove(true)} disabled={loading}>
+                            <Button onClick={() => setShowMove(true)} disabled={loading}>
                                 {loading && loadingMessage.includes('Moving') && <Spinner size='small' />}
                                 Move
-                            </ActionButton>
-                            <ActionButton onClick={onClickCompress} disabled={loading}>
+                            </Button>
+                            <Button onClick={onClickCompress} disabled={loading}>
                                 {loading && loadingMessage.includes('Archiving') && <Spinner size='small' />}
                                 Archive
-                            </ActionButton>
-                            <ActionButton variant='danger' onClick={() => setShowConfirm(true)} disabled={loading}>
+                            </Button>
+                            <Button variant='destructive' onClick={() => setShowConfirm(true)} disabled={loading}>
                                 {loading && loadingMessage.includes('Deleting') && <Spinner size='small' />}
                                 Delete
-                            </ActionButton>
+                            </Button>
                         </div>
                     </div>
                 </FadeTransition>

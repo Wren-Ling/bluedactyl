@@ -1,12 +1,12 @@
+import { GitBranch, Plus } from 'lucide-react';
 import { For } from 'million/react';
 import { useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
-import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { PageListContainer } from '@/components/elements/pages/PageList';
 import AllocationRow from '@/components/server/network/AllocationRow';
 import SubdomainManagement from '@/components/server/network/SubdomainManagement';
@@ -39,13 +39,11 @@ const NetworkContainer = () => {
 
     useDeepCompareEffect(() => {
         if (!data) return;
-
         setServerFromState((state) => ({ ...state, allocations: data }));
     }, [data]);
 
     const onCreateAllocation = () => {
         clearFlashes();
-
         setLoading(true);
         createServerAllocation(uuid)
             .then((allocation) => {
@@ -57,11 +55,11 @@ const NetworkContainer = () => {
     };
 
     return (
-        <ServerContentBlock title={'Network'}>
+        <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
             <FlashMessageRender byKey={'server:network'} />
 
             <MainPageHeader direction='column' title={'Networking'}>
-                <p className='text-sm text-neutral-400 leading-relaxed'>
+                <p className='text-sm leading-relaxed text-muted-foreground'>
                     Configure network settings for your server. Manage subdomains, IP addresses and ports that your
                     server can bind to for incoming connections.
                 </p>
@@ -70,32 +68,33 @@ const NetworkContainer = () => {
             <div className='space-y-12'>
                 <SubdomainManagement />
 
-                <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-6 shadow-sm mt-8'>
-                    <div className='flex items-center justify-between mb-6'>
+                <div className='rounded-xl border bg-card p-6 text-card-foreground shadow-sm'>
+                    <div className='mb-6 flex items-center justify-between'>
                         <h3 className='text-xl font-extrabold tracking-tight'>Port Allocations</h3>
                         {data && (
                             <Can action={'allocation.create'}>
                                 <div className='flex items-center gap-4'>
                                     {allocationLimit === null && (
-                                        <span className='text-sm text-zinc-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
+                                        <span className='rounded-lg border border-border bg-muted/30 px-3 py-1 text-sm text-muted-foreground'>
                                             {data.length} allocations (unlimited)
                                         </span>
                                     )}
                                     {allocationLimit > 0 && (
-                                        <span className='text-sm text-zinc-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
+                                        <span className='rounded-lg border border-border bg-muted/30 px-3 py-1 text-sm text-muted-foreground'>
                                             {data.length} of {allocationLimit}
                                         </span>
                                     )}
                                     {allocationLimit === 0 && (
-                                        <span className='text-sm text-red-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
+                                        <span className='rounded-lg border border-border bg-muted/30 px-3 py-1 text-sm text-destructive'>
                                             Allocations disabled
                                         </span>
                                     )}
                                     {(allocationLimit === null ||
                                         (allocationLimit > 0 && allocationLimit > data.length)) && (
-                                        <ActionButton variant='primary' onClick={onCreateAllocation} size='sm'>
+                                        <Button variant='default' size='sm' onClick={onCreateAllocation}>
+                                            <Plus className='mr-1 size-4' />
                                             New Allocation
-                                        </ActionButton>
+                                        </Button>
                                     )}
                                 </div>
                             </Can>
@@ -105,8 +104,8 @@ const NetworkContainer = () => {
                     {!data ? (
                         <div className='flex items-center justify-center py-12'>
                             <div className='flex flex-col items-center gap-3'>
-                                <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-brand'></div>
-                                <p className='text-sm text-neutral-400'>Loading allocations...</p>
+                                <div className='size-6 animate-spin rounded-full border-b-2 border-primary' />
+                                <p className='text-sm text-muted-foreground'>Loading allocations...</p>
                             </div>
                         </div>
                     ) : data.length > 0 ? (
@@ -123,19 +122,13 @@ const NetworkContainer = () => {
                     ) : (
                         <div className='flex flex-col items-center justify-center py-12'>
                             <div className='text-center'>
-                                <div className='w-12 h-12 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
-                                    <svg className='w-6 h-6 text-zinc-400' fill='currentColor' viewBox='0 0 20 20'>
-                                        <path
-                                            fillRule='evenodd'
-                                            d='M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z'
-                                            clipRule='evenodd'
-                                        />
-                                    </svg>
+                                <div className='mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-muted'>
+                                    <GitBranch className='size-6 text-muted-foreground' />
                                 </div>
-                                <h4 className='text-lg font-medium text-zinc-200 mb-2'>
+                                <h4 className='mb-2 text-lg font-medium text-foreground'>
                                     {allocationLimit === 0 ? 'Allocations unavailable' : 'No allocations found'}
                                 </h4>
-                                <p className='text-sm text-zinc-400 max-w-sm text-center'>
+                                <p className='max-w-sm text-center text-sm text-muted-foreground'>
                                     {allocationLimit === 0
                                         ? 'Network allocations cannot be created for this server.'
                                         : 'Create your first allocation to get started.'}
@@ -145,7 +138,7 @@ const NetworkContainer = () => {
                     )}
                 </div>
             </div>
-        </ServerContentBlock>
+        </div>
     );
 };
 

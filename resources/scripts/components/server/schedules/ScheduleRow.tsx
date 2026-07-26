@@ -1,4 +1,4 @@
-import { Calendar } from '@gravity-ui/icons';
+import { Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 
 import ScheduleCronRow from '@/components/server/schedules/ScheduleCronRow';
@@ -9,7 +9,7 @@ const ScheduleRow = ({ schedule }: { schedule: Schedule }) => (
     <>
         <div className={`flex-auto`}>
             <div className='flex flex-row flex-none align-middle items-center gap-6'>
-                <Calendar width={25} height={25} className='flex-none' fill='currentColor' />
+                <Calendar size={25} className='flex-none' />
                 <div>
                     <div className='flex flex-row items-center gap-2 text-lg'>
                         <p>{schedule.name}</p>

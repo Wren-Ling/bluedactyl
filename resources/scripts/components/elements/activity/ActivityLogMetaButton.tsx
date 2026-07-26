@@ -1,7 +1,7 @@
-import { Code, Copy } from '@gravity-ui/icons';
+import { Code, Copy } from 'lucide-react';
 import { useState } from 'react';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import { Dialog } from '@/components/elements/dialog';
 
 import { formatObjectToIdentString } from '@/lib/objects';
@@ -29,14 +29,14 @@ const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
                 <div className='space-y-4'>
                     <div className='flex items-center justify-between'>
                         <h4 className='text-sm font-medium text-zinc-300'>Formatted View</h4>
-                        <ActionButton
+                        <Button
                             variant='secondary'
                             onClick={copyToClipboard}
                             className='flex items-center gap-2 text-xs'
                         >
-                            <Copy width={22} height={22} />
+                            <Copy size={22} />
                             {copied ? 'Copied!' : 'Copy JSON'}
-                        </ActionButton>
+                        </Button>
                     </div>
 
                     <div className='bg-zinc-900 rounded-lg p-4 border border-zinc-800 max-h-96 overflow-auto'>
@@ -56,9 +56,9 @@ const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
                 </div>
 
                 <Dialog.Footer>
-                    <ActionButton variant='secondary' onClick={() => setOpen(false)}>
+                    <Button variant='secondary' onClick={() => setOpen(false)}>
                         Close
-                    </ActionButton>
+                    </Button>
                 </Dialog.Footer>
             </Dialog>
 
@@ -67,7 +67,7 @@ const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
                 className='w-6 h-6 rounded text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 transition-colors duration-150 flex items-center justify-center'
                 onClick={() => setOpen(true)}
             >
-                <Code width={22} height={22} />
+                <Code size={22} />
             </button>
         </>
     );

@@ -1,9 +1,9 @@
-import { CircleQuestion, CloudArrowUpIn, PencilToLine, Power, Terminal, TrashBin } from '@gravity-ui/icons';
+import { CircleHelp, CloudUpload, PencilLine, Power, Terminal, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
-import ConfirmationModal from '@/components/elements/ConfirmationModal';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import ItemContainer from '@/components/elements/ItemContainer';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
@@ -28,9 +28,9 @@ const getActionDetails = (action: string): [string, any, boolean?] => {
         case 'power':
             return ['Send Power Action', Power];
         case 'backup':
-            return ['Create Backup', CloudArrowUpIn];
+            return ['Create Backup', CloudUpload];
         default:
-            return ['Unknown Action', CircleQuestion];
+            return ['Unknown Action', CircleHelp];
     }
 };
 
@@ -79,16 +79,18 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                 visible={isEditing}
                 onModalDismissed={() => setIsEditing(false)}
             />
-            <ConfirmationModal
-                title={'Confirm task deletion'}
-                buttonText={'Delete Task'}
-                onConfirmed={onConfirmDeletion}
-                visible={visible}
-                onModalDismissed={() => setVisible(false)}
-            >
-                Are you sure you want to delete this task? This action cannot be undone.
-            </ConfirmationModal>
-            {/* <FontAwesomeIcon icon={icon} className={`text-lg text-white hidden md:block`} /> */}
+            <Dialog open={visible} onOpenChange={(o) => { if (!o) setVisible(false); }}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Confirm task deletion</DialogTitle>
+                    </DialogHeader>
+                    Are you sure you want to delete this task? This action cannot be undone.
+                    <DialogFooter>
+                        <Button variant='outline' onClick={() => setVisible(false)}>Cancel</Button>
+                        <Button variant='destructive' onClick={onConfirmDeletion}>Delete Task</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
             {/* <div className={`flex-none sm:flex-1 w-full sm:w-auto overflow-x-auto`}>
                 <p className={`md:ml-6 text-zinc-200 uppercase text-sm`}>{title}</p>
                 {task.payload && (
@@ -118,28 +120,28 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                     )}
                 </div>
                 <Can action={'schedule.update'}>
-                    <ActionButton
+                    <Button
                         variant='secondary'
                         size='sm'
                         className='flex flex-row items-center gap-2 ml-auto sm:ml-0'
                         onClick={() => setIsEditing(true)}
                         aria-label='Edit scheduled task'
                     >
-                        <PencilToLine width={22} height={22} fill='currentColor' />
+                        <PencilLine size={22} />
                         Edit
-                    </ActionButton>
+                    </Button>
                 </Can>
                 <Can action={'schedule.update'}>
-                    <ActionButton
-                        variant='danger'
+                    <Button
+                        variant='destructive'
                         size='sm'
                         onClick={() => setVisible(true)}
                         className='flex items-center gap-2'
                         aria-label='Delete scheduled task'
                     >
-                        <TrashBin width={22} height={22} fill='currentColor' className='w-4 h-4' />
+                        <Trash2 size={22} className='w-4 h-4' />
                         <span className='hidden sm:inline'>Delete</span>
-                    </ActionButton>
+                    </Button>
                 </Can>
             </div>
         </ItemContainer>

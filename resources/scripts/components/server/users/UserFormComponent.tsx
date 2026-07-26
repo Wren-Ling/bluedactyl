@@ -1,11 +1,11 @@
-import { AntennaSignal, Calendar, Copy, Database, FolderOpen, Gear, Person, Server, Shield } from '@gravity-ui/icons';
+import { Calendar, Copy, Crown, Database, FolderOpen, Settings, Shield, User, Wifi } from 'lucide-react';
 import { Actions, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
 import { array, object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import Field from '@/components/elements/Field';
 import PermissionRow from '@/components/server/users/PermissionRow';
@@ -86,17 +86,17 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
     const getPermissionIcon = (key: string) => {
         switch (key) {
             case 'control':
-                return Server;
+                return Crown;
             case 'user':
-                return Person;
+                return User;
             case 'file':
                 return FolderOpen;
             case 'backup':
                 return Copy;
             case 'allocation':
-                return AntennaSignal;
+                return Wifi;
             case 'startup':
-                return Gear;
+                return Settings;
             case 'database':
                 return Database;
             case 'schedule':
@@ -130,17 +130,15 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                     <Form className='space-y-6'>
                         {/* User Information Section */}
                         {!subuser && (
-                            <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff12] rounded-xl p-6'>
+                            <div className='bg-white/5 border border-white/10 rounded-xl p-6'>
                                 <div className='flex items-center gap-3 mb-6'>
-                                    <div className='w-10 h-10 rounded-lg bg-brand/20 flex items-center justify-center'>
-                                        <Person
-                                            width={22}
-                                            height={22}
-                                            fill='currentColor'
-                                            className='w-5 h-5 text-brand'
-                                        />
-                                    </div>
-                                    <h3 className='text-xl font-semibold text-zinc-100'>User Information</h3>
+                                    <div className='w-10 h-10 rounded-lg bg-secondary flex items-center justify-center'>
+                                        <User
+                                            size={22}
+className='size-5 text-foreground'
+                                                        />
+                                                    </div>
+                                                    <h3 className='text-xl font-semibold text-zinc-100'>User Information</h3>
                                 </div>
                                 <Field
                                     name={'email'}
@@ -153,18 +151,16 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                         )}
 
                         {/* Permissions Section */}
-                        <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border border-[#ffffff12] rounded-xl p-6'>
+                        <div className='bg-white/5 border border-white/10 rounded-xl p-6'>
                             <div className='flex items-center justify-between mb-6'>
                                 <div className='flex items-center gap-3'>
-                                    <div className='w-10 h-10 rounded-lg bg-brand/20 flex items-center justify-center'>
-                                        <Gear
-                                            width={22}
-                                            height={22}
-                                            fill='currentColor'
-                                            className='w-5 h-5 text-brand'
-                                        />
-                                    </div>
-                                    <h3 className='text-xl font-semibold text-zinc-100'>Detailed Permissions</h3>
+                                    <div className='w-10 h-10 rounded-lg bg-secondary flex items-center justify-center'>
+                                        <Settings
+                                            size={22}
+className='size-5 text-foreground'
+                                                        />
+                                                    </div>
+                                                    <h3 className='text-xl font-semibold text-zinc-100'>Detailed Permissions</h3>
                                 </div>
                                 {canEditUser && (
                                     <button
@@ -180,7 +176,7 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                                                 setFieldValue('permissions', [...allPermissions]);
                                             }
                                         }}
-                                        className='text-sm px-4 py-2 rounded-lg bg-brand/10 hover:bg-brand/20 text-brand border border-brand/20 hover:border-brand/30 transition-colors font-medium'
+                                        className='text-sm px-4 py-2 rounded-lg bg-secondary hover:bg-accent text-secondary-foreground border border-border hover:border-foreground/20 transition-colors font-medium'
                                     >
                                         {editablePermissions.every((p) => values.permissions.includes(p))
                                             ? 'Deselect All'
@@ -190,15 +186,13 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                             </div>
 
                             {!isRootAdmin && loggedInPermissions[0] !== '*' && (
-                                <div className='mb-6 p-4 bg-brand/10 border border-brand/20 rounded-lg'>
+                                <div className='mb-6 p-4 bg-secondary border-border rounded-lg'>
                                     <div className='flex items-center gap-3 mb-2'>
                                         <Shield
-                                            width={22}
-                                            height={22}
-                                            fill='currentColor'
-                                            className='w-5 h-5 text-brand'
-                                        />
-                                        <span className='text-sm font-semibold text-brand'>Permission Restriction</span>
+                                            size={22}
+className='size-5 text-foreground'
+                                                        />
+                                                        <span className='text-sm font-semibold text-foreground'>Permission Restriction</span>
                                     </div>
                                     <p className='text-sm text-zinc-300 leading-relaxed'>
                                         You can only assign permissions that you currently have access to.
@@ -210,17 +204,15 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                                 {Object.keys(permissions)
                                     .filter((key) => key !== 'websocket')
                                     .map((key) => (
-                                        <div key={key} className='border border-[#ffffff12] rounded-lg p-4'>
+                                        <div key={key} className='border border-white/10 rounded-lg p-4'>
                                             <div className='flex items-start justify-between mb-3'>
                                                 <div className='flex items-start gap-3 flex-1 min-w-0'>
                                                     {(() => {
                                                         const Icon = getPermissionIcon(key);
                                                         return (
                                                             <Icon
-                                                                width={22}
-                                                                height={22}
-                                                                fill='currentColor'
-                                                                className=' text-brand flex-shrink-0 mt-0.5'
+                                                                size={22}
+                                                                className='mt-0.5 flex-shrink-0 text-foreground'
                                                             />
                                                         );
                                                     })()}
@@ -291,13 +283,13 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
 
                         {/* Action Buttons */}
                         <Can action={subuser ? 'user.update' : 'user.create'}>
-                            <div className='flex gap-3 justify-end pt-4 border-t border-[#ffffff12]'>
-                                <ActionButton variant='secondary' type='button' onClick={onCancel}>
+                            <div className='flex gap-3 justify-end pt-4 border-t border-white/10'>
+                                <Button variant='secondary' type='button' onClick={onCancel}>
                                     Cancel
-                                </ActionButton>
-                                <ActionButton variant='primary' type='submit' disabled={isSubmitting}>
+                                </Button>
+                                <Button type='submit' disabled={isSubmitting}>
                                     {subuser ? 'Save Changes' : 'Invite User'}
-                                </ActionButton>
+                                </Button>
                             </div>
                         </Can>
                     </Form>

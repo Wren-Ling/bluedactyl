@@ -1,24 +1,46 @@
 import { Field, FieldProps } from 'formik';
 
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
-import SwitchV2Container, { SwitchProps } from '@/components/elements/SwitchV2Container';
+import ItemContainer from '@/components/elements/ItemContainer';
+import { Switch } from '@/components/ui/switch';
 
-const FormikSwitch = ({ name, label, ...props }: SwitchProps) => {
+interface SwitchProps {
+    name: string;
+    label: string;
+    description: string;
+    defaultChecked?: boolean;
+    readOnly?: boolean;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const FormikSwitch = ({ name, label, description, defaultChecked, readOnly, onChange: onChangeProp, ...props }: SwitchProps) => {
     return (
         <FormikFieldWrapper name={name}>
             <Field name={name}>
-                {({ field, form }: FieldProps) => (
-                    <SwitchV2Container
-                        name={name}
-                        label={label}
-                        onChange={() => {
-                            form.setFieldTouched(name);
-                            form.setFieldValue(field.name, !field.value);
-                        }}
-                        defaultChecked={field.value}
-                        {...props}
-                    />
-                )}
+                {({ field, form }: FieldProps) => {
+                    const handleChange = () => {
+                        form.setFieldTouched(name);
+                        form.setFieldValue(field.name, !field.value);
+                    };
+
+                    return (
+                        <ItemContainer title={label} description={description}>
+                            <Switch
+                                name={name}
+                                onCheckedChange={(checked) => {
+                                    handleChange();
+                                    if (onChangeProp) {
+                                        onChangeProp({
+                                            target: { checked } as HTMLInputElement,
+                                        } as React.ChangeEvent<HTMLInputElement>);
+                                    }
+                                }}
+                                defaultChecked={field.value}
+                                disabled={readOnly}
+                            />
+                        </ItemContainer>
+                    );
+                }}
             </Field>
         </FormikFieldWrapper>
     );

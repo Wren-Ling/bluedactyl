@@ -1,8 +1,6 @@
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
 import CopyOnClick from '@/components/elements/CopyOnClick';
-
-import styles from './style.module.css';
 
 interface StatBlockProps {
     title: string;
@@ -15,20 +13,16 @@ const StatBlock = ({ title, copyOnClick, className, children }: StatBlockProps) 
     return (
         <CopyOnClick text={copyOnClick}>
             <div
-                className={clsx(
-                    'bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-3 sm:p-4 hover:border-[#ffffff20] transition-all duration-150 group shadow-sm',
+                className={cn(
+                    'group rounded-xl border bg-card p-3 text-card-foreground shadow-sm transition-all duration-150 hover:border-foreground/20 sm:p-4',
                     className,
                 )}
             >
-                <div className={'flex flex-col justify-center overflow-hidden w-full cursor-default'}>
-                    <p className={'leading-tight text-xs text-zinc-400 mb-2 uppercase tracking-wide font-medium'}>
+                <div className='flex w-full cursor-default flex-col justify-center overflow-hidden'>
+                    <p className='mb-2 text-xs leading-tight font-medium tracking-wide text-muted-foreground uppercase'>
                         {title}
                     </p>
-                    <div
-                        className={
-                            'text-lg sm:text-xl font-bold leading-tight tracking-tight w-full truncate text-zinc-100 group-hover:text-white transition-colors duration-150'
-                        }
-                    >
+                    <div className='w-full truncate text-lg leading-tight font-bold tracking-tight transition-colors duration-150 sm:text-xl'>
                         {children}
                     </div>
                 </div>

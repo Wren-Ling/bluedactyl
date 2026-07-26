@@ -1,9 +1,9 @@
-import { Cloud, CloudArrowUpIn, Lock, File } from '@gravity-ui/icons';
+import { Cloud, Lock } from 'lucide-react';
 
 import { format, formatDistanceToNow } from 'date-fns';
 
 import Can from '@/components/elements/Can';
-import { ContextMenu, ContextMenuTrigger } from '@/components/elements/ContextMenu';
+import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import Spinner from '@/components/elements/Spinner';
 import { PageListItem } from '@/components/elements/pages/PageList';
 import { SocketEvent } from '@/components/server/events';
@@ -59,11 +59,11 @@ const BackupItem = ({ backup }: Props) => {
         if (isActive) {
             return <Spinner size={'small'} />;
         } else if (backup.isLocked) {
-            return <Lock width={22} height={22} className='text-red-400 ' fill='currentColor' />;
+            return <Lock size={22} className='text-red-400 ' />;
         } else if (backup.isInProgress === true || backup.isSuccessful) {
-            return <Cloud width={22} height={22} className='text-green-400 ' fill='currentColor' />;
+            return <Cloud size={22} className='text-green-400 ' />;
         } else {
-            return <Cloud width={22} height={22} className='text-red-400 ' fill='currentColor' />;
+            return <Cloud size={22} className='text-red-400 ' />;
         }
     };
 
@@ -73,7 +73,7 @@ const BackupItem = ({ backup }: Props) => {
                 <PageListItem>
                     <div className='flex items-center gap-3 w-full'>
                         <div className='flex flex-row align-middle items-center gap-6 truncate'>
-                            <div className='flex-shrink-0 w-9 h-9 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
+                            <div className='flex-shrink-0 w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center'>
                                 {getStatusIcon()}
                             </div>
                             <div className='flex-1 min-w-0'>

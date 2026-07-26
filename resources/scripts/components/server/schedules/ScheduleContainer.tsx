@@ -1,11 +1,11 @@
+import { Clock } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
-import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { PageListContainer, PageListItem } from '@/components/elements/pages/PageList';
 import EditScheduleModal from '@/components/server/schedules/EditScheduleModal';
 import ScheduleRow from '@/components/server/schedules/ScheduleRow';
@@ -39,20 +39,20 @@ function ScheduleContainer() {
     }, []);
 
     return (
-        <ServerContentBlock title={'Schedules'}>
+        <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
             <FlashMessageRender byKey={'schedules'} />
             <MainPageHeader
                 direction='column'
                 title={'Schedules'}
                 titleChildren={
                     <Can action={'schedule.create'}>
-                        <ActionButton variant='primary' onClick={() => setVisible(true)}>
+                        <Button variant='default' onClick={() => setVisible(true)}>
                             New Schedule
-                        </ActionButton>
+                        </Button>
                     </Can>
                 }
             >
-                <p className='text-sm text-neutral-400 leading-relaxed'>
+                <p className='text-sm leading-relaxed text-muted-foreground'>
                     Automate server tasks with scheduled commands. Create recurring tasks to manage your server, run
                     backups, or execute custom commands.
                 </p>
@@ -63,19 +63,13 @@ function ScheduleContainer() {
             {!schedules.length && loading ? null : (
                 <>
                     {schedules.length === 0 ? (
-                        <div className='flex flex-col items-center justify-center min-h-[60vh] py-12 px-4'>
+                        <div className='flex min-h-[60vh] flex-col items-center justify-center px-4 py-12'>
                             <div className='text-center'>
-                                <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
-                                    <svg className='w-8 h-8 text-zinc-400' fill='currentColor' viewBox='0 0 20 20'>
-                                        <path
-                                            fillRule='evenodd'
-                                            d='M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z'
-                                            clipRule='evenodd'
-                                        />
-                                    </svg>
+                                <div className='mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-muted'>
+                                    <Clock className='size-8 text-muted-foreground' />
                                 </div>
-                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>No schedules found</h3>
-                                <p className='text-sm text-zinc-400 max-w-sm'>
+                                <h3 className='mb-2 text-lg font-medium text-foreground'>No schedules found</h3>
+                                <p className='max-w-sm text-sm text-muted-foreground'>
                                     Your server does not have any scheduled tasks. Create one to automate server
                                     management.
                                 </p>
@@ -94,7 +88,7 @@ function ScheduleContainer() {
                     )}
                 </>
             )}
-        </ServerContentBlock>
+        </div>
     );
 }
 

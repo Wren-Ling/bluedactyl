@@ -1,14 +1,30 @@
-import { Xmark } from '@gravity-ui/icons';
 import { Dialog as HDialog } from '@headlessui/react';
+import { X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useMemo, useRef, useState } from 'react';
-import styled from 'styled-components';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Spinner from '@/components/elements/Spinner';
-import { DialogContext, IconPosition, styles } from '@/components/elements/dialog';
+import { DialogContext, IconPosition } from '@/components/elements/dialog';
 
-const variants = {
+export interface RequiredModalProps {
+    visible: boolean;
+    onDismissed: () => void;
+    appear?: boolean;
+    top?: boolean;
+    children?: React.ReactNode;
+}
+
+export interface ModalProps extends RequiredModalProps {
+    title?: string;
+    closeButton?: boolean;
+    dismissable?: boolean;
+    closeOnEscape?: boolean;
+    closeOnBackground?: boolean;
+    showSpinnerOverlay?: boolean;
+}
+
+const variantAnimations = {
     open: {
         scale: 1,
         opacity: 1,
@@ -34,38 +50,11 @@ const variants = {
     },
 };
 
-export interface RequiredModalProps {
-    visible: boolean;
-    onDismissed: () => void;
-    appear?: boolean;
-    top?: boolean;
-    children?: React.ReactNode;
-}
-
-export interface ModalProps extends RequiredModalProps {
-    title?: string;
-    closeButton?: boolean;
-    dismissable?: boolean;
-    closeOnEscape?: boolean;
-    closeOnBackground?: boolean;
-    showSpinnerOverlay?: boolean;
-}
-
-export const ModalMask = styled.div`
-    background: radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%);
-    position: fixed;
-    z-index: 9997;
-    overflow: auto;
-    flex: 1;
-    inset: 0;
-    backdrop-filter: blur(3px);
-`;
-
 const Modal: React.FC<ModalProps> = ({
     title,
     visible,
-    closeButton,
     dismissable = true,
+    closeButton,
     showSpinnerOverlay,
     onDismissed,
     children,
@@ -95,10 +84,7 @@ const Modal: React.FC<ModalProps> = ({
     return (
         <>
             {showSpinnerOverlay && (
-                <div
-                    className={`fixed inset-0 w-full h-full rounded-sm flex items-center justify-center`}
-                    style={{ background: 'rgba(0,0,0,0.75)', zIndex: 9999 }}
-                >
+                <div className='fixed inset-0 w-full h-full rounded-sm flex items-center justify-center bg-black/75 z-9999'>
                     <Spinner />
                 </div>
             )}
@@ -115,17 +101,11 @@ const Modal: React.FC<ModalProps> = ({
                             open={visible}
                             onClose={onDialogClose}
                         >
-                            <div
-                                style={{
-                                    background:
-                                        'radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%)',
-                                }}
-                                className={'fixed inset-0 backdrop-blur-xs z-9997'}
-                            />
-                            <div className={'fixed inset-0 overflow-y-auto z-9998'}>
+                            <div className='fixed inset-0 z-9997 backdrop-blur-xs bg-black/40' />
+                            <div className='fixed inset-0 overflow-y-auto z-9998'>
                                 <div
                                     ref={container}
-                                    className={styles.dialogContainer}
+                                    className='flex min-h-full items-center justify-center p-4 text-center'
                                     onMouseDown={onContainerClick.bind(this, true)}
                                     onMouseUp={onContainerClick.bind(this, false)}
                                 >
@@ -134,38 +114,32 @@ const Modal: React.FC<ModalProps> = ({
                                         initial={'closed'}
                                         animate={down ? 'bounce' : 'open'}
                                         exit={'closed'}
-                                        variants={variants}
-                                        className={styles.panel}
+                                        variants={variantAnimations}
+                                        className='relative mx-auto w-full max-w-xl rounded-2xl border border-white/5 text-left shadow-2xl backdrop-blur-3xl bg-black/60'
                                     >
-                                        <div className='place-content-between flex items-center m-6'>
-                                            {title && <h2 className={`text-2xl text-zinc-100`}>{title}</h2>}
+                                        <div className='flex justify-between items-center m-6'>
+                                            {title && <h2 className='text-2xl text-zinc-100'>{title}</h2>}
                                             {dismissable && (
                                                 <button
                                                     onClick={onDismissed}
-                                                    className={'opacity-45 hover:opacity-100 p-6 -m-6 cursor-pointer'}
+                                                    className='opacity-45 hover:opacity-100 p-6 -m-6 cursor-pointer'
                                                 >
-                                                    <Xmark width={22} height={22} fill='currentColor' />
+                                                    <X className='size-5' />
                                                 </button>
                                             )}
                                         </div>
-                                        <div className={'flex px-6 overflow-y-auto'}>
-                                            <hr
-                                                style={{
-                                                    boxShadow: 'inset 0 0 .4rem .4rem #fff',
-                                                }}
-                                            />
+                                        <div className='flex px-6 overflow-y-auto'>
                                             {iconPosition === 'container' && icon}
-                                            <div className={'flex-1 max-h-[70vh] min-w-0'}>
-                                                <div className={'flex items-center'}>
+                                            <div className='flex-1 max-h-[70vh] min-w-0'>
+                                                <div className='flex items-center'>
                                                     {iconPosition !== 'container' && icon}
                                                     {children}
-                                                    {/* <div className={'invisible h-6'} /> */}
                                                 </div>
                                                 {closeButton && (
-                                                    <div className={`my-6 sm:flex items-center justify-end`}>
-                                                        <ActionButton onClick={onDismissed} className={`min-w-full`}>
-                                                            <div>Close</div>
-                                                        </ActionButton>
+                                                    <div className='my-6 sm:flex items-center justify-end'>
+                                                        <Button onClick={onDismissed} className='w-full'>
+                                                            Close
+                                                        </Button>
                                                     </div>
                                                 )}
                                             </div>

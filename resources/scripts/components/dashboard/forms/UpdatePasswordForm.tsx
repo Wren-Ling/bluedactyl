@@ -3,7 +3,7 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import { Fragment } from 'react';
 import * as Yup from 'yup';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Field from '@/components/elements/Field';
 import Spinner from '@/components/elements/Spinner';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
@@ -94,10 +94,10 @@ const UpdatePasswordForm = () => {
                                 />
                             </div>
                             <div className={`mt-6`}>
-                                <ActionButton variant='primary' disabled={isSubmitting || !isValid}>
+                                <Button disabled={isSubmitting || !isValid}>
                                     {isSubmitting && <Spinner size='small' />}
                                     {isSubmitting ? 'Updating...' : 'Update Password'}
-                                </ActionButton>
+                                </Button>
                             </div>
                         </Form>
                     </Fragment>

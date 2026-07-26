@@ -1,7 +1,7 @@
-import { TriangleExclamation } from '@gravity-ui/icons';
+import { TriangleAlert } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Spinner from '@/components/elements/Spinner';
 import { Dialog } from '@/components/elements/dialog';
 
@@ -112,7 +112,7 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                 );
             case 'error':
                 return (
-                    <TriangleExclamation width={22} height={22} fill='currentColor' className='w-5 h-5 text-red-400' />
+                    <TriangleAlert size={22} className='w-5 h-5 text-red-400' />
                 );
             default:
                 return <Spinner size={'small'} />;
@@ -142,7 +142,7 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                 {/* Operation ID */}
                 {operationId && (
                     <div className='flex justify-center'>
-                        <div className='px-3 py-1.5 bg-[#ffffff11] border border-[#ffffff12] rounded-lg'>
+                        <div className='px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg'>
                             <p className='text-xs text-zinc-400 font-mono'>ID: {formatOperationId(operationId)}</p>
                         </div>
                     </div>
@@ -152,10 +152,8 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                 {error ? (
                     <div className='space-y-4'>
                         <div className='flex items-center justify-center space-x-3'>
-                            <TriangleExclamation
-                                width={22}
-                                height={22}
-                                fill='currentColor'
+                            <TriangleAlert
+                                size={22}
                                 className='w-6 h-6 text-red-400'
                             />
                             <span className='text-red-400 font-semibold text-lg'>Error</span>
@@ -178,16 +176,16 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                         </div>
 
                         {/* Message Box */}
-                        <div className='p-4 bg-[#ffffff11] border border-[#ffffff12] rounded-lg'>
+                        <div className='p-4 bg-white/5 border border-white/10 rounded-lg'>
                             <p className='text-sm text-zinc-300 text-center'>{operation.message || 'Processing...'}</p>
                         </div>
 
                         {/* Progress Bar for Active Operations */}
                         {isActiveStatus(operation.status) && (
                             <div className='space-y-3'>
-                                <div className='w-full bg-[#ffffff11] rounded-full h-2 border border-[#ffffff12]'>
+                                <div className='w-full bg-white/5 rounded-full h-2 border border-white/10'>
                                     <div
-                                        className='bg-brand h-2 rounded-full animate-pulse transition-all duration-500 ease-out'
+                                        className='bg-foreground h-2 rounded-full animate-pulse transition-all duration-500 ease-out'
                                         style={{ width: `${UI_CONFIG.ESTIMATED_PROGRESS_WIDTH}%` }}
                                     />
                                 </div>
@@ -220,10 +218,8 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                         {isFailedStatus(operation.status) && (
                             <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
                                 <div className='flex items-center justify-center space-x-2 mb-2'>
-                                    <TriangleExclamation
-                                        width={22}
-                                        height={22}
-                                        fill='currentColor'
+                                    <TriangleAlert
+                                        size={22}
                                         className='w-5 h-5 text-red-400'
                                     />
                                     <p className='text-sm text-red-300 font-medium'>Operation failed</p>
@@ -245,12 +241,12 @@ const WingsOperationProgressModal: React.FC<Props> = ({
 
             {canClose && (
                 <Dialog.Footer>
-                    <ActionButton onClick={handleClose} variant='secondary' className='mr-3'>
+                    <Button onClick={handleClose} variant='outline' className='mr-3'>
                         Cancel
-                    </ActionButton>
-                    <ActionButton onClick={handleClose} variant='primary'>
+                    </Button>
+                    <Button onClick={handleClose}>
                         {operation?.is_completed ? 'Done' : 'Close'}
-                    </ActionButton>
+                    </Button>
                 </Dialog.Footer>
             )}
         </Dialog>

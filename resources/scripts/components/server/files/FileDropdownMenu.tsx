@@ -1,19 +1,17 @@
-import { BarsPlay, Copy, FileArrowDown, FileZipper, PencilToLine, Shield, TrashBin } from '@gravity-ui/icons';
+import { Play, Copy, FileDown, FileArchive, PencilLine, Shield, Trash2 } from 'lucide-react';
 import { join } from 'pathe';
 import { memo, useState } from 'react';
 import isEqual from 'react-fast-compare';
 import { toast } from 'sonner';
 
 import Can from '@/components/elements/Can';
-import { ContextMenuContent, ContextMenuItem } from '@/components/elements/ContextMenu';
-import { Dialog } from '@/components/elements/dialog';
+import { ContextMenuContent, ContextMenuItem } from '@/components/ui/context-menu';
 import ChmodFileModal from '@/components/server/files/ChmodFileModal';
 import RenameFileModal from '@/components/server/files/RenameFileModal';
 
 import compressFiles from '@/api/server/files/compressFiles';
 import copyFile from '@/api/server/files/copyFile';
 import decompressFiles from '@/api/server/files/decompressFiles';
-import deleteFiles from '@/api/server/files/deleteFiles';
 import getFileDownloadUrl from '@/api/server/files/getFileDownloadUrl';
 import { FileObject } from '@/api/server/files/loadDirectory';
 
@@ -24,27 +22,13 @@ import useFlash from '@/plugins/useFlash';
 
 type ModalType = 'rename' | 'move' | 'chmod';
 
-const FileDropdownMenu = ({ file }: { file: FileObject }) => {
+const FileDropdownMenu = ({ file, onDelete }: { file: FileObject; onDelete?: () => void }) => {
     const [modal, setModal] = useState<ModalType | null>(null);
-    const [showConfirmation, setShowConfirmation] = useState(false);
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const { mutate } = useFileManagerSwr();
     const { clearAndAddHttpError, clearFlashes } = useFlash();
     const directory = ServerContext.useStoreState((state) => state.files.directory);
-
-    const doDeletion = async () => {
-        clearFlashes('files');
-
-        await mutate((files) => files!.filter((f) => f.key !== file.key), false);
-
-        deleteFiles(uuid, directory, [file.name]).catch((error) => {
-            mutate();
-            clearAndAddHttpError({ key: 'files', error });
-        });
-
-        setShowConfirmation(false);
-    };
 
     const doCopy = () => {
         clearFlashes('files');
@@ -89,16 +73,6 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
 
     return (
         <>
-            <Dialog.Confirm
-                open={showConfirmation}
-                onClose={() => setShowConfirmation(false)}
-                title={`Delete ${file.isFile ? 'File' : 'Directory'}`}
-                confirm={'Delete'}
-                onConfirmed={doDeletion}
-            >
-                You will not be able to recover the contents of
-                <span className={'font-semibold text-zinc-50'}> {file.name}</span> once deleted.
-            </Dialog.Confirm>
             {modal ? (
                 modal === 'chmod' ? (
                     <ChmodFileModal
@@ -120,22 +94,22 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
             <ContextMenuContent className='flex flex-col gap-1'>
                 <Can action={'file.update'}>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setModal('rename')}>
-                        <PencilToLine className='h-4! w-4!' fill='currentColor' />
+                        <PencilLine className='h-4! w-4!' />
                         <span>Rename</span>
                     </ContextMenuItem>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setModal('move')}>
-                        <BarsPlay className='h-4! w-4!' fill='currentColor' />
+                        <Play className='h-4! w-4!' />
                         <span>Move</span>
                     </ContextMenuItem>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setModal('chmod')}>
-                        <Shield className='h-4! w-4!' fill='currentColor' />
+                        <Shield className='h-4! w-4!' />
                         <span>Permissions</span>
                     </ContextMenuItem>
                 </Can>
                 {file.isFile && (
                     <Can action={'file.create'}>
                         <ContextMenuItem className='flex gap-2' onClick={doCopy}>
-                            <Copy className='h-4! w-4!' fill='currentColor' />
+                            <Copy className='h-4! w-4!' />
                             <span>Duplicate</span>
                         </ContextMenuItem>
                     </Can>
@@ -143,27 +117,27 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                 {file.isArchiveType() ? (
                     <Can action={'file.create'}>
                         <ContextMenuItem className='flex gap-2' onSelect={doUnarchive} title={'Unarchive'}>
-                            <FileZipper className='h-4! w-4!' fill='currentColor' />
+                            <FileArchive className='h-4! w-4!' />
                             <span>Unarchive</span>
                         </ContextMenuItem>
                     </Can>
                 ) : (
                     <Can action={'file.archive'}>
                         <ContextMenuItem className='flex gap-2' onSelect={doArchive}>
-                            <FileZipper className='h-4! w-4!' fill='currentColor' />
+                            <FileArchive className='h-4! w-4!' />
                             <span>Archive</span>
                         </ContextMenuItem>
                     </Can>
                 )}
                 {file.isFile && (
                     <ContextMenuItem className='flex gap-2' onSelect={doDownload}>
-                        <FileArrowDown className='h-4! w-4!' fill='currentColor' />
+                        <FileDown className='h-4! w-4!' />
                         <span>Download</span>
                     </ContextMenuItem>
                 )}
                 <Can action={'file.delete'}>
-                    <ContextMenuItem className='flex gap-2' onSelect={() => setShowConfirmation(true)}>
-                        <TrashBin className='h-4! w-4!' fill='currentColor' />
+                    <ContextMenuItem className='flex gap-2' onClick={onDelete}>
+                        <Trash2 className='h-4! w-4!' />
                         <span>Delete</span>
                     </ContextMenuItem>
                 </Can>

@@ -1,22 +1,28 @@
-import { Box, TriangleExclamation } from '@gravity-ui/icons';
+import { Box, ChevronDown, TriangleAlert } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import isEqual from 'react-fast-compare';
 import { toast } from 'sonner';
 
-import ActionButton from '@/components/elements/ActionButton';
-import ConfirmationModal from '@/components/elements/ConfirmationModal';
+import { Button } from '@/components/ui/button';
+import FlashMessageRender from '@/components/FlashMessageRender';
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuRadioGroup,
     DropdownMenuRadioItem,
     DropdownMenuTrigger,
-} from '@/components/elements/DropdownMenu';
+} from '@/components/ui/dropdown-menu';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
-import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Spinner from '@/components/elements/Spinner';
 import { Switch } from '@/components/ui/switch';
-import TitledGreyBox from '@/components/elements/TitledGreyBox';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import OperationProgressModal from '@/components/server/operations/OperationProgressModal';
 import WingsOperationProgressModal from '@/components/server/operations/WingsOperationProgressModal';
 
@@ -595,13 +601,13 @@ const SoftwareContainer = () => {
         const showFull = showFullDescriptions[id];
 
         return (
-            <p className='text-sm text-neutral-400 leading-relaxed'>
+            <p className='text-sm text-muted-foreground leading-relaxed'>
                 {isLong && !showFull ? (
                     <>
                         {description.slice(0, MAX_DESCRIPTION_LENGTH)}...{' '}
                         <button
                             onClick={() => toggleDescription(id)}
-                            className='text-brand hover:underline font-medium'
+                            className='text-primary hover:underline font-medium'
                         >
                             Show more
                         </button>
@@ -614,7 +620,7 @@ const SoftwareContainer = () => {
                                 {' '}
                                 <button
                                     onClick={() => toggleDescription(id)}
-                                    className='text-brand hover:underline font-medium'
+                                    className='text-primary hover:underline font-medium'
                                 >
                                     Show less
                                 </button>
@@ -627,576 +633,579 @@ const SoftwareContainer = () => {
     };
 
     const renderOverview = () => (
-        <TitledGreyBox title='Current Software'>
-            <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
-                <div className='flex items-center gap-3 sm:gap-4 min-w-0 flex-1'>
-                    <div className='w-10 h-10 sm:w-12 sm:h-12 bg-[#ffffff11] rounded-lg flex items-center justify-center flex-shrink-0'>
-                        <Box
-                            width={22}
-                            height={22}
-                            fill='currentColor'
-                            className='w-5 h-5 sm:w-6 sm:h-6 text-neutral-300'
-                        />
-                    </div>
-                    <div className='min-w-0 flex-1'>
-                        {currentEggName ? (
-                            currentEggName.includes(blank_egg_prefix) ? (
-                                <p className='text-amber-400 font-medium text-sm sm:text-base'>No software selected</p>
+        <Card>
+            <CardHeader>
+                <CardTitle className='text-xl font-extrabold tracking-tight'>Current Software</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
+                    <div className='flex items-center gap-3 sm:gap-4 min-w-0 flex-1'>
+                        <div className='w-10 h-10 sm:w-12 sm:h-12 bg-muted/20 rounded-lg flex items-center justify-center flex-shrink-0'>
+                            <Box className='w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground' />
+                        </div>
+                        <div className='min-w-0 flex-1'>
+                            {currentEggName ? (
+                                currentEggName.includes(blank_egg_prefix) ? (
+                                    <p className='text-amber-400 font-medium text-sm sm:text-base'>No software selected</p>
+                                ) : (
+                                    <p className='text-foreground font-medium text-sm sm:text-base truncate'>
+                                        {currentEggName}
+                                    </p>
+                                )
                             ) : (
-                                <p className='text-neutral-200 font-medium text-sm sm:text-base truncate'>
-                                    {currentEggName}
-                                </p>
-                            )
-                        ) : (
-                            <div className='flex items-center gap-2'>
-                                <Spinner size='small' />
-                                <span className='text-neutral-400 text-sm'>Loading...</span>
-                            </div>
-                        )}
-                        <p className='text-xs sm:text-sm text-neutral-400 leading-relaxed'>
-                            Manage your server&apos;s game or software configuration
-                        </p>
+                                <div className='flex items-center gap-2'>
+                                    <Spinner size='small' />
+                                    <span className='text-muted-foreground text-sm'>Loading...</span>
+                                </div>
+                            )}
+                            <p className='text-xs sm:text-sm text-muted-foreground leading-relaxed'>
+                                Manage your server&apos;s game or software configuration
+                            </p>
+                        </div>
+                    </div>
+                    <div className='flex-shrink-0 w-full sm:w-auto'>
+                        <Button
+                            variant='default'
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                try {
+                                    setCurrentStep('select-game');
+                                } catch (error) {
+                                    console.error('Error in change software click:', error);
+                                }
+                            }}
+                            className='w-full sm:w-auto'
+                            disabled={isLoading}
+                        >
+                            {isLoading && <Spinner size='small' />}
+                            Change Software
+                        </Button>
                     </div>
                 </div>
-                <div className='flex-shrink-0 w-full sm:w-auto'>
-                    <ActionButton
-                        variant='primary'
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            try {
-                                setCurrentStep('select-game');
-                            } catch (error) {
-                                console.error('Error in change software click:', error);
-                            }
-                        }}
-                        className='w-full sm:w-auto'
-                        disabled={isLoading}
-                    >
-                        {isLoading && <Spinner size='small' />}
-                        Change Software
-                    </ActionButton>
-                </div>
-            </div>
-        </TitledGreyBox>
+            </CardContent>
+        </Card>
     );
 
     const renderGameSelection = () => (
-        <TitledGreyBox title='Select Category'>
-            <div className='space-y-4'>
-                <p className='text-sm text-neutral-400'>Choose the type of game or software you want to run</p>
+        <Card>
+            <CardHeader>
+                <CardTitle className='text-xl font-extrabold tracking-tight'>Select Category</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className='space-y-4'>
+                    <p className='text-sm text-muted-foreground'>Choose the type of game or software you want to run</p>
 
-                <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4'>
-                    {nests?.map((nest) =>
-                        nest?.attributes?.name?.includes(hidden_nest_prefix) ? null : (
-                            <button
-                                key={nest?.attributes?.uuid}
-                                onClick={() => handleNestSelection(nest)}
-                                className='p-4 sm:p-5 bg-[#ffffff08] border border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-all text-left active:bg-[#ffffff12] touch-manipulation'
-                            >
-                                <h3 className='font-semibold text-neutral-200 mb-2 text-base sm:text-lg'>
-                                    {nest?.attributes?.name}
-                                </h3>
-                                {renderDescription(
-                                    nest?.attributes?.description || '',
-                                    `nest-${nest?.attributes?.uuid}`,
-                                )}
-                            </button>
-                        ),
-                    )}
-                </div>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4'>
+                        {nests?.map((nest) =>
+                            nest?.attributes?.name?.includes(hidden_nest_prefix) ? null : (
+                                <button
+                                    key={nest?.attributes?.uuid}
+                                    onClick={() => handleNestSelection(nest)}
+                                    className='p-4 sm:p-5 bg-muted/30 border border-border/20 rounded-lg hover:border-white/10 transition-all text-left active:bg-white/5 touch-manipulation'
+                                >
+                                    <h3 className='font-semibold text-foreground mb-2 text-base sm:text-lg'>
+                                        {nest?.attributes?.name}
+                                    </h3>
+                                    {renderDescription(
+                                        nest?.attributes?.description || '',
+                                        `nest-${nest?.attributes?.uuid}`,
+                                    )}
+                                </button>
+                            ),
+                        )}
+                    </div>
 
-                <div className='flex justify-center pt-4'>
-                    <ActionButton
-                        variant='secondary'
-                        onClick={() => setCurrentStep('overview')}
-                        className='w-full sm:w-auto'
-                    >
-                        Back to Overview
-                    </ActionButton>
+                    <div className='flex justify-center pt-4'>
+                        <Button
+                            variant='outline'
+                            onClick={() => setCurrentStep('overview')}
+                            className='w-full sm:w-auto'
+                        >
+                            Back to Overview
+                        </Button>
+                    </div>
                 </div>
-            </div>
-        </TitledGreyBox>
+            </CardContent>
+        </Card>
     );
 
     const renderSoftwareSelection = () => (
-        <TitledGreyBox title={`Select Software - ${selectedNest?.attributes.name}`}>
-            <div className='space-y-4'>
-                <p className='text-sm text-neutral-400'>Choose the specific software version for your server</p>
+        <Card>
+            <CardHeader>
+                <CardTitle className='text-xl font-extrabold tracking-tight'>Select Software - {selectedNest?.attributes.name}</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className='space-y-4'>
+                    <p className='text-sm text-muted-foreground'>Choose the specific software version for your server</p>
 
-                {isLoading ? (
-                    <div className='flex items-center justify-center py-16'>
-                        <div className='flex flex-col items-center text-center'>
-                            <Spinner size='large' />
-                            <p className='text-neutral-400 mt-4'>Loading software options...</p>
+                    {isLoading ? (
+                        <div className='flex items-center justify-center py-16'>
+                            <div className='flex flex-col items-center text-center'>
+                                <Spinner size='large' />
+                                <p className='text-muted-foreground mt-4'>Loading software options...</p>
+                            </div>
                         </div>
-                    </div>
-                ) : (
-                    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4'>
-                        {selectedNest?.attributes?.relationships?.eggs?.data?.map((egg) => (
-                            <button
-                                key={egg.attributes.uuid}
-                                onClick={() => handleEggSelection(egg)}
-                                disabled={isLoading}
-                                className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-all text-left touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed'
-                            >
-                                <div className='flex items-center gap-2 mb-2'>
-                                    {isLoading && selectedEgg?.attributes?.uuid === egg?.attributes?.uuid && (
-                                        <Spinner size='small' />
-                                    )}
-                                    <h3 className='font-semibold text-neutral-200 text-sm sm:text-base'>
-                                        {egg?.attributes?.name}
-                                    </h3>
-                                </div>
-                                {renderDescription(egg?.attributes?.description || '', `egg-${egg?.attributes?.uuid}`)}
-                            </button>
-                        ))}
-                    </div>
-                )}
+                    ) : (
+                        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4'>
+                            {selectedNest?.attributes?.relationships?.eggs?.data?.map((egg) => (
+                                <button
+                                    key={egg.attributes.uuid}
+                                    onClick={() => handleEggSelection(egg)}
+                                    disabled={isLoading}
+                                    className='p-4 bg-muted/30 border border-border/20 rounded-lg hover:border-white/10 transition-all text-left touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed'
+                                >
+                                    <div className='flex items-center gap-2 mb-2'>
+                                        {isLoading && selectedEgg?.attributes?.uuid === egg?.attributes?.uuid && (
+                                            <Spinner size='small' />
+                                        )}
+                                        <h3 className='font-semibold text-foreground text-sm sm:text-base'>
+                                            {egg?.attributes?.name}
+                                        </h3>
+                                    </div>
+                                    {renderDescription(egg?.attributes?.description || '', `egg-${egg?.attributes?.uuid}`)}
+                                </button>
+                            ))}
+                        </div>
+                    )}
 
-                <div className='flex flex-col sm:flex-row justify-center gap-3 pt-4'>
-                    <ActionButton
-                        variant='secondary'
-                        onClick={() => setCurrentStep('select-game')}
-                        className='w-full sm:w-auto'
-                    >
-                        Back to Games
-                    </ActionButton>
-                    <ActionButton
-                        variant='secondary'
-                        onClick={() => setCurrentStep('overview')}
-                        className='w-full sm:w-auto'
-                    >
-                        Cancel
-                    </ActionButton>
+                    <div className='flex flex-col sm:flex-row justify-center gap-3 pt-4'>
+                        <Button
+                            variant='outline'
+                            onClick={() => setCurrentStep('select-game')}
+                            className='w-full sm:w-auto'
+                        >
+                            Back to Games
+                        </Button>
+                        <Button
+                            variant='outline'
+                            onClick={() => setCurrentStep('overview')}
+                            className='w-full sm:w-auto'
+                        >
+                            Cancel
+                        </Button>
+                    </div>
                 </div>
-            </div>
-        </TitledGreyBox>
+            </CardContent>
+        </Card>
     );
 
     const renderConfiguration = () => (
         <div className='space-y-6'>
-            <TitledGreyBox title={`Configure ${selectedEgg?.attributes.name}`}>
-                {eggPreview && (
-                    <div className='space-y-6'>
-                        {/* Software Configuration */}
-                        <div className='space-y-4'>
-                            <h3 className='text-lg font-semibold text-neutral-200'>Software Configuration</h3>
-                            <div className='grid grid-cols-1 xl:grid-cols-2 gap-4'>
-                                <div>
-                                    <label className='text-sm font-medium text-neutral-300 block mb-2'>
-                                        Startup Command
-                                    </label>
-                                    <textarea
-                                        value={customStartup}
-                                        onChange={(e) => setCustomStartup(e.target.value)}
-                                        placeholder='Enter custom startup command...'
-                                        rows={3}
-                                        className='w-full px-3 py-2 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200 placeholder:text-neutral-500 focus:outline-none focus:border-brand transition-colors font-mono resize-none'
-                                    />
-                                    <p className='text-xs text-neutral-400 mt-1'>
-                                        Use variables like{' '}
-                                        {eggPreview.variables
-                                            .map((v) => `{{${v.env_variable}}}`)
-                                            .slice(0, 3)
-                                            .join(', ')}
-                                        {eggPreview.variables.length > 3 && ', etc.'}
-                                    </p>
-                                </div>
-                                <div>
-                                    <label className='text-sm font-medium text-neutral-300 block mb-2'>
-                                        Docker Image
-                                    </label>
-                                    {eggPreview.docker_images && Object.keys(eggPreview.docker_images).length > 1 ? (
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <button className='w-full px-3 py-2 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200 focus:outline-none focus:border-brand transition-colors text-left flex items-center justify-between hover:border-[#ffffff20]'>
-                                                    <span className='truncate'>
-                                                        {selectedDockerImage || 'Select image...'}
-                                                    </span>
-                                                    <svg
-                                                        className='w-4 h-4 text-neutral-400 flex-shrink-0'
-                                                        fill='none'
-                                                        stroke='currentColor'
-                                                        viewBox='0 0 24 24'
+            <Card>
+                <CardHeader>
+                    <CardTitle className='text-xl font-extrabold tracking-tight'>Configure {selectedEgg?.attributes.name}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {eggPreview && (
+                        <div className='space-y-6'>
+                            {/* Software Configuration */}
+                            <div className='space-y-4'>
+                                <h3 className='text-lg font-semibold text-foreground'>Software Configuration</h3>
+                                <div className='grid grid-cols-1 xl:grid-cols-2 gap-4'>
+                                    <div>
+                                        <label className='text-sm font-medium text-muted-foreground block mb-2'>
+                                            Startup Command
+                                        </label>
+                                        <textarea
+                                            value={customStartup}
+                                            onChange={(e) => setCustomStartup(e.target.value)}
+                                            placeholder='Enter custom startup command...'
+                                            rows={3}
+                                            className='w-full px-3 py-2 bg-muted/30 border border-border/20 rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-ring transition-colors font-mono resize-none'
+                                        />
+                                        <p className='text-xs text-muted-foreground mt-1'>
+                                            Use variables like{' '}
+                                            {eggPreview.variables
+                                                .map((v) => `{{${v.env_variable}}}`)
+                                                .slice(0, 3)
+                                                .join(', ')}
+                                            {eggPreview.variables.length > 3 && ', etc.'}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <label className='text-sm font-medium text-muted-foreground block mb-2'>
+                                            Docker Image
+                                        </label>
+                                        {eggPreview.docker_images && Object.keys(eggPreview.docker_images).length > 1 ? (
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <button className='w-full px-3 py-2 bg-muted/30 border border-border/20 rounded-lg text-sm text-foreground focus:outline-none focus:border-ring transition-colors text-left flex items-center justify-between hover:border-white/10'>
+                                                        <span className='truncate'>
+                                                            {selectedDockerImage || 'Select image...'}
+                                                        </span>
+                                                        <ChevronDown className='w-4 h-4 text-muted-foreground flex-shrink-0' />
+                                                    </button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent className='w-full min-w-[300px]'>
+                                                    <DropdownMenuRadioGroup
+                                                        value={selectedDockerImage}
+                                                        onValueChange={setSelectedDockerImage}
                                                     >
-                                                        <path
-                                                            strokeLinecap='round'
-                                                            strokeLinejoin='round'
-                                                            strokeWidth={2}
-                                                            d='M19 9l-7 7-7-7'
-                                                        />
-                                                    </svg>
-                                                </button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent className='w-full min-w-[300px]'>
-                                                <DropdownMenuRadioGroup
-                                                    value={selectedDockerImage}
-                                                    onValueChange={setSelectedDockerImage}
-                                                >
-                                                    {Object.entries(eggPreview.docker_images).map(
-                                                        ([displayName, _]) => (
-                                                            <DropdownMenuRadioItem
-                                                                key={displayName}
-                                                                value={displayName}
-                                                                className='text-sm font-mono'
-                                                            >
-                                                                <span>{displayName}</span>
-                                                            </DropdownMenuRadioItem>
-                                                        ),
-                                                    )}
-                                                </DropdownMenuRadioGroup>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    ) : (
-                                        <div className='w-full px-3 py-2 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200'>
-                                            {(eggPreview.docker_images && Object.keys(eggPreview.docker_images)[0]) ||
-                                                'Default Image'}
-                                        </div>
-                                    )}
-                                    <p className='text-xs text-neutral-400 mt-1'>
-                                        Container runtime environment for your server
-                                    </p>
+                                                        {Object.entries(eggPreview.docker_images).map(
+                                                            ([displayName, _]) => (
+                                                                <DropdownMenuRadioItem
+                                                                    key={displayName}
+                                                                    value={displayName}
+                                                                    className='text-sm font-mono'
+                                                                >
+                                                                    <span>{displayName}</span>
+                                                                </DropdownMenuRadioItem>
+                                                            ),
+                                                        )}
+                                                    </DropdownMenuRadioGroup>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        ) : (
+                                            <div className='w-full px-3 py-2 bg-muted/30 border border-border/20 rounded-lg text-sm text-foreground'>
+                                                {(eggPreview.docker_images && Object.keys(eggPreview.docker_images)[0]) ||
+                                                    'Default Image'}
+                                            </div>
+                                        )}
+                                        <p className='text-xs text-muted-foreground mt-1'>
+                                            Container runtime environment for your server
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Environment Variables */}
-                        {eggPreview.variables.length > 0 && (
-                            <div className='space-y-4'>
-                                <h3 className='text-lg font-semibold text-neutral-200'>Environment Variables</h3>
-                                <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
-                                    {eggPreview.variables.map((variable) => (
-                                        <div key={variable.env_variable} className='space-y-3'>
-                                            <div>
-                                                <label className='text-sm font-medium text-neutral-200 block mb-1'>
-                                                    {variable.name}
-                                                    {!variable.user_editable && (
-                                                        <span className='ml-2 px-2 py-0.5 text-xs bg-amber-500/20 text-amber-400 rounded'>
-                                                            Read-only
-                                                        </span>
-                                                    )}
-                                                    {variable.user_editable && variable.rules.includes('required') && (
-                                                        <span className='ml-2 px-2 py-0.5 text-xs bg-red-500/20 text-red-400 rounded'>
-                                                            Required
-                                                        </span>
-                                                    )}
-                                                    {variable.user_editable && !variable.rules.includes('required') && (
-                                                        <span className='ml-2 px-2 py-0.5 text-xs bg-neutral-500/20 text-neutral-400 rounded'>
-                                                            Optional
-                                                        </span>
-                                                    )}
-                                                </label>
-                                                {variable.description && (
-                                                    <p className='text-xs text-neutral-400 mb-2'>
-                                                        {variable.description}
-                                                    </p>
-                                                )}
-                                            </div>
-
-                                            {variable.user_editable ? (
+                            {/* Environment Variables */}
+                            {eggPreview.variables.length > 0 && (
+                                <div className='space-y-4'>
+                                    <h3 className='text-lg font-semibold text-foreground'>Environment Variables</h3>
+                                    <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+                                        {eggPreview.variables.map((variable) => (
+                                            <div key={variable.env_variable} className='space-y-3'>
                                                 <div>
-                                                    <input
-                                                        type='text'
-                                                        value={pendingVariables[variable.env_variable] || ''}
-                                                        onChange={(e) =>
-                                                            handleVariableChange(variable.env_variable, e.target.value)
-                                                        }
-                                                        placeholder={variable.default_value || 'Enter value...'}
-                                                        className={`w-full px-3 py-2 bg-[#ffffff08] border rounded-lg text-sm text-neutral-200 placeholder:text-neutral-500 focus:outline-none transition-colors ${variableErrors[variable.env_variable]
-                                                            ? 'border-red-500 focus:border-red-500'
-                                                            : 'border-[#ffffff12] focus:border-brand'
-                                                            }`}
-                                                    />
-                                                    {variableErrors[variable.env_variable] && (
-                                                        <p className='text-xs text-red-400 mt-1'>
-                                                            {variableErrors[variable.env_variable]}
+                                                    <label className='text-sm font-medium text-foreground block mb-1'>
+                                                        {variable.name}
+                                                        {!variable.user_editable && (
+                                                            <span className='ml-2 px-2 py-0.5 text-xs bg-amber-500/20 text-amber-400 rounded'>
+                                                                Read-only
+                                                            </span>
+                                                        )}
+                                                        {variable.user_editable && variable.rules.includes('required') && (
+                                                            <span className='ml-2 px-2 py-0.5 text-xs bg-red-500/20 text-red-400 rounded'>
+                                                                Required
+                                                            </span>
+                                                        )}
+                                                        {variable.user_editable && !variable.rules.includes('required') && (
+                                                            <span className='ml-2 px-2 py-0.5 text-xs bg-neutral-500/20 text-muted-foreground rounded'>
+                                                                Optional
+                                                            </span>
+                                                        )}
+                                                    </label>
+                                                    {variable.description && (
+                                                        <p className='text-xs text-muted-foreground mb-2'>
+                                                            {variable.description}
                                                         </p>
                                                     )}
                                                 </div>
-                                            ) : (
-                                                <div className='w-full px-3 py-2 bg-[#ffffff04] border border-[#ffffff08] rounded-lg text-sm text-neutral-300 font-mono'>
-                                                    {pendingVariables[variable.env_variable] ||
-                                                        variable.default_value ||
-                                                        'Not set'}
-                                                </div>
-                                            )}
 
-                                            <div className='flex justify-between text-xs'>
-                                                <span className='text-neutral-500 font-mono'>
-                                                    {variable.env_variable}
-                                                </span>
-                                                {variable.rules && (
-                                                    <span className='text-neutral-500'>Rules: {variable.rules}</span>
+                                                {variable.user_editable ? (
+                                                    <div>
+                                                        <input
+                                                            type='text'
+                                                            value={pendingVariables[variable.env_variable] || ''}
+                                                            onChange={(e) =>
+                                                                handleVariableChange(variable.env_variable, e.target.value)
+                                                            }
+                                                            placeholder={variable.default_value || 'Enter value...'}
+                                                            className={`w-full px-3 py-2 bg-muted/30 border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none transition-colors ${variableErrors[variable.env_variable]
+                                                                ? 'border-red-500 focus:border-red-500'
+                                                                : 'border-border/20 focus:border-ring'
+                                                                }`}
+                                                        />
+                                                        {variableErrors[variable.env_variable] && (
+                                                            <p className='text-xs text-red-400 mt-1'>
+                                                                {variableErrors[variable.env_variable]}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                ) : (
+                                                    <div className='w-full px-3 py-2 bg-muted/10 border border-muted/30 rounded-lg text-sm text-muted-foreground font-mono'>
+                                                        {pendingVariables[variable.env_variable] ||
+                                                            variable.default_value ||
+                                                            'Not set'}
+                                                    </div>
                                                 )}
+
+                                                <div className='flex justify-between text-xs'>
+                                                    <span className='text-muted-foreground font-mono'>
+                                                        {variable.env_variable}
+                                                    </span>
+                                                    {variable.rules && (
+                                                        <span className='text-muted-foreground'>Rules: {variable.rules}</span>
+                                                    )}
+                                                </div>
                                             </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Safety Options */}
+                            <div className='space-y-4'>
+                                <h3 className='text-lg font-semibold text-foreground'>Safety Options</h3>
+                                <div className='space-y-3'>
+                                    <div className='flex items-center justify-between p-4 bg-muted/30 border border-border/20 rounded-lg hover:border-white/10 transition-colors'>
+                                        <div className='flex-1 min-w-0 pr-4'>
+                                            <label className='text-sm font-medium text-foreground block mb-1'>
+                                                Create Backup
+                                            </label>
+                                            <p className='text-xs text-muted-foreground leading-relaxed'>
+                                                {backupLimit !== 0 &&
+                                                    (backupLimit === null || (backups?.backupCount || 0) < backupLimit)
+                                                    ? 'Automatically create a backup before applying changes'
+                                                    : backupLimit === 0
+                                                        ? 'Backups are disabled for this server'
+                                                        : 'Backup limit reached'}
+                                            </p>
                                         </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
+                                        <div className='flex-shrink-0'>
+                                            <Switch
+                                                checked={shouldBackup}
+                                                onCheckedChange={setShouldBackup}
+                                                disabled={
+                                                    backupLimit === 0 ||
+                                                    (backupLimit !== null && (backups?.backupCount || 0) >= backupLimit)
+                                                }
+                                            />
+                                        </div>
+                                    </div>
 
-                        {/* Safety Options */}
-                        <div className='space-y-4'>
-                            <h3 className='text-lg font-semibold text-neutral-200'>Safety Options</h3>
-                            <div className='space-y-3'>
-                                <div className='flex items-center justify-between p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-colors'>
-                                    <div className='flex-1 min-w-0 pr-4'>
-                                        <label className='text-sm font-medium text-neutral-200 block mb-1'>
-                                            Create Backup
-                                        </label>
-                                        <p className='text-xs text-neutral-400 leading-relaxed'>
-                                            {backupLimit !== 0 &&
-                                                (backupLimit === null || (backups?.backupCount || 0) < backupLimit)
-                                                ? 'Automatically create a backup before applying changes'
-                                                : backupLimit === 0
-                                                    ? 'Backups are disabled for this server'
-                                                    : 'Backup limit reached'}
-                                        </p>
-                                    </div>
-                                    <div className='flex-shrink-0'>
-                                        <Switch
-                                            checked={shouldBackup}
-                                            onCheckedChange={setShouldBackup}
-                                            disabled={
-                                                backupLimit === 0 ||
-                                                (backupLimit !== null && (backups?.backupCount || 0) >= backupLimit)
-                                            }
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className='flex items-center justify-between p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-colors'>
-                                    <div className='flex-1 min-w-0 pr-4'>
-                                        <label className='text-sm font-medium text-neutral-200 block mb-1'>
-                                            Wipe Files
-                                        </label>
-                                        <p className='text-xs text-neutral-400 leading-relaxed'>
-                                            Delete all files before installing new software
-                                        </p>
-                                    </div>
-                                    <div className='flex-shrink-0'>
-                                        <Switch checked={shouldWipe} onCheckedChange={setShouldWipe} />
+                                    <div className='flex items-center justify-between p-4 bg-muted/30 border border-border/20 rounded-lg hover:border-white/10 transition-colors'>
+                                        <div className='flex-1 min-w-0 pr-4'>
+                                            <label className='text-sm font-medium text-foreground block mb-1'>
+                                                Wipe Files
+                                            </label>
+                                            <p className='text-xs text-muted-foreground leading-relaxed'>
+                                                Delete all files before installing new software
+                                            </p>
+                                        </div>
+                                        <div className='flex-shrink-0'>
+                                            <Switch checked={shouldWipe} onCheckedChange={setShouldWipe} />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
 
-                <div className='flex flex-col sm:flex-row justify-center gap-3 pt-4'>
-                    <ActionButton
-                        variant='secondary'
-                        onClick={() => setCurrentStep('select-software')}
-                        className='w-full sm:w-auto'
-                    >
-                        Back to Software
-                    </ActionButton>
-                    <ActionButton
-                        variant='primary'
-                        onClick={proceedToReview}
-                        disabled={!eggPreview || isLoading}
-                        className='w-full sm:w-auto'
-                    >
-                        {isLoading && <Spinner size='small' />}
-                        Review Changes
-                    </ActionButton>
-                </div>
-            </TitledGreyBox>
+                    <div className='flex flex-col sm:flex-row justify-center gap-3 pt-4'>
+                        <Button
+                            variant='outline'
+                            onClick={() => setCurrentStep('select-software')}
+                            className='w-full sm:w-auto'
+                        >
+                            Back to Software
+                        </Button>
+                        <Button
+                            variant='default'
+                            onClick={proceedToReview}
+                            disabled={!eggPreview || isLoading}
+                            className='w-full sm:w-auto'
+                        >
+                            {isLoading && <Spinner size='small' />}
+                            Review Changes
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     );
 
     const renderReview = () => (
         <div className='space-y-6'>
-            <TitledGreyBox title='Review Changes'>
-                {selectedEgg && eggPreview && (
-                    <div className='space-y-6'>
-                        {/* Summary */}
-                        <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                            <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Change Summary</h3>
-                            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm'>
-                                <div>
-                                    <span className='text-neutral-400'>From:</span>
-                                    <div className='text-neutral-200 font-medium'>
-                                        {currentEggName || 'No software'}
+            <Card>
+                <CardHeader>
+                    <CardTitle className='text-xl font-extrabold tracking-tight'>Review Changes</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {selectedEgg && eggPreview && (
+                        <div className='space-y-6'>
+                            {/* Summary */}
+                            <div className='p-4 bg-muted/30 border border-border/20 rounded-lg'>
+                                <h3 className='text-lg font-semibold text-foreground mb-4'>Change Summary</h3>
+                                <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm'>
+                                    <div>
+                                        <span className='text-muted-foreground'>From:</span>
+                                        <div className='text-foreground font-medium'>
+                                            {currentEggName || 'No software'}
+                                        </div>
                                     </div>
-                                </div>
-                                <div>
-                                    <span className='text-neutral-400'>To:</span>
-                                    <div className='text-brand font-medium'>{selectedEgg.attributes.name}</div>
-                                </div>
-                                <div>
-                                    <span className='text-neutral-400'>Category:</span>
-                                    <div className='text-neutral-200 font-medium'>{selectedNest?.attributes.name}</div>
-                                </div>
-                                <div>
-                                    <span className='text-neutral-400'>Docker Image:</span>
-                                    <div className='text-neutral-200 font-medium'>
-                                        {selectedDockerImage || 'Default'}
+                                    <div>
+                                        <span className='text-muted-foreground'>To:</span>
+                                        <div className='text-primary font-medium'>{selectedEgg.attributes.name}</div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Startup Command Review */}
-                        <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                            <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Startup Configuration</h3>
-                            <div className='space-y-3'>
-                                <div>
-                                    <span className='text-neutral-400 text-sm'>Startup Command:</span>
-                                    <div className='mt-1 p-3 bg-[#ffffff08] border border-[#ffffff12] rounded-lg font-mono text-sm text-neutral-200 whitespace-pre-wrap'>
-                                        {customStartup || eggPreview.egg.startup}
+                                    <div>
+                                        <span className='text-muted-foreground'>Category:</span>
+                                        <div className='text-foreground font-medium'>{selectedNest?.attributes.name}</div>
                                     </div>
-                                </div>
-                                <div>
-                                    <span className='text-neutral-400 text-sm'>Docker Image:</span>
-                                    <div className='mt-1 p-3 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200'>
-                                        {selectedDockerImage || 'Default Image'}
+                                    <div>
+                                        <span className='text-muted-foreground'>Docker Image:</span>
+                                        <div className='text-foreground font-medium'>
+                                            {selectedDockerImage || 'Default'}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Configuration Review */}
-                        {eggPreview.variables.length > 0 && (
-                            <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                                <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Variable Configuration</h3>
-                                <div className='space-y-2'>
-                                    {eggPreview.variables.map((variable) => (
-                                        <div
-                                            key={variable.env_variable}
-                                            className='flex justify-between items-center py-2 px-3 bg-[#ffffff08] rounded-lg'
-                                        >
-                                            <div>
-                                                <span className='text-neutral-200 font-medium'>{variable.name}</span>
-                                                <span className='text-neutral-500 text-sm ml-2 font-mono'>
-                                                    ({variable.env_variable})
-                                                </span>
+                            {/* Startup Command Review */}
+                            <div className='p-4 bg-muted/30 border border-border/20 rounded-lg'>
+                                <h3 className='text-lg font-semibold text-foreground mb-4'>Startup Configuration</h3>
+                                <div className='space-y-3'>
+                                    <div>
+                                        <span className='text-muted-foreground text-sm'>Startup Command:</span>
+                                        <div className='mt-1 p-3 bg-muted/30 border border-border/20 rounded-lg font-mono text-sm text-foreground whitespace-pre-wrap'>
+                                            {customStartup || eggPreview.egg.startup}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span className='text-muted-foreground text-sm'>Docker Image:</span>
+                                        <div className='mt-1 p-3 bg-muted/30 border border-border/20 rounded-lg text-sm text-foreground'>
+                                            {selectedDockerImage || 'Default Image'}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Configuration Review */}
+                            {eggPreview.variables.length > 0 && (
+                                <div className='p-4 bg-muted/30 border border-border/20 rounded-lg'>
+                                    <h3 className='text-lg font-semibold text-foreground mb-4'>Variable Configuration</h3>
+                                    <div className='space-y-2'>
+                                        {eggPreview.variables.map((variable) => (
+                                            <div
+                                                key={variable.env_variable}
+                                                className='flex justify-between items-center py-2 px-3 bg-muted/30 rounded-lg'
+                                            >
+                                                <div>
+                                                    <span className='text-foreground font-medium'>{variable.name}</span>
+                                                    <span className='text-muted-foreground text-sm ml-2 font-mono'>
+                                                        ({variable.env_variable})
+                                                    </span>
+                                                </div>
+                                                <div className='text-primary font-mono text-sm'>
+                                                    {pendingVariables[variable.env_variable] ||
+                                                        variable.default_value ||
+                                                        'Not set'}
+                                                </div>
                                             </div>
-                                            <div className='text-brand font-mono text-sm'>
-                                                {pendingVariables[variable.env_variable] ||
-                                                    variable.default_value ||
-                                                    'Not set'}
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Safety Options Review */}
+                            <div className='p-4 bg-muted/30 border border-border/20 rounded-lg'>
+                                <h3 className='text-lg font-semibold text-foreground mb-4'>Safety Options</h3>
+                                <div className='space-y-2'>
+                                    <div className='flex justify-between items-center py-2 px-3 bg-muted/30 rounded-lg'>
+                                        <span className='text-foreground'>Create Backup</span>
+                                        <span className={shouldBackup ? 'text-green-400' : 'text-muted-foreground'}>
+                                            {shouldBackup ? 'Yes' : 'No'}
+                                        </span>
+                                    </div>
+                                    <div className='flex justify-between items-center py-2 px-3 bg-muted/30 rounded-lg'>
+                                        <span className='text-foreground'>Wipe Files</span>
+                                        <span className={shouldWipe ? 'text-amber-400' : 'text-muted-foreground'}>
+                                            {shouldWipe ? 'Yes' : 'No'}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Subdomain Warnings */}
+                            {eggPreview.warnings && eggPreview.warnings.length > 0 && (
+                                <div className='space-y-3'>
+                                    {eggPreview.warnings.map((warning, index) => (
+                                        <div
+                                            key={index}
+                                            className={`p-4 border rounded-lg ${warning.severity === 'error'
+                                                ? 'bg-red-500/10 border-red-500/20'
+                                                : 'bg-amber-500/10 border-amber-500/20'
+                                                }`}
+                                        >
+                                            <div className='flex items-start gap-3'>
+                                                <TriangleAlert
+                                                    className={`w-5 h-5 flex-shrink-0 mt-0.5 ${warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
+                                                        }`}
+                                                />
+                                                <div>
+                                                    <h4
+                                                        className={`font-semibold mb-2 ${warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
+                                                            }`}
+                                                    >
+                                                        {warning.type === 'subdomain_incompatible'
+                                                            ? 'Subdomain Will Be Deleted'
+                                                            : 'Warning'}
+                                                    </h4>
+                                                    <p className='text-sm text-muted-foreground'>{warning.message}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
-                            </div>
-                        )}
+                            )}
 
-                        {/* Safety Options Review */}
-                        <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                            <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Safety Options</h3>
-                            <div className='space-y-2'>
-                                <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff08] rounded-lg'>
-                                    <span className='text-neutral-200'>Create Backup</span>
-                                    <span className={shouldBackup ? 'text-green-400' : 'text-neutral-400'}>
-                                        {shouldBackup ? 'Yes' : 'No'}
-                                    </span>
-                                </div>
-                                <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff08] rounded-lg'>
-                                    <span className='text-neutral-200'>Wipe Files</span>
-                                    <span className={shouldWipe ? 'text-amber-400' : 'text-neutral-400'}>
-                                        {shouldWipe ? 'Yes' : 'No'}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Subdomain Warnings */}
-                        {eggPreview.warnings && eggPreview.warnings.length > 0 && (
-                            <div className='space-y-3'>
-                                {eggPreview.warnings.map((warning, index) => (
-                                    <div
-                                        key={index}
-                                        className={`p-4 border rounded-lg ${warning.severity === 'error'
-                                            ? 'bg-red-500/10 border-red-500/20'
-                                            : 'bg-amber-500/10 border-amber-500/20'
-                                            }`}
-                                    >
-                                        <div className='flex items-start gap-3'>
-                                            <TriangleExclamation
-                                                width={22}
-                                                height={22}
-                                                fill='currentColor'
-                                                className={`w-5 h-5 flex-shrink-0 mt-0.5 ${warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
-                                                    }`}
-                                            />
-                                            <div>
-                                                <h4
-                                                    className={`font-semibold mb-2 ${warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
-                                                        }`}
-                                                >
-                                                    {warning.type === 'subdomain_incompatible'
-                                                        ? 'Subdomain Will Be Deleted'
-                                                        : 'Warning'}
-                                                </h4>
-                                                <p className='text-sm text-neutral-300'>{warning.message}</p>
-                                            </div>
-                                        </div>
+                            {/* General Warning */}
+                            <div className='p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg'>
+                                <div className='flex items-start gap-3'>
+                                    <TriangleAlert
+                                        className='w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5'
+                                    />
+                                    <div>
+                                        <h4 className='text-amber-400 font-semibold mb-2'>This will:</h4>
+                                        <ul className='text-sm text-muted-foreground'>
+                                            <li>• Stop and reinstall your server</li>
+                                            <li>• Take several minutes to complete</li>
+                                            <li>• Modify and remove some files</li>
+                                        </ul>
+                                        <span className='text-sm font-bold mt-4'>
+                                            Please ensure you have backups of important data before proceeding.
+                                        </span>
                                     </div>
-                                ))}
-                            </div>
-                        )}
-
-                        {/* General Warning */}
-                        <div className='p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg'>
-                            <div className='flex items-start gap-3'>
-                                <TriangleExclamation
-                                    width={22}
-                                    height={22}
-                                    fill='currentColor'
-                                    className='w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5'
-                                />
-                                <div>
-                                    <h4 className='text-amber-400 font-semibold mb-2'>This will:</h4>
-                                    <ul className='text-sm text-neutral-300'>
-                                        <li>• Stop and reinstall your server</li>
-                                        <li>• Take several minutes to complete</li>
-                                        <li>• Modify and remove some files</li>
-                                    </ul>
-                                    <span className='text-sm font-bold mt-4'>
-                                        Please ensure you have backups of important data before proceeding.
-                                    </span>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
 
-                <div className='flex flex-col sm:flex-row justify-center gap-3 pt-4'>
-                    <ActionButton
-                        variant='secondary'
-                        onClick={() => setCurrentStep('configure')}
-                        className='w-full sm:w-auto'
-                    >
-                        Back to Configure
-                    </ActionButton>
-                    <ActionButton
-                        variant='primary'
-                        onClick={applyChanges}
-                        disabled={isLoading}
-                        className='w-full sm:w-auto'
-                    >
-                        {isLoading && <Spinner size='small' />}
-                        Apply Changes
-                    </ActionButton>
-                </div>
-            </TitledGreyBox>
+                    <div className='flex flex-col sm:flex-row justify-center gap-3 pt-4'>
+                        <Button
+                            variant='outline'
+                            onClick={() => setCurrentStep('configure')}
+                            className='w-full sm:w-auto'
+                        >
+                            Back to Configure
+                        </Button>
+                        <Button
+                            variant='default'
+                            onClick={applyChanges}
+                            disabled={isLoading}
+                            className='w-full sm:w-auto'
+                        >
+                            {isLoading && <Spinner size='small' />}
+                            Apply Changes
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     );
 
     // Show loading state if server data is not available
     if (!serverData) {
         return (
-            <ServerContentBlock title='Software Management'>
+            <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
+                <FlashMessageRender byKey={'shell'} />
                 <div className='flex items-center justify-center h-64'>
                     <div className='flex flex-col items-center text-center'>
                         <Spinner size='large' />
-                        <p className='text-neutral-400 mt-4'>Loading server information...</p>
+                        <p className='text-muted-foreground mt-4'>Loading server information...</p>
                     </div>
                 </div>
-            </ServerContentBlock>
+            </div>
         );
     }
     function RenderOperationModal() {
@@ -1227,22 +1236,22 @@ const SoftwareContainer = () => {
         return <div>Could not find Operation Modal for this daemon: Using ${daemonType}</div>;
     }
     return (
-        <ServerContentBlock title='Software Management'>
+        <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
+            <FlashMessageRender byKey={'server:software'} />
             <div className='space-y-6'>
                 <MainPageHeader direction='column' title='Software Management'>
-                    <p className='text-neutral-400 leading-relaxed'>
+                    <p className='text-muted-foreground leading-relaxed'>
                         Change your server&apos;s game or software with our guided configuration wizard
                     </p>
                 </MainPageHeader>
 
-                {/* Progress indicator */}
                 {currentStep !== 'overview' && (
-                    <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                        <div className='flex items-center justify-between mb-2'>
-                            <span className='text-sm font-medium text-neutral-200 capitalize'>
+                    <div className='rounded-lg border border-border/20 bg-muted/30 p-4'>
+                        <div className='mb-2 flex items-center justify-between'>
+                            <span className='text-sm font-medium capitalize text-foreground'>
                                 {currentStep.replace('-', ' ')}
                             </span>
-                            <span className='text-sm text-neutral-400'>
+                            <span className='text-sm text-muted-foreground'>
                                 Step{' '}
                                 {['overview', 'select-game', 'select-software', 'configure', 'review'].indexOf(
                                     currentStep,
@@ -1250,18 +1259,17 @@ const SoftwareContainer = () => {
                                 of 4
                             </span>
                         </div>
-                        <div className='w-full bg-[#ffffff12] rounded-full h-2'>
+                        <div className='h-2 w-full rounded-full bg-muted/20'>
                             <div
-                                className='bg-brand h-2 rounded-full transition-all duration-300'
+                                className='h-2 rounded-full bg-primary transition-all duration-300'
                                 style={{
                                     width: `${(['overview', 'select-game', 'select-software', 'configure', 'review'].indexOf(currentStep) / 4) * 100}%`,
                                 }}
-                            ></div>
+                            />
                         </div>
                     </div>
                 )}
 
-                {/* Step Content */}
                 {currentStep === 'overview' && renderOverview()}
                 {currentStep === 'select-game' && renderGameSelection()}
                 {currentStep === 'select-software' && renderSoftwareSelection()}
@@ -1269,53 +1277,51 @@ const SoftwareContainer = () => {
                 {currentStep === 'review' && renderReview()}
             </div>
 
-            {/* Wipe Files Confirmation Modal */}
-            <ConfirmationModal
-                title='Wipe All Files Without Backup?'
-                buttonText={wipeCountdown > 0 ? `Yes, Wipe Files (${wipeCountdown}s)` : 'Yes, Wipe Files'}
-                visible={showWipeConfirmation}
-                onConfirmed={handleWipeConfirm}
-                onModalDismissed={() => setShowWipeConfirmation(false)}
-                disabled={wipeCountdown > 0 && !shiftPressed}
-                loading={wipeLoading}
-            >
-                <div className='space-y-4'>
-                    <div className='flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
-                        <TriangleExclamation
-                            width={22}
-                            height={22}
-                            fill='currentColor'
-                            className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5'
-                        />
-                        <div>
-                            <h4 className='text-red-400 font-semibold mb-2'>DANGER: No Backup Selected</h4>
-                            <p className='text-sm text-neutral-300'>
-                                You have chosen to wipe all files <strong>without creating a backup</strong>. This
-                                action will <strong>permanently delete ALL files</strong> on your server and cannot be
-                                undone.
-                            </p>
+            <Dialog open={showWipeConfirmation} onOpenChange={setShowWipeConfirmation}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Wipe All Files Without Backup?</DialogTitle>
+                    </DialogHeader>
+                    <div className='space-y-4'>
+                        <div className='flex items-start gap-3 rounded-lg border border-red-500/20 bg-red-500/10 p-4'>
+                            <TriangleAlert className='mt-0.5 size-5 shrink-0 text-red-400' />
+                            <div>
+                                <h4 className='mb-2 font-semibold text-red-400'>DANGER: No Backup Selected</h4>
+                                <p className='text-sm text-muted-foreground'>
+                                    You have chosen to wipe all files <strong>without creating a backup</strong>. This
+                                    action will <strong>permanently delete ALL files</strong> on your server and cannot be
+                                    undone.
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                    <div className='text-sm text-neutral-300 space-y-2'>
-                        <p>
-                            <strong>What will happen:</strong>
+                        <div className='space-y-2 text-sm text-muted-foreground'>
+                            <p><strong>What will happen:</strong></p>
+                            <ul className='ml-4 list-inside list-disc space-y-1'>
+                                <li>All server files will be permanently deleted</li>
+                                <li>Your server will be stopped and reinstalled</li>
+                                <li>Any custom configurations or data will be lost</li>
+                                <li>This action cannot be reversed</li>
+                            </ul>
+                        </div>
+                        <p className='text-sm text-muted-foreground'>
+                            Are you absolutely sure you want to proceed without a backup?
                         </p>
-                        <ul className='list-disc list-inside space-y-1 ml-4'>
-                            <li>All server files will be permanently deleted</li>
-                            <li>Your server will be stopped and reinstalled</li>
-                            <li>Any custom configurations or data will be lost</li>
-                            <li>This action cannot be reversed</li>
-                        </ul>
                     </div>
-                    <p className='text-sm text-neutral-300'>
-                        Are you absolutely sure you want to proceed without a backup?
-                    </p>
-                </div>
-            </ConfirmationModal>
+                    <DialogFooter>
+                        <Button variant='outline' onClick={() => setShowWipeConfirmation(false)}>Cancel</Button>
+                        <Button
+                            variant='destructive'
+                            onClick={handleWipeConfirm}
+                            disabled={wipeCountdown > 0 && !shiftPressed}
+                        >
+                            {wipeCountdown > 0 ? `Yes, Wipe Files (${wipeCountdown}s)` : 'Yes, Wipe Files'}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
 
-            {/* Operation Progress Modal */}
             {RenderOperationModal()}
-        </ServerContentBlock>
+        </div>
     );
 };
 

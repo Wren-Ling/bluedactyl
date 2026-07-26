@@ -1,7 +1,7 @@
-import { TrashBin } from '@gravity-ui/icons';
+import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import { Dialog } from '@/components/elements/dialog';
 
 import deleteServerAllocation from '@/api/server/network/deleteServerAllocation';
@@ -49,15 +49,15 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
             >
                 This allocation will be immediately removed from your server.
             </Dialog.Confirm>
-            <ActionButton
-                variant='danger'
+            <Button
+                variant='destructive'
                 size='sm'
                 onClick={() => setConfirm(true)}
                 className='flex items-center gap-2'
             >
-                <TrashBin width={22} height={22} fill='currentColor' />
+                <Trash2 size={22} />
                 <span className='hidden sm:inline'>Delete</span>
-            </ActionButton>
+            </Button>
         </>
     );
 };

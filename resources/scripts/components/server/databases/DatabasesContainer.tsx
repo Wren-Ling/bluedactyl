@@ -1,17 +1,16 @@
-import { Database } from '@gravity-ui/icons';
+import { Database } from 'lucide-react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { For } from 'million/react';
 import { useEffect, useState } from 'react';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import Field from '@/components/elements/Field';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Modal from '@/components/elements/Modal';
-import ServerContentBlock from '@/components/elements/ServerContentBlock';
-import { PageListContainer, PageListItem } from '@/components/elements/pages/PageList';
+import { PageListContainer } from '@/components/elements/pages/PageList';
 import DatabaseRow from '@/components/server/databases/DatabaseRow';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -84,37 +83,37 @@ const DatabasesContainer = () => {
     }, []);
 
     return (
-        <ServerContentBlock title={'Databases'}>
+        <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
             <FlashMessageRender byKey={'databases'} />
             <MainPageHeader
                 direction='column'
                 title={'Databases'}
                 titleChildren={
                     <Can action={'database.create'}>
-                        <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
+                        <div className='flex flex-col items-center justify-end gap-4 sm:flex-row'>
                             {databaseLimit === null && (
-                                <p className='text-sm text-zinc-300 text-center sm:text-right'>
+                                <p className='text-center text-sm text-muted-foreground sm:text-right'>
                                     {databases.length} databases (unlimited)
                                 </p>
                             )}
                             {databaseLimit > 0 && (
-                                <p className='text-sm text-zinc-300 text-center sm:text-right'>
+                                <p className='text-center text-sm text-muted-foreground sm:text-right'>
                                     {databases.length} of {databaseLimit} databases
                                 </p>
                             )}
                             {databaseLimit === 0 && (
-                                <p className='text-sm text-red-400 text-center sm:text-right'>Databases disabled</p>
+                                <p className='text-center text-sm text-destructive sm:text-right'>Databases disabled</p>
                             )}
                             {(databaseLimit === null || (databaseLimit > 0 && databaseLimit !== databases.length)) && (
-                                <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
+                                <Button variant='default' onClick={() => setCreateModalVisible(true)}>
                                     New Database
-                                </ActionButton>
+                                </Button>
                             )}
                         </div>
                     </Can>
                 }
             >
-                <p className='text-sm text-neutral-400 leading-relaxed'>
+                <p className='text-sm leading-relaxed text-muted-foreground'>
                     Create and manage MySQL databases for your server. Configure database access, manage users, and view
                     connection details.
                 </p>
@@ -157,10 +156,10 @@ const DatabasesContainer = () => {
                                         }
                                     />
                                 </div>
-                                <div className={`flex gap-3 justify-end my-6`}>
-                                    <ActionButton variant='primary' type={'submit'}>
+                                <div className={`my-6 flex justify-end gap-3`}>
+                                    <Button variant='default' type={'submit'}>
                                         Create Database
-                                    </ActionButton>
+                                    </Button>
                                 </div>
                             </Form>
                         </div>
@@ -170,7 +169,7 @@ const DatabasesContainer = () => {
 
             {!databases.length && loading ? (
                 <div className='flex items-center justify-center py-12'>
-                    <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-brand'></div>
+                    <div className='size-8 animate-spin rounded-full border-b-2 border-primary' />
                 </div>
             ) : databases.length > 0 ? (
                 <PageListContainer data-pyro-databases>
@@ -179,15 +178,15 @@ const DatabasesContainer = () => {
                     </For>
                 </PageListContainer>
             ) : (
-                <div className='flex flex-col items-center justify-center min-h-[60vh] py-12 px-4'>
+                <div className='flex min-h-[60vh] flex-col items-center justify-center px-4 py-12'>
                     <div className='text-center'>
-                        <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
-                            <Database className='w-8 h-8 text-zinc-400' fill='currentColor' />
+                        <div className='mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-muted'>
+                            <Database className='size-8 text-muted-foreground' />
                         </div>
-                        <h3 className='text-lg font-medium text-zinc-200 mb-2'>
+                        <h3 className='mb-2 text-lg font-medium text-foreground'>
                             {databaseLimit === 0 ? 'Databases unavailable' : 'No databases found'}
                         </h3>
-                        <p className='text-sm text-zinc-400 max-w-sm'>
+                        <p className='max-w-sm text-sm text-muted-foreground'>
                             {databaseLimit === 0
                                 ? 'Databases cannot be created for this server.'
                                 : 'Your server does not have any databases. Create one to get started.'}
@@ -195,7 +194,7 @@ const DatabasesContainer = () => {
                     </div>
                 </div>
             )}
-        </ServerContentBlock>
+        </div>
     );
 };
 

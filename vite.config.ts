@@ -90,17 +90,7 @@ export default defineConfig({
             },
             telemetry: false,
         }),
-        react({
-            plugins: [
-                [
-                    '@swc/plugin-styled-components',
-                    {
-                        pure: true,
-                        namespace: 'pyrodactyl',
-                    },
-                ],
-            ],
-        }),
+        react({}),
     ],
 
     resolve: {

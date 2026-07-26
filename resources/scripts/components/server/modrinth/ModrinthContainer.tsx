@@ -1,11 +1,12 @@
+import { Search } from 'lucide-react';
 import debounce from 'debounce';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import Can from '@/components/elements/Can';
-import ContentBox from '@/components/elements/ContentBox';
-import { ModBox } from '@/components/elements/ModBox';
-import PageContentBlock from '@/components/elements/PageContentBlock';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
+import { Input } from '@/components/ui/input';
 
 import LoaderSelector from './LoaderSelector';
 import { ModList } from './ModList';
@@ -48,7 +49,6 @@ const ModrinthContainerInner = () => {
         debouncedSetSearchTerm(value);
     };
 
-    // Initialize and load loaders/versions - ONLY ONCE
     useEffect(() => {
         const initialize = async () => {
             if (isInitialized) return;
@@ -65,12 +65,8 @@ const ModrinthContainerInner = () => {
                     ModrinthService.fetchGameVersions(),
                 ]);
 
-                // Use the context updaters instead of direct setters
                 updateLoaders(loaderResponse.data);
                 updateGameVersions(versionResponse.data);
-
-                // console.log('Game versions set:', versionResponse.data);
-                // console.log('Loaders set:', loaderResponse.data);
 
                 setLoaderLoading(false);
                 setVersionLoading(false);
@@ -86,77 +82,57 @@ const ModrinthContainerInner = () => {
         initialize();
     }, [isInitialized, updateLoaders, updateGameVersions]);
 
-    // Sync searchTerm with global searchQuery
     useEffect(() => {
         setSearchTerm(searchQuery);
     }, [searchQuery]);
 
-    // console.log('Current state:', {
-    //     loaders: loaders.length,
-    //     gameVersions: gameVersions.length,
-    //     selectedLoaders,
-    //     selectedVersions,
-    //     searchQuery,
-    //     mods: mods.length,
-    // });
-
     return (
-        <PageContentBlock title={'Mods/Plugins'}>
-            <ContentBox className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl mb-5'>
-                {/* TODO: Add a navbar to cycle between Downloaded, Download, and Dependency resolver */}
-            </ContentBox>
+        <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
+            <Card className='mb-5'>
+                <CardContent className='p-8' />
+            </Card>
             <div className='flex flex-wrap gap-4'>
-                <ContentBox
-                    className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl w-full md:w-1/6'
-                    title='Settings'
-                >
-                    <Can action={'modrinth.loader'}>
-                        <ModBox>
-                            <ContentBox title='Loader' className=''>
-                                {isLoadingLoader ? <p>Loading loaders...</p> : <LoaderSelector />}
-                            </ContentBox>
-                        </ModBox>
-                    </Can>
-                    <Can action={'modrinth.version'}>
-                        <ModBox>
-                            <ContentBox title='Version' className='scrollbar-thumb-red-700'>
-                                {isLoadingVersion ? <p>Loading versions...</p> : <GameVersionSelector />}
-                            </ContentBox>
-                        </ModBox>
-                    </Can>
-                </ContentBox>
+                <Card className='w-full md:w-1/6'>
+                    <CardContent className='p-8'>
+                        <Can action={'modrinth.loader'}>
+                            <div className='mb-4 w-full text-nowrap select-none'>
+                                <div>
+                                    <CardTitle className='mb-4'>Loader</CardTitle>
+                                    {isLoadingLoader ? <p className='text-sm text-muted-foreground'>Loading loaders...</p> : <LoaderSelector />}
+                                </div>
+                            </div>
+                        </Can>
+                        <Can action={'modrinth.version'}>
+                            <div className='mb-4 w-full text-nowrap select-none'>
+                                <div>
+                                    <CardTitle className='mb-4 mt-6'>Version</CardTitle>
+                                    {isLoadingVersion ? <p className='text-sm text-muted-foreground'>Loading versions...</p> : <GameVersionSelector />}
+                                </div>
+                            </div>
+                        </Can>
+                    </CardContent>
+                </Card>
 
-                <ContentBox
-                    className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl w-full md:w-4/5'
-                    title='Downloader'
-                >
-                    <div className='relative w-full h-full mb-4'>
-                        <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            fill='none'
-                            viewBox='0 0 24 24'
-                            strokeWidth={1.5}
-                            stroke='currentColor'
-                            className='w-5 h-5 absolute top-1/2 -translate-y-1/2 left-5 opacity-40'
-                        >
-                            <path
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
+                <Card className='w-full md:w-4/5'>
+                    <CardHeader>
+                        <CardTitle>Downloader</CardTitle>
+                    </CardHeader>
+                    <CardContent className='p-8'>
+                        <div className='relative mb-4 h-full w-full'>
+                            <Search className='pointer-events-none absolute left-5 top-1/2 size-5 -translate-y-1/2 opacity-40' />
+                            <Input
+                                type='text'
+                                placeholder='Search'
+                                value={searchTerm}
+                                onChange={handleInputChange}
+                                className='py-4 pl-14 pr-4 text-sm font-bold'
                             />
-                        </svg>
-                        <input
-                            className='pl-14 pr-4 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold'
-                            type='text'
-                            placeholder='Search'
-                            value={searchTerm}
-                            onChange={handleInputChange}
-                        />
-                    </div>
-                    <ModList />
-                </ContentBox>
+                        </div>
+                        <ModList />
+                    </CardContent>
+                </Card>
             </div>
-        </PageContentBlock>
+        </div>
     );
 };
 

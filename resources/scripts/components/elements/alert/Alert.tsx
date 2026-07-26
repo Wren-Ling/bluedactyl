@@ -1,5 +1,6 @@
-import { TriangleExclamation } from '@gravity-ui/icons';
-import clsx from 'clsx';
+import { TriangleAlert } from 'lucide-react';
+
+import { cn } from '@/lib/utils';
 
 interface AlertProps {
     type: 'warning' | 'danger';
@@ -10,25 +11,15 @@ interface AlertProps {
 const Alert = ({ type, className, children }: AlertProps) => {
     return (
         <div
-            className={clsx(
-                'flex items-center border-l-8 text-zinc-50 rounded-md shadow-sm px-4 py-3',
-                {
-                    ['border-red-500 bg-red-500/25']: type === 'danger',
-                    ['border-yellow-500 bg-yellow-500/25']: type === 'warning',
-                },
+            className={cn(
+                'flex items-center rounded-md border-l-8 px-4 py-3 text-sm text-foreground shadow-sm',
+                type === 'danger' ? 'border-destructive bg-destructive/20' : 'border-yellow-500 bg-yellow-500/20',
                 className,
             )}
         >
-            {type === 'danger' ? (
-                <TriangleExclamation
-                    width={22}
-                    height={22}
-                    fill='currentColor'
-                    className={'w-6 h-6 text-red-400 mr-2'}
-                />
-            ) : (
-                <TriangleExclamation width={22} height={22} fill='currentColor' className='pl-2 mr-3 text-yellow-500' />
-            )}
+            <TriangleAlert
+                className={cn('mr-2 size-5 shrink-0', type === 'danger' ? 'text-destructive' : 'text-yellow-500')}
+            />
             {children}
         </div>
     );

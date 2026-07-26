@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { useEffect, useRef, useState } from 'react';
 
-import Button from '../../elements/ButtonV2';
+import { Button } from '@/components/ui/button';
 
 interface ApiFile {
     hashes: {
@@ -144,7 +144,7 @@ const DropdownButton = ({ versions, onVersionSelect, className = '' }: DropdownB
                                 role='option'
                                 aria-selected={version.id === selectedVersion?.id}
                                 className={`px-4 py-3 cursor-pointer transition-colors ${
-                                    version.id === selectedVersion?.id ? 'bg-brand text-white' : 'hover:bg-gray-700'
+                                    version.id === selectedVersion?.id ? 'bg-foreground text-background' : 'hover:bg-gray-700'
                                 } focus:outline-none focus:bg-gray-700`}
                                 onClick={() => handleSelect(version)}
                                 onKeyDown={(e) => {
@@ -184,7 +184,7 @@ const DropdownButton = ({ versions, onVersionSelect, className = '' }: DropdownB
             </div>
             {isLoading && (
                 <div className='absolute inset-0 flex items-center justify-center bg-gray-900/50 rounded-lg'>
-                    <div className='w-6 h-6 border-2 border-brand border-t-transparent rounded-full animate-spin' />
+                    <div className='w-6 h-6 border-2 border-foreground border-t-transparent rounded-full animate-spin' />
                 </div>
             )}
         </div>

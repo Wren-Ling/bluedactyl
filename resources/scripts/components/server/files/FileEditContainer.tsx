@@ -9,14 +9,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from '@/components/elements/DropdownMenu';
+} from '@/components/ui/dropdown-menu';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import FileManagerBreadcrumbs from '@/components/server/files/FileManagerBreadcrumbs';
@@ -127,7 +127,7 @@ const FileEditContainer = () => {
 
             <ErrorBoundary>
                 <div
-                    className={`flex py-6 bg-[#ffffff11] rounded-md rounded-b-none border-[1px] border-[#ffffff07] border-b-0`}
+                    className='flex py-6 bg-muted/30 rounded-md rounded-b-none border border-border border-b-0'
                 >
                     <span className='-ml-[2rem]'></span>
                     <FileManagerBreadcrumbs withinFileEditor isNewFile={action !== 'edit'} />
@@ -135,14 +135,14 @@ const FileEditContainer = () => {
             </ErrorBoundary>
 
             {['.pyroignore', '.pyroignore'].includes(filename) ? (
-                <div className={`mb-4 p-4 border-l-4 bg-neutral-900 rounded-sm border-cyan-400`}>
-                    <p className={`text-neutral-300 text-sm`}>
+                <div className={`mb-4 p-4 border-l-4 bg-card rounded-sm border-cyan-400`}>
+                    <p className={`text-foreground/80 text-sm`}>
                         You&apos;re editing a{' '}
-                        <code className={`font-mono bg-black rounded-sm py-px px-1`}>.pyroignore</code> file. Any files
+                        <code className={`font-mono bg-muted/50 rounded-sm py-px px-1`}>.pyroignore</code> file. Any files
                         or directories listed in here will be excluded from backups. Wildcards are supported by using an
-                        asterisk (<code className={`font-mono bg-black rounded-sm py-px px-1`}>*</code>). You can negate
+                        asterisk (<code className={`font-mono bg-muted/50 rounded-sm py-px px-1`}>*</code>). You can negate
                         a prior rule by prepending an exclamation point (
-                        <code className={`font-mono bg-black rounded-sm py-px px-1`}>!</code>).
+                        <code className={`font-mono bg-muted/50 rounded-sm py-px px-1`}>!</code>).
                     </p>
                 </div>
             ) : null}
@@ -156,7 +156,7 @@ const FileEditContainer = () => {
                 }}
             />
 
-            <div className='h-full relative bg-[#ffffff11] border-[1px] border-[#ffffff07] border-t-0 [&>div>div]:h-full [&>div>div]:outline-hidden! w-full flex-grow'>
+            <div className='h-full relative bg-muted/30 border border-border border-t-0 [&>div>div]:h-full [&>div>div]:outline-hidden! w-full flex-grow'>
                 <Editor
                     filename={filename}
                     initialContent={content}
@@ -180,7 +180,7 @@ const FileEditContainer = () => {
 
             <div className='flex flex-row items-center gap-4 absolute top-2.5 right-2'>
                 <DropdownMenu>
-                    <DropdownMenuTrigger className='flex items-center gap-2 font-bold text-sm px-3 py-1 rounded-md h-fit bg-[#ffffff11]'>
+                    <DropdownMenuTrigger className='flex items-center gap-2 font-bold text-sm px-3 py-1 rounded-md h-fit bg-muted/30'>
                         <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
                             <path
                                 d='M8 12H8.00897M11.9955 12H12.0045M15.991 12H16'
@@ -234,8 +234,7 @@ const FileEditContainer = () => {
                 {action === 'edit' ? (
                     <Can action={'file.update'}>
                         <div className='flex gap-1 items-center justify-center'>
-                            <ActionButton
-                                variant='primary'
+                            <Button
                                 size='lg'
                                 className='rounded-l-full rounded-r-none pl-8 pr-6'
                                 onClick={() => save()}
@@ -244,11 +243,10 @@ const FileEditContainer = () => {
                                 <span className='ml-2 font-mono text-xs font-bold uppercase lg:inline-block hidden'>
                                     CTRL + S
                                 </span>
-                            </ActionButton>
+                            </Button>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <ActionButton
-                                        variant='primary'
+                                    <Button
                                         size='lg'
                                         className='rounded-r-full rounded-l-none px-2'
                                     >
@@ -266,7 +264,7 @@ const FileEditContainer = () => {
                                                 fill='white'
                                             />
                                         </svg>
-                                    </ActionButton>
+                                    </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent
                                     className='max-h-[calc(100vh-4rem)] overflow-auto z-99999'
@@ -281,9 +279,9 @@ const FileEditContainer = () => {
                     </Can>
                 ) : (
                     <Can action={'file.create'}>
-                        <ActionButton variant='secondary' size='lg' onClick={() => setModalVisible(true)}>
+                        <Button variant='secondary' size='lg' onClick={() => setModalVisible(true)}>
                             Create File
-                        </ActionButton>
+                        </Button>
                     </Can>
                 )}
             </div>

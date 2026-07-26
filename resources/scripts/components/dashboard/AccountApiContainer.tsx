@@ -1,4 +1,4 @@
-import { Eye, EyeSlash, Key, Plus, TrashBin } from '@gravity-ui/icons';
+import { Eye, EyeOff, Key, Plus, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
@@ -7,14 +7,20 @@ import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ApiKeyModal from '@/components/dashboard/ApiKeyModal';
-import ActionButton from '@/components/elements/ActionButton';
-import Code from '@/components/elements/Code';
+import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import { Input } from '@/components/ui/input';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
-import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Dialog } from '@/components/elements/dialog';
 
 import createApiKey from '@/api/account/createApiKey';
 import deleteApiKey from '@/api/account/deleteApiKey';
@@ -85,25 +91,16 @@ const AccountApiContainer = () => {
     };
 
     return (
-        <PageContentBlock title={'API Keys'}>
+        <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
             <FlashMessageRender byKey='account:api-keys' />
             <ApiKeyModal visible={apiKey.length > 0} onModalDismissed={() => setApiKey('')} apiKey={apiKey} />
 
-            {/* Create API Key Modal */}
-            {showCreateModal && (
-                <Dialog.Confirm
-                    open={showCreateModal}
-                    onClose={() => setShowCreateModal(false)}
-                    title='Create API Key'
-                    confirm='Create Key'
-                    onConfirmed={() => {
-                        const form = document.getElementById('create-api-form') as HTMLFormElement;
-                        if (form) {
-                            const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
-                            if (submitButton) submitButton.click();
-                        }
-                    }}
-                >
+            {/* Create API Key Dialog */}
+            <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Create API Key</DialogTitle>
+                    </DialogHeader>
                     <Formik
                         onSubmit={submitCreate}
                         initialValues={{ description: '', allowedIps: '' }}
@@ -132,140 +129,119 @@ const AccountApiContainer = () => {
                                     <Field name='allowedIps' as={Input} className='w-full' />
                                 </FormikFieldWrapper>
 
-                                <button type='submit' className='hidden' />
+                                <DialogFooter>
+                                    <Button type='submit' disabled={isSubmitting}>
+                                        Create Key
+                                    </Button>
+                                </DialogFooter>
                             </Form>
                         )}
                     </Formik>
-                </Dialog.Confirm>
-            )}
+                </DialogContent>
+            </Dialog>
 
-            <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
-                <div
-                    className='transform-gpu skeleton-anim-2 mb-3 sm:mb-4'
-                    style={{
-                        animationDelay: '50ms',
-                        animationTimingFunction:
-                            'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                    }}
-                >
-                    <MainPageHeader
-                        title='API Keys'
-                        titleChildren={
-                            <ActionButton
-                                variant='primary'
-                                onClick={() => setShowCreateModal(true)}
-                                className='flex items-center gap-2'
+            <div className='flex w-full flex-1 flex-col px-2 sm:px-0'>
+                <MainPageHeader
+                    title='API Keys'
+                    titleChildren={
+                        <Button onClick={() => setShowCreateModal(true)} className='flex items-center gap-2'>
+                            <Plus className='size-5' />
+                            Create API Key
+                        </Button>
+                    }
+                />
+
+                <SpinnerOverlay visible={loading} />
+
+                {/* Delete API Key Dialog */}
+                <Dialog open={!!deleteIdentifier} onOpenChange={(o) => !o && setDeleteIdentifier('')}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Delete API Key</DialogTitle>
+                            <DialogDescription>
+                                All requests using the <code className='rounded bg-muted px-1 font-mono text-sm'>{deleteIdentifier}</code> key will be invalidated.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                            <Button variant='outline' onClick={() => setDeleteIdentifier('')}>
+                                Cancel
+                            </Button>
+                            <Button variant='destructive' onClick={() => doDeletion(deleteIdentifier)}>
+                                Delete Key
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+
+                {keys.length === 0 ? (
+                    <div className='py-12 text-center'>
+                        <div className='mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-muted'>
+                            <Key className='size-5 text-muted-foreground' />
+                        </div>
+                        <h3 className='mb-2 text-lg font-medium text-foreground'>No API Keys</h3>
+                        <p className='mx-auto max-w-sm text-sm text-muted-foreground'>
+                            {loading
+                                ? 'Loading your API keys...'
+                                : "You haven't created any API keys yet. Create one to get started with the API."}
+                        </p>
+                    </div>
+                ) : (
+                    <div className='space-y-3'>
+                        {keys.map((key) => (
+                            <div
+                                key={key.identifier}
+                                className='rounded-lg border bg-card p-4 text-card-foreground shadow-sm transition-colors hover:border-border'
                             >
-                                <Plus width={22} height={22} fill='currentColor' />
-                                Create API Key
-                            </ActionButton>
-                        }
-                    />
-                </div>
-
-                <div
-                    className='transform-gpu skeleton-anim-2'
-                    style={{
-                        animationDelay: '75ms',
-                        animationTimingFunction:
-                            'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                    }}
-                >
-                    <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-4 sm:p-6 shadow-sm'>
-                        <SpinnerOverlay visible={loading} />
-                        <Dialog.Confirm
-                            title={'Delete API Key'}
-                            confirm={'Delete Key'}
-                            open={!!deleteIdentifier}
-                            onClose={() => setDeleteIdentifier('')}
-                            onConfirmed={() => doDeletion(deleteIdentifier)}
-                        >
-                            All requests using the <Code>{deleteIdentifier}</Code> key will be invalidated.
-                        </Dialog.Confirm>
-
-                        {keys.length === 0 ? (
-                            <div className='text-center py-12'>
-                                <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
-                                    <Key width={22} height={22} className='text-zinc-400' fill='currentColor' />
-                                </div>
-                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>No API Keys</h3>
-                                <p className='text-sm text-zinc-400 max-w-sm mx-auto'>
-                                    {loading
-                                        ? 'Loading your API keys...'
-                                        : "You haven't created any API keys yet. Create one to get started with the API."}
-                                </p>
-                            </div>
-                        ) : (
-                            <div className='space-y-3'>
-                                {keys.map((key, index) => (
-                                    <div
-                                        key={key.identifier}
-                                        className='transform-gpu skeleton-anim-2'
-                                        style={{
-                                            animationDelay: `${index * 25 + 100}ms`,
-                                            animationTimingFunction:
-                                                'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                                        }}
-                                    >
-                                        <div className='bg-[#ffffff05] border-[1px] border-[#ffffff08] rounded-lg p-4 hover:border-[#ffffff15] transition-all duration-150'>
-                                            <div className='flex items-center justify-between'>
-                                                <div className='flex-1 min-w-0'>
-                                                    <div className='flex items-center gap-3 mb-2'>
-                                                        <h4 className='text-sm font-medium text-zinc-100 truncate'>
-                                                            {key.description}
-                                                        </h4>
-                                                    </div>
-                                                    <div className='flex items-center gap-4 text-xs text-zinc-400'>
-                                                        <span>
-                                                            Last used:{' '}
-                                                            {key.lastUsedAt
-                                                                ? format(key.lastUsedAt, 'MMM d, yyyy HH:mm')
-                                                                : 'Never'}
-                                                        </span>
-                                                        <div className='flex items-center gap-2'>
-                                                            <span>Key:</span>
-                                                            <code className='font-mono px-2 py-1 bg-[#ffffff08] border border-[#ffffff08] rounded text-zinc-300'>
-                                                                {showKeys[key.identifier]
-                                                                    ? key.identifier
-                                                                    : '••••••••••••••••'}
-                                                            </code>
-                                                            <ActionButton
-                                                                variant='secondary'
-                                                                size='sm'
-                                                                onClick={() => toggleKeyVisibility(key.identifier)}
-                                                                className='p-1 text-zinc-400 hover:text-zinc-300'
-                                                            >
-                                                                {showKeys[key.identifier] ? (
-                                                                    <EyeSlash
-                                                                        width={18}
-                                                                        height={18}
-                                                                        fill='currentColor'
-                                                                    />
-                                                                ) : (
-                                                                    <Eye width={18} height={18} fill='currentColor' />
-                                                                )}
-                                                            </ActionButton>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <ActionButton
-                                                    variant='danger'
-                                                    size='sm'
-                                                    className='ml-4'
-                                                    onClick={() => setDeleteIdentifier(key.identifier)}
+                                <div className='flex items-center justify-between'>
+                                    <div className='min-w-0 flex-1'>
+                                        <div className='mb-2 flex items-center gap-3'>
+                                            <h4 className='truncate text-sm font-medium text-foreground'>
+                                                {key.description}
+                                            </h4>
+                                        </div>
+                                        <div className='flex items-center gap-4 text-xs text-muted-foreground'>
+                                            <span>
+                                                Last used:{' '}
+                                                {key.lastUsedAt
+                                                    ? format(key.lastUsedAt, 'MMM d, yyyy HH:mm')
+                                                    : 'Never'}
+                                            </span>
+                                            <div className='flex items-center gap-2'>
+                                                <span>Key:</span>
+                                                <code className='rounded border bg-muted px-2 py-1 font-mono text-muted-foreground'>
+                                                    {showKeys[key.identifier]
+                                                        ? key.identifier
+                                                        : '••••••••••••••••'}
+                                                </code>
+                                                <Button
+                                                    variant='ghost'
+                                                    size='icon-sm'
+                                                    onClick={() => toggleKeyVisibility(key.identifier)}
                                                 >
-                                                    <TrashBin width={20} height={20} fill='currentColor' />
-                                                </ActionButton>
+                                                    {showKeys[key.identifier] ? (
+                                                        <EyeOff className='size-4' />
+                                                    ) : (
+                                                        <Eye className='size-4' />
+                                                    )}
+                                                </Button>
                                             </div>
                                         </div>
                                     </div>
-                                ))}
+                                    <Button
+                                        variant='destructive'
+                                        size='icon-sm'
+                                        className='ml-4'
+                                        onClick={() => setDeleteIdentifier(key.identifier)}
+                                    >
+                                        <Trash2 className='size-4' />
+                                    </Button>
+                                </div>
                             </div>
-                        )}
+                        ))}
                     </div>
-                </div>
+                )}
             </div>
-        </PageContentBlock>
+        </div>
     );
 };
 

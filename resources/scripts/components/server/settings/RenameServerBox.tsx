@@ -3,9 +3,9 @@ import { Form, Formik } from 'formik';
 import { toast } from 'sonner';
 import { object, string } from 'yup';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Field from '@/components/elements/Field';
-import TitledGreyBox from '@/components/elements/TitledGreyBox';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 import { httpErrorToHuman } from '@/api/http';
 import renameServer from '@/api/server/renameServer';
@@ -20,17 +20,22 @@ interface Values {
 
 const RenameServerForm = () => {
     return (
-        <TitledGreyBox title={'Server Details'}>
-            <Form className='flex flex-col gap-4'>
-                <Field id={'name'} name={'name'} label={'Server Name'} type={'text'} />
-                <Field id={'description'} name={'description'} label={'Server Description'} type={'text'} />
-                <div className={`mt-6 text-right`}>
-                    <ActionButton variant='primary' type={'submit'}>
-                        Save
-                    </ActionButton>
-                </div>
-            </Form>
-        </TitledGreyBox>
+        <Card>
+            <CardHeader>
+                <CardTitle className='text-xl font-extrabold tracking-tight'>Server Details</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <Form className='flex flex-col gap-4'>
+                    <Field id={'name'} name={'name'} label={'Server Name'} type={'text'} />
+                    <Field id={'description'} name={'description'} label={'Server Description'} type={'text'} />
+                    <div className={`mt-6 text-right`}>
+                        <Button type={'submit'}>
+                            Save
+                        </Button>
+                    </div>
+                </Form>
+            </CardContent>
+        </Card>
     );
 };
 

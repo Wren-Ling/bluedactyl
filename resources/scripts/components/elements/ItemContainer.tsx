@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { v4 } from 'uuid';
+import { cn } from '@/lib/utils';
 
 import CopyOnClick from './CopyOnClick';
 
@@ -29,25 +30,22 @@ const ItemContainer = ({
     const uuid = useMemo(() => v4(), []);
 
     return (
-        <div
-            className={`flex items-center justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg ${divClasses}`}
-        >
+        <div className={cn('flex items-center justify-between gap-2 bg-white/5 border border-white/10 p-4 rounded-lg', divClasses)}>
             {icon && (
-                <div className={`w-10 h-10 items-center justify-center hidden sm:flex`}>
+                <div className='w-10 h-10 items-center justify-center hidden sm:flex'>
                     {React.createElement(icon, { className: 'w-6 h-6', fill: 'currentColor' })}
                 </div>
             )}
-            <div className={`flex flex-1 flex-col`}>
-                <label htmlFor={uuid} className={`text-neutral-300 text-md font-bold ${titleClasses} ${labelClasses}`}>
+            <div className='flex flex-1 flex-col'>
+                <label htmlFor={uuid} className={cn('text-foreground text-md font-bold', titleClasses, labelClasses)}>
                     {title}
                 </label>
 
-                {/* i don't like how this duplicates the element, but idk how to get it working otherwise */}
                 {copyDescription ? (
                     <CopyOnClick text={description}>
                         <label
                             htmlFor={uuid}
-                            className={`text-neutral-500 text-sm font-semibold ${descriptionClasses} ${labelClasses}`}
+                            className={cn('text-muted-foreground text-sm font-semibold', descriptionClasses, labelClasses)}
                         >
                             {description}
                         </label>
@@ -55,7 +53,7 @@ const ItemContainer = ({
                 ) : (
                     <label
                         htmlFor={uuid}
-                        className={`text-neutral-500 text-sm font-semibold ${descriptionClasses} ${labelClasses}`}
+                        className={cn('text-muted-foreground text-sm font-semibold', descriptionClasses, labelClasses)}
                     >
                         {description}
                     </label>

@@ -6,8 +6,8 @@ import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ApiKeyModal from '@/components/dashboard/ApiKeyModal';
-import ActionButton from '@/components/elements/ActionButton';
-import ContentBox from '@/components/elements/ContentBox';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import { Input } from '@/components/ui/input';
 import PageContentBlock from '@/components/elements/PageContentBlock';
@@ -54,7 +54,7 @@ const CreateApiKeyForm = ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => voi
             <ApiKeyModal visible={apiKey.length > 0} onModalDismissed={() => setApiKey('')} apiKey={apiKey} />
 
             {/* Form for creating API key */}
-            <ContentBox>
+            <Card>
                 <Formik
                     onSubmit={submit}
                     initialValues={{ description: '', allowedIps: '' }}
@@ -88,14 +88,14 @@ const CreateApiKeyForm = ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => voi
 
                             {/* Submit Button below form fields */}
                             <div className='flex justify-end mt-6'>
-                                <ActionButton type='submit' disabled={isSubmitting}>
+                                <Button type='submit' disabled={isSubmitting}>
                                     {isSubmitting ? 'Creating...' : 'Create API Key'}
-                                </ActionButton>
+                                </Button>
                             </div>
                         </Form>
                     )}
                 </Formik>
-            </ContentBox>
+            </Card>
         </>
     );
 };

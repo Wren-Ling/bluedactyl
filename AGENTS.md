@@ -82,3 +82,11 @@ vendor/bin/phpstan analyse  # PHPStan level 4
 - 用户数据通过 `window.PterodactylUser` 和 `window.SiteConfiguration` 注入（服务端渲染），不是 API 获取
 - Vite 配置中 `process.env` 被置为 `{}`，`process.platform/version/versions` 被置为 `null`，不要依赖它们
 - `resources/scripts/` 目录仅存在于 `example/pyrodactyl/`，根级别缺失；开发时需要确认前端源码位置
+
+## UI 迁移状态 (2026-07-26)
+
+- **所有容器组件** (routes.ts 中的 20+ 个) 已从旧的 `elements/` UI 迁移到 shadcn UI
+- **`@gravity-ui/icons`** 已全部替换为 `lucide-react` (0 个文件导入旧图标包)
+- **`ActionButton`** 已全部替换为 `Button` from `@/components/ui/button` (文件已删除)
+- **`ConfirmationModal`** 已全部替换为 `Dialog` from `@/components/ui/dialog` (文件已删除)
+- **遗留旧组件** (仍有使用者): `TitledGreyBox` (6 文件), `Modal` (14 文件), `Spinner`, `Can`, `Field`, `FormikFieldWrapper`, `CopyOnClick`, `Dialog`, `MainPageHeader` 等

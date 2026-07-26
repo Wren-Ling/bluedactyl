@@ -1,9 +1,9 @@
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useEffect, useState } from 'react';
 
-import ActionButton from '@/components/elements/ActionButton';
-import TitledGreyBox from '@/components/elements/TitledGreyBox';
-import { Dialog } from '@/components/elements/dialog';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 import { httpErrorToHuman } from '@/api/http';
 import reinstallServer from '@/api/server/reinstallServer';
@@ -44,32 +44,45 @@ const ReinstallServerBox = () => {
     }, []);
 
     return (
-        <TitledGreyBox title={'Reinstall Server'}>
-            <Dialog.Confirm
-                open={modalVisible}
-                title={'Confirm server reinstallation'}
-                confirm={'Yes, reinstall server'}
-                onClose={() => setModalVisible(false)}
-                onConfirmed={reinstall}
-                loading={loading}
-            >
-                Your server will be stopped and some files may be deleted or modified during this process, are you sure
-                you wish to continue?
-            </Dialog.Confirm>
-            <p className={`text-sm`}>
-                Reinstalling your server will stop it, and then re-run the installation script that initially set it
-                up.&nbsp;
-                <strong className={`font-medium`}>
-                    Some files may be deleted or modified during this process, please back up your data before
-                    continuing.
-                </strong>
-            </p>
-            <div className={`mt-6 text-right`}>
-                <ActionButton variant='danger' onClick={() => setModalVisible(true)}>
-                    Reinstall Server
-                </ActionButton>
-            </div>
-        </TitledGreyBox>
+        <Card>
+            <CardHeader>
+                <CardTitle className='text-xl font-extrabold tracking-tight'>Reinstall Server</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <Dialog open={modalVisible} onOpenChange={setModalVisible}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Confirm server reinstallation</DialogTitle>
+                        </DialogHeader>
+                        <div className='text-sm text-muted-foreground'>
+                            Your server will be stopped and some files may be deleted or modified during this process, are
+                            you sure you wish to continue?
+                        </div>
+                        <DialogFooter>
+                            <Button variant='outline' onClick={() => setModalVisible(false)} disabled={loading}>
+                                Cancel
+                            </Button>
+                            <Button variant='destructive' onClick={reinstall} isLoading={loading}>
+                                Yes, reinstall server
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+                <p className={`text-sm`}>
+                    Reinstalling your server will stop it, and then re-run the installation script that initially set it
+                    up.&nbsp;
+                    <strong className={`font-medium`}>
+                        Some files may be deleted or modified during this process, please back up your data before
+                        continuing.
+                    </strong>
+                </p>
+                <div className={`mt-6 text-right`}>
+                    <Button variant='destructive' onClick={() => setModalVisible(true)}>
+                        Reinstall Server
+                    </Button>
+                </div>
+            </CardContent>
+        </Card>
     );
 };
 

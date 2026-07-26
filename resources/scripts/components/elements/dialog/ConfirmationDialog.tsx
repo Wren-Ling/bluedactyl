@@ -1,4 +1,4 @@
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Spinner from '@/components/elements/Spinner';
 
 import { Dialog, RenderDialogProps } from './';
@@ -15,15 +15,15 @@ const ConfirmationDialog = ({ confirm = 'Okay', children, onConfirmed, loading, 
         <Dialog {...props} description={typeof children === 'string' ? children : undefined}>
             {typeof children !== 'string' && children}
             <Dialog.Footer>
-                <ActionButton variant='secondary' onClick={props.onClose}>
+                <Button variant='outline' onClick={props.onClose}>
                     Cancel
-                </ActionButton>
-                <ActionButton variant='danger' onClick={onConfirmed} disabled={loading}>
+                </Button>
+                <Button variant='destructive' onClick={onConfirmed} disabled={loading}>
                     <div className='flex items-center gap-2'>
                         {loading && <Spinner size='small' />}
                         <span>{confirm}</span>
                     </div>
-                </ActionButton>
+                </Button>
             </Dialog.Footer>
         </Dialog>
     );

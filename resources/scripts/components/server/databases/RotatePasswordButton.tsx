@@ -1,8 +1,8 @@
-import { ArrowsRotateRight } from '@gravity-ui/icons';
+import { RotateCcw } from 'lucide-react';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Spinner from '@/components/elements/Spinner';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -50,12 +50,12 @@ const RotatePasswordButton = ({
     };
 
     return (
-        <ActionButton onClick={rotate} className='flex-none'>
+        <Button onClick={rotate} className='flex-none'>
             <div className='flex justify-center items-center'>
-                {!loading && <ArrowsRotateRight width={22} height={22} />}
+                {!loading && <RotateCcw size={22} />}
                 {loading && <Spinner size={'small'} />}
             </div>
-        </ActionButton>
+        </Button>
     );
 };
 

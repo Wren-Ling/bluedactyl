@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Modal from '@/components/elements/Modal';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 
@@ -83,12 +83,12 @@ const EulaModalFeature = () => {
                     .
                 </p>
                 <div className={`my-6 gap-3 flex items-center justify-end`}>
-                    <ActionButton variant='secondary' onClick={() => setVisible(false)}>
+                    <Button variant='secondary' onClick={() => setVisible(false)}>
                         I don&apos;t accept
-                    </ActionButton>
-                    <ActionButton variant='primary' onClick={onAcceptEULA}>
+                    </Button>
+                    <Button onClick={onAcceptEULA}>
                         I accept
-                    </ActionButton>
+                    </Button>
                 </div>
             </div>
         </Modal>

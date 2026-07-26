@@ -1,9 +1,15 @@
-import { TrashBin } from '@gravity-ui/icons';
+import { Trash2 } from 'lucide-react';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
-import ActionButton from '@/components/elements/ActionButton';
-import ConfirmationModal from '@/components/elements/ConfirmationModal';
+import { Button } from '@/components/ui/button';
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 
 import { httpErrorToHuman } from '@/api/http';
 import deleteSubuser from '@/api/server/users/deleteSubuser';
@@ -38,26 +44,30 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
 
     return (
         <>
-            <ConfirmationModal
-                title={`Remove ${subuser.username}?`}
-                buttonText={`Remove ${subuser.username}`}
-                visible={showConfirmation}
-                loading={loading}
-                onConfirmed={() => doDeletion()}
-                onModalDismissed={() => setShowConfirmation(false)}
-            >
-                All access to the server will be removed immediately.
-            </ConfirmationModal>
-            <ActionButton
-                variant='danger'
+            <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Remove {subuser.username}?</DialogTitle>
+                    </DialogHeader>
+                    All access to the server will be removed immediately.
+                    <DialogFooter>
+                        <Button variant='outline' onClick={() => setShowConfirmation(false)}>Cancel</Button>
+                        <Button variant='destructive' onClick={doDeletion} disabled={loading}>
+                            {loading ? 'Removing...' : `Remove ${subuser.username}`}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+            <Button
+                variant='destructive'
                 size='sm'
                 className='flex items-center gap-2'
                 onClick={() => setShowConfirmation(true)}
                 aria-label='Delete subuser'
             >
-                <TrashBin width={22} height={22} fill='currentColor' className='w-4 h-4' />
+                <Trash2 size={22} className='size-4' />
                 Delete
-            </ActionButton>
+            </Button>
         </>
     );
 };

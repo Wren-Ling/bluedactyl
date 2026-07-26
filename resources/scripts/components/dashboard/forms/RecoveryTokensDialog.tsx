@@ -1,4 +1,4 @@
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import { Alert } from '@/components/elements/alert';
 import { Dialog, DialogProps } from '@/components/elements/dialog';
@@ -43,9 +43,9 @@ const RecoveryTokensDialog = ({ tokens, open, onClose }: RecoveryTokenDialogProp
                 These codes will not be shown again.
             </Alert>
             <Dialog.Footer>
-                <ActionButton variant='primary' onClick={onClose}>
+                <Button onClick={onClose}>
                     Done
-                </ActionButton>
+                </Button>
             </Dialog.Footer>
         </Dialog>
     );

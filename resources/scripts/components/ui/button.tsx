@@ -64,7 +64,7 @@ function Button({
       {...props}
     >
       {isLoading && <Loader2 className="absolute size-4 animate-spin" />}
-      <span className={cn(isLoading && "opacity-0 pointer-events-none")}>{children}</span>
+      <span className={cn(isLoading ? "opacity-0 pointer-events-none" : "contents")}>{children}</span>
     </ButtonPrimitive>
   )
 }

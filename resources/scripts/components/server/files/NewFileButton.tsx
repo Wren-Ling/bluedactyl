@@ -1,13 +1,13 @@
 import { NavLink } from 'react-router-dom';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 
 const NewFileButton = ({ id }: { id: string }) => {
     return (
         <NavLink to={`/server/${id}/files/new${window.location.hash}`}>
-            <ActionButton variant='secondary' size='md'>
+            <Button variant='secondary'>
                 New File
-            </ActionButton>
+            </Button>
         </NavLink>
     );
 };

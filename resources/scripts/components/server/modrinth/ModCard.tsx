@@ -1,10 +1,9 @@
 'use client';
 
-import { ArrowDownToLine } from '@gravity-ui/icons';
+import { ArrowDownToLine } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-import ActionButton from '@/components/elements/ActionButton';
-import Button from '@/components/elements/ButtonV2';
+import { Button } from '@/components/ui/button';
 
 // import { ServerContext } from '@/state/server';
 
@@ -23,7 +22,7 @@ export const ModCard = ({ mod }: ModCardProps) => {
     };
 
     return (
-        <div className='group bg-gradient-to-br from-[#090909] via-[#0f0f0f] to-[#131313] transition delay-50 duration-325  rounded-xl overflow-hidden border border-gray-800/70 hover:border-brand/60 transition-all duration-300 hover:shadow-2xl hover:shadow-brand/15 backdrop-blur-sm'>
+        <div className='group rounded-xl overflow-hidden border border-white/10 bg-white/5 transition-all duration-300 hover:border-foreground/20'>
             <div className='p-6 flex items-start space-x-5'>
                 {/* Icon Container */}
                 <div className='flex-shrink-0 relative hover:cursor-pointer hover:scale-105 transition-transform duration-300'>
@@ -39,8 +38,8 @@ export const ModCard = ({ mod }: ModCardProps) => {
                             <div className='absolute inset-0 rounded-xl bg-gradient-to-t from-black/30 to-transparent' />
                         </div>
                     ) : (
-                        <div className='w-20 h-20 bg-gradient-to-br from-[#131313] to-[#1a1a1a] rounded-xl flex items-center justify-center shadow-inner border border-gray-700/30'>
-                            <span className='text-gray-400 text-sm font-medium'>No Icon</span>
+                        <div className='w-20 h-20 bg-white/5 rounded-xl flex items-center justify-center border border-white/10'>
+                            <span className='text-muted-foreground text-sm font-medium'>No Icon</span>
                         </div>
                     )}
                 </div>
@@ -50,7 +49,7 @@ export const ModCard = ({ mod }: ModCardProps) => {
                     <div>
                         <Link
                             to={`${mod.id}`}
-                            className='text-xl font-bold text-white hover:text-brand/50 transition-colors duration-200 line-clamp-1 group-hover:underline'
+                            className='text-xl font-bold text-white hover:text-foreground/60 transition-colors duration-200 line-clamp-1 group-hover:underline'
                         >
                             {mod.title}
                         </Link>
@@ -62,7 +61,7 @@ export const ModCard = ({ mod }: ModCardProps) => {
                     {/* Stats */}
                     <div className='flex items-center space-x-6 text-sm'>
                         <div className='flex items-center space-x-2 text-gray-400'>
-                            <svg className='w-4 h-4 text-brand' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <svg className='w-4 h-4 text-foreground' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                                 <path
                                     strokeLinecap='round'
                                     strokeLinejoin='round'
@@ -90,8 +89,8 @@ export const ModCard = ({ mod }: ModCardProps) => {
                 </div>
 
                 <div className='flex-shrink-0 self-center align-text-left'>
-                    <Button className='border-gray-500/70 border-2 rounded-md transition delay-50 duration-325 hover:border-brand/50 hover:text-gray-200 '>
-                        <ArrowDownToLine width={22} height={22} className='px-1' />
+                    <Button className='border-gray-500/70 border-2 rounded-md transition delay-50 duration-325 hover:border-foreground/30 hover:text-gray-200 '>
+                        <ArrowDownToLine size={22} className='px-1' />
                         Install
                     </Button>
                 </div>

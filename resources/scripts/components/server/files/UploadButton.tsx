@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 
-import ActionButton from '@/components/elements/ActionButton';
-import { ModalMask } from '@/components/elements/Modal';
+import { Button } from '@/components/ui/button';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
 
 import getFileUploadUrl from '@/api/server/files/getFileUploadUrl';
@@ -72,19 +71,16 @@ const UploadButton = () => {
             });
 
             return () =>
-                getFileUploadUrl(uuid).then((url) =>
-                    axios
-                        .post(
-                            url,
-                            { files: file },
-                            {
-                                signal: controller.signal,
-                                headers: { 'Content-Type': 'multipart/form-data' },
-                                params: { directory },
-                            },
-                        )
-                        .then(() => timeouts.push(setTimeout(() => removeFileUpload(file.name), 500))),
-                );
+                getFileUploadUrl(uuid).then((url) => {
+                    const formData = new FormData();
+                    formData.append('files', file);
+                    formData.append('directory', directory);
+                    return axios
+                        .post(url, formData, {
+                            signal: controller.signal,
+                        })
+                        .then(() => timeouts.push(setTimeout(() => removeFileUpload(file.name), 500)));
+                });
         });
 
         Promise.all(uploads.map((fn) => fn()))
@@ -98,11 +94,14 @@ const UploadButton = () => {
     return (
         <>
             <FadeTransition show={visible} duration='duration-75' key='upload_modal_mask' appear unmount>
-                <ModalMask
-                    className='flex'
+                <div
+                    className='fixed inset-0 z-9997 flex overflow-auto backdrop-blur-xs'
+                    style={{
+                        background:
+                            'radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%)',
+                    }}
                     onClick={() => setVisible(false)}
                     onDragOver={(e) => e.preventDefault()}
-                    // why doesn't vanilla pterodactyl have this?
                     onDragLeave={() => {
                         setVisible(false);
                     }}
@@ -119,10 +118,10 @@ const UploadButton = () => {
                     <div className={'w-full flex items-center justify-center pointer-events-none'}>
                         <div
                             className={
-                                'relative flex flex-col items-center gap-4 bg-brand w-full rounded-2xl py-12 px-4 mx-10 max-w-sm'
+                                'relative flex flex-col items-center gap-4 bg-foreground w-full rounded-xl py-12 px-4 mx-10 max-w-sm'
                             }
                         >
-                            <div className='absolute inset-4 border-dashed border-[#ffffff88] border-2 rounded-xl'></div>
+                            <div className='absolute inset-4 border-dashed border-white/50 border-2 rounded-xl'></div>
                             <svg
                                 width='24'
                                 height='24'
@@ -151,7 +150,7 @@ const UploadButton = () => {
                             </h1>
                         </div>
                     </div>
-                </ModalMask>
+                </div>
             </FadeTransition>
             <input
                 type={'file'}
@@ -167,12 +166,12 @@ const UploadButton = () => {
                 }}
                 multiple
             />
-            <ActionButton
+            <Button
                 variant='secondary'
                 onClick={() => fileUploadInput.current && fileUploadInput.current.click()}
             >
                 Upload
-            </ActionButton>
+            </Button>
         </>
     );
 };

@@ -1,8 +1,8 @@
-import clsx from 'clsx';
 import { useEffect, useMemo, useState } from 'react';
 
 import StatBlock from '@/components/server/console/StatBlock';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
+import { cn } from '@/lib/utils';
 
 import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
 
@@ -13,19 +13,6 @@ import { ServerContext } from '@/state/server';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
 type Stats = Record<'memory' | 'cpu' | 'disk' | 'uptime' | 'rx' | 'tx', number>;
-
-// const getBackgroundColor = (value: number, max: number | null): string | undefined => {
-//     const delta = !max ? 0 : value / max;
-
-//     if (delta > 0.8) {
-//         if (delta > 0.9) {
-//             return 'bg-red-500';
-//         }
-//         return 'bg-yellow-500';
-//     }
-
-//     return undefined;
-// };
 
 // @ts-expect-error - Unused parameter in component definition
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -57,7 +44,6 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
         return !match ? 'n/a' : `${match.alias || ip(match.ip)}:${match.port}`;
     });
 
-    // Get display address (subdomain if available and active, otherwise IP)
     const displayAddress = useMemo(() => {
         if (
             subdomainInfo?.current_subdomain?.attributes?.is_active &&
@@ -74,7 +60,6 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                 const data = await getSubdomainInfo(uuid);
                 setSubdomainInfo(data);
             } catch (error) {
-                // Silently fail - subdomain feature might not be available
                 setSubdomainInfo(null);
             }
         };
@@ -109,63 +94,27 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
     });
 
     return (
-        <div className={clsx('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4', className)}>
-            <div
-                className='transform-gpu skeleton-anim-2'
-                style={{
-                    animationDelay: `50ms`,
-                    animationTimingFunction:
-                        'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                }}
-            >
-                <StatBlock title={'IP Address'} copyOnClick={displayAddress}>
-                    {displayAddress}
-                </StatBlock>
-            </div>
-            <div
-                className='transform-gpu skeleton-anim-2'
-                style={{
-                    animationDelay: `75ms`,
-                    animationTimingFunction:
-                        'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                }}
-            >
-                <StatBlock title={'CPU'}>
-                    {status === 'offline' ? (
-                        <span className={'text-zinc-400'}>Offline</span>
-                    ) : (
-                        <Limit limit={textLimits.cpu}>{stats.cpu.toFixed(2)}%</Limit>
-                    )}
-                </StatBlock>
-            </div>
-            <div
-                className='transform-gpu skeleton-anim-2'
-                style={{
-                    animationDelay: `100ms`,
-                    animationTimingFunction:
-                        'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                }}
-            >
-                <StatBlock title={'RAM'}>
-                    {status === 'offline' ? (
-                        <span className={'text-zinc-400'}>Offline</span>
-                    ) : (
-                        <Limit limit={textLimits.memory}>{bytesToString(stats.memory)}</Limit>
-                    )}
-                </StatBlock>
-            </div>
-            <div
-                className='transform-gpu skeleton-anim-2'
-                style={{
-                    animationDelay: `125ms`,
-                    animationTimingFunction:
-                        'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                }}
-            >
-                <StatBlock title={'Storage'}>
-                    <Limit limit={textLimits.disk}>{bytesToString(stats.disk)}</Limit>
-                </StatBlock>
-            </div>
+        <div className={cn('grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4', className)}>
+            <StatBlock title={'IP Address'} copyOnClick={displayAddress}>
+                {displayAddress}
+            </StatBlock>
+            <StatBlock title={'CPU'}>
+                {status === 'offline' ? (
+                    <span className='text-muted-foreground'>Offline</span>
+                ) : (
+                    <Limit limit={textLimits.cpu}>{stats.cpu.toFixed(2)}%</Limit>
+                )}
+            </StatBlock>
+            <StatBlock title={'RAM'}>
+                {status === 'offline' ? (
+                    <span className='text-muted-foreground'>Offline</span>
+                ) : (
+                    <Limit limit={textLimits.memory}>{bytesToString(stats.memory)}</Limit>
+                )}
+            </StatBlock>
+            <StatBlock title={'Storage'}>
+                <Limit limit={textLimits.disk}>{bytesToString(stats.disk)}</Limit>
+            </StatBlock>
         </div>
     );
 };

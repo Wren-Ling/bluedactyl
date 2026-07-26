@@ -65,10 +65,6 @@ const App = () => {
                 <ThemeProvider defaultTheme='dark'>
                     <TooltipProvider>
                     <PyrodactylProvider>
-                    <div
-                        data-pyro-routerwrap=''
-                        className='relative w-full h-full flex flex-row p-2 overflow-hidden rounded-lg'
-                    >
                         <Toaster />
                         <BrowserRouter>
                             <Routes>
@@ -108,8 +104,7 @@ const App = () => {
                                 <Route path='*' element={<NotFound />} />
                             </Routes>
                         </BrowserRouter>
-                    </div>
-                </PyrodactylProvider>
+                    </PyrodactylProvider>
                     </TooltipProvider>
                 </ThemeProvider>
             </StoreProvider>

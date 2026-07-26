@@ -1,14 +1,11 @@
-import styled from 'styled-components';
+import { cn } from '@/lib/utils';
 
-const MainPage = styled.div`
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    height: fit-content;
-    min-height: 100%;
-    position: relative;
-    width: 100%;
-`;
+const MainPage = ({
+    className,
+    ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+    <div className={cn('flex flex-1 flex-col w-full', className)} {...props} />
+);
 MainPage.displayName = 'MainPage';
 
 export default MainPage;

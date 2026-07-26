@@ -1,11 +1,10 @@
-import { Database, Eye, TrashBin } from '@gravity-ui/icons';
+import { Database, Eye, Trash2 } from 'lucide-react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { useState } from 'react';
-import styled from 'styled-components';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import Field from '@/components/elements/Field';
@@ -22,13 +21,6 @@ import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
-
-const Label = styled.label`
-    display: inline-block;
-    color: #ffffff77;
-    font-size: 0.875rem;
-    padding-bottom: 0.5rem;
-`;
 
 interface Props {
     database: ServerDatabase;
@@ -99,15 +91,15 @@ const DatabaseRow = ({ database }: Props) => {
                                     label={'Confirm Database Name'}
                                     description={'Enter the database name to confirm deletion.'}
                                 />
-                                <ActionButton
-                                    variant='danger'
+                                <Button
+                                    variant='destructive'
                                     type={'submit'}
                                     className='min-w-full my-6'
                                     disabled={!isValid || isSubmitting}
                                 >
                                     {isSubmitting && <Spinner size='small' />}
                                     {isSubmitting ? 'Deleting...' : 'Delete Database'}
-                                </ActionButton>
+                                </Button>
                             </Form>
                         </div>
                     </Modal>
@@ -124,26 +116,26 @@ const DatabaseRow = ({ database }: Props) => {
                 <div className='flex flex-col min-w-full gap-4'>
                     <div className='grid gap-4 sm:grid-cols-2 min-w-full'>
                         <div className='flex flex-col'>
-                            <Label>Endpoint</Label>
+                            <label className='inline-block text-muted-foreground text-sm pb-2'>Endpoint</label>
                             <CopyOnClick text={database.connectionString}>
                                 <Input type={'text'} readOnly value={database.connectionString} />
                             </CopyOnClick>
                         </div>
                         <div className='flex flex-col'>
-                            <Label>Connections from</Label>
+                            <label className='inline-block text-muted-foreground text-sm pb-2'>Connections from</label>
                             <CopyOnClick text={database.allowConnectionsFrom}>
                                 <Input type={'text'} readOnly value={database.allowConnectionsFrom} />
                             </CopyOnClick>
                         </div>
                         <div className='flex flex-col'>
-                            <Label>Username</Label>
+                            <label className='inline-block text-muted-foreground text-sm pb-2'>Username</label>
                             <CopyOnClick text={database.username}>
                                 <Input type={'text'} readOnly value={database.username} />
                             </CopyOnClick>
                         </div>
                         <Can action={'database.view_password'}>
                             <div className='flex flex-col'>
-                                <Label>Password</Label>
+                                <label className='inline-block text-muted-foreground text-sm pb-2'>Password</label>
                                 <div className='flex flex-row min-w-full gap-2'>
                                     <CopyOnClick text={database.password} showInNotification={false}>
                                         <Input
@@ -162,7 +154,7 @@ const DatabaseRow = ({ database }: Props) => {
                     </div>
                     <div className='flex flex-col'>
                         <div className='flex flex-row gap-2 align-middle items-center'>
-                            <Label>JDBC Connection String</Label>
+                            <label className='inline-block text-muted-foreground text-sm pb-2'>JDBC Connection String</label>
                         </div>
                         <CopyOnClick text={jdbcConnectionString} showInNotification={false}>
                             <Input type={'password'} readOnly value={jdbcConnectionString} />
@@ -175,8 +167,8 @@ const DatabaseRow = ({ database }: Props) => {
                 <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full'>
                     <div className='flex-1 min-w-0'>
                         <div className='flex items-center gap-3 mb-2'>
-                            <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
-                                <Database fill='currentColor' className='text-zinc-400 w-4 h-4' />
+                            <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center'>
+                                <Database className='text-zinc-400 w-4 h-4' />
                             </div>
                             <div className='min-w-0 flex-1'>
                                 <CopyOnClick text={database.name}>
@@ -208,25 +200,25 @@ const DatabaseRow = ({ database }: Props) => {
                     </div>
 
                     <div className='flex items-center gap-2 sm:flex-col sm:gap-3'>
-                        <ActionButton
+                        <Button
                             variant='secondary'
                             size='sm'
                             onClick={() => setConnectionVisible(true)}
                             className='flex items-center gap-2'
                         >
-                            <Eye fill='currentColor' className='w-4 h-4' />
+                            <Eye className='w-4 h-4' />
                             <span className='hidden sm:inline'>Details</span>
-                        </ActionButton>
+                        </Button>
                         <Can action={'database.delete'}>
-                            <ActionButton
-                                variant='danger'
+                            <Button
+                                variant='destructive'
                                 size='sm'
                                 onClick={() => setVisible(true)}
                                 className='flex items-center gap-2'
                             >
-                                <TrashBin fill='currentColor' className='w-4 h-4' />
+                                <Trash2 className='w-4 h-4' />
                                 <span className='hidden sm:inline'>Delete</span>
-                            </ActionButton>
+                            </Button>
                         </Can>
                     </div>
                 </div>

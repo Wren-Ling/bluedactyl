@@ -1,10 +1,9 @@
-import { ChevronLeft } from '@gravity-ui/icons';
+import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
-import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import UserFormComponent from '@/components/server/users/UserFormComponent';
 
 import { ServerContext } from '@/state/server';
@@ -24,17 +23,17 @@ const CreateUserContainer = () => {
     };
 
     return (
-        <ServerContentBlock title={'Create User'}>
+        <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
             <MainPageHeader title={'Create New User'}>
-                <ActionButton
-                    variant='secondary'
+                <Button
+                    variant='outline'
                     onClick={() => navigate(`/server/${serverId}/users`)}
                     className='flex items-center gap-2'
                     disabled={isSubmitting}
                 >
-                    <ChevronLeft width={22} height={22} fill='currentColor' />
+                    <ArrowLeft className='size-4' />
                     Back to Users
-                </ActionButton>
+                </Button>
             </MainPageHeader>
 
             <UserFormComponent
@@ -44,7 +43,7 @@ const CreateUserContainer = () => {
                 isSubmitting={isSubmitting}
                 setIsSubmitting={setIsSubmitting}
             />
-        </ServerContentBlock>
+        </div>
     );
 };
 

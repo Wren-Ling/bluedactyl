@@ -3,7 +3,7 @@
 import { useContext, useEffect, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
 import { Input } from '@/components/elements/inputs';
 
@@ -57,22 +57,22 @@ const DisableTOTPDialog = () => {
                 onChange={(e) => setPassword(e.currentTarget.value)}
             />
             <Dialog.Footer>
-                <ActionButton variant='secondary' onClick={close}>
+                <Button variant='secondary' onClick={close}>
                     Cancel
-                </ActionButton>
+                </Button>
                 {/* <Tooltip
                     delay={100}
                     disabled={password.length > 0}
                     content={'You must enter your account password to continue.'}
                 > */}
-                <ActionButton
-                    variant='danger'
+                <Button
+                    variant='destructive'
                     type={'submit'}
                     form={'disable-totp-form'}
                     disabled={submitting || !password.length}
                 >
                     Disable
-                </ActionButton>
+                </Button>
                 {/* </Tooltip> */}
             </Dialog.Footer>
         </form>

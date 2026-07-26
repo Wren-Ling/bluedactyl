@@ -1,11 +1,12 @@
 import { encodePathSegments } from '@/helpers';
+import type { ReactNode } from 'react';
 import { Fragment, useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 
 import { ServerContext } from '@/state/server';
 
 interface Props {
-    renderLeft?: JSX.Element;
+    renderLeft?: ReactNode;
     withinFileEditor?: boolean;
     isNewFile?: boolean;
 }
@@ -48,7 +49,7 @@ const FileManagerBreadcrumbs = ({ renderLeft, withinFileEditor, isNewFile }: Pro
     return (
         <div className={`group select-none flex grow-0 items-center text-sm overflow-x-hidden`}>
             {renderLeft || <div className={`w-12`} />}
-            <NavLink to={`/server/${id}/files`} className={`px-1 text-zinc-200 no-underline hover:text-zinc-100`}>
+            <NavLink to={`/server/${id}/files`} className={`px-1 text-foreground/80 no-underline hover:text-foreground`}>
                 root
             </NavLink>
             <svg
@@ -66,7 +67,7 @@ const FileManagerBreadcrumbs = ({ renderLeft, withinFileEditor, isNewFile }: Pro
                     <Fragment key={index}>
                         <NavLink
                             to={`/server/${id}/files#${encodePathSegments(crumb.path)}`}
-                            className={`px-1 text-zinc-200 no-underline hover:text-zinc-100`}
+                            className={`px-1 text-foreground/80 no-underline hover:text-foreground`}
                         >
                             {crumb.name}
                         </NavLink>
@@ -82,14 +83,14 @@ const FileManagerBreadcrumbs = ({ renderLeft, withinFileEditor, isNewFile }: Pro
                         </svg>
                     </Fragment>
                 ) : (
-                    <span key={index} className={`px-1 text-zinc-300`}>
+                    <span key={index} className={`px-1 text-foreground/70`}>
                         {crumb.name}
                     </span>
                 ),
             )}
             {file && (
                 <Fragment>
-                    <span className={`px-1 text-zinc-300`}>{file}</span>
+                    <span className={`px-1 text-foreground/70`}>{file}</span>
                 </Fragment>
             )}
         </div>

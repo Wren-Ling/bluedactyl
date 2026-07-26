@@ -3,7 +3,7 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import { Fragment } from 'react';
 import * as Yup from 'yup';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Field from '@/components/elements/Field';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 
@@ -63,9 +63,9 @@ const UpdateEmailAddressForm = () => {
                             <Field id={'confirm_password'} type={'password'} name={'password'} label={'Password'} />
                         </div>
                         <div className={`mt-6`}>
-                            <ActionButton variant='primary' disabled={isSubmitting || !isValid}>
+                            <Button disabled={isSubmitting || !isValid}>
                                 Update Email
-                            </ActionButton>
+                            </Button>
                         </div>
                     </Form>
                 </Fragment>

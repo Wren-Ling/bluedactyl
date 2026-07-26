@@ -1,4 +1,4 @@
-import { Cloud, CloudArrowUpIn, Lock } from '@gravity-ui/icons';
+import { Cloud, CloudUpload, Lock } from 'lucide-react';
 import { format, formatDistanceToNow } from 'date-fns';
 
 import Can from '@/components/elements/Can';
@@ -72,11 +72,11 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
         if (isActive) {
             return <Spinner size={'small'} />;
         } else if (backup.isLocked) {
-            return <Lock width={22} height={22} className='text-red-400 ' fill='currentColor' />;
+            return <Lock size={22} className='text-red-400 ' />;
         } else if (backup.status === 'completed' || backup.isSuccessful) {
-            return <Cloud width={22} height={22} className='text-green-400 ' fill='currentColor' />;
+            return <Cloud size={22} className='text-green-400 ' />;
         } else {
-            return <Cloud width={22} height={22} className='text-red-400 ' fill='currentColor' />;
+            return <Cloud size={22} className='text-red-400 ' />;
         }
     };
 
@@ -140,7 +140,7 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                     )}
                 </div>
 
-                <div className='flex-shrink-0 w-9 h-9 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
+                <div className='flex-shrink-0 w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center'>
                     {getStatusIcon()}
                 </div>
 
@@ -221,7 +221,7 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                                 className='p-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-colors'
                                 title='Retry backup'
                             >
-                                <CloudArrowUpIn width={22} height={22} />
+                                <CloudUpload size={22} />
                             </button>
                         </Can>
                     )}

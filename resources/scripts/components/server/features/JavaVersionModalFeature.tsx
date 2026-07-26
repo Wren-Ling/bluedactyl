@@ -1,7 +1,7 @@
-import { ChevronDown, ChevronUp } from '@gravity-ui/icons';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 // import { Options } from '@/components/elements/button/types';
 import Can from '@/components/elements/Can';
 import {
@@ -10,7 +10,7 @@ import {
     DropdownMenuRadioGroup,
     DropdownMenuRadioItem,
     DropdownMenuTrigger,
-} from '@/components/elements/DropdownMenu';
+} from '@/components/ui/dropdown-menu';
 import Modal from '@/components/elements/Modal';
 import Spinner from '@/components/elements/Spinner';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
@@ -101,7 +101,7 @@ const JavaVersionModalFeature = () => {
                         <DropdownMenu onOpenChange={(open) => setDropDownOpen(open)}>
                             <DropdownMenuTrigger asChild>
                                 <button
-                                    className='flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl shadow-xs hover:from-[#ffffff05] hover:to-[#ffffff04] cursor-pointer'
+                                    className='flex items-center justify-center h-8 px-4 text-sm font-medium text-foreground transition-colors duration-150 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 cursor-pointer'
                                     disabled={!data}
                                 >
                                     {selectedVersion
@@ -111,9 +111,9 @@ const JavaVersionModalFeature = () => {
                                         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                                         .join(' ') || 'Select a version'}
                                     {dropDownOpen ? (
-                                        <ChevronUp fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} />
+                                        <ChevronUp className={`ml-2 w-[16px] h-[16px]`} />
                                     ) : (
-                                        <ChevronDown fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} />
+                                        <ChevronDown className={`ml-2 w-[16px] h-[16px]`} />
                                     )}
                                 </button>
                             </DropdownMenuTrigger>
@@ -133,9 +133,9 @@ const JavaVersionModalFeature = () => {
                         Cancel
                     </Button> */}
                     <Can action={'startup.docker-image'}>
-                        <ActionButton variant='primary' onClick={updateJava} className={`w-full sm:w-auto`}>
+                        <Button onClick={updateJava} className={`w-full sm:w-auto`}>
                             Update
-                        </ActionButton>
+                        </Button>
                     </Can>
                 </div>
             </div>

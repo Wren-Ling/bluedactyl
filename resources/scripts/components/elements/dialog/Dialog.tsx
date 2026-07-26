@@ -1,9 +1,9 @@
-import { Xmark } from '@gravity-ui/icons';
-import { Dialog as HDialog } from '@headlessui/react';
+import { Dialog as BaseDialog } from '@base-ui/react/dialog';
+import { X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useRef, useState } from 'react';
 
-import { DialogContext, IconPosition, RenderDialogProps, styles } from './';
+import { DialogContext, IconPosition, RenderDialogProps } from './';
 
 const variants = {
     open: {
@@ -59,75 +59,68 @@ const Dialog = ({
     };
 
     return (
-        <AnimatePresence>
-            {open && (
-                <DialogContext.Provider value={{ setIcon, setFooter, setIconPosition }}>
-                    <HDialog
-                        static
-                        as={motion.div}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.15 }}
-                        open={open}
-                        onClose={onDialogClose}
-                    >
-                        <div
-                            style={{
-                                background:
-                                    'radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%)',
-                            }}
-                            className={'fixed inset-0 backdrop-blur-xs z-9997'}
-                        />
-                        <div className={'fixed inset-0 overflow-y-auto z-9998'}>
-                            <div
-                                ref={container}
-                                className={styles.dialogContainer}
-                                onMouseDown={onContainerClick.bind(this, true)}
-                                onMouseUp={onContainerClick.bind(this, false)}
-                            >
-                                <HDialog.Panel
-                                    as={motion.div}
-                                    initial={'closed'}
-                                    animate={down ? 'bounce' : 'open'}
-                                    exit={'closed'}
-                                    variants={variants}
-                                    className={styles.panel}
+        <BaseDialog.Root open={open} onOpenChange={(isOpen) => !isOpen && onDialogClose()}>
+            <AnimatePresence>
+                {open && (
+                    <DialogContext.Provider value={{ setIcon, setFooter, setIconPosition }}>
+                        <BaseDialog.Portal>
+                            <BaseDialog.Backdrop
+                                as={motion.div}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.15 }}
+                                className='fixed inset-0 z-9997 bg-black/60 backdrop-blur-xs'
+                            />
+                            <div className='fixed inset-0 overflow-y-auto z-9998'>
+                                <div
+                                    ref={container}
+                                    className='flex min-h-full items-center justify-center p-4 text-center'
+                                    onMouseDown={onContainerClick.bind(this, true)}
+                                    onMouseUp={onContainerClick.bind(this, false)}
                                 >
-                                    <div className={'flex p-6 pb-0 overflow-y-auto'}>
-                                        {iconPosition === 'container' && icon}
-                                        <div className={'flex-1 max-h-[70vh] min-w-0'}>
-                                            <div className={'flex items-center'}>
-                                                {iconPosition !== 'container' && icon}
-                                                <div>
-                                                    {title && (
-                                                        <HDialog.Title className={styles.title}>{title}</HDialog.Title>
-                                                    )}
-                                                    {description && (
-                                                        <HDialog.Description>{description}</HDialog.Description>
-                                                    )}
+                                    <BaseDialog.Popup
+                                        as={motion.div}
+                                        initial={'closed'}
+                                        animate={down ? 'bounce' : 'open'}
+                                        exit={'closed'}
+                                        variants={variants}
+                                        className='relative mx-auto w-full max-w-xl rounded-xl border border-white/10 bg-background text-left shadow-2xl'
+                                    >
+                                        <div className='flex p-6 pb-0 overflow-y-auto'>
+                                            {iconPosition === 'container' && icon}
+                                            <div className='flex-1 max-h-[70vh] min-w-0'>
+                                                <div className='flex items-center'>
+                                                    {iconPosition !== 'container' && icon}
+                                                    <div>
+                                                        {title && (
+                                                            <h2 className='mb-2 pr-4 text-2xl font-extrabold tracking-tight'>
+                                                                {title}
+                                                            </h2>
+                                                        )}
+                                                        {description && <p>{description}</p>}
+                                                    </div>
                                                 </div>
+                                                {children}
+                                                <div className='invisible h-6' />
                                             </div>
-                                            {children}
-                                            <div className={'invisible h-6'} />
                                         </div>
-                                    </div>
-                                    {footer}
-                                    {/* Keep this below the other buttons so that it isn't the default focus if they're present. */}
-                                    {!hideCloseIcon && (
-                                        <div className={'absolute right-0 top-0 m-4 p-2 opacity-45 hover:opacity-100'}>
-                                            <button onClick={onClose} className='cursor-pointer'>
-                                                <Xmark width={22} height={22} fill='currentColor' />
-                                            </button>
-                                        </div>
-                                    )}
-                                </HDialog.Panel>
+                                        {footer}
+                                        {!hideCloseIcon && (
+                                            <div className='absolute right-0 top-0 m-4 p-2 opacity-45 hover:opacity-100'>
+                                                <button onClick={onClose} className='cursor-pointer'>
+                                                    <X className='size-5' />
+                                                </button>
+                                            </div>
+                                        )}
+                                    </BaseDialog.Popup>
+                                </div>
                             </div>
-                        </div>
-                    </HDialog>
-                </DialogContext.Provider>
-            )}
-        </AnimatePresence>
+                        </BaseDialog.Portal>
+                    </DialogContext.Provider>
+                )}
+            </AnimatePresence>
+        </BaseDialog.Root>
     );
 };
 

@@ -1,7 +1,6 @@
 import { ActivityLog } from '@definitions/user';
-import { TerminalLine } from '@gravity-ui/icons';
+import { Terminal } from 'lucide-react';
 // FIXME: add icons back
-import clsx from 'clsx';
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 import { formatDistanceToNowStrict } from 'date-fns';
@@ -12,8 +11,6 @@ import ActivityLogMetaButton from '@/components/elements/activity/ActivityLogMet
 import { formatObjectToIdentString } from '@/lib/objects';
 
 import useLocationHash from '@/plugins/useLocationHash';
-
-import style from './style.module.css';
 
 interface Props {
     activity: ActivityLog;
@@ -44,7 +41,7 @@ const ActivityLogEntry = ({ activity, children }: Props) => {
                     <span className='text-zinc-500'>•</span>
                     <Link
                         to={`#${pathTo({ event: activity.event })}`}
-                        className='font-mono text-xs bg-zinc-800/50 text-zinc-300 px-2 py-1 rounded hover:bg-zinc-700/50 hover:text-brand transition-colors duration-150 truncate'
+                        className='font-mono text-xs bg-zinc-800/50 text-zinc-300 px-2 py-1 rounded hover:bg-zinc-700/50 hover:text-foreground transition-colors duration-150 truncate'
                     >
                         {activity.event}
                     </Link>
@@ -53,7 +50,7 @@ const ActivityLogEntry = ({ activity, children }: Props) => {
                     <div className='flex items-center gap-1 ml-auto'>
                         {activity.isApi && (
                             <span className='text-xs bg-blue-900/30 text-blue-300 px-1.5 py-0.5 rounded flex items-center gap-1'>
-                                <TerminalLine width={22} height={22} fill='currentColor' />
+                                <Terminal size={22} />
                                 API
                             </span>
                         )}

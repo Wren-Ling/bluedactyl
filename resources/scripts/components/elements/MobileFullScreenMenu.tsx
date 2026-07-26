@@ -1,4 +1,4 @@
-import { AbbrApi, Gear, House, Key, Xmark } from '@gravity-ui/icons';
+import { Code, House, Key, Settings, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
@@ -21,14 +21,14 @@ const MobileFullScreenMenu = ({ isVisible, onClose, children }: MobileFullScreen
     if (!isVisible) return null;
 
     return (
-        <div className='lg:hidden fixed inset-0 z-9999 bg-[#1a1a1a] pt-16'>
+        <div className='lg:hidden fixed inset-0 z-9999 bg-background pt-16'>
             {/* Close button */}
             <button
                 onClick={onClose}
-                className='absolute top-4 right-4 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200'
+                className='absolute top-4 right-4 p-2 text-muted-foreground hover:text-foreground hover:bg-white/10 rounded-lg transition-all duration-200'
                 aria-label='Close menu'
             >
-                <Xmark width={22} height={22} fill='currentColor' />
+                <X size={22} />
             </button>
 
             {/* Full screen navigation menu */}
@@ -57,14 +57,14 @@ const NavigationItem = ({ to, icon: Icon, children, end = false, onClick }: Navi
         className={({ isActive }) =>
             `flex items-center gap-4 p-4 rounded-md transition-all duration-200 ${
                 isActive
-                    ? 'bg-gradient-to-r from-brand/20 to-brand/10 border-l-4 border-brand text-white'
-                    : 'text-white/80 hover:text-white hover:bg-[#ffffff11] border-l-4 border-transparent'
+                    ? 'bg-muted border-l-4 border-foreground text-foreground'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-white/5 border-l-4 border-transparent'
             }`
         }
         onClick={onClick}
     >
         <div>
-            <Icon width={22} height={22} fill='currentColor' />
+            <Icon size={22} />
         </div>
         <span className='text-lg font-medium'>{children}</span>
     </NavLink>
@@ -81,13 +81,13 @@ export const DashboardMobileMenu = ({ isVisible, onClose }: DashboardMobileMenuP
             <NavigationItem to='/' icon={House} end onClick={onClose}>
                 Servers
             </NavigationItem>
-            <NavigationItem to='/account/api' icon={AbbrApi} end onClick={onClose}>
+            <NavigationItem to='/account/api' icon={Code} end onClick={onClose}>
                 API Keys
             </NavigationItem>
             <NavigationItem to='/account/ssh' icon={Key} end onClick={onClose}>
                 SSH Keys
             </NavigationItem>
-            <NavigationItem to='/account' icon={Gear} end onClick={onClose}>
+            <NavigationItem to='/account' icon={Settings} end onClick={onClose}>
                 Settings
             </NavigationItem>
         </MobileFullScreenMenu>

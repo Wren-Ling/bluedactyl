@@ -3,7 +3,7 @@ import { memo, useCallback } from 'react';
 import isEqual from 'react-fast-compare';
 
 import { Input } from '@/components/ui/input';
-import TitledGreyBox from '@/components/elements/TitledGreyBox';
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
 
 interface Props {
     isEditable?: boolean;
@@ -28,8 +28,8 @@ const PermissionTitleBox: React.FC<Props> = memo(({ isEditable, title, permissio
     );
 
     return (
-        <TitledGreyBox
-            title={
+        <Card className={className}>
+            <CardHeader>
                 <div className={`flex items-center justify-between w-full`}>
                     <p className={`text-sm capitalize`}>{title}</p>
                     {isEditable && (
@@ -40,11 +40,11 @@ const PermissionTitleBox: React.FC<Props> = memo(({ isEditable, title, permissio
                         />
                     )}
                 </div>
-            }
-            className={className}
-        >
-            {children}
-        </TitledGreyBox>
+            </CardHeader>
+            <CardContent>
+                {children}
+            </CardContent>
+        </Card>
     );
 }, isEqual);
 

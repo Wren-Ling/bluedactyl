@@ -1,5 +1,12 @@
-import styled from 'styled-components';
+import { cn } from '@/lib/utils';
 
-const Label = styled.label<{ isLight?: boolean }>``;
+const Label = ({
+    as: Tag = 'label',
+    isLight,
+    className,
+    ...props
+}: React.HTMLAttributes<HTMLElement> & { as?: string; isLight?: boolean }) => (
+    <Tag className={cn(className)} {...props} />
+);
 
 export default Label;

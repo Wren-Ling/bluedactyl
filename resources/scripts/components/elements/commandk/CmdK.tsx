@@ -1,17 +1,17 @@
 import {
     Box,
-    BranchesDown,
-    ClockArrowRotateLeft,
-    CloudArrowUpIn,
+    CloudUpload,
     Database,
     FolderOpen,
-    Gear,
+    GitBranch,
+    History,
     House,
-    PencilToLine,
-    Persons,
+    PencilLine,
     Power,
+    Settings,
     Terminal,
-} from '@gravity-ui/icons';
+    Users,
+} from 'lucide-react';
 import { Command } from 'cmdk';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -20,8 +20,6 @@ import { toast } from 'sonner';
 import Can from '@/components/elements/Can';
 
 import { ServerContext } from '@/state/server';
-
-import ModrinthLogo from '../ModrinthLogo';
 
 const CommandMenu = () => {
     const [open, setOpen] = useState(false);
@@ -70,72 +68,71 @@ const CommandMenu = () => {
 
                 <Command.Group heading='Pages'>
                     <Command.Item onSelect={() => cmdkNavigate('')}>
-                        <House fill='currentColor' />
+                        <House />
                         Home
                     </Command.Item>
                     <Can action={'file.*'} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/files')}>
-                            <FolderOpen fill='currentColor' />
+                            <FolderOpen />
                             Files
                         </Command.Item>
                     </Can>
                     <Can action={'database.*'} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/databases')}>
-                            <Database fill='currentColor' />
+                            <Database />
                             Databases
                         </Command.Item>
                     </Can>
                     <Can action={'backup.*'} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/backups')}>
-                            <CloudArrowUpIn fill='currentColor' />
+                            <CloudUpload />
                             Backups
                         </Command.Item>
                     </Can>
                     <Can action={'allocation.*'} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/network')}>
-                            <BranchesDown fill='currentColor' />
+                            <GitBranch />
                             Networking
                         </Command.Item>
                     </Can>
                     <Can action={'user.*'} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/users')}>
-                            <Persons fill='currentColor' />
+                            <Users />
                             Users
                         </Command.Item>
                     </Can>
                     <Can action={['startup.*']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/startup')}>
-                            <Terminal fill='currentColor' />
+                            <Terminal />
                             Startup
                         </Command.Item>
                     </Can>
                     <Can action={['schedule.*']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/schedules')}>
-                            <ClockArrowRotateLeft fill='currentColor' />
+                            <History />
                             Schedules
                         </Command.Item>
                     </Can>
                     <Can action={['settings.*', 'file.sftp']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/settings')}>
-                            <Gear fill='currentColor' />
+                            <Settings />
                             Settings
                         </Command.Item>
                     </Can>
                     <Can action={['activity.*']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/activity')}>
-                            <PencilToLine fill='currentColor' />
+                            <PencilLine />
                             Activity
                         </Command.Item>
                     </Can>
                     <Can action={['modrinth.*']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/mods')}>
-                            <ModrinthLogo />
-                            Mods/Plugins
+                            Download
                         </Command.Item>
                     </Can>
                     <Can action={['software.*']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/shell')}>
-                            <Box fill='currentColor' />
+                            <Box />
                             Software
                         </Command.Item>
                     </Can>
@@ -143,19 +140,19 @@ const CommandMenu = () => {
                 <Command.Group heading='Server'>
                     <Can action={'control.start'}>
                         <Command.Item disabled={status !== 'offline'} onSelect={() => cmdkPowerAction('start')}>
-                            <Power fill='currentColor' />
+                            <Power />
                             Start Server
                         </Command.Item>
                     </Can>
                     <Can action={'control.restart'}>
                         <Command.Item disabled={!status} onSelect={() => cmdkPowerAction('restart')}>
-                            <Power fill='currentColor' />
+                            <Power />
                             Restart Server
                         </Command.Item>
                     </Can>
                     <Can action={'control.restart'}>
                         <Command.Item disabled={status === 'offline'} onSelect={() => cmdkPowerAction('stop')}>
-                            <Power fill='currentColor' />
+                            <Power />
                             Stop Server
                         </Command.Item>
                     </Can>

@@ -1,7 +1,7 @@
 import { fileBitsToString } from '@/helpers';
 import { Form, Formik, FormikHelpers } from 'formik';
 
-import ActionButton from '@/components/elements/ActionButton';
+import { Button } from '@/components/ui/button';
 import Field from '@/components/elements/Field';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
 
@@ -78,9 +78,9 @@ const ChmodFileModal = ({ files, ...props }: OwnProps) => {
                                 />
                             </div>
                             <div className={`flex justify-end w-full my-6`}>
-                                <ActionButton variant='primary' type='submit'>
+                                <Button type='submit'>
                                     Update
-                                </ActionButton>
+                                </Button>
                             </div>
                         </div>
                     </Form>
