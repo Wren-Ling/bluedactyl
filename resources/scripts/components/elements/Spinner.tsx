@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { cn } from '@/lib/utils';
 
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
-import PyroLogo from '@/components/elements/PyroLogo';
+
 import { Spinner as ShadcnSpinner, type SpinnerSize } from '@/components/ui/spinner';
 
 export type SpinnerSize = 'small' | 'base' | 'large';
@@ -54,14 +54,7 @@ Spinner.Suspense = ({ children }) => (
     <Suspense
         fallback={
             <div className='flex min-h-screen items-center justify-center bg-background'>
-                <div className='flex flex-col items-center gap-4'>
-                    <div className='flex items-center gap-2'>
-                        <PyroLogo className='size-8 text-foreground' />
-                        <span className='text-lg font-semibold tracking-tight text-foreground'>Pyrodactyl</span>
-                    </div>
-                    <ShadcnSpinner className='size-5 text-muted-foreground' />
-                    <p className='text-sm text-muted-foreground animate-pulse'>Loading&hellip;</p>
-                </div>
+                <ShadcnSpinner className='size-8 text-muted-foreground' />
             </div>
         }
     >
