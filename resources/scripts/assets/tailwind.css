@@ -323,6 +323,9 @@
 
     --transition-duration-250: 250ms;
     --breakpoint-ms: 41rem;   /* Medium Small */
+
+    --animate-background-position-spin: background-position-spin 3000ms infinite alternate;
+    --animate-meteor: meteor 5s linear infinite;
 }
 
 :root {
@@ -448,6 +451,10 @@
     background: transparent;
 }
 
+@keyframes background-position-spin {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
 @keyframes list-anim {
     0% {
         transform: translateY(-22px) scale(0.98);
@@ -578,4 +585,8 @@
     color: var(--muted-foreground);
 }
 
-
+@keyframes meteor {
+    0% { transform: rotate(var(--angle)) translateX(0); opacity: 1; }
+    70% { opacity: 1; }
+    100% { transform: rotate(var(--angle)) translateX(-500px); opacity: 0; }
+}

@@ -96,15 +96,15 @@ const FileDropdownMenu = ({ file, onDelete }: { file: FileObject; onDelete?: () 
             ) : null}
             <ContextMenuContent className='flex flex-col gap-1'>
                 <Can action={'file.update'}>
-                    <ContextMenuItem className='flex gap-2' onSelect={() => setModal('rename')}>
+                    <ContextMenuItem className='flex gap-2' onClick={() => setModal('rename')}>
                         <PencilLine className='h-4! w-4!' />
                         <span>{t('files:rename')}</span>
                     </ContextMenuItem>
-                    <ContextMenuItem className='flex gap-2' onSelect={() => setModal('move')}>
+                    <ContextMenuItem className='flex gap-2' onClick={() => setModal('move')}>
                         <Play className='h-4! w-4!' />
                         <span>{t('files:move')}</span>
                     </ContextMenuItem>
-                    <ContextMenuItem className='flex gap-2' onSelect={() => setModal('chmod')}>
+                    <ContextMenuItem className='flex gap-2' onClick={() => setModal('chmod')}>
                         <Shield className='h-4! w-4!' />
                         <span>{t('files:permissions')}</span>
                     </ContextMenuItem>
@@ -119,21 +119,21 @@ const FileDropdownMenu = ({ file, onDelete }: { file: FileObject; onDelete?: () 
                 )}
                 {file.isArchiveType() ? (
                     <Can action={'file.create'}>
-                        <ContextMenuItem className='flex gap-2' onSelect={doUnarchive} title={t('files:unarchive')}>
+                        <ContextMenuItem className='flex gap-2' onClick={doUnarchive} title={t('files:unarchive')}>
                             <FileArchive className='h-4! w-4!' />
                             <span>{t('files:unarchive')}</span>
                         </ContextMenuItem>
                     </Can>
                 ) : (
                     <Can action={'file.archive'}>
-                        <ContextMenuItem className='flex gap-2' onSelect={doArchive}>
+                        <ContextMenuItem className='flex gap-2' onClick={doArchive}>
                             <FileArchive className='h-4! w-4!' />
                             <span>{t('files:archive')}</span>
                         </ContextMenuItem>
                     </Can>
                 )}
                 {file.isFile && (
-                    <ContextMenuItem className='flex gap-2' onSelect={doDownload}>
+                    <ContextMenuItem className='flex gap-2' onClick={doDownload}>
                         <FileDown className='h-4! w-4!' />
                         <span>{t('files:download')}</span>
                     </ContextMenuItem>

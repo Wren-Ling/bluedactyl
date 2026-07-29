@@ -8,15 +8,13 @@ import { NotFound } from '@/components/elements/ScreenBlock';
 
 const AuthenticationRouter = () => {
     return (
-        <div className='flex min-h-screen items-center justify-center bg-background'>
-            <Routes>
-                <Route path='login' element={<LoginContainer />} />
-                <Route path='login/checkpoint/*' element={<LoginCheckpointContainer />} />
-                <Route path='password' element={<ForgotPasswordContainer />} />
-                <Route path='password/reset/:token' element={<ResetPasswordContainer />} />
-                <Route path='*' element={<NotFound />} />
-            </Routes>
-        </div>
+        <Routes>
+            <Route path='login' element={<LoginContainer />} />
+            <Route path='login/checkpoint/*' element={<LoginCheckpointContainer />} />
+            <Route path='password' element={<ForgotPasswordContainer />} />
+            <Route path='password/reset/:token' element={<ResetPasswordContainer />} />
+            <Route path='*' element={<NotFound />} />
+        </Routes>
     );
 };
 

@@ -1,140 +1,156 @@
-import type { FormikHelpers } from 'formik';
-import { Formik } from 'formik';
-import { useEffect } from 'react';
+import { Globe } from 'lucide-react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
-import { object, string } from 'yup';
+import { useNavigate } from 'react-router-dom';
 
-import LoginFormContainer from '@/components/auth/LoginFormContainer';
 import { Button } from '@/components/ui/button';
-import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
-import Field from '@/components/elements/Field';
-import Logo from '@/components/elements/PyroLogo';
-
-import CaptchaManager from '@/lib/captcha';
+import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { AnimatedThemeToggler as ModeToggle } from '@/components/ui/animated-theme-toggler';
+import { Meteors } from '@/components/ui/meteors';
+import { NeonGradientCard } from '@/components/ui/neon-gradient-card';
 
 import login from '@/api/auth/login';
 
-import useFlash from '@/plugins/useFlash';
+import i18n from '@/i18n/config';
 
-interface Values {
-    user: string;
-    password: string;
-}
+import { httpErrorToHuman } from '@/api/http';
 
-function LoginContainer() {
+const LANGUAGES = [
+    { code: 'en', label: 'English' },
+    { code: 'zh', label: '中文' },
+];
+
+const LoginContainer = () => {
     const { t } = useTranslation();
-    const { clearFlashes, clearAndAddHttpError } = useFlash();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        clearFlashes();
-    }, []);
+    const [credential, setCredential] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const onSubmit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
-        clearFlashes();
-
-        // Get captcha response if enabled
-        let loginData: any = values;
-        if (CaptchaManager.isEnabled()) {
-            const captchaResponse = getCaptchaResponse();
-            const fieldName = CaptchaManager.getProviderInstance().getResponseFieldName();
-
-            console.log('Captcha enabled, response:', captchaResponse, 'fieldName:', fieldName);
-
-            if (fieldName) {
-                if (captchaResponse) {
-                    loginData = { ...values, [fieldName]: captchaResponse };
-                    console.log('Adding captcha to login data:', loginData);
-                } else {
-                    // Captcha is enabled but no response - show error
-                    console.error('Captcha enabled but no response available');
-                    clearAndAddHttpError({ error: new Error(t('auth:please_complete_captcha')) });
-                    setSubmitting(false);
-                    return;
-                }
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError('');
+        if (!credential || !password) return;
+        setLoading(true);
+        try {
+            const res = await login({ user: credential, password });
+            if (res.complete) {
+                navigate(res.intended || '/');
+            } else if (res.confirmationToken) {
+                navigate(`/auth/login/checkpoint/${res.confirmationToken}`);
+            } else {
+                setError(res.error || t('auth:login_error'));
             }
-        } else {
-            console.log('Captcha not enabled');
+        } catch (err: any) {
+            setError(httpErrorToHuman(err));
+        } finally {
+            setLoading(false);
         }
-
-        login(loginData)
-            .then((response) => {
-                if (response.complete) {
-                    window.location.href = response.intended || '/';
-                    return;
-                }
-                navigate('/auth/login/checkpoint', { state: { token: response.confirmationToken } });
-            })
-            .catch((error: any) => {
-                setSubmitting(false);
-
-                if (error.code === 'InvalidCredentials') {
-                    clearAndAddHttpError({ error: new Error(t('auth:invalid_credentials')) });
-                } else if (error.code === 'DisplayException') {
-                    clearAndAddHttpError({ error: new Error(error.detail || error.message) });
-                } else {
-                    clearAndAddHttpError({ error });
-                }
-            });
     };
 
     return (
-        <Formik
-            onSubmit={onSubmit}
-            initialValues={{ user: '', password: '' }}
-            validationSchema={object().shape({
-                user: string().required(t('auth:validation_username_required')),
-                password: string().required(t('auth:validation_password_required')),
-            })}
-        >
-            {({ isSubmitting }) => (
-                <LoginFormContainer>
-                    <div className='flex justify-center py-2'>
-                        <Logo className='size-8 text-foreground' />
-                    </div>
-                    <div className='space-y-4'>
-                        <Field id='user' type='text' label={t('auth:username_or_email')} name='user' disabled={isSubmitting} />
+        <div className='relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4 sm:px-6'>
+            <Meteors number={25} angle={215} />
 
-                        <div className='relative'>
-                            <Field
-                                id='password'
-                                type='password'
-                                label={t('auth:password')}
-                                name='password'
-                                disabled={isSubmitting}
+            <div className='fixed right-4 top-4 flex items-center gap-2'>
+                <ModeToggle />
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <button
+                            type='button'
+                            className='flex size-9 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-background hover:text-foreground'
+                        >
+                            <Globe size={22} className='size-5' />
+                        </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align='end'>
+                        <DropdownMenuRadioGroup
+                            value={i18n.language}
+                            onValueChange={(v) => i18n.changeLanguage(v)}
+                        >
+                            {LANGUAGES.map((l) => (
+                                <DropdownMenuRadioItem key={l.code} value={l.code}>
+                                    {l.label}
+                                </DropdownMenuRadioItem>
+                            ))}
+                        </DropdownMenuRadioGroup>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
+
+            <NeonGradientCard
+                neonColors={{ firstColor: '#a3a3a3', secondColor: '#525252' }}
+                borderSize={0.5}
+                borderRadius={18}
+                blurSize={2}
+                className='w-full max-w-xl h-auto'
+            >
+                <CardHeader className='items-center gap-3 pb-0 text-center px-4 sm:px-6'>
+                    <svg
+                        viewBox='0 0 24 24'
+                        className='h-8 text-foreground'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeWidth='1.5'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                    >
+                        <path d='M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2' />
+                    </svg>
+                    <CardTitle className='text-xl'>{t('auth:login_title')}</CardTitle>
+                </CardHeader>
+                <CardContent className='pt-6 pb-4 px-4 sm:px-6'>
+                    <form onSubmit={handleLogin} className='flex flex-col gap-5'>
+                        <div className='flex flex-col gap-2'>
+                            <Label htmlFor='credential'>{t('auth:username_or_email')}</Label>
+                            <Input
+                                id='credential'
+                                type='text'
+                                placeholder={t('auth:username_or_email')}
+                                value={credential}
+                                onChange={(e) => setCredential(e.target.value)}
+                                required
                             />
-                            <Link
-                                to={'/auth/password'}
-                                className='absolute right-0 top-0 text-xs text-muted-foreground hover:text-foreground transition-colors'
-                            >
-                                {t('auth:forgot')}
-                            </Link>
                         </div>
 
-                        <Captcha
-                            onError={(error) => {
-                                console.error('Captcha error:', error);
-                                clearAndAddHttpError({
-                                    error: new Error(t('auth:captcha_verification_failed')),
-                                });
-                            }}
-                        />
+                        <div className='flex flex-col gap-2'>
+                            <Label htmlFor='password'>{t('auth:password')}</Label>
+                            <Input
+                                id='password'
+                                type='password'
+                                placeholder={t('auth:password')}
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+
+                        {error && <p className='text-sm text-destructive'>{error}</p>}
 
                         <Button
-                            className='w-full'
                             type='submit'
-                            size='lg'
-                            isLoading={isSubmitting}
-                            disabled={isSubmitting}
+                            disabled={loading}
+                            className='w-full'
                         >
-                            {t('auth:login')}
+                            {loading ? t('auth:loading') : t('auth:login')}
                         </Button>
-                    </div>
-                </LoginFormContainer>
-            )}
-        </Formik>
+                    </form>
+                </CardContent>
+            </NeonGradientCard>
+
+        </div>
     );
-}
+};
 
 export default LoginContainer;

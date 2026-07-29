@@ -1,12 +1,12 @@
 import http from '@/api/http';
 
-interface LoginData {
+export interface LoginData {
     user: string;
     password: string;
     [key: string]: any; // Allow additional fields like captcha responses
 }
 
-interface LoginResponse {
+export interface LoginResponse {
     complete: boolean;
     intended?: string;
     confirmationToken?: string;
@@ -25,6 +25,12 @@ export default async (data: LoginData): Promise<LoginResponse> => {
         const response = await http.post('/auth/login', payload);
 
         if (!response.data || typeof response.data !== 'object') {
+            if (response.status >= 200 && response.status < 300) {
+                return {
+                    complete: true,
+                    intended: '/',
+                };
+            }
             throw new Error('Invalid server response format');
         }
 
