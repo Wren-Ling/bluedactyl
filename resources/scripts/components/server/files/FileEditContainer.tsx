@@ -1,4 +1,3 @@
-import { Trans, useTranslation } from 'react-i18next';
 import { encodePathSegments } from '@/helpers';
 import type { LanguageDescription } from '@codemirror/language';
 import { languages } from '@codemirror/language-data';
@@ -32,6 +31,8 @@ import { ServerContext } from '@/state/server';
 import useFlash from '@/plugins/useFlash';
 
 const Editor = lazy(() => import('@/components/elements/editor/Editor'));
+
+import { useTranslation } from 'react-i18next';
 
 const FileEditContainer = () => {
     const { t } = useTranslation();
@@ -109,7 +110,6 @@ const FileEditContainer = () => {
         try {
             await save(name);
             if (instance) {
-                // they'll stack immediately, so this'll ease that
                 setTimeout(() => {
                     toast.success(t('files:server_restarting'));
                 }, 500);
@@ -129,25 +129,16 @@ const FileEditContainer = () => {
             <FlashMessageRender byKey={'files:view'} />
 
             <ErrorBoundary>
-                <div
-                    className='flex py-6 bg-muted/30 rounded-md rounded-b-none border border-border border-b-0'
-                >
+                <div className='flex py-6 bg-muted/30 rounded-md rounded-b-none border border-border border-b-0'>
                     <span className='-ml-[2rem]'></span>
                     <FileManagerBreadcrumbs withinFileEditor isNewFile={action !== 'edit'} />
                 </div>
             </ErrorBoundary>
 
             {['.pyroignore', '.pyroignore'].includes(filename) ? (
-                <div className={`mb-4 p-4 border-l-4 bg-card rounded-sm border-cyan-400`}>
-                    <p className={`text-foreground/80 text-sm`}>
-                        <Trans i18nKey='files:pyroignore_help'>
-                            You&apos;re editing a{' '}
-                            <code className={`font-mono bg-muted/50 rounded-sm py-px px-1`}>.pyroignore</code> file. Any files
-                            or directories listed in here will be excluded from backups. Wildcards are supported by using an
-                            asterisk (<code className={`font-mono bg-muted/50 rounded-sm py-px px-1`}>*</code>). You can negate
-                            a prior rule by prepending an exclamation point (
-                            <code className={`font-mono bg-muted/50 rounded-sm py-px px-1`}>!</code>).
-                        </Trans>
+                <div className='mb-4 p-4 border-l-4 bg-card rounded-sm border-cyan-400'>
+                    <p className='text-foreground/80 text-sm'>
+                        {t('files:pyroignore_help')}
                     </p>
                 </div>
             ) : null}
@@ -181,42 +172,19 @@ const FileEditContainer = () => {
                     }}
                     className='w-full h-full'
                 />
+            </div>
 
-            <div className='absolute top-2.5 right-2 flex flex-row items-center gap-4'>
+            <div className='flex flex-row items-center gap-4 absolute top-2.5 right-2'>
                 <DropdownMenu>
                     <DropdownMenuTrigger className='flex items-center gap-2 font-bold text-sm px-3 py-1 rounded-md h-fit bg-muted/30'>
                         <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
-                            <path
-                                d='M8 12H8.00897M11.9955 12H12.0045M15.991 12H16'
-                                stroke='currentColor'
-                                strokeWidth='2'
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                            />
-                            <path
-                                d='M18 21C19.2322 21 20.231 19.8487 20.231 18.4286C20.231 16.1808 20.1312 14.6865 21.6733 12.9091C22.1089 12.407 22.1089 11.593 21.6733 11.0909C20.1312 9.31354 20.231 7.81916 20.231 5.57143C20.231 4.15127 19.2322 3 18 3'
-                                stroke='currentColor'
-                                strokeWidth='1.5'
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                            />
-                            <path
-                                d='M6 21C4.76784 21 3.76897 19.8487 3.76897 18.4286C3.76897 16.1808 3.86877 14.6865 2.32673 12.9091C1.89109 12.407 1.89109 11.593 2.32673 11.0909C3.83496 9.35251 3.76897 7.83992 3.76897 5.57143C3.76897 4.15127 4.76784 3 6 3'
-                                stroke='currentColor'
-                                strokeWidth='1.5'
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                            />
+                            <path d='M8 12H8.00897M11.9955 12H12.0045M15.991 12H16' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' />
+                            <path d='M18 21C19.2322 21 20.231 19.8487 20.231 18.4286C20.231 16.1808 20.1312 14.6865 21.6733 12.9091C22.1089 12.407 22.1089 11.593 21.6733 11.0909C20.1312 9.31354 20.231 7.81916 20.231 5.57143C20.231 4.15127 19.2322 3 18 3' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' />
+                            <path d='M6 21C4.76784 21 3.76897 19.8487 3.76897 18.4286C3.76897 16.1808 3.86877 14.6865 2.32673 12.9091C1.89109 12.407 1.89109 11.593 2.32673 11.0909C3.83496 9.35251 3.76897 7.83992 3.76897 5.57143C3.76897 4.15127 4.76784 3 6 3' stroke='currentColor' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' />
                         </svg>
                         <span className='sm:block hidden'>{language?.name ?? t('files:language')}</span>
                         <svg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 13 13' fill='none'>
-                            <path
-                                fillRule='evenodd'
-                                clipRule='evenodd'
-                                d='M3.39257 5.3429C3.48398 5.25161 3.60788 5.20033 3.73707 5.20033C3.86626 5.20033 3.99016 5.25161 4.08157 5.3429L6.49957 7.7609L8.91757 5.3429C8.9622 5.29501 9.01602 5.25659 9.07582 5.22995C9.13562 5.2033 9.20017 5.18897 9.26563 5.18782C9.33109 5.18667 9.39611 5.19871 9.45681 5.22322C9.51751 5.24774 9.57265 5.28424 9.61895 5.33053C9.66524 5.37682 9.70173 5.43196 9.72625 5.49267C9.75077 5.55337 9.76281 5.61839 9.76166 5.68384C9.7605 5.7493 9.74617 5.81385 9.71953 5.87365C9.69288 5.93345 9.65447 5.98727 9.60657 6.0319L6.84407 8.7944C6.75266 8.8857 6.62876 8.93698 6.49957 8.93698C6.37038 8.93698 6.24648 8.8857 6.15507 8.7944L3.39257 6.0319C3.30128 5.9405 3.25 5.81659 3.25 5.6874C3.25 5.55822 3.30128 5.43431 3.39257 5.3429Z'
-                                fill='white'
-                                fillOpacity='0.37'
-                            />
+                            <path fillRule='evenodd' clipRule='evenodd' d='M3.39257 5.3429C3.48398 5.25161 3.60788 5.20033 3.73707 5.20033C3.86626 5.20033 3.99016 5.25161 4.08157 5.3429L6.49957 7.7609L8.91757 5.3429C8.9622 5.29501 9.01602 5.25659 9.07582 5.22995C9.13562 5.2033 9.20017 5.18897 9.26563 5.18782C9.33109 5.18667 9.39611 5.19871 9.45681 5.22322C9.51751 5.24774 9.57265 5.28424 9.61895 5.33053C9.66524 5.37682 9.70173 5.43196 9.72625 5.49267C9.75077 5.55337 9.76281 5.61839 9.76166 5.68384C9.7605 5.7493 9.74617 5.81385 9.71953 5.87365C9.69288 5.93345 9.65447 5.98727 9.60657 6.0319L6.84407 8.7944C6.75266 8.8857 6.62876 8.93698 6.49957 8.93698C6.37038 8.93698 6.24648 8.8857 6.15507 8.7944L3.39257 6.0319C3.30128 5.9405 3.25 5.81659 3.25 5.6874C3.25 5.55822 3.30128 5.43431 3.39257 5.3429Z' fill='white' fillOpacity='0.37' />
                         </svg>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className='max-h-50 overflow-auto z-99999' sideOffset={8}>
@@ -254,26 +222,12 @@ const FileEditContainer = () => {
                                         size='lg'
                                         className='rounded-r-full rounded-l-none px-2'
                                     >
-                                        <svg
-                                            xmlns='http://www.w3.org/2000/svg'
-                                            width='13'
-                                            height='13'
-                                            viewBox='0 0 13 13'
-                                            fill='none'
-                                        >
-                                            <path
-                                                fillRule='evenodd'
-                                                clipRule='evenodd'
-                                                d='M3.39257 5.3429C3.48398 5.25161 3.60788 5.20033 3.73707 5.20033C3.86626 5.20033 3.99016 5.25161 4.08157 5.3429L6.49957 7.7609L8.91757 5.3429C8.9622 5.29501 9.01602 5.25659 9.07582 5.22995C9.13562 5.2033 9.20017 5.18897 9.26563 5.18782C9.33109 5.18667 9.39611 5.19871 9.45681 5.22322C9.51751 5.24774 9.57265 5.28424 9.61895 5.33053C9.66524 5.37682 9.70173 5.43196 9.72625 5.49267C9.75077 5.55337 9.76281 5.61839 9.76166 5.68384C9.7605 5.7493 9.74617 5.81385 9.71953 5.87365C9.69288 5.93345 9.65447 5.98727 9.60657 6.0319L6.84407 8.7944C6.75266 8.8857 6.62876 8.93698 6.49957 8.93698C6.37038 8.93698 6.24648 8.8857 6.15507 8.7944L3.39257 6.0319C3.30128 5.9405 3.25 5.81659 3.25 5.6874C3.25 5.55822 3.30128 5.43431 3.39257 5.3429Z'
-                                                fill='white'
-                                            />
+                                        <svg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 13 13' fill='none'>
+                                            <path fillRule='evenodd' clipRule='evenodd' d='M3.39257 5.3429C3.48398 5.25161 3.60788 5.20033 3.73707 5.20033C3.86626 5.20033 3.99016 5.25161 4.08157 5.3429L6.49957 7.7609L8.91757 5.3429C8.9622 5.29501 9.01602 5.25659 9.07582 5.22995C9.13562 5.2033 9.20017 5.18897 9.26563 5.18782C9.33109 5.18667 9.39611 5.19871 9.45681 5.22322C9.51751 5.24774 9.57265 5.28424 9.61895 5.33053C9.66524 5.37682 9.70173 5.43196 9.72625 5.49267C9.75077 5.55337 9.76281 5.61839 9.76166 5.68384C9.7605 5.7493 9.74617 5.81385 9.71953 5.87365C9.69288 5.93345 9.65447 5.98727 9.60657 6.0319L6.84407 8.7944C6.75266 8.8857 6.62876 8.93698 6.49957 8.93698C6.37038 8.93698 6.24648 8.8857 6.15507 8.7944L3.39257 6.0319C3.30128 5.9405 3.25 5.81659 3.25 5.6874C3.25 5.55822 3.30128 5.43431 3.39257 5.3429Z' fill='white' />
                                         </svg>
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent
-                                    className='max-h-[calc(100vh-4rem)] overflow-auto z-99999'
-                                    sideOffset={8}
-                                >
+                                <DropdownMenuContent className='max-h-[calc(100vh-4rem)] overflow-auto z-99999' sideOffset={8}>
                                     <DropdownMenuItem onSelect={() => saveAndRestart()}>
                                         {t('files:save_and_restart')}
                                     </DropdownMenuItem>
@@ -288,7 +242,6 @@ const FileEditContainer = () => {
                         </Button>
                     </Can>
                 )}
-            </div>
             </div>
         </PageContentBlock>
     );

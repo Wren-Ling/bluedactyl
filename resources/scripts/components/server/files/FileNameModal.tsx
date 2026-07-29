@@ -53,7 +53,7 @@ const FileNameModal = ({ onFileNamed, onDismissed, ...props }: Props) => {
                             autoFocus
                         />
                         <div className={`flex justify-end w-full my-4`}>
-                            <Button>{t('files:create_file')}</Button>
+                            <Button type='submit'>{t('files:create_file')}</Button>
                         </div>
                     </Form>
                 </Modal>

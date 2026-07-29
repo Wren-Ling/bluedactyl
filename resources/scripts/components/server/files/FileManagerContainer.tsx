@@ -1,17 +1,16 @@
-import { useTranslation } from 'react-i18next';
 import { hashToPath } from '@/helpers';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import debounce from 'debounce';
-import { Search } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import Can from '@/components/elements/Can';
 import { Checkbox } from '@/components/ui/checkbox';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
-import FlashMessageRender from '@/components/FlashMessageRender';
-import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import { ServerError } from '@/components/elements/ScreenBlock';
+import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import FileManagerBreadcrumbs from '@/components/server/files/FileManagerBreadcrumbs';
 import FileManagerStatus from '@/components/server/files/FileManagerStatus';
 import FileObjectRow from '@/components/server/files/FileObjectRow';
@@ -20,7 +19,7 @@ import NewDirectoryButton from '@/components/server/files/NewDirectoryButton';
 import UploadButton from '@/components/server/files/UploadButton';
 
 import { httpErrorToHuman } from '@/api/http';
-import { FileObject } from '@/api/server/files/loadDirectory';
+import type { FileObject } from '@/api/server/files/loadDirectory';
 
 import { useStoreActions } from '@/state/hooks';
 import { ServerContext } from '@/state/server';
@@ -65,7 +64,6 @@ const FileManagerContainer = () => {
     }, [directory]);
 
     const onSelectAllClick = () => {
-        console.log('files', files);
         setSelectedFiles(
             selectedFilesLength === (files?.length === 0 ? -1 : files?.length)
                 ? []
@@ -99,67 +97,74 @@ const FileManagerContainer = () => {
     }
 
     return (
-        <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
-            <FlashMessageRender byKey={'files'} />
-            <ErrorBoundary>
-                <MainPageHeader
-                    direction='column'
-                    title={t('files:files_page_title')}
-                    titleChildren={
-                        <Can action={'file.create'}>
-                            <div className='flex flex-row gap-1'>
-                                <FileManagerStatus />
-                                <NewDirectoryButton />
-                                <NewFileButton id={id} />
-                                <UploadButton />
+        <ServerContentBlock className='p-0!' title={t('files:files_page_title')} showFlashKey={'files'}>
+            <SpinnerOverlay visible={!files} />
+
+            <div className='px-2 sm:px-14 pt-2 h-full sm:pt-14'>
+                <ErrorBoundary>
+                    <div className='mb-4'>
+                        <div className='flex flex-row justify-between items-start'>
+                            <div>
+                                <h2 className='text-2xl font-semibold'>{t('files:files_page_title')}</h2>
+                                <p className='text-sm text-muted-foreground leading-relaxed mt-1'>
+                                    {t('files:files_page_description')}
+                                </p>
                             </div>
-                        </Can>
-                    }
-                >
-                    <p className='text-sm leading-relaxed text-muted-foreground'>
-                        {t('files:files_page_description')}
-                    </p>
-                </MainPageHeader>
-                <div className={'mb-4 flex flex-wrap-reverse md:flex-nowrap'}>
-                    <FileManagerBreadcrumbs
-                        renderLeft={
-                            <Checkbox
-                                className='ml-[1.22rem] mr-4'
-                                checked={selectedFilesLength === (files?.length === 0 ? -1 : files?.length)}
-                                onCheckedChange={() => onSelectAllClick()}
-                            />
-                        }
-                    />
-                </div>
-            </ErrorBoundary>
+                            <Can action={'file.create'}>
+                                <div className='flex flex-row gap-2 items-center'>
+                                    <FileManagerStatus />
+                                    <NewDirectoryButton />
+                                    <NewFileButton id={id} />
+                                    <UploadButton />
+                                </div>
+                            </Can>
+                        </div>
+                    </div>
+
+                    <div className='flex flex-wrap-reverse md:flex-nowrap mb-4'>
+                        <FileManagerBreadcrumbs
+                            renderLeft={
+                                <Checkbox
+                                    className='ml-[1.22rem] mr-4'
+                                    checked={selectedFilesLength === (files?.length === 0 ? -1 : files?.length)}
+                                    onCheckedChange={() => onSelectAllClick()}
+                                />
+                            }
+                        />
+                    </div>
+                </ErrorBoundary>
+            </div>
 
             {!files ? null : (
                 <>
                     {!files.length ? (
-                        <p className={'text-center text-sm text-muted-foreground'}>{t('files:empty_folder')}</p>
+                        <p className='text-sm text-muted-foreground text-center'>{t('files:empty_folder')}</p>
                     ) : (
                         <>
-                            <div className='relative mx-2 rounded-md border border-border p-1 sm:ml-12 sm:mr-12'>
-                                <div className='pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 pl-2'>
-                                    <Search className='size-5 opacity-40' />
+                            <div className='relative p-1 border border-border rounded-md sm:ml-12 sm:mr-12 mx-2'>
+                                <div className='absolute left-4 top-1/2 pl-2 -translate-y-1/2 pointer-events-none'>
+                                    <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-5 h-5 opacity-40'>
+                                        <path strokeLinecap='round' strokeLinejoin='round' d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z' />
+                                    </svg>
                                 </div>
 
                                 <input
                                     ref={searchInputRef}
-                                    className='w-full rounded-lg bg-muted/40 px-14 py-4 text-sm font-bold outline-none'
+                                    className='pl-14 py-4 w-full rounded-lg bg-muted/30 text-sm font-bold outline-none'
                                     type='text'
                                     placeholder={t('files:search')}
                                     onChange={(event) => debouncedSearchTerm(event.target.value)}
                                 />
                             </div>
+
                             <div ref={parentRef} className='max-h-screen min-h-screen overflow-auto'>
                                 <div
                                     data-pyro-file-manager-files
-                                    className='mx-2 rounded-xl border border-border bg-card p-1 sm:ml-12 sm:mr-12'
+                                    className='p-1 border border-border rounded-xl sm:ml-12 sm:mr-12 mx-2 bg-card'
                                     style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
                                 >
                                     <div
-                                        className='flex w-full flex-col gap-0.5 overflow-hidden rounded-lg'
+                                        className='w-full overflow-hidden rounded-lg gap-0.5 flex flex-col'
                                         style={{
                                             height: `${rowVirtualizer.getTotalSize()}px`,
                                             width: '100%',
@@ -171,31 +176,31 @@ const FileManagerContainer = () => {
                                                 return (
                                                     <div
                                                         key={item.key}
-                                                        className='absolute left-0 top-0 w-full'
+                                                        className='w-full absolute left-0 top-0'
                                                         style={{
                                                             height: `${item.size}px`,
                                                             transform: `translateY(${item.start}px)`,
                                                         }}
                                                     >
                                                         <FileObjectRow
-                                                            // @ts-expect-error - Legacy type suppression
                                                             file={filesArray[item.index]}
                                                             key={filesArray[item.index]?.name}
                                                         />
                                                     </div>
                                                 );
                                             }
-                                            return <></>;
+                                            return null;
                                         })}
                                     </div>
                                 </div>
                             </div>
+
                             <MassActionsBar />
                         </>
                     )}
                 </>
             )}
-        </div>
+        </ServerContentBlock>
     );
 };
 
