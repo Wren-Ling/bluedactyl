@@ -1,6 +1,7 @@
 import { RotateCcw } from 'lucide-react';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import Spinner from '@/components/elements/Spinner';
@@ -20,6 +21,7 @@ const RotatePasswordButton = ({
     onUpdate: (database: ServerDatabase) => void;
 }) => {
     const [loading, setLoading] = useState(false);
+    const { t } = useTranslation('databases');
     const { addFlash, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
     const server = ServerContext.useStoreState((state) => state.server.data!);
 
@@ -37,7 +39,7 @@ const RotatePasswordButton = ({
                 console.error(error);
                 addFlash({
                     type: 'error',
-                    title: 'Error',
+                    title: t('error'),
                     message: httpErrorToHuman(error),
                     key: 'database-connection-modal',
                 });

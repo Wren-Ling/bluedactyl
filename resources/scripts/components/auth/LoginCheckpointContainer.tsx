@@ -1,6 +1,7 @@
 import type { ActionCreator } from 'easy-peasy';
 import { useFormikContext, withFormik } from 'formik';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Location, RouteProps } from 'react-router-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
@@ -29,6 +30,7 @@ type Props = OwnProps & {
 };
 
 function LoginCheckpointForm() {
+    const { t } = useTranslation();
     const { isSubmitting, setFieldValue } = useFormikContext<Values>();
     const [isMissingDevice, setIsMissingDevice] = useState(false);
 
@@ -41,17 +43,17 @@ function LoginCheckpointForm() {
                             <Logo className='size-8 text-foreground' />
                         </div>
                     </Link>
-                    <h2 className='text-lg font-semibold tracking-tight'>Two-Factor Authentication</h2>
-                    <p className='text-sm text-muted-foreground'>Check your device for the authentication code.</p>
+                    <h2 className='text-lg font-semibold tracking-tight'>{t('auth:two_factor_auth')}</h2>
+                    <p className='text-sm text-muted-foreground'>{t('auth:two_factor_check_device')}</p>
 
                     <Field
                         name={isMissingDevice ? 'recoveryCode' : 'code'}
-                        title={isMissingDevice ? 'Recovery Code' : 'Authentication Code'}
+                        title={isMissingDevice ? t('auth:recovery_code') : t('auth:auth_code')}
                         placeholder='000000'
                         description={
                             isMissingDevice
-                                ? 'Enter one of the recovery codes generated when you setup 2-Factor authentication on this account in order to continue.'
-                                : 'Enter the two-factor token displayed by your device.'
+                                ? t('auth:recovery_code_desc')
+                                : t('auth:two_factor_desc')
                         }
                         type='text'
                         autoComplete='one-time-code'
@@ -65,7 +67,7 @@ function LoginCheckpointForm() {
                         disabled={isSubmitting}
                         isLoading={isSubmitting}
                     >
-                        Login
+                        {t('auth:login')}
                     </Button>
 
                     <span
@@ -76,14 +78,14 @@ function LoginCheckpointForm() {
                         }}
                         className='block text-center text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer'
                     >
-                        {!isMissingDevice ? "I've Lost My Device" : 'I Have My Device'}
+                        {!isMissingDevice ? t('auth:lost_device') : t('auth:have_device')}
                     </span>
 
                     <Link
                         to={'/auth/login'}
                         className='block text-center text-xs text-muted-foreground hover:text-foreground transition-colors'
                     >
-                        Return to Login
+                        {t('auth:return_to_login')}
                     </Link>
                 </LoginFormContainer>
             </CardContent>

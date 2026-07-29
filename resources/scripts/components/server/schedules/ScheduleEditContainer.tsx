@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import isEqual from 'react-fast-compare';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -26,13 +27,14 @@ const CronBox = ({ title, value }: { title: string; value: string }) => (
     <ItemContainer title={title} description={value} />
 );
 
-const ActivePill = ({ active }: { active: boolean }) => (
+const ActivePill = ({ active, t }: { active: boolean; t: (key: string) => string }) => (
     <span className='flex items-center rounded-full px-2 py-px text-xs ml-4 uppercase bg-neutral-600 text-white'>
-        {active ? 'Active' : 'Inactive'}
+        {active ? t('active') : t('inactive')}
     </span>
 );
 
 const ScheduleEditContainer = () => {
+    const { t } = useTranslation('schedules');
     const { id: scheduleId } = useParams<'id'>();
     const navigate = useNavigate();
 
@@ -87,14 +89,14 @@ const ScheduleEditContainer = () => {
     }, [schedule, id, clearFlashes, clearAndAddHttpError, appendSchedule]);
 
     return (
-        <PageContentBlock title={'Schedules'}>
+        <PageContentBlock title={t('title')}>
             <FlashMessageRender byKey={'schedules'} />
             {!schedule || isLoading ? (
                 <Spinner size={'large'} centered />
             ) : (
                 <div className={`rounded-sm shadow-sm flex flex-col gap-6`}>
                     <div
-                        className='bg-white/5 border border-white/5 flex items-center place-content-between flex-col md:flex-row gap-6 p-6 rounded-2xl overflow-hidden'
+                        className='bg-muted/30 border border-border flex items-center place-content-between flex-col md:flex-row gap-6 p-6 rounded-2xl overflow-hidden'
                     >
                         <div className={`flex-none self-start`}>
                             <h3 className={`flex items-center text-neutral-100 text-2xl`}>
@@ -103,28 +105,28 @@ const ScheduleEditContainer = () => {
                                     <span
                                         className={`flex items-center rounded-full px-2 py-px text-xs ml-4 uppercase bg-neutral-600 text-white`}
                                     >
-                                        Processing
+                                        {t('processing')}
                                     </span>
                                 ) : (
-                                    <ActivePill active={schedule.isActive} />
+                                    <ActivePill active={schedule.isActive} t={t} />
                                 )}
                             </h3>
                             <p className={`mt-1 text-sm`}>
-                                <strong>Last run at:&nbsp;</strong>
+                                <strong>{t('last_run_at')}:&nbsp;</strong>
                                 {schedule.lastRunAt ? (
                                     format(schedule.lastRunAt, "MMM do 'at' h:mma")
                                 ) : (
-                                    <span>N/A</span>
+                                    <span>{t('na')}</span>
                                 )}
 
                                 <span className={`ml-4 pl-4 border-l-4 border-neutral-600 py-px hidden sm:inline`} />
                                 <br className={`sm:hidden`} />
 
-                                <strong>Next run at:&nbsp;</strong>
+                                <strong>{t('next_run_at')}:&nbsp;</strong>
                                 {schedule.nextRunAt ? (
                                     format(schedule.nextRunAt, "MMM do 'at' h:mma")
                                 ) : (
-                                    <span>N/A</span>
+                                    <span>{t('na')}</span>
                                 )}
                             </p>
                         </div>
@@ -135,23 +137,23 @@ const ScheduleEditContainer = () => {
                                     onClick={toggleEditModal}
                                     className={'flex-1 min-w-max'}
                                 >
-                                    Edit
+                                    {t('edit')}
                                 </Button>
                                 <Button
                                     onClick={() => setShowTaskModal(true)}
                                     className={'flex-1 min-w-max'}
                                 >
-                                    New Task
+                                    {t('new_task')}
                                 </Button>
                             </Can>
                         </div>
                     </div>
                     <div className={`grid grid-cols-3 sm:grid-cols-5 gap-4`}>
-                        <CronBox title={'Minute'} value={schedule.cron.minute} />
-                        <CronBox title={'Hour'} value={schedule.cron.hour} />
-                        <CronBox title={'Day (Month)'} value={schedule.cron.dayOfMonth} />
-                        <CronBox title={'Month'} value={schedule.cron.month} />
-                        <CronBox title={'Day (Week)'} value={schedule.cron.dayOfWeek} />
+                        <CronBox title={t('minute')} value={schedule.cron.minute} />
+                        <CronBox title={t('hour')} value={schedule.cron.hour} />
+                        <CronBox title={t('day_month')} value={schedule.cron.dayOfMonth} />
+                        <CronBox title={t('month')} value={schedule.cron.month} />
+                        <CronBox title={t('day_week')} value={schedule.cron.dayOfWeek} />
                     </div>
                     <div>
                         {schedule.tasks.length > 0
@@ -185,7 +187,7 @@ const ScheduleEditContainer = () => {
                                     disabled={schedule.isProcessing}
                                     onClick={onTriggerExecute}
                                 >
-                                    Run Now
+                                    {t('run_now')}
                                 </Button>
                             </Can>
                         )}

@@ -1,6 +1,7 @@
 import copy from 'copy-to-clipboard';
 import { useEffect, useState } from 'react';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { cn } from '@/lib/utils';
@@ -12,6 +13,7 @@ interface CopyOnClickProps {
 }
 
 const CopyOnClick = ({ text, children, showInNotification }: CopyOnClickProps) => {
+    const { t } = useTranslation();
     const [copied, setCopied] = useState(false);
     let truncatedText;
     if (showInNotification == false) {
@@ -24,7 +26,7 @@ const CopyOnClick = ({ text, children, showInNotification }: CopyOnClickProps) =
 
     useEffect(() => {
         if (!copied) return;
-        toast(`Copied ${truncatedText} to clipboard.`);
+        toast(t('common:copied_to_clipboard', { text: truncatedText }));
 
         const timeout = setTimeout(() => {
             setCopied(false);

@@ -1,20 +1,15 @@
 'use client';
 
-import { Ellipsis, LogOut, Server } from 'lucide-react';
+import { Cuboid, Home, Server } from 'lucide-react';
 import { useStoreState } from 'easy-peasy';
 import { Fragment, Suspense, useEffect, useMemo, useState } from 'react';
-import { NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom';
+import { Route, Routes, useLocation, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import routes, { getServerNavRoutes } from '@/routers/routes';
 
 import { AnimatedThemeToggler as ModeToggle } from '@/components/ui/animated-theme-toggler';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+
 import {
     Sidebar,
     SidebarContent,
@@ -29,10 +24,8 @@ import {
     SidebarTrigger,
 } from '@/components/ui/sidebar';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
-import { ServerMobileMenu } from '@/components/elements/MobileFullScreenMenu';
-import MobileTopBar from '@/components/elements/MobileTopBar';
+
 import PermissionRoute from '@/components/elements/PermissionRoute';
-import Logo from '@/components/elements/PyroLogo';
 import { NotFound, ServerError } from '@/components/elements/ScreenBlock';
 import CommandMenu from '@/components/elements/commandk/CmdK';
 import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
@@ -48,6 +41,7 @@ import { getSubdomainInfo } from '@/api/server/network/subdomain';
 import { ServerContext } from '@/state/server';
 
 const ServerRouter = () => {
+    const { t } = useTranslation();
     const params = useParams<'id'>();
     const location = useLocation();
 
@@ -63,23 +57,7 @@ const ServerRouter = () => {
     const getServer = ServerContext.useStoreActions((actions) => actions.server.getServer);
     const clearServerState = ServerContext.useStoreActions((actions) => actions.clearServerState);
 
-    const [isMobileMenuVisible, setMobileMenuVisible] = useState(false);
-
     const navRoutes = useMemo(() => getServerNavRoutes(), []);
-
-    const toggleMobileMenu = () => setMobileMenuVisible(!isMobileMenuVisible);
-    const closeMobileMenu = () => setMobileMenuVisible(false);
-
-    const onTriggerLogout = () => {
-        http.post('/auth/logout').finally(() => {
-            // @ts-expect-error this is valid
-            window.location = '/';
-        });
-    };
-
-    const onSelectManageServer = () => {
-        window.open(`/admin/servers/view/${serverId}`);
-    };
 
     useEffect(() => {
         return () => {
@@ -125,52 +103,28 @@ const ServerRouter = () => {
         <Fragment key={'server-router'}>
             {!uuid || !id ? (
                 error ? (
-                    <ServerError title='Something went wrong' message={error} />
+                    <ServerError title={t('server:something_went_wrong')} message={error} />
                 ) : null
             ) : (
                 <SidebarProvider>
-                    <MobileTopBar
-                        onMenuToggle={toggleMobileMenu}
-                        onTriggerLogout={onTriggerLogout}
-                        onSelectAdminPanel={onSelectManageServer}
-                        rootAdmin={rootAdmin}
-                    />
-
-                    <ServerMobileMenu
-                        isVisible={isMobileMenuVisible}
-                        onClose={closeMobileMenu}
-                        serverId={id}
-                    />
 
                     <Sidebar variant='sidebar' collapsible='offcanvas'>
-                        <SidebarHeader className='border-b border-border/50 p-2'>
+                        <SidebarHeader className='border-b border-border/50'>
                             <SidebarMenu>
                                 <SidebarMenuItem>
-                                    <div className='flex h-10 items-center justify-between gap-2 rounded-md px-1'>
-                                        <NavLink to={'/'} className='flex shrink-0 items-center gap-2'>
-                                            <Logo uniqueId='server-desktop-sidebar' className='size-5 text-sidebar-foreground' />
-                                            <span className='text-sm font-semibold text-sidebar-foreground'>Pyrodactyl</span>
-                                        </NavLink>
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <button className='flex size-8 cursor-pointer items-center justify-center rounded-md text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'>
-                                                    <Ellipsis size={18} />
-                                                </button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent sideOffset={8}>
-                                                {rootAdmin && (
-                                                    <DropdownMenuItem onSelect={onSelectManageServer}>
-                                                        Manage Server
-                                                    </DropdownMenuItem>
-                                                )}
-                                                <DropdownMenuSeparator />
-                                                <DropdownMenuItem onSelect={onTriggerLogout}>
-                                                    <LogOut className='mr-2 size-4' />
-                                                    Log Out
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </div>
+                                    <SidebarMenuButton
+                                        size='lg'
+                                        className='data-[slot=sidebar-menu-button]:p-1.5!'
+                                        render={<a href='/' />}
+                                    >
+                                        <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground'>
+                                            <Cuboid className='size-5' />
+                                        </div>
+                                        <div className='grid flex-1 text-left text-sm leading-tight'>
+                                            <span className='truncate font-semibold'>{t('server:pyrodactyl')}</span>
+                                            <span className='truncate text-xs text-muted-foreground'>{t('server:management')}</span>
+                                        </div>
+                                    </SidebarMenuButton>
                                 </SidebarMenuItem>
                             </SidebarMenu>
                         </SidebarHeader>
@@ -203,9 +157,9 @@ const ServerRouter = () => {
                     </Sidebar>
 
                     <SidebarInset>
-                        <header className='sticky top-0 z-10 hidden h-16 shrink-0 items-center gap-2 border-b bg-background px-4 lg:flex'>
+                        <header className='sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-background px-4'>
                             <SidebarTrigger className='-ml-1' />
-                            <nav aria-label='Breadcrumb'>
+                            <nav aria-label={t('server:breadcrumb')}>
                                 <ol className='flex flex-wrap items-center gap-1.5 break-words text-sm text-muted-foreground sm:gap-2.5'>
                                     <li className='inline-flex items-center gap-1.5 sm:gap-2.5'>
                                         <span className='font-normal text-foreground'>{serverName}</span>
@@ -213,6 +167,13 @@ const ServerRouter = () => {
                                 </ol>
                             </nav>
                             <div className='ml-auto flex items-center gap-2'>
+                                <a
+                                    href='/'
+                                    className='flex items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-accent-foreground size-9'
+                                >
+                                    <Home className='h-[1.2rem] w-[1.2rem]' />
+                                    <span className='sr-only'>{t('server:home')}</span>
+                                </a>
                                 <ModeToggle />
                             </div>
                         </header>

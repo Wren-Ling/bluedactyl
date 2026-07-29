@@ -1,0 +1,38 @@
+<?php
+
+return [
+    'title' => '管理面板',
+    'header' => '管理概览',
+    'header_subtitle' => '快速查看您的系统状态。',
+    'breadcrumb_admin' => '管理',
+    'breadcrumb_index' => '首页',
+    'system_info' => '系统信息',
+    'system_info_text' => '您正在运行 Pyrodactyl 面板版本 :version。',
+    'get_help' => '获取帮助',
+    'via_discord' => '（通过 Discord）',
+    'documentation' => '文档',
+    'github' => 'Github',
+    'support_project' => '支持项目',
+
+    // 侧边栏
+    'sidebar_basic_admin' => '基础管理',
+    'sidebar_overview' => '概览',
+    'sidebar_settings' => '设置',
+    'sidebar_api' => '应用 API',
+    'sidebar_management' => '资源管理',
+    'sidebar_databases' => '数据库',
+    'sidebar_locations' => '位置',
+    'sidebar_nodes' => '节点',
+    'sidebar_servers' => '服务器',
+    'sidebar_users' => '用户',
+    'sidebar_service_mgmt' => '服务管理',
+    'sidebar_mounts' => '挂载',
+    'sidebar_nests' => '预设组',
+    'sidebar_exit_admin' => '退出管理',
+    'sidebar_logout' => '登出',
+    'toggle_sidebar' => '切换侧边栏',
+    'toggle_dark_mode' => '切换深色模式',
+    'logout_confirm' => '您确定要登出吗？',
+    'validation_error' => '验证提供的数据时发生错误。',
+    'sidebar_subtitle' => '管理',
+];

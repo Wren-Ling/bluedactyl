@@ -1,4 +1,5 @@
 import { Component, useCallback, useState, type ReactNode } from 'react';
+import i18n from '@/i18n/config';
 import {
     AlertCircle,
     ArrowLeft,
@@ -85,10 +86,10 @@ class ErrorBoundary extends Component<Props, State> {
                                 <AlertCircle className='size-7 text-destructive' />
                             </div>
                             <CardTitle className='text-lg font-semibold'>
-                                Something went wrong
+                                {i18n.t('common:something_went_wrong')}
                             </CardTitle>
                             <CardDescription className='text-muted-foreground'>
-                                An unexpected error occurred while rendering this view.
+                                {i18n.t('common:unexpected_error_description')}
                             </CardDescription>
                         </CardHeader>
                         <CardContent className='space-y-4 px-6 pb-6'>
@@ -118,11 +119,11 @@ class ErrorBoundary extends Component<Props, State> {
                                     onClick={() => window.history.back()}
                                 >
                                     <ArrowLeft className='size-4 mr-2' />
-                                    Go Back
+                                    {i18n.t('common:go_back')}
                                 </Button>
                                 <Button className='flex-1' onClick={this.handleReset}>
                                     <RefreshCw className='size-4 mr-2' />
-                                    Try Again
+                                    {i18n.t('common:try_again')}
                                 </Button>
                             </div>
                         </CardContent>

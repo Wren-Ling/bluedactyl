@@ -2,6 +2,7 @@ import { Plus, Users } from 'lucide-react';
 import { Actions, useStoreActions, useStoreState } from 'easy-peasy';
 import { For } from 'million/react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -18,6 +19,7 @@ import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 
 const UsersContainer = () => {
+    const { t } = useTranslation('users');
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
@@ -62,10 +64,10 @@ const UsersContainer = () => {
             <>
                 <MainPageHeader
                     direction='column'
-                    title={'Users'}
+                    title={t('title')}
                     titleChildren={
                         <div className='flex flex-col items-center justify-end gap-4 sm:flex-row'>
-                            <p className='text-center text-sm text-muted-foreground sm:text-right'>0 users</p>
+                            <p className='text-center text-sm text-muted-foreground sm:text-right'>{t('count_zero')}</p>
                             <Can action={'user.create'}>
                                 <Button
                                     variant='default'
@@ -73,15 +75,14 @@ const UsersContainer = () => {
                                     className='flex items-center gap-2'
                                 >
                                     <Plus className='size-4' />
-                                    New User
+                                    {t('new_user')}
                                 </Button>
                             </Can>
                         </div>
                     }
                 >
                     <p className='text-sm leading-relaxed text-muted-foreground'>
-                        Manage user access to your server. Grant specific permissions to other users to help you manage
-                        and maintain your server.
+                        {t('description')}
                     </p>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
@@ -95,10 +96,10 @@ const UsersContainer = () => {
         <>
             <MainPageHeader
                 direction='column'
-                title={'Users'}
+                title={t('title')}
                 titleChildren={
                     <div className='flex flex-col items-center justify-end gap-4 sm:flex-row'>
-                        <p className='text-center text-sm text-muted-foreground sm:text-right'>{subusers.length} users</p>
+                        <p className='text-center text-sm text-muted-foreground sm:text-right'>{t('count', { count: subusers.length })}</p>
                         <Can action={'user.create'}>
                             <Button
                                 variant='default'
@@ -106,15 +107,14 @@ const UsersContainer = () => {
                                 className='flex items-center gap-2'
                             >
                                 <Plus className='size-4' />
-                                New User
+                                {t('new_user')}
                             </Button>
                         </Can>
                     </div>
                 }
             >
                 <p className='text-sm leading-relaxed text-muted-foreground'>
-                    Manage user access to your server. Grant specific permissions to other users to help you manage and
-                    maintain your server.
+                    {t('description')}
                 </p>
             </MainPageHeader>
             {!subusers.length ? (
@@ -123,9 +123,9 @@ const UsersContainer = () => {
                         <div className='mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-muted'>
                             <Users className='size-8 text-muted-foreground' />
                         </div>
-                        <h3 className='mb-2 text-lg font-medium text-foreground'>No users found</h3>
+                        <h3 className='mb-2 text-lg font-medium text-foreground'>{t('no_users')}</h3>
                         <p className='max-w-sm text-sm text-muted-foreground'>
-                            Your server does not have any additional users. Add others to help you manage your server.
+                            {t('no_users_description')}
                         </p>
                     </div>
                 </div>

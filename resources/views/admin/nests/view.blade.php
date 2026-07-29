@@ -1,16 +1,16 @@
 @extends('layouts.admin')
 
 @section('title')
-    Nests &rarr; {{ $nest->name }}
+    @lang('admin/nests.nest_view.title') &rarr; {{ $nest->name }}
 @endsection
 
 @section('content-header')
     <h1 class="text-xl font-bold">{{ $nest->name }}</h1>
     <p class="text-sm text-muted-foreground">{{ str_limit($nest->description, 50) }}</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/nests.admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <a href="{{ route('admin.nests') }}">Nests</a>
+        <a href="{{ route('admin.nests') }}">@lang('admin/nests.nests_breadcrumb')</a>
         <x-icon name="chevron-right" class="size-3" />
         <span>{{ $nest->name }}</span>
     </nav>
@@ -22,18 +22,18 @@
         <div class="card">
             <section>
                 <div role="group" class="field">
-                    <label >Name <span class="field-required"></span></label>
+                    <label >@lang('admin/nests.nest_view.name_label') <span class="field-required"></span></label>
                     <input type="text" name="name"  value="{{ $nest->name }}" />
-                    <p class="text-sm text-muted-foreground">This should be a descriptive category name that encompasses all of the options within the service.</p>
+                    <p class="text-sm text-muted-foreground">{!! trans('admin/nests.nest_view.name_hint') !!}</p>
                 </div>
                 <div role="group" class="field">
-                    <label >Description</label>
+                    <label >@lang('admin/nests.nest_view.description_label')</label>
                     <textarea name="description"  rows="7">{{ $nest->description }}</textarea>
                 </div>
             </section>
             <footer>
                 {!! csrf_field() !!}
-                <button type="submit" name="_method" value="PATCH" class="btn ml-auto" data-size="sm">Save</button>
+                <button type="submit" name="_method" value="PATCH" class="btn ml-auto" data-size="sm">@lang('admin/nests.nest_view.save')</button>
                 <button id="deleteButton" type="submit" name="_method" value="DELETE" class="btn" data-variant="destructive" data-size="sm"><x-icon name="trash-2" class="size-4" /></button>
             </footer>
         </div>
@@ -42,19 +42,19 @@
         <div class="card">
             <section>
                 <div role="group" class="field">
-                    <label >Nest ID</label>
+                    <label >@lang('admin/nests.nest_view.nest_id_label')</label>
                         <input type="text" readonly  value="{{ $nest->id }}" />
-                        <p class="text-sm text-muted-foreground">A unique ID used for identification of this nest internally and through the API.</p>
+                        <p class="text-sm text-muted-foreground">{!! trans('admin/nests.nest_view.nest_id_hint') !!}</p>
                     </div>
                     <div role="group" class="field">
-                        <label >Author</label>
+                        <label >@lang('admin/nests.nest_view.author_label')</label>
                         <input type="text" readonly  value="{{ $nest->author }}" />
-                        <p class="text-sm text-muted-foreground">The author of this service option. Please direct questions and issues to them unless this is an official option authored by <code>support@pterodactyl.io</code>.</p>
+                        <p class="text-sm text-muted-foreground">{!! trans('admin/nests.nest_view.author_hint') !!}</p>
                     </div>
                     <div role="group" class="field">
-                        <label >UUID</label>
+                        <label >@lang('admin/nests.nest_view.uuid_label')</label>
                         <input type="text" readonly  value="{{ $nest->uuid }}" />
-                        <p class="text-sm text-muted-foreground">A UUID that all servers using this option are assigned for identification purposes.</p>
+                        <p class="text-sm text-muted-foreground">{!! trans('admin/nests.nest_view.uuid_hint') !!}</p>
                 </div>
             </section>
         </div>
@@ -64,7 +64,7 @@
     <div class="col-span-full">
         <div class="card">
             <header>
-                <h3 class="text-lg font-semibold">Nest Eggs</h3>
+                <h3 class="text-lg font-semibold">@lang('admin/nests.nest_view.eggs_card_title')</h3>
             </header>
             <section class="table-container no-padding">
                 <table class="table table-fixed w-full">
@@ -77,10 +77,10 @@
                     </colgroup>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th class="text-center">Servers</th>
+                            <th>@lang('admin/nests.nest_view.table_id')</th>
+                            <th>@lang('admin/nests.nest_view.table_name')</th>
+                            <th>@lang('admin/nests.nest_view.table_description')</th>
+                            <th class="text-center">@lang('admin/nests.nest_view.table_servers')</th>
                             <th class="text-center"></th>
                         </tr>
                     </thead>
@@ -100,7 +100,7 @@
                 </table>
             </section>
             <footer>
-                <a href="{{ route('admin.nests.egg.new') }}"><button class="btn ml-auto" data-size="sm">New Egg</button></a>
+                <a href="{{ route('admin.nests.egg.new') }}"><button class="btn ml-auto" data-size="sm">@lang('admin/nests.nest_view.new_egg')</button></a>
             </footer>
         </div>
     </div>
@@ -111,7 +111,7 @@
     @parent
     <script>
         $('#deleteButton').on('mouseenter', function (event) {
-            $(this).find('i').html(' Delete Nest');
+            $(this).find('i').html('{{ trans("admin.nests.nest_view.delete_nest") }}');
         }).on('mouseleave', function (event) {
             $(this).find('i').html('');
         });

@@ -1,16 +1,16 @@
 @extends('layouts.admin')
 
 @section('title')
-    Administration
+    @lang('admin/dashboard.title')
 @endsection
 
 @section('content-header')
-    <h1 class="text-xl font-bold">Administrative Overview</h1>
-    <p class="text-sm text-muted-foreground">A quick glance at your system.</p>
+    <h1 class="text-xl font-bold">@lang('admin/dashboard.header')</h1>
+    <p class="text-sm text-muted-foreground">@lang('admin/dashboard.header_subtitle')</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/dashboard.breadcrumb_admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>Index</span>
+        <span>@lang('admin/dashboard.breadcrumb_index')</span>
     </nav>
 @endsection
 
@@ -19,10 +19,10 @@
         <div class="col-span-full">
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">System Information</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/dashboard.system_info')</h3>
                 </header>
                 <section>
-                    You are running Pyrodactyl panel version <code>{{ config('app.version') }}</code>.
+                    @lang('admin/dashboard.system_info_text', ['version' => config('app.version')])
                 </section>
 
 
@@ -31,16 +31,16 @@
     </div>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div class="text-center">
-            <a href="https://discord.gg/UhuYKKK2uM"><button class="btn w-full" data-variant="secondary"><x-icon name="headphones" class="size-4" /> Get Help <small>(via Discord)</small></button></a>
+            <a href="https://discord.gg/UhuYKKK2uM"><button class="btn w-full" data-variant="secondary"><x-icon name="headphones" class="size-4" /> @lang('admin/dashboard.get_help')</button></a>
         </div>
         <div class="text-center">
-            <a href="https://pyrodactyl.dev"><button class="btn w-full"><x-icon name="link" class="size-4" /> Documentation</button></a>
+            <a href="https://pyrodactyl.dev"><button class="btn w-full"><x-icon name="link" class="size-4" /> @lang('admin/dashboard.documentation')</button></a>
         </div>
         <div class="text-center">
-            <a href="https://github.com/pyrohost/pyrodactyl"><button class="btn w-full"><x-icon name="headphones" class="size-4" /> Github</button></a>
+            <a href="https://github.com/pyrohost/pyrodactyl"><button class="btn w-full"><x-icon name="headphones" class="size-4" /> @lang('admin/dashboard.github')</button></a>
         </div>
         <div class="text-center">
-            <a href="{{ $version->getDonations() }}"><button class="btn w-full"><x-icon name="dollar-sign" class="size-4" /> Support the Project</button></a>
+            <a href="{{ $version->getDonations() }}"><button class="btn w-full"><x-icon name="dollar-sign" class="size-4" /> @lang('admin/dashboard.support_project')</button></a>
         </div>
     </div>
 @endsection

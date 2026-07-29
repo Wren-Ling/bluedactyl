@@ -1,6 +1,7 @@
 import { ChevronDown, ChevronUp, Lock } from 'lucide-react';
 import debounce from 'debounce';
 import { memo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import isEqual from 'react-fast-compare';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -29,6 +30,7 @@ interface Props {
 }
 
 const VariableBox = ({ variable }: Props) => {
+    const { t } = useTranslation('startup');
     const FLASH_KEY = `server:startup:${variable.envVariable}`;
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -69,7 +71,7 @@ const VariableBox = ({ variable }: Props) => {
     const selectValues = variable.rules.find((v) => v.startsWith('in:'))?.split(',') || [];
 
     return (
-        <div className='flex flex-col justify-between gap-4 bg-white/5 border border-white/10 p-4 sm:p-5 rounded-xl hover:border-white/15 transition-all'>
+        <div className='flex flex-col justify-between gap-4 bg-muted/30 border border-border p-4 sm:p-5 rounded-xl hover:border-border/40 transition-all'>
             <FlashMessageRender byKey={FLASH_KEY} />
             <div className='space-y-3'>
                 <div className='flex flex-col items-baseline sm:flex-row sm:justify-between gap-2 sm:gap-3'>
@@ -77,30 +79,30 @@ const VariableBox = ({ variable }: Props) => {
                         {!variable.isEditable && (
                             <Lock
                                 size={22}
-                                className='text-neutral-500 w-4 h-4 flex-shrink-0'
+                                className='text-muted-foreground/70 w-4 h-4 flex-shrink-0'
                             />
                         )}
-                        <span className='text-sm font-medium text-neutral-200 break-words'>{variable.name}</span>
+                        <span className='text-sm font-medium text-foreground break-words'>{variable.name}</span>
                     </div>
-                    <div className='text-xs leading-5 text-neutral-500 font-mono rounded w-fit'>
+                    <div className='text-xs leading-5 text-muted-foreground/70 font-mono rounded w-fit'>
                         {variable.envVariable}
                     </div>
                 </div>
-                <p className='text-xs sm:text-sm text-neutral-400 leading-relaxed break-words'>
+                <p className='text-xs sm:text-sm text-muted-foreground leading-relaxed break-words'>
                     {variable.description}
                 </p>
             </div>
             <InputSpinner visible={loading}>
                 {useSwitch ? (
-                    <div className='flex items-center justify-between p-3 sm:p-4 bg-white/5 border border-white/10 rounded-xl'>
-                        <span className='text-sm font-medium text-neutral-300'>
+                    <div className='flex items-center justify-between p-3 sm:p-4 bg-muted/30 border border-border rounded-xl'>
+                        <span className='text-sm font-medium text-foreground'>
                             {isStringSwitch
                                 ? variable.serverValue === 'true'
-                                    ? 'Enabled'
-                                    : 'Disabled'
+                                    ? t('enabled')
+                                    : t('disabled')
                                 : variable.serverValue === '1'
-                                  ? 'On'
-                                  : 'Off'}
+                                  ? t('on')
+                                  : t('off')}
                         </span>
                         <Switch
                             disabled={!canEdit || !variable.isEditable}
@@ -125,10 +127,10 @@ const VariableBox = ({ variable }: Props) => {
                             <DropdownMenu onOpenChange={(open) => setDropDownOpen(open)}>
                                 <DropdownMenuTrigger asChild>
                                     <button
-                                        className='w-full flex items-center justify-between gap-3 h-11 sm:h-12 px-3 sm:px-4 text-sm font-medium text-foreground transition-all duration-200 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-white/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation'
+                                        className='w-full flex items-center justify-between gap-3 h-11 sm:h-12 px-3 sm:px-4 text-sm font-medium text-foreground transition-all duration-200 bg-muted/30 border border-border rounded-xl hover:bg-muted/50 hover:border-border/40 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation'
                                         disabled={!canEdit || !variable.isEditable}
                                     >
-                                        <span className='font-mono text-neutral-200 truncate text-left'>
+                                        <span className='font-mono text-foreground truncate text-left'>
                                             {variable.serverValue}
                                         </span>
                                         {dropDownOpen ? (
@@ -171,7 +173,7 @@ const VariableBox = ({ variable }: Props) => {
                                 readOnly={!canEdit || !variable.isEditable}
                                 name={variable.envVariable}
                                 defaultValue={variable.serverValue ?? ''}
-                                placeholder={variable.defaultValue || 'Enter value...'}
+                                placeholder={variable.defaultValue || t('enter_value')}
                                 disabled={!canEdit || !variable.isEditable}
                             />
                         )}

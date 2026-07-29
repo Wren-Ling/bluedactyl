@@ -1,6 +1,7 @@
 import type { FormikHelpers } from 'formik';
 import { Formik } from 'formik';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
 
@@ -22,6 +23,7 @@ interface Values {
 }
 
 function LoginContainer() {
+    const { t } = useTranslation();
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const navigate = useNavigate();
 
@@ -47,7 +49,7 @@ function LoginContainer() {
                 } else {
                     // Captcha is enabled but no response - show error
                     console.error('Captcha enabled but no response available');
-                    clearAndAddHttpError({ error: new Error('Please complete the captcha verification.') });
+                    clearAndAddHttpError({ error: new Error(t('auth:please_complete_captcha')) });
                     setSubmitting(false);
                     return;
                 }
@@ -68,7 +70,7 @@ function LoginContainer() {
                 setSubmitting(false);
 
                 if (error.code === 'InvalidCredentials') {
-                    clearAndAddHttpError({ error: new Error('Invalid username or password. Please try again.') });
+                    clearAndAddHttpError({ error: new Error(t('auth:invalid_credentials')) });
                 } else if (error.code === 'DisplayException') {
                     clearAndAddHttpError({ error: new Error(error.detail || error.message) });
                 } else {
@@ -82,8 +84,8 @@ function LoginContainer() {
             onSubmit={onSubmit}
             initialValues={{ user: '', password: '' }}
             validationSchema={object().shape({
-                user: string().required('A username or email must be provided.'),
-                password: string().required('Please enter your account password.'),
+                user: string().required(t('auth:validation_username_required')),
+                password: string().required(t('auth:validation_password_required')),
             })}
         >
             {({ isSubmitting }) => (
@@ -92,13 +94,13 @@ function LoginContainer() {
                         <Logo className='size-8 text-foreground' />
                     </div>
                     <div className='space-y-4'>
-                        <Field id='user' type='text' label='Username or Email' name='user' disabled={isSubmitting} />
+                        <Field id='user' type='text' label={t('auth:username_or_email')} name='user' disabled={isSubmitting} />
 
                         <div className='relative'>
                             <Field
                                 id='password'
                                 type='password'
-                                label='Password'
+                                label={t('auth:password')}
                                 name='password'
                                 disabled={isSubmitting}
                             />
@@ -106,7 +108,7 @@ function LoginContainer() {
                                 to={'/auth/password'}
                                 className='absolute right-0 top-0 text-xs text-muted-foreground hover:text-foreground transition-colors'
                             >
-                                Forgot?
+                                {t('auth:forgot')}
                             </Link>
                         </div>
 
@@ -114,7 +116,7 @@ function LoginContainer() {
                             onError={(error) => {
                                 console.error('Captcha error:', error);
                                 clearAndAddHttpError({
-                                    error: new Error('Captcha verification failed. Please try again.'),
+                                    error: new Error(t('auth:captcha_verification_failed')),
                                 });
                             }}
                         />
@@ -126,7 +128,7 @@ function LoginContainer() {
                             isLoading={isSubmitting}
                             disabled={isSubmitting}
                         >
-                            Login
+                            {t('auth:login')}
                         </Button>
                     </div>
                 </LoginFormContainer>

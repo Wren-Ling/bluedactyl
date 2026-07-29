@@ -4,6 +4,7 @@
 // https://github.com/preactjs/signals/issues/414
 import '@/assets/tailwind.css';
 import '@preact/signals-react';
+import '@/i18n/config';
 import { StoreProvider } from 'easy-peasy';
 import { lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';

@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { useStoreState } from 'easy-peasy';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import { Button } from '@/components/ui/button';
@@ -41,6 +42,7 @@ interface Props {
 }
 
 const BackupContextMenu = ({ backup }: Props) => {
+    const { t } = useTranslation('backups');
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const daemonType = getGlobalDaemonType();
     const setServerFromState = ServerContext.useStoreActions((actions) => actions.server.setServerFromState);
@@ -75,7 +77,7 @@ const BackupContextMenu = ({ backup }: Props) => {
             addFlash({
                 key: 'backup:delete',
                 type: 'error',
-                message: 'Password is required to delete this backup.',
+                message: t('password_required_delete'),
             });
             return;
         }
@@ -84,7 +86,7 @@ const BackupContextMenu = ({ backup }: Props) => {
             addFlash({
                 key: 'backup:delete',
                 type: 'error',
-                message: 'Two-factor authentication code is required.',
+                message: t('totp_required_delete'),
             });
             return;
         }
@@ -118,7 +120,7 @@ const BackupContextMenu = ({ backup }: Props) => {
             addFlash({
                 key: 'backup:restore',
                 type: 'error',
-                message: 'Password is required to restore this backup.',
+                message: t('password_required_restore'),
             });
             return;
         }
@@ -127,7 +129,7 @@ const BackupContextMenu = ({ backup }: Props) => {
             addFlash({
                 key: 'backup:restore',
                 type: 'error',
-                message: 'Two-factor authentication code is required.',
+                message: t('totp_required_restore'),
             });
             return;
         }
@@ -213,40 +215,40 @@ const BackupContextMenu = ({ backup }: Props) => {
         <>
             <Dialog open={modal === 'rename'} onOpenChange={(v) => { if (!v) setModal(''); }}>
                 <DialogContent>
-                    <DialogHeader><DialogTitle>Rename Backup</DialogTitle></DialogHeader>
+                    <DialogHeader><DialogTitle>{t('rename_title')}</DialogTitle></DialogHeader>
                     <div className='space-y-4'>
                         <div>
-                            <label className='block text-sm font-medium text-zinc-200 mb-2'>Backup Name</label>
+                            <label className='block text-sm font-medium text-foreground/90 mb-2'>{t('backup_name')}</label>
                             <input
                                 type='text'
                                 value={newName}
                                 onChange={(e) => setNewName(e.target.value)}
-                                className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 placeholder-zinc-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
-                                placeholder='Enter backup name...'
+                                className='w-full px-3 py-2 bg-muted border border-border/50 rounded-lg text-foreground placeholder-zinc-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
+                                placeholder={t('rename_placeholder')}
                                 maxLength={191}
                             />
                         </div>
                     </div>
                     <DialogFooter>
                         <Button variant='outline' onClick={() => setModal('')}>
-                            Cancel
+                            {t('cancel')}
                         </Button>
                         <Button
                             onClick={doRename}
                             disabled={!newName.trim() || newName.trim() === backup.name}
                         >
-                            Rename Backup
+                            {t('rename_button')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
             <Dialog open={modal === 'unlock'} onOpenChange={(v) => { if (!v) setModal(''); }}>
                 <DialogContent>
-                    <DialogHeader><DialogTitle>{`Unlock "${backup.name}"`}</DialogTitle></DialogHeader>
-                    This backup will no longer be protected from automated or accidental deletions.
+                    <DialogHeader><DialogTitle>{t('unlock_title', { name: backup.name })}</DialogTitle></DialogHeader>
+                    {t('unlock_description')}
                     <DialogFooter>
-                        <Button variant='outline' onClick={() => setModal('')}>Cancel</Button>
-                        <Button variant='destructive' onClick={onLockToggle}>Unlock</Button>
+                        <Button variant='outline' onClick={() => setModal('')}>{t('cancel')}</Button>
+                        <Button variant='destructive' onClick={onLockToggle}>{t('unlock_button')}</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
@@ -261,14 +263,13 @@ const BackupContextMenu = ({ backup }: Props) => {
                 }}
             >
                 <DialogContent>
-                    <DialogHeader><DialogTitle>Restore Backup</DialogTitle></DialogHeader>
+                    <DialogHeader><DialogTitle>{t('restore_title')}</DialogTitle></DialogHeader>
                     <FlashMessageRender byKey={'backup:restore'} />
                     <div className='space-y-4'>
                         <div className='space-y-2'>
-                            <p className='text-sm font-medium text-zinc-200'>&quot;{backup.name}&quot;</p>
-                            <p className='text-sm text-zinc-400'>
-                                Your server will be stopped during the restoration process. You will not be able to control
-                                the power state, access the file manager, or create additional backups until completed.
+                            <p className='text-sm font-medium text-foreground/90'>&quot;{backup.name}&quot;</p>
+                            <p className='text-sm text-muted-foreground'>
+                                {t('restore_description')}
                             </p>
                         </div>
 
@@ -280,11 +281,10 @@ const BackupContextMenu = ({ backup }: Props) => {
                                 />
                                 <div className='space-y-1'>
                                     <h4 className='text-sm text-red-200 font-medium'>
-                                        Destructive Action - Complete Server Restore
+                                        {t('restore_destructive_title')}
                                     </h4>
                                     <p className='text-xs text-red-300'>
-                                        All current files and server configuration will be deleted and replaced with the
-                                        backup data. This action cannot be undone.
+                                        {t('restore_destructive_description')}
                                     </p>
                                 </div>
                             </div>
@@ -292,14 +292,14 @@ const BackupContextMenu = ({ backup }: Props) => {
 
                         <div className='space-y-3'>
                             <div>
-                                <label htmlFor='restore-password' className='block text-sm font-medium text-zinc-300 mb-1'>
-                                    Password
+                                <label htmlFor='restore-password' className='block text-sm font-medium text-foreground/80 mb-1'>
+                                    {t('password_label')}
                                 </label>
                                 <input
                                     id='restore-password'
                                     type='password'
-                                    className='w-full px-4 py-2 rounded-lg outline-hidden bg-white/10 text-sm border border-zinc-700 focus:border-ring'
-                                    placeholder='Enter your password'
+                                    className='w-full px-4 py-2 rounded-lg outline-hidden bg-white/10 text-sm border border-border focus:border-ring'
+                                    placeholder={t('password_placeholder')}
                                     value={restorePassword}
                                     onChange={(e) => setRestorePassword(e.target.value)}
                                     disabled={loading}
@@ -308,14 +308,14 @@ const BackupContextMenu = ({ backup }: Props) => {
 
                             {hasTwoFactor && (
                                 <div>
-                                    <label htmlFor='restore-totp' className='block text-sm font-medium text-zinc-300 mb-1'>
-                                        Two-Factor Authentication Code
+                                    <label htmlFor='restore-totp' className='block text-sm font-medium text-foreground/80 mb-1'>
+                                        {t('totp_label')}
                                     </label>
                                     <input
                                         id='restore-totp'
                                         type='text'
-                                        className='w-full px-4 py-2 rounded-lg outline-hidden bg-white/10 text-sm border border-zinc-700 focus:border-ring'
-                                        placeholder='6-digit code'
+                                        className='w-full px-4 py-2 rounded-lg outline-hidden bg-white/10 text-sm border border-border focus:border-ring'
+                                        placeholder={t('totp_placeholder')}
                                         maxLength={6}
                                         value={restoreTotpCode}
                                         onChange={(e) => setRestoreTotpCode(e.target.value.replace(/[^0-9]/g, ''))}
@@ -336,7 +336,7 @@ const BackupContextMenu = ({ backup }: Props) => {
                             variant='outline'
                             disabled={loading}
                         >
-                            Cancel
+                            {t('cancel')}
                         </Button>
                         <Button
                             onClick={() => doRestorationAction()}
@@ -345,10 +345,10 @@ const BackupContextMenu = ({ backup }: Props) => {
                         >
                             {loading && <Spinner size='small' />}
                             {loading
-                                ? 'Restoring...'
+                                ? t('restoring')
                                 : countdown > 0
-                                    ? `Delete All & Restore (${countdown}s)`
-                                    : 'Delete All & Restore Backup'}
+                                    ? t('restore_button_countdown', { count: countdown })
+                                    : t('restore_button')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -364,11 +364,11 @@ const BackupContextMenu = ({ backup }: Props) => {
                 }}
             >
                 <DialogContent>
-                    <DialogHeader><DialogTitle>{`Delete "${backup.name}"`}</DialogTitle></DialogHeader>
+                    <DialogHeader><DialogTitle>{t('delete_title', { name: backup.name })}</DialogTitle></DialogHeader>
                     <FlashMessageRender byKey={'backup:delete'} />
                     <div className='space-y-4'>
-                        <p className='text-sm text-zinc-300'>
-                            This is a permanent operation. The backup cannot be recovered once deleted.
+                        <p className='text-sm text-foreground/80'>
+                            {t('delete_permanent')}
                         </p>
 
                         <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
@@ -387,9 +387,9 @@ const BackupContextMenu = ({ backup }: Props) => {
                                     />
                                 </svg>
                                 <div className='text-sm'>
-                                    <p className='font-medium text-red-300'>Warning</p>
+                                    <p className='font-medium text-red-300'>{t('delete_warning_title')}</p>
                                     <p className='text-red-400 mt-1'>
-                                        The backup file and its snapshot will be permanently deleted.
+                                        {t('delete_warning_description')}
                                     </p>
                                 </div>
                             </div>
@@ -397,14 +397,14 @@ const BackupContextMenu = ({ backup }: Props) => {
 
                         <div className='space-y-3'>
                             <div>
-                                <label htmlFor='delete-password' className='block text-sm font-medium text-zinc-300 mb-1'>
-                                    Password
+                                <label htmlFor='delete-password' className='block text-sm font-medium text-foreground/80 mb-1'>
+                                    {t('password_label')}
                                 </label>
                                 <input
                                     id='delete-password'
                                     type='password'
-                                    className='w-full px-4 py-2 rounded-lg outline-hidden bg-white/10 text-sm border border-zinc-700 focus:border-ring'
-                                    placeholder='Enter your password'
+                                    className='w-full px-4 py-2 rounded-lg outline-hidden bg-white/10 text-sm border border-border focus:border-ring'
+                                    placeholder={t('password_placeholder')}
                                     value={deletePassword}
                                     onChange={(e) => setDeletePassword(e.target.value)}
                                     disabled={loading}
@@ -413,14 +413,14 @@ const BackupContextMenu = ({ backup }: Props) => {
 
                             {hasTwoFactor && (
                                 <div>
-                                    <label htmlFor='delete-totp' className='block text-sm font-medium text-zinc-300 mb-1'>
-                                        Two-Factor Authentication Code
+                                    <label htmlFor='delete-totp' className='block text-sm font-medium text-foreground/80 mb-1'>
+                                        {t('totp_label')}
                                     </label>
                                     <input
                                         id='delete-totp'
                                         type='text'
-                                        className='w-full px-4 py-2 rounded-lg outline-hidden bg-white/10 text-sm border border-zinc-700 focus:border-ring'
-                                        placeholder='6-digit code'
+                                        className='w-full px-4 py-2 rounded-lg outline-hidden bg-white/10 text-sm border border-border focus:border-ring'
+                                        placeholder={t('totp_placeholder')}
                                         maxLength={6}
                                         value={deleteTotpCode}
                                         onChange={(e) => setDeleteTotpCode(e.target.value.replace(/[^0-9]/g, ''))}
@@ -441,11 +441,11 @@ const BackupContextMenu = ({ backup }: Props) => {
                             }}
                             disabled={loading}
                         >
-                            Cancel
+                            {t('cancel')}
                         </Button>
                         <Button variant='destructive' onClick={doDeletion} disabled={loading}>
                             {loading && <Spinner size='small' />}
-                            {loading ? 'Deleting...' : 'Delete Backup'}
+                            {loading ? t('deleting') : t('delete_backup_button')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -458,7 +458,7 @@ const BackupContextMenu = ({ backup }: Props) => {
                             variant='secondary'
                             size='sm'
                             disabled={loading}
-                            className='flex items-center justify-center w-8 h-8 p-0 hover:bg-zinc-700'
+                            className='flex items-center justify-center w-8 h-8 p-0 hover:bg-muted'
                         >
                             <div>
                                 <Menu size={22} />
@@ -469,24 +469,24 @@ const BackupContextMenu = ({ backup }: Props) => {
                         <Can action={'backup.download'}>
                             <DropdownMenuItem onClick={doDownload} className='cursor-pointer'>
                                 <ArrowDownToLine size={22} className='mr-2' />
-                                Download
+                                {t('download')}
                             </DropdownMenuItem>
                         </Can>
                         <Can action={'backup.restore'}>
                             <DropdownMenuItem onClick={() => setModal('restore')} className='cursor-pointer'>
                                 <CloudUpload size={22} className=' mr-2' />
-                                Restore
+                                {t('restore')}
                             </DropdownMenuItem>
                         </Can>
                         <Can action={'backup.delete'}>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={() => setModal('rename')} className='cursor-pointer'>
                                 <Pencil size={22} className=' mr-2' />
-                                Rename
+                                {t('rename')}
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={onLockToggle} className='cursor-pointer'>
                                 <Shield size={22} className=' mr-2' />
-                                {backup.isLocked ? 'Unlock' : 'Lock'}
+                                {backup.isLocked ? t('unlock') : t('lock')}
                             </DropdownMenuItem>
                             {!backup.isLocked && (
                                 <>
@@ -496,7 +496,7 @@ const BackupContextMenu = ({ backup }: Props) => {
                                         className='cursor-pointer text-red-400 focus:text-red-300'
                                     >
                                         <Trash2 size={22} className=' mr-2' />
-                                        Delete
+                                        {t('delete')}
                                     </DropdownMenuItem>
                                 </>
                             )}
@@ -512,7 +512,7 @@ const BackupContextMenu = ({ backup }: Props) => {
                     className='flex items-center gap-2'
                 >
                     <Trash2 size={22} />
-                    <span className='hidden sm:inline'>Delete</span>
+                    <span className='hidden sm:inline'>{t('delete')}</span>
                 </Button>
             )}
         </>

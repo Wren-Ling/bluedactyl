@@ -22,7 +22,7 @@ export const ModCard = ({ mod }: ModCardProps) => {
     };
 
     return (
-        <div className='group rounded-xl overflow-hidden border border-white/10 bg-white/5 transition-all duration-300 hover:border-foreground/20'>
+        <div className='group rounded-xl overflow-hidden border border-border bg-muted/30 transition-all duration-300 hover:border-foreground/20'>
             <div className='p-6 flex items-start space-x-5'>
                 {/* Icon Container */}
                 <div className='flex-shrink-0 relative hover:cursor-pointer hover:scale-105 transition-transform duration-300'>
@@ -38,7 +38,7 @@ export const ModCard = ({ mod }: ModCardProps) => {
                             <div className='absolute inset-0 rounded-xl bg-gradient-to-t from-black/30 to-transparent' />
                         </div>
                     ) : (
-                        <div className='w-20 h-20 bg-white/5 rounded-xl flex items-center justify-center border border-white/10'>
+                        <div className='w-20 h-20 bg-muted/30 rounded-xl flex items-center justify-center border border-border'>
                             <span className='text-muted-foreground text-sm font-medium'>No Icon</span>
                         </div>
                     )}

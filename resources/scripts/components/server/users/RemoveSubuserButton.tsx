@@ -1,6 +1,7 @@
 import { Trash2 } from 'lucide-react';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -19,6 +20,7 @@ import { ServerContext } from '@/state/server';
 import { Subuser } from '@/state/server/subusers';
 
 const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
+    const { t } = useTranslation('users');
     const [loading, setLoading] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -47,13 +49,13 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
             <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Remove {subuser.username}?</DialogTitle>
+                        <DialogTitle>{t('remove_title', { username: subuser.username })}</DialogTitle>
                     </DialogHeader>
-                    All access to the server will be removed immediately.
+                    {t('remove_description')}
                     <DialogFooter>
-                        <Button variant='outline' onClick={() => setShowConfirmation(false)}>Cancel</Button>
+                        <Button variant='outline' onClick={() => setShowConfirmation(false)}>{t('cancel')}</Button>
                         <Button variant='destructive' onClick={doDeletion} disabled={loading}>
-                            {loading ? 'Removing...' : `Remove ${subuser.username}`}
+                            {loading ? t('removing') : t('remove_button', { username: subuser.username })}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -63,10 +65,10 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
                 size='sm'
                 className='flex items-center gap-2'
                 onClick={() => setShowConfirmation(true)}
-                aria-label='Delete subuser'
+                aria-label={t('delete_subuser_aria')}
             >
                 <Trash2 size={22} className='size-4' />
-                Delete
+                {t('delete')}
             </Button>
         </>
     );

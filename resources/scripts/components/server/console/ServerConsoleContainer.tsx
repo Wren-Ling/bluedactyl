@@ -1,5 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
+import { useTranslation } from 'react-i18next';
 
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
@@ -24,6 +25,7 @@ export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
 type UptimeStat = Record<'uptime', number>;
 
 const ServerConsoleContainer = () => {
+    const { t } = useTranslation();
     const name = ServerContext.useStoreState((state) => state.server.data!.name);
     const description = ServerContext.useStoreState((state) => state.server.data!.description);
     const isInstalling = ServerContext.useStoreState((state) => state.server.isInstalling);
@@ -59,10 +61,10 @@ const ServerConsoleContainer = () => {
             {(isNodeUnderMaintenance || isInstalling || isTransferring) && (
                 <Alert type={'warning'}>
                     {isNodeUnderMaintenance
-                        ? 'The node of this server is currently under maintenance and all actions are unavailable.'
+                        ? t('console:node_maintenance')
                         : isInstalling
-                            ? 'This server is currently running its installation process and most actions are unavailable.'
-                            : 'This server is currently being transferred to another node and all actions are unavailable.'}
+                            ? t('console:server_installing')
+                            : t('console:server_transferring')}
                 </Alert>
             )}
 
@@ -70,16 +72,11 @@ const ServerConsoleContainer = () => {
                 title={name}
                 headChildren={
                     <p className='rounded-lg border bg-card px-3 py-1 text-sm text-muted-foreground shadow-sm'>
-                        Uptime: {UptimeDuration(uptime)}
+                        {t('console:uptime_label')}: {UptimeDuration(uptime)}
                     </p>
                 }
                 titleChildren={
-                    <div className='flex items-center justify-center gap-1'>
-                        <p className='block rounded-lg border bg-card px-3 py-1 text-sm text-muted-foreground shadow sm:hidden md:hidden'>
-                            Uptime: {UptimeDuration(uptime)}
-                        </p>
-                        <PowerButtons className='flex items-center justify-center gap-1' />
-                    </div>
+                    <PowerButtons className='flex items-center justify-center gap-1' />
                 }
             />
 

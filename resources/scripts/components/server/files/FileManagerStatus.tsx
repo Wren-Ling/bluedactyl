@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -43,6 +44,8 @@ const CircleProgress = ({ progress, className }: { progress: number; className?:
 };
 
 const FileUploadList = ({ onClose }: { onClose: () => void }) => {
+    const { t } = useTranslation();
+
     const cancelFileUpload = ServerContext.useStoreActions((actions) => actions.files.cancelFileUpload);
     const clearFileUploads = ServerContext.useStoreActions((actions) => actions.files.clearFileUploads);
     const uploads = ServerContext.useStoreState((state) =>
@@ -77,7 +80,7 @@ const FileUploadList = ({ onClose }: { onClose: () => void }) => {
                                 </Button>
                             </TooltipTrigger>
                             <TooltipContent side='right' sideOffset={5}>
-                                Cancel
+                                {t('files:cancel')}
                             </TooltipContent>
                         </Tooltip>
                     </div>
@@ -85,10 +88,10 @@ const FileUploadList = ({ onClose }: { onClose: () => void }) => {
             </div>
             <DialogFooter>
                 <Button variant='destructive' onClick={() => clearFileUploads()}>
-                    Cancel Uploads
+                    {t('files:cancel_uploads')}
                 </Button>
                 <Button variant='secondary' onClick={onClose}>
-                    Close
+                    {t('files:close')}
                 </Button>
             </DialogFooter>
         </TooltipProvider>
@@ -96,6 +99,8 @@ const FileUploadList = ({ onClose }: { onClose: () => void }) => {
 };
 
 const FileManagerStatus = () => {
+    const { t } = useTranslation();
+
     const [open, setOpen] = useState(false);
 
     const count = ServerContext.useStoreState((state) => Object.keys(state.files.uploads).length);
@@ -143,14 +148,14 @@ const FileManagerStatus = () => {
                             </Button>
                         </TooltipTrigger>
                         <TooltipContent side='top' sideOffset={5}>
-                            {`${count} files are uploading, click to view`}
+                            {t('files:files_uploading', { count })}
                         </TooltipContent>
                     </Tooltip>
                 )}
                 <Dialog open={open} onOpenChange={setOpen}>
                     <DialogContent>
-                        <DialogHeader><DialogTitle>File Uploads</DialogTitle></DialogHeader>
-                        <p className='text-sm text-muted-foreground'>The following files are being uploaded to your server.</p>
+                        <DialogHeader><DialogTitle>{t('files:file_uploads_title')}</DialogTitle></DialogHeader>
+                        <p className='text-sm text-muted-foreground'>{t('files:file_uploads_description')}</p>
                         <FileUploadList onClose={() => setOpen(false)} />
                     </DialogContent>
                 </Dialog>

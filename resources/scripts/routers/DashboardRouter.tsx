@@ -3,7 +3,9 @@ import {
     BadgeCheck,
     ChevronsUpDown,
     Cuboid,
+    Home,
     KeyRound,
+    Languages,
     LogOut,
     Server,
     Settings2,
@@ -11,6 +13,7 @@ import {
     UserKey,
 } from 'lucide-react';
 import { Fragment, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 
 import { AnimatedThemeToggler as ModeToggle } from '@/components/ui/animated-theme-toggler';
@@ -47,6 +50,7 @@ import { NotFound } from '@/components/elements/ScreenBlock';
 import http from '@/api/http';
 
 function AppSidebarHeader() {
+    const { t } = useTranslation();
     return (
         <SidebarHeader className='border-b border-border/50'>
             <SidebarMenu>
@@ -54,14 +58,14 @@ function AppSidebarHeader() {
                     <SidebarMenuButton
                         size='lg'
                         className='data-[slot=sidebar-menu-button]:p-1.5!'
-                        render={<a href='#' />}
+                        render={<a href='/' />}
                     >
                         <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground'>
                             <Cuboid className='size-5' />
                         </div>
                         <div className='grid flex-1 text-left text-sm leading-tight'>
-                            <span className='truncate font-semibold'>Pyrodactyl</span>
-                            <span className='truncate text-xs text-muted-foreground'>Management</span>
+                            <span className='truncate font-semibold'>{t('dashboard:pyrodactyl')}</span>
+                            <span className='truncate text-xs text-muted-foreground'>{t('dashboard:management')}</span>
                         </div>
                     </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -71,11 +75,13 @@ function AppSidebarHeader() {
 }
 
 function AppSidebarItems() {
+    const { t } = useTranslation();
     const navItems = [
-        { title: 'Servers', url: '/', icon: <Server /> },
-        { title: 'API Keys', url: '/account/api', icon: <UserKey /> },
-        { title: 'SSH Keys', url: '/account/ssh', icon: <KeyRound /> },
-        { title: 'Settings', url: '/account', icon: <Settings2 /> },
+        { title: t('dashboard:sidebar_servers'), url: '/', icon: <Server /> },
+        { title: t('dashboard:sidebar_api_keys'), url: '/account/api', icon: <UserKey /> },
+        { title: t('dashboard:sidebar_ssh_keys'), url: '/account/ssh', icon: <KeyRound /> },
+        { title: t('account:sidebar_language'), url: '/account/language', icon: <Languages /> },
+        { title: t('dashboard:sidebar_settings'), url: '/account', icon: <Settings2 /> },
     ];
 
     return (
@@ -97,6 +103,7 @@ function AppSidebarItems() {
 }
 
 function AppSidebarUser() {
+    const { t } = useTranslation();
     const { isMobile } = useSidebar();
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
     const name = useStoreState((state) => state.user.data!.username);
@@ -145,7 +152,7 @@ function AppSidebarUser() {
                                     </div>
                                     <div className='grid flex-1 text-left text-sm leading-tight'>
                                         <span className='truncate font-medium'>{name}</span>
-                                        <span className='truncate text-xs'>{rootAdmin ? 'Admin' : 'User'}</span>
+                                        <span className='truncate text-xs'>{rootAdmin ? t('dashboard:role_admin') : t('dashboard:role_user')}</span>
                                     </div>
                                 </div>
                             </DropdownMenuLabel>
@@ -153,14 +160,14 @@ function AppSidebarUser() {
                             {rootAdmin && (
                                 <DropdownMenuItem onClick={onSelectAdminPanel}>
                                     <BadgeCheck className='mr-2 size-4' />
-                                    Admin Panel
+                                    {t('dashboard:admin_panel')}
                                 </DropdownMenuItem>
                             )}
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={onTriggerLogout}>
                             <LogOut className='mr-2 size-4' />
-                            Log out
+                            {t('dashboard:log_out')}
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -185,16 +192,24 @@ function AppSidebar() {
 }
 
 function DashboardRouter() {
+    const { t } = useTranslation();
     const location = useLocation();
 
     const getBreadcrumbs = () => {
         const paths = location.pathname.split('/').filter(Boolean);
-        if (paths.length === 0) return [{ title: 'Dashboard', active: true }];
+        if (paths.length === 0) return [{ title: t('dashboard:title'), active: true }];
 
-        const breadcrumbs = [{ title: 'Dashboard', url: '/', active: false }];
+        const breadcrumbLabels: Record<string, string> = {
+            account: t('common:account'),
+            api: t('common:api_credentials'),
+            ssh: t('common:ssh_keys'),
+            activity: t('common:activity'),
+            language: t('account:sidebar_language'),
+        };
+        const breadcrumbs = [{ title: t('dashboard:title'), url: '/', active: false }];
         paths.forEach((path, index) => {
             const url = `/${paths.slice(0, index + 1).join('/')}`;
-            const title = path.charAt(0).toUpperCase() + path.slice(1);
+            const title = breadcrumbLabels[path] || path.charAt(0).toUpperCase() + path.slice(1);
             breadcrumbs.push({
                 title,
                 url,
@@ -234,7 +249,14 @@ function DashboardRouter() {
                                 ))}
                             </ol>
                         </nav>
-                        <div className='ml-auto'>
+                        <div className='ml-auto flex items-center gap-2'>
+                            <a
+                                href='/'
+                                className='flex items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-accent-foreground size-9'
+                            >
+                                <Home className='h-[1.2rem] w-[1.2rem]' />
+                                <span className='sr-only'>{t('dashboard:home_sr')}</span>
+                            </a>
                             <ModeToggle />
                         </div>
                     </header>

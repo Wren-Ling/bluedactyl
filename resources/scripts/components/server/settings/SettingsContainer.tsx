@@ -1,5 +1,6 @@
 import { ExternalLink, Server } from 'lucide-react';
 import { useStoreState } from 'easy-peasy';
+import { useTranslation } from 'react-i18next';
 import isEqual from 'react-fast-compare';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -18,6 +19,7 @@ import { ServerContext } from '@/state/server';
 import RenameServerBox from './RenameServerBox';
 
 const SettingsContainer = () => {
+    const { t } = useTranslation('settings');
     const username = useStoreState((state) => state.user.data!.username);
     const id = ServerContext.useStoreState((state) => state.server.data!.id);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -27,10 +29,9 @@ const SettingsContainer = () => {
     return (
         <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
             <FlashMessageRender byKey={'settings'} />
-            <MainPageHeader direction='column' title={'Settings'}>
+            <MainPageHeader direction='column' title={t('title')}>
                 <p className='text-sm leading-relaxed text-muted-foreground'>
-                    Configure your server settings, manage SFTP access, and access debug information. Make changes to
-                    server name and reinstall when needed.
+                    {t('description')}
                 </p>
             </MainPageHeader>
             <Can action={'settings.rename'}>
@@ -45,16 +46,16 @@ const SettingsContainer = () => {
                 </Can>
                 <Card>
                     <CardHeader>
-                        <CardTitle className='text-xl font-extrabold tracking-tight'>Debug Information</CardTitle>
+                        <CardTitle className='text-xl font-extrabold tracking-tight'>{t('debug_info_title')}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className={`flex items-center justify-between text-sm`}>
-                            <p className='text-muted-foreground'>Node</p>
+                            <p className='text-muted-foreground'>{t('node')}</p>
                             <code className={`rounded-sm bg-muted px-2 py-1 font-mono text-foreground`}>{node}</code>
                         </div>
                         <CopyOnClick text={uuid}>
                             <div className={`mt-2 flex items-center justify-between text-sm`}>
-                                <p className='text-muted-foreground'>Server ID</p>
+                                <p className='text-muted-foreground'>{t('server_id')}</p>
                                 <code className={`rounded-sm bg-muted px-2 py-1 font-mono text-foreground`}>{uuid}</code>
                             </div>
                         </CopyOnClick>
@@ -63,11 +64,11 @@ const SettingsContainer = () => {
                 <Can action={'file.sftp'}>
                     <Card className={'mb-6 md:mb-10'}>
                         <CardHeader>
-                            <CardTitle className='text-xl font-extrabold tracking-tight'>SFTP Details</CardTitle>
+                            <CardTitle className='text-xl font-extrabold tracking-tight'>{t('sftp_details_title')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className={`flex items-center justify-between text-sm`}>
-                                <Label className='text-muted-foreground'>Server Address</Label>
+                                <Label className='text-muted-foreground'>{t('server_address')}</Label>
                                 <CopyOnClick text={`sftp://${ip(sftp.ip)}:${sftp.port}`}>
                                     <code className={`rounded-sm bg-muted px-2 py-1 font-mono text-foreground`}>
                                         {`sftp://${ip(sftp.ip)}:${sftp.port}`}
@@ -75,7 +76,7 @@ const SettingsContainer = () => {
                                 </CopyOnClick>
                             </div>
                             <div className={`mt-2 flex items-center justify-between text-sm`}>
-                                <Label className='text-muted-foreground'>Username</Label>
+                                <Label className='text-muted-foreground'>{t('username')}</Label>
                                 <CopyOnClick text={`${username}.${id}`}>
                                     <code className={`rounded-sm bg-muted px-2 py-1 font-mono text-foreground`}>
                                         {`${username}.${id}`}
@@ -86,7 +87,7 @@ const SettingsContainer = () => {
                                 <div className={`flex-1`}>
                                     <div className={`border-l-4 border-primary p-3`}>
                                         <p className={`text-xs text-muted-foreground`}>
-                                            Your SFTP password is the same as the password you use to access this panel.
+                                            {t('sftp_password_note')}
                                         </p>
                                     </div>
                                 </div>
@@ -94,7 +95,7 @@ const SettingsContainer = () => {
                                     <a href={`sftp://${username}.${id}@${ip(sftp.ip)}:${sftp.port}`}>
                                         <Button variant='outline'>
                                             <ExternalLink className='mr-2 size-4' />
-                                            Launch SFTP
+                                            {t('launch_sftp')}
                                         </Button>
                                     </a>
                                 </div>

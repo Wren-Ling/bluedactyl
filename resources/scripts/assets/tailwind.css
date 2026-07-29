@@ -578,6 +578,4 @@
     color: var(--muted-foreground);
 }
 
-input::placeholder {
-    color: #ffffff55 !important;
-}
+

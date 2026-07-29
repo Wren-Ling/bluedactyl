@@ -1,5 +1,6 @@
 import { Code, House, Key, Settings, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import type { FeatureLimitKey, ServerRouteDefinition } from '@/routers/routes';
@@ -18,6 +19,7 @@ interface MobileFullScreenMenuProps {
 }
 
 const MobileFullScreenMenu = ({ isVisible, onClose, children }: MobileFullScreenMenuProps) => {
+    const { t } = useTranslation();
     if (!isVisible) return null;
 
     return (
@@ -26,7 +28,7 @@ const MobileFullScreenMenu = ({ isVisible, onClose, children }: MobileFullScreen
             <button
                 onClick={onClose}
                 className='absolute top-4 right-4 p-2 text-muted-foreground hover:text-foreground hover:bg-white/10 rounded-lg transition-all duration-200'
-                aria-label='Close menu'
+                aria-label={t('common:close_menu')}
             >
                 <X size={22} />
             </button>
@@ -76,19 +78,20 @@ interface DashboardMobileMenuProps {
 }
 
 export const DashboardMobileMenu = ({ isVisible, onClose }: DashboardMobileMenuProps) => {
+    const { t } = useTranslation();
     return (
         <MobileFullScreenMenu isVisible={isVisible} onClose={onClose}>
             <NavigationItem to='/' icon={House} end onClick={onClose}>
-                Servers
+                {t('common:servers')}
             </NavigationItem>
             <NavigationItem to='/account/api' icon={Code} end onClick={onClose}>
-                API Keys
+                {t('common:api_keys')}
             </NavigationItem>
             <NavigationItem to='/account/ssh' icon={Key} end onClick={onClose}>
-                SSH Keys
+                {t('common:ssh_keys')}
             </NavigationItem>
             <NavigationItem to='/account' icon={Settings} end onClick={onClose}>
-                Settings
+                {t('common:settings')}
             </NavigationItem>
         </MobileFullScreenMenu>
     );

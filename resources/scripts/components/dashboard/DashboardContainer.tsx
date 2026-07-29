@@ -2,6 +2,7 @@ import { ChevronDown, House, LayoutGrid, Menu } from 'lucide-react';
 import { useStoreState } from 'easy-peasy';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import useSWR from 'swr';
 
 import ServerRow from '@/components/dashboard/ServerRow';
@@ -27,10 +28,11 @@ import { usePersistedState } from '@/plugins/usePersistedState';
 import { MainPageHeader } from '../elements/MainPageHeader';
 
 const DashboardContainer = () => {
+    const { t } = useTranslation();
     const getTitle = () => {
-        if (serverViewMode === 'admin-all') return 'All Servers (Admin)';
-        if (serverViewMode === 'all') return 'All Servers';
-        return 'Your Servers';
+        if (serverViewMode === 'admin-all') return t('dashboard:all_servers_admin');
+        if (serverViewMode === 'all') return t('dashboard:all_servers');
+        return t('dashboard:your_servers');
     };
 
     const { search } = useLocation();
@@ -92,19 +94,19 @@ const DashboardContainer = () => {
                     <House className='size-6 text-muted-foreground' />
                 </div>
                 <h3 className='mb-1 text-base font-medium text-foreground'>
-                    {serverViewMode === 'admin-all' ? 'No other servers found' : 'No servers found'}
+                    {serverViewMode === 'admin-all' ? t('dashboard:no_other_servers_found') : t('dashboard:no_servers_found')}
                 </h3>
                 <p className='max-w-sm text-sm text-muted-foreground'>
                     {serverViewMode === 'admin-all'
-                        ? 'There are no other servers to display.'
-                        : 'There are no servers associated with your account.'}
+                        ? t('dashboard:no_other_servers_display')
+                        : t('dashboard:no_servers_account')}
                 </p>
             </div>
         </div>
     );
 
     return (
-        <PageContentBlock title='Dashboard' showFlashKey='dashboard'>
+        <PageContentBlock title={t('dashboard:title')} showFlashKey='dashboard'>
             <Tabs
                 defaultValue={'list'}
                 onValueChange={(value) => {
@@ -129,7 +131,7 @@ const DashboardContainer = () => {
                                             onSelect={() => setServerViewMode('owner')}
                                             className={serverViewMode === 'owner' ? 'bg-accent' : ''}
                                         >
-                                            Your Servers Only
+                                            {t('dashboard:your_servers_only')}
                                         </DropdownMenuItem>
 
                                         {rootAdmin && (
@@ -138,7 +140,7 @@ const DashboardContainer = () => {
                                                     onSelect={() => setServerViewMode('admin-all')}
                                                     className={serverViewMode === 'admin-all' ? 'bg-accent' : ''}
                                                 >
-                                                    All Servers (Admin)
+                                                    {t('dashboard:all_servers_admin')}
                                                 </DropdownMenuItem>
                                             </>
                                         )}
@@ -146,16 +148,16 @@ const DashboardContainer = () => {
                                             onSelect={() => setServerViewMode('all')}
                                             className={serverViewMode === 'all' ? 'bg-accent' : ''}
                                         >
-                                            All Servers
+                                            {t('dashboard:all_servers')}
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
 
                                 <TabsList>
-                                    <TabsTrigger aria-label='View servers in a list layout.' value='list'>
+                                    <TabsTrigger aria-label={t('dashboard:list_layout_aria')} value='list'>
                                         <Menu className='size-4' />
                                     </TabsTrigger>
-                                    <TabsTrigger aria-label='View servers in a grid layout.' value='grid'>
+                                    <TabsTrigger aria-label={t('dashboard:grid_layout_aria')} value='grid'>
                                         <LayoutGrid className='size-4' />
                                     </TabsTrigger>
                                 </TabsList>

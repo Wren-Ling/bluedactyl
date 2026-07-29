@@ -2,6 +2,7 @@ import { Database } from 'lucide-react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { For } from 'million/react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -40,6 +41,7 @@ const databaseSchema = object().shape({
 });
 
 const DatabasesContainer = () => {
+    const { t } = useTranslation('databases');
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const databaseLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.databases);
 
@@ -87,26 +89,26 @@ const DatabasesContainer = () => {
             <FlashMessageRender byKey={'databases'} />
             <MainPageHeader
                 direction='column'
-                title={'Databases'}
+                title={t('title')}
                 titleChildren={
                     <Can action={'database.create'}>
                         <div className='flex flex-col items-center justify-end gap-4 sm:flex-row'>
                             {databaseLimit === null && (
                                 <p className='text-center text-sm text-muted-foreground sm:text-right'>
-                                    {databases.length} databases (unlimited)
+                                    {t('count_unlimited', { count: databases.length })}
                                 </p>
                             )}
                             {databaseLimit > 0 && (
                                 <p className='text-center text-sm text-muted-foreground sm:text-right'>
-                                    {databases.length} of {databaseLimit} databases
+                                    {t('count_of', { count: databases.length, max: databaseLimit })}
                                 </p>
                             )}
                             {databaseLimit === 0 && (
-                                <p className='text-center text-sm text-destructive sm:text-right'>Databases disabled</p>
+                                <p className='text-center text-sm text-destructive sm:text-right'>{t('disabled')}</p>
                             )}
                             {(databaseLimit === null || (databaseLimit > 0 && databaseLimit !== databases.length)) && (
                                 <Button variant='default' onClick={() => setCreateModalVisible(true)}>
-                                    New Database
+                                    {t('new_database')}
                                 </Button>
                             )}
                         </div>
@@ -114,8 +116,7 @@ const DatabasesContainer = () => {
                 }
             >
                 <p className='text-sm leading-relaxed text-muted-foreground'>
-                    Create and manage MySQL databases for your server. Configure database access, manage users, and view
-                    connection details.
+                    {t('description')}
                 </p>
             </MainPageHeader>
 
@@ -133,7 +134,7 @@ const DatabasesContainer = () => {
                             resetForm();
                             setCreateModalVisible(false);
                         }}
-                        title='Create new database'
+                        title={t('create_modal_title')}
                     >
                         <div className='flex flex-col'>
                             <FlashMessageRender byKey={'database:create'} />
@@ -142,23 +143,21 @@ const DatabasesContainer = () => {
                                     type={'string'}
                                     id={'database_name'}
                                     name={'databaseName'}
-                                    label={'Database Name'}
-                                    description={'A descriptive name for your database instance.'}
+                                    label={t('database_name_label')}
+                                    description={t('database_name_description')}
                                 />
                                 <div className={`mt-6`}>
                                     <Field
                                         type={'string'}
                                         id={'connections_from'}
                                         name={'connectionsFrom'}
-                                        label={'Connections From'}
-                                        description={
-                                            'Where connections should be allowed from. Leave blank to allow connections from anywhere.'
-                                        }
+                                        label={t('connections_from_label')}
+                                        description={t('connections_from_description')}
                                     />
                                 </div>
                                 <div className={`my-6 flex justify-end gap-3`}>
                                     <Button variant='default' type={'submit'}>
-                                        Create Database
+                                        {t('create_database_button')}
                                     </Button>
                                 </div>
                             </Form>
@@ -184,12 +183,12 @@ const DatabasesContainer = () => {
                             <Database className='size-8 text-muted-foreground' />
                         </div>
                         <h3 className='mb-2 text-lg font-medium text-foreground'>
-                            {databaseLimit === 0 ? 'Databases unavailable' : 'No databases found'}
+                            {databaseLimit === 0 ? t('unavailable') : t('no_databases')}
                         </h3>
                         <p className='max-w-sm text-sm text-muted-foreground'>
                             {databaseLimit === 0
-                                ? 'Databases cannot be created for this server.'
-                                : 'Your server does not have any databases. Create one to get started.'}
+                                ? t('cannot_create')
+                                : t('create_one_to_start')}
                         </p>
                     </div>
                 </div>

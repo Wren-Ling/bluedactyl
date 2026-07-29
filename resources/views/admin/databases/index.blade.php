@@ -1,16 +1,16 @@
 @extends('layouts.admin')
 
 @section('title')
-    Database Hosts
+    @lang('admin/databases.title')
 @endsection
 
 @section('content-header')
-    <h1 class="text-xl font-bold">Database Hosts</h1>
-    <p class="text-sm text-muted-foreground">Database hosts that servers can have databases created on.</p>
+    <h1 class="text-xl font-bold">@lang('admin/databases.header')</h1>
+    <p class="text-sm text-muted-foreground">@lang('admin/databases.header_subtitle')</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/databases.breadcrumb_admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>Database Hosts</span>
+        <span>@lang('admin/databases.breadcrumb_databases')</span>
     </nav>
 @endsection
 
@@ -19,9 +19,9 @@
     <div class="col-span-full">
         <div class="card">
             <header>
-                <h3 class="text-lg font-semibold">Host List</h3>
+                <h3 class="text-lg font-semibold">@lang('admin/databases.host_list')</h3>
                 <div class="card-action">
-                    <button class="btn" data-size="sm" onclick="document.getElementById('newHostModal').showModal()">Create New</button>
+                    <button class="btn" data-size="sm" onclick="document.getElementById('newHostModal').showModal()">@lang('admin/databases.create_new')</button>
                 </div>
             </header>
             <section>
@@ -29,13 +29,13 @@
                     <table class="table">
                         <tbody>
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Host</th>
-                                <th>Port</th>
-                                <th>Username</th>
-                                <th class="text-center">Databases</th>
-                                <th class="text-center">Node</th>
+                                <th>@lang('admin/databases.id')</th>
+                                <th>@lang('admin/databases.name')</th>
+                                <th>@lang('admin/databases.host')</th>
+                                <th>@lang('admin/databases.port')</th>
+                                <th>@lang('admin/databases.username')</th>
+                                <th class="text-center">@lang('admin/databases.databases')</th>
+                                <th class="text-center">@lang('admin/databases.node')</th>
                             </tr>
                             @foreach ($hosts as $host)
                                 <tr>
@@ -49,7 +49,7 @@
                                         @if(! is_null($host->node))
                                             <a href="{{ route('admin.nodes.view', $host->node->id) }}">{{ $host->node->name }}</a>
                                         @else
-                                            <span class="badge">None</span>
+                                            <span class="badge">@lang('admin/databases.none')</span>
                                         @endif
                                     </td>
                                 </tr>
@@ -64,44 +64,44 @@
 
 <dialog class="dialog" id="newHostModal" tabindex="-1">
     <header>
-        <button type="button" class="btn" data-variant="ghost" onclick="this.closest('dialog').close()" aria-label="Close"><x-icon name="x" class="size-4" /></button>
-        <h4 class="text-lg font-semibold">Create New Database Host</h4>
+        <button type="button" class="btn" data-variant="ghost" onclick="this.closest('dialog').close()" aria-label="@lang('admin/databases.close')"><x-icon name="x" class="size-4" /></button>
+        <h4 class="text-lg font-semibold">@lang('admin/databases.create_host')</h4>
     </header>
     <form action="{{ route('admin.databases') }}" method="POST" id="databaseHostForm">
         <section>
             <div id="testResult" class="hidden"></div>
 
             <div role="group" class="field">
-                <label for="pName">Name</label>
+                <label for="pName">@lang('admin/databases.name')</label>
                 <input type="text" name="name" id="pName" value="{{ old('name') }}" />
-                <p class="text-sm text-muted-foreground">A short identifier used to distinguish this location from others. Must be between 1 and 60 characters, for example, <code>us.nyc.lvl3</code>.</p>
+                <p class="text-sm text-muted-foreground">@lang('admin/databases.name_help')</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div role="group" class="field">
-                    <label for="pHost">Host</label>
+                    <label for="pHost">@lang('admin/databases.host')</label>
                     <input type="text" name="host" id="pHost" value="{{ old('host') }}" />
-                    <p class="text-sm text-muted-foreground">The IP address or FQDN that should be used when attempting to connect to this MySQL host <em>from the panel</em> to add new databases.</p>
+                    <p class="text-sm text-muted-foreground">@lang('admin/databases.host_help')</p>
                 </div>
                 <div role="group" class="field">
-                    <label for="pPort">Port</label>
+                    <label for="pPort">@lang('admin/databases.port')</label>
                     <input type="text" name="port" id="pPort" value="{{ old('port', '3306') }}" />
-                    <p class="text-sm text-muted-foreground">The port that MySQL is running on for this host.</p>
+                    <p class="text-sm text-muted-foreground">@lang('admin/databases.port_help')</p>
                 </div>
                 <div role="group" class="field">
-                    <label for="pUsername">Username</label>
+                    <label for="pUsername">@lang('admin/databases.username')</label>
                     <input type="text" name="username" id="pUsername" value="{{ old('username') }}" />
-                    <p class="text-sm text-muted-foreground">The username of an account that has enough permissions to create new users and databases on the system.</p>
+                    <p class="text-sm text-muted-foreground">@lang('admin/databases.username_help')</p>
                 </div>
                 <div role="group" class="field">
-                    <label for="pPassword">Password</label>
+                    <label for="pPassword">@lang('admin/databases.password')</label>
                     <input type="password" name="password" id="pPassword" />
-                    <p class="text-sm text-muted-foreground">The password to the account defined.</p>
+                    <p class="text-sm text-muted-foreground">@lang('admin/databases.password_help')</p>
                 </div>
             </div>
             <div role="group" class="field">
-                <label for="pNodeId">Linked Node</label>
+                <label for="pNodeId">@lang('admin/databases.linked_node')</label>
                 <select name="node_id" id="pNodeId" class="select">
-                    <option value="">None</option>
+                    <option value="">@lang('admin/databases.none')</option>
                     @foreach($locations as $location)
                         <optgroup label="{{ $location->short }}">
                             @foreach($location->nodes as $node)
@@ -110,16 +110,16 @@
                         </optgroup>
                     @endforeach
                 </select>
-                <p class="text-sm text-muted-foreground">This setting does nothing other than default to this database host when adding a database to a server on the selected node.</p>
+                <p class="text-sm text-muted-foreground">@lang('admin/databases.linked_node_help')</p>
             </div>
             {!! csrf_field() !!}
         </section>
     </form>
     <footer>
-        <p class="text-sm text-destructive text-left">The account defined for this database host <strong>must</strong> have the <code>WITH GRANT OPTION</code> permission. If the defined account does not have this permission requests to create databases <em>will</em> fail. <strong>Do not use the same account details for MySQL that you have defined for this panel.</strong></p>
-        <button type="button" class="btn" data-size="sm" data-variant="outline" onclick="this.closest('dialog').close()">Cancel</button>
-        <button type="button" id="testDatabaseBtn" class="btn" data-size="sm">Test Database</button>
-        <button type="submit" class="btn" data-size="sm" form="databaseHostForm">Create</button>
+        <p class="text-sm text-destructive text-left">@lang('admin/databases.grant_warning')</p>
+        <button type="button" class="btn" data-size="sm" data-variant="outline" onclick="this.closest('dialog').close()">@lang('admin/databases.cancel')</button>
+        <button type="button" id="testDatabaseBtn" class="btn" data-size="sm">@lang('admin/databases.test_database')</button>
+        <button type="submit" class="btn" data-size="sm" form="databaseHostForm">@lang('admin/databases.create')</button>
     </footer>
 </dialog>
 @endsection
@@ -136,7 +136,7 @@
             const resultDiv = $('#testResult');
 
             // Show loading state
-            button.prop('disabled', true).text('Testing...');
+            button.prop('disabled', true).text('{{ trans('admin/databases.testing') }}');
             resultDiv.hide().removeClass('alert').attr('data-variant', '').html('');
 
             // Get form data
@@ -150,7 +150,7 @@
 
             // Validate required fields
             if (!formData.host || !formData.port || !formData.username || !formData.password) {
-                resultDiv.html('<strong>Error:</strong> Please fill in all required database connection fields.').addClass('alert').attr('data-variant', 'destructive').show();
+                resultDiv.html('<strong>@lang('admin/databases.error_label')</strong> {{ trans('admin/databases.fill_required') }}').addClass('alert').attr('data-variant', 'destructive').show();
                 button.prop('disabled', false).text(originalText);
                 return;
             }
@@ -162,19 +162,19 @@
                 data: formData,
                 success: function(response) {
                     if (response.success) {
-                        resultDiv.html('<strong>Success:</strong> ' + response.message).addClass('alert').attr('data-variant', 'success').show();
+                        resultDiv.html('<strong>@lang('admin/databases.success_label')</strong> ' + response.message).addClass('alert').attr('data-variant', 'success').show();
                     } else {
-                        resultDiv.html('<strong>Error:</strong> ' + response.message).addClass('alert').attr('data-variant', 'destructive').show();
+                        resultDiv.html('<strong>@lang('admin/databases.error_label')</strong> ' + response.message).addClass('alert').attr('data-variant', 'destructive').show();
                     }
                 },
                 error: function(xhr) {
-                    let message = 'An unexpected error occurred.';
+                    let message = '{{ trans('admin/databases.unexpected_error') }}';
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         message = xhr.responseJSON.message;
                     } else if (xhr.statusText) {
                         message = xhr.statusText;
                     }
-                    resultDiv.html('<strong>Error:</strong> ' + message).addClass('alert').attr('data-variant', 'destructive').show();
+                    resultDiv.html('<strong>@lang('admin/databases.error_label')</strong> ' + message).addClass('alert').attr('data-variant', 'destructive').show();
                 },
                 complete: function() {
                     button.prop('disabled', false).text(originalText);

@@ -2,6 +2,7 @@ import { Dialog as HDialog } from '@headlessui/react';
 import { X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import Spinner from '@/components/elements/Spinner';
@@ -63,6 +64,7 @@ const Modal: React.FC<ModalProps> = ({
         return dismissable && !showSpinnerOverlay;
     }, [dismissable, showSpinnerOverlay]);
 
+    const { t } = useTranslation();
     const container = useRef<HTMLDivElement>(null);
     const [icon, setIcon] = useState<React.ReactNode>();
     const [_, setFooter] = useState<React.ReactNode>();
@@ -84,7 +86,7 @@ const Modal: React.FC<ModalProps> = ({
     return (
         <>
             {showSpinnerOverlay && (
-                <div className='fixed inset-0 w-full h-full rounded-sm flex items-center justify-center bg-black/75 z-9999'>
+                <div className='fixed inset-0 w-full h-full rounded-sm flex items-center justify-center bg-background/80 z-9999'>
                     <Spinner />
                 </div>
             )}
@@ -101,7 +103,7 @@ const Modal: React.FC<ModalProps> = ({
                             open={visible}
                             onClose={onDialogClose}
                         >
-                            <div className='fixed inset-0 z-9997 backdrop-blur-xs bg-black/40' />
+                            <div className='fixed inset-0 z-9997 bg-black/50' />
                             <div className='fixed inset-0 overflow-y-auto z-9998'>
                                 <div
                                     ref={container}
@@ -115,10 +117,10 @@ const Modal: React.FC<ModalProps> = ({
                                         animate={down ? 'bounce' : 'open'}
                                         exit={'closed'}
                                         variants={variantAnimations}
-                                        className='relative mx-auto w-full max-w-xl rounded-2xl border border-white/5 text-left shadow-2xl backdrop-blur-3xl bg-black/60'
+                                        className='relative mx-auto w-full max-w-xl rounded-xl border border-border text-left shadow-lg bg-background'
                                     >
                                         <div className='flex justify-between items-center m-6'>
-                                            {title && <h2 className='text-2xl text-zinc-100'>{title}</h2>}
+                                            {title && <h2 className='text-2xl text-foreground'>{title}</h2>}
                                             {dismissable && (
                                                 <button
                                                     onClick={onDismissed}
@@ -138,7 +140,7 @@ const Modal: React.FC<ModalProps> = ({
                                                 {closeButton && (
                                                     <div className='my-6 sm:flex items-center justify-end'>
                                                         <Button onClick={onDismissed} className='w-full'>
-                                                            Close
+                                                            {t('common:close')}
                                                         </Button>
                                                     </div>
                                                 )}

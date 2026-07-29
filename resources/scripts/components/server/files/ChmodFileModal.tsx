@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { fileBitsToString } from '@/helpers';
 import { Form, Formik, FormikHelpers } from 'formik';
 
@@ -24,6 +25,8 @@ interface File {
 type OwnProps = RequiredModalProps & { files: File[] };
 
 const ChmodFileModal = ({ files, ...props }: OwnProps) => {
+    const { t } = useTranslation();
+
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const { mutate } = useFileManagerSwr();
     const { clearFlashes, clearAndAddHttpError } = useFlash();
@@ -59,7 +62,7 @@ const ChmodFileModal = ({ files, ...props }: OwnProps) => {
             {({ isSubmitting }) => (
                 <Modal
                     {...props}
-                    title='Configure permissions'
+                    title={t('files:chmod_title')}
                     dismissable={!isSubmitting}
                     showSpinnerOverlay={isSubmitting}
                 >
@@ -70,16 +73,14 @@ const ChmodFileModal = ({ files, ...props }: OwnProps) => {
                                     type={'string'}
                                     id={'file_mode'}
                                     name={'mode'}
-                                    label={'File Mode'}
-                                    description={
-                                        'This is intended for advanced users. You may irreperably damage your server by changing file permissions.'
-                                    }
+                                    label={t('files:file_mode')}
+                                    description={t('files:chmod_description')}
                                     autoFocus
                                 />
                             </div>
                             <div className={`flex justify-end w-full my-6`}>
                                 <Button type='submit'>
-                                    Update
+                                    {t('files:update')}
                                 </Button>
                             </div>
                         </div>

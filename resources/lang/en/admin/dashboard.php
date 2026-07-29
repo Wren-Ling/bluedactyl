@@ -1,0 +1,38 @@
+<?php
+
+return [
+    'title' => 'Administration',
+    'header' => 'Administrative Overview',
+    'header_subtitle' => 'A quick glance at your system.',
+    'breadcrumb_admin' => 'Admin',
+    'breadcrumb_index' => 'Index',
+    'system_info' => 'System Information',
+    'system_info_text' => 'You are running Pyrodactyl panel version :version.',
+    'get_help' => 'Get Help',
+    'via_discord' => '(via Discord)',
+    'documentation' => 'Documentation',
+    'github' => 'Github',
+    'support_project' => 'Support the Project',
+
+    // Sidebar
+    'sidebar_basic_admin' => 'BASIC ADMINISTRATION',
+    'sidebar_overview' => 'Overview',
+    'sidebar_settings' => 'Settings',
+    'sidebar_api' => 'Application API',
+    'sidebar_management' => 'MANAGEMENT',
+    'sidebar_databases' => 'Databases',
+    'sidebar_locations' => 'Locations',
+    'sidebar_nodes' => 'Nodes',
+    'sidebar_servers' => 'Servers',
+    'sidebar_users' => 'Users',
+    'sidebar_service_mgmt' => 'SERVICE MANAGEMENT',
+    'sidebar_mounts' => 'Mounts',
+    'sidebar_nests' => 'Nests',
+    'sidebar_exit_admin' => 'Exit Admin',
+    'sidebar_logout' => 'Logout',
+    'toggle_sidebar' => 'Toggle sidebar',
+    'toggle_dark_mode' => 'Toggle dark mode',
+    'logout_confirm' => 'Do you want to log out?',
+    'validation_error' => 'There was an error validating the data provided.',
+    'sidebar_subtitle' => 'Administration',
+];

@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Command } from 'cmdk';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -22,6 +23,7 @@ import Can from '@/components/elements/Can';
 import { ServerContext } from '@/state/server';
 
 const CommandMenu = () => {
+    const { t } = useTranslation();
     const [open, setOpen] = useState(false);
     const id = ServerContext.useStoreState((state) => state.server.data?.id);
     const navigate = useNavigate();
@@ -32,11 +34,11 @@ const CommandMenu = () => {
     const cmdkPowerAction = (action: string) => {
         if (instance) {
             if (action === 'start') {
-                toast.success('Your server is starting!');
+                toast.success(t('common:server_starting'));
             } else if (action === 'restart') {
-                toast.success('Your server is restarting.');
+                toast.success(t('common:server_restarting'));
             } else {
-                toast.success('Your server is being stopped.');
+                toast.success(t('common:server_stopping'));
             }
             setOpen(false);
             instance.send('set state', action === 'kill-confirmed' ? 'kill' : action);
@@ -61,99 +63,99 @@ const CommandMenu = () => {
     }, []);
 
     return (
-        <Command.Dialog open={open} onOpenChange={setOpen} label='Global Command Menu'>
+        <Command.Dialog open={open} onOpenChange={setOpen} label={t('common:global_command_menu')}>
             <Command.Input />
             <Command.List>
-                <Command.Empty>No results found.</Command.Empty>
+                <Command.Empty>{t('common:no_results_found')}</Command.Empty>
 
-                <Command.Group heading='Pages'>
+                <Command.Group heading={t('common:pages')}>
                     <Command.Item onSelect={() => cmdkNavigate('')}>
                         <House />
-                        Home
+                        {t('common:home')}
                     </Command.Item>
                     <Can action={'file.*'} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/files')}>
                             <FolderOpen />
-                            Files
+                            {t('common:files')}
                         </Command.Item>
                     </Can>
                     <Can action={'database.*'} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/databases')}>
                             <Database />
-                            Databases
+                            {t('common:databases')}
                         </Command.Item>
                     </Can>
                     <Can action={'backup.*'} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/backups')}>
                             <CloudUpload />
-                            Backups
+                            {t('common:backups')}
                         </Command.Item>
                     </Can>
                     <Can action={'allocation.*'} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/network')}>
                             <GitBranch />
-                            Networking
+                            {t('common:networking')}
                         </Command.Item>
                     </Can>
                     <Can action={'user.*'} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/users')}>
                             <Users />
-                            Users
+                            {t('common:users')}
                         </Command.Item>
                     </Can>
                     <Can action={['startup.*']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/startup')}>
                             <Terminal />
-                            Startup
+                            {t('common:startup')}
                         </Command.Item>
                     </Can>
                     <Can action={['schedule.*']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/schedules')}>
                             <History />
-                            Schedules
+                            {t('common:schedules')}
                         </Command.Item>
                     </Can>
                     <Can action={['settings.*', 'file.sftp']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/settings')}>
                             <Settings />
-                            Settings
+                            {t('common:settings')}
                         </Command.Item>
                     </Can>
                     <Can action={['activity.*']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/activity')}>
                             <PencilLine />
-                            Activity
+                            {t('common:activity')}
                         </Command.Item>
                     </Can>
                     <Can action={['modrinth.*']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/mods')}>
-                            Download
+                            {t('common:download')}
                         </Command.Item>
                     </Can>
                     <Can action={['software.*']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/shell')}>
                             <Box />
-                            Software
+                            {t('common:software')}
                         </Command.Item>
                     </Can>
                 </Command.Group>
-                <Command.Group heading='Server'>
+                <Command.Group heading={t('common:server')}>
                     <Can action={'control.start'}>
                         <Command.Item disabled={status !== 'offline'} onSelect={() => cmdkPowerAction('start')}>
                             <Power />
-                            Start Server
+                            {t('common:start_server')}
                         </Command.Item>
                     </Can>
                     <Can action={'control.restart'}>
                         <Command.Item disabled={!status} onSelect={() => cmdkPowerAction('restart')}>
                             <Power />
-                            Restart Server
+                            {t('common:restart_server')}
                         </Command.Item>
                     </Can>
                     <Can action={'control.restart'}>
                         <Command.Item disabled={status === 'offline'} onSelect={() => cmdkPowerAction('stop')}>
                             <Power />
-                            Stop Server
+                            {t('common:stop_server')}
                         </Command.Item>
                     </Can>
                 </Command.Group>

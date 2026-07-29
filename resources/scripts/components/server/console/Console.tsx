@@ -4,8 +4,12 @@ import { WebLinksAddon } from '@xterm/addon-web-links';
 import { ITerminalOptions, Terminal } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 import debounce from 'debounce';
-import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 
@@ -48,6 +52,7 @@ const terminalProps: ITerminalOptions = {
 };
 
 const Console = () => {
+    const { t } = useTranslation();
     const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@pyrodactyl~ \u001b[0m';
     const ref = useRef<HTMLDivElement>(null);
     const terminal = useMemo(
@@ -88,34 +93,34 @@ const Console = () => {
     const handlePowerChangeEvent = (state: string) =>
         terminal.writeln(TERMINAL_PRELUDE + 'Server marked as ' + state + '...\u001b[0m');
 
-    const handleCommandKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    const sendCommand = useCallback(() => {
+        const input = inputRef.current;
+        if (!input) return;
+        const command = input.value;
+        if (command.length === 0) return;
+        setHistory((prevHistory) => [command, ...prevHistory!].slice(0, 32));
+        setHistoryIndex(-1);
+        if (instance) instance.send('send command', command);
+        input.value = '';
+    }, [instance]);
+
+    const handleCommandKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+        const input = e.currentTarget;
         if (e.key === 'ArrowUp') {
             const newIndex = Math.min(historyIndex + 1, history!.length - 1);
-
             setHistoryIndex(newIndex);
-            e.currentTarget.value = history![newIndex] || '';
-
-            // By default up arrow will also bring the cursor to the start of the line,
-            // so we'll preventDefault to keep it at the end.
+            input.value = history![newIndex] || '';
             e.preventDefault();
-        }
-
-        if (e.key === 'ArrowDown') {
+        } else if (e.key === 'ArrowDown') {
             const newIndex = Math.max(historyIndex - 1, -1);
-
             setHistoryIndex(newIndex);
-            e.currentTarget.value = history![newIndex] || '';
+            input.value = history![newIndex] || '';
+        } else if (e.key === 'Enter' && input.value.length > 0) {
+            sendCommand();
         }
-
-        const command = e.currentTarget.value;
-        if (e.key === 'Enter' && command.length > 0) {
-            setHistory((prevHistory) => [command, ...prevHistory!].slice(0, 32));
-            setHistoryIndex(-1);
-
-            if (instance) instance.send('send command', command);
-            e.currentTarget.value = '';
-        }
-    };
+    }, [historyIndex, history, sendCommand]);
 
     useEffect(() => {
         if (connected && ref.current && !terminal.element) {
@@ -199,7 +204,7 @@ const Console = () => {
     }, [connected, instance]);
 
     return (
-        <div className='bg-white/5 border border-white/10 rounded-xl hover:border-white/15 transition-all duration-150 overflow-hidden'>
+        <div className='bg-muted/30 border border-border rounded-xl hover:border-border/40 transition-all duration-150 overflow-hidden'>
             <div className='relative'>
                 <SpinnerOverlay visible={!connected} size={'large'} />
                 <div className='bg-[#131313] min-h-[280px] sm:min-h-[380px] p-3 sm:p-4 font-mono overflow-hidden'>
@@ -208,17 +213,24 @@ const Console = () => {
                     </div>
                 </div>
                 {canSendCommands && (
-                    <div className='relative border-t border-white/5 bg-black/5'>
-                        <input
-                            className='w-full bg-transparent px-3 py-2.5 sm:px-4 sm:py-3 font-mono text-xs sm:text-sm text-muted-foreground placeholder-muted-foreground border-0 outline-none focus:ring-0 focus:outline-none focus:bg-black/10 transition-colors duration-150'
+                    <div className='relative flex items-center gap-2 border-t border-border p-2'>
+                        <Input
+                            ref={inputRef}
+                            className='w-full rounded-lg bg-muted/30 font-mono text-xs sm:text-sm h-9 focus-visible:ring-0'
                             type='text'
-                            placeholder='Enter a command...'
-                            aria-label='Console command input.'
+                            placeholder={t('console:enter_command')}
+                            aria-label={t('console:console_command_input')}
                             disabled={!instance || !connected}
                             onKeyDown={handleCommandKeyDown}
                             autoCorrect='off'
                             autoCapitalize='none'
                         />
+                        <Button
+                            disabled={!instance || !connected}
+                            onClick={sendCommand}
+                        >
+                            {t('console:execute')}
+                        </Button>
                     </div>
                 )}
             </div>

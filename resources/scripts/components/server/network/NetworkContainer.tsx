@@ -1,6 +1,7 @@
 import { GitBranch, Plus } from 'lucide-react';
 import { For } from 'million/react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import isEqual from 'react-fast-compare';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -20,6 +21,7 @@ import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
 import { useFlashKey } from '@/plugins/useFlash';
 
 const NetworkContainer = () => {
+    const { t } = useTranslation('network');
     const [_, setLoading] = useState(false);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const allocationLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.allocations);
@@ -58,10 +60,9 @@ const NetworkContainer = () => {
         <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
             <FlashMessageRender byKey={'server:network'} />
 
-            <MainPageHeader direction='column' title={'Networking'}>
+            <MainPageHeader direction='column' title={t('title')}>
                 <p className='text-sm leading-relaxed text-muted-foreground'>
-                    Configure network settings for your server. Manage subdomains, IP addresses and ports that your
-                    server can bind to for incoming connections.
+                    {t('description')}
                 </p>
             </MainPageHeader>
 
@@ -70,30 +71,30 @@ const NetworkContainer = () => {
 
                 <div className='rounded-xl border bg-card p-6 text-card-foreground shadow-sm'>
                     <div className='mb-6 flex items-center justify-between'>
-                        <h3 className='text-xl font-extrabold tracking-tight'>Port Allocations</h3>
+                        <h3 className='text-xl font-extrabold tracking-tight'>{t('port_allocations')}</h3>
                         {data && (
                             <Can action={'allocation.create'}>
                                 <div className='flex items-center gap-4'>
                                     {allocationLimit === null && (
                                         <span className='rounded-lg border border-border bg-muted/30 px-3 py-1 text-sm text-muted-foreground'>
-                                            {data.length} allocations (unlimited)
+                                            {t('count_unlimited', { count: data.length })}
                                         </span>
                                     )}
                                     {allocationLimit > 0 && (
                                         <span className='rounded-lg border border-border bg-muted/30 px-3 py-1 text-sm text-muted-foreground'>
-                                            {data.length} of {allocationLimit}
+                                            {t('count_of', { count: data.length, max: allocationLimit })}
                                         </span>
                                     )}
                                     {allocationLimit === 0 && (
                                         <span className='rounded-lg border border-border bg-muted/30 px-3 py-1 text-sm text-destructive'>
-                                            Allocations disabled
+                                            {t('disabled')}
                                         </span>
                                     )}
                                     {(allocationLimit === null ||
                                         (allocationLimit > 0 && allocationLimit > data.length)) && (
                                         <Button variant='default' size='sm' onClick={onCreateAllocation}>
                                             <Plus className='mr-1 size-4' />
-                                            New Allocation
+                                            {t('new_allocation')}
                                         </Button>
                                     )}
                                 </div>
@@ -105,7 +106,7 @@ const NetworkContainer = () => {
                         <div className='flex items-center justify-center py-12'>
                             <div className='flex flex-col items-center gap-3'>
                                 <div className='size-6 animate-spin rounded-full border-b-2 border-primary' />
-                                <p className='text-sm text-muted-foreground'>Loading allocations...</p>
+                                <p className='text-sm text-muted-foreground'>{t('loading_allocations')}</p>
                             </div>
                         </div>
                     ) : data.length > 0 ? (
@@ -126,12 +127,12 @@ const NetworkContainer = () => {
                                     <GitBranch className='size-6 text-muted-foreground' />
                                 </div>
                                 <h4 className='mb-2 text-lg font-medium text-foreground'>
-                                    {allocationLimit === 0 ? 'Allocations unavailable' : 'No allocations found'}
+                                    {allocationLimit === 0 ? t('unavailable') : t('no_allocations')}
                                 </h4>
                                 <p className='max-w-sm text-center text-sm text-muted-foreground'>
                                     {allocationLimit === 0
-                                        ? 'Network allocations cannot be created for this server.'
-                                        : 'Create your first allocation to get started.'}
+                                        ? t('cannot_create')
+                                        : t('create_first')}
                                 </p>
                             </div>
                         </div>

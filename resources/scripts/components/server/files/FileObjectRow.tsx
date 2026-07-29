@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from 'react-i18next';
 import { encodePathSegments } from '@/helpers';
 import { File, FolderOpen } from 'lucide-react';
 import { differenceInHours, format, formatDistanceToNow } from 'date-fns';
@@ -46,6 +47,8 @@ function Clickable({ file, children }: { file: FileObject; children: ReactNode }
 const MemoizedClickable = memo(Clickable, isEqual);
 
 const FileObjectRow = ({ file }: { file: FileObject }) => {
+    const { t } = useTranslation();
+
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const { mutate } = useFileManagerSwr();
@@ -98,12 +101,14 @@ const FileObjectRow = ({ file }: { file: FileObject }) => {
             </ContextMenu>
             <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
                 <DialogContent>
-                    <DialogHeader><DialogTitle>{`Delete ${file.isFile ? 'File' : 'Directory'}`}</DialogTitle></DialogHeader>
-                    You will not be able to recover the contents of
-                    <span className='font-semibold text-foreground'> {file.name}</span> once deleted.
+                    <DialogHeader><DialogTitle>{file.isFile ? t('files:confirm_delete_file') : t('files:confirm_delete_directory')}</DialogTitle></DialogHeader>
+                    <Trans i18nKey='files:confirm_delete_message' values={{ name: file.name }}>
+                        You will not be able to recover the contents of{' '}
+                        <span className='font-semibold text-foreground'>{{ name: file.name }}</span> once deleted.
+                    </Trans>
                     <DialogFooter>
-                        <Button variant='outline' onClick={() => setShowDeleteConfirm(false)}>Cancel</Button>
-                        <Button variant='destructive' onClick={doDeletion}>Delete</Button>
+                        <Button variant='outline' onClick={() => setShowDeleteConfirm(false)}>{t('files:cancel')}</Button>
+                        <Button variant='destructive' onClick={doDeletion}>{t('files:confirm_delete')}</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

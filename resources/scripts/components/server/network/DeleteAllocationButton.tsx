@@ -1,5 +1,6 @@
 import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import { Dialog } from '@/components/elements/dialog';
@@ -16,6 +17,7 @@ interface Props {
 }
 
 const DeleteAllocationButton = ({ allocation }: Props) => {
+    const { t } = useTranslation('network');
     const [confirm, setConfirm] = useState(false);
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -43,11 +45,11 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
             <Dialog.Confirm
                 open={confirm}
                 onClose={() => setConfirm(false)}
-                title={'Remove Allocation'}
-                confirm={'Delete'}
+                title={t('remove_allocation_title')}
+                confirm={t('delete')}
                 onConfirmed={deleteAllocation}
             >
-                This allocation will be immediately removed from your server.
+                {t('remove_allocation_description')}
             </Dialog.Confirm>
             <Button
                 variant='destructive'
@@ -56,7 +58,7 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
                 className='flex items-center gap-2'
             >
                 <Trash2 size={22} />
-                <span className='hidden sm:inline'>Delete</span>
+                <span className='hidden sm:inline'>{t('delete')}</span>
             </Button>
         </>
     );

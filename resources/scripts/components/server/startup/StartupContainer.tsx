@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import isEqual from 'react-fast-compare';
 
 import { Button } from '@/components/ui/button';
@@ -42,6 +43,7 @@ import useFlash from '@/plugins/useFlash';
 import { usePermissions } from '@/plugins/usePermissions';
 
 const StartupContainer = () => {
+    const { t } = useTranslation('startup');
     const [loading, setLoading] = useState(false);
     const [commandLoading, setCommandLoading] = useState(false);
     const [editingCommand, setEditingCommand] = useState(false);
@@ -168,13 +170,13 @@ const StartupContainer = () => {
                     <div className='flex min-h-[60vh] items-center justify-center'>
                         <div className='flex flex-col items-center gap-4'>
                             <Spinner centered size={Spinner.Size.LARGE} />
-                            <p className='text-sm text-muted-foreground'>Loading startup configuration...</p>
+                            <p className='text-sm text-muted-foreground'>{t('loading_config')}</p>
                         </div>
                     </div>
                 </div>
             );
         }
-        return <ServerError title={'Oops!'} message={httpErrorToHuman(error)} />;
+        return <ServerError title={t('oops')} message={httpErrorToHuman(error)} />;
     }
 
     return (
@@ -184,66 +186,63 @@ const StartupContainer = () => {
             <Dialog open={revertModalVisible} onOpenChange={setRevertModalVisible}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Revert Docker Image</DialogTitle>
+                        <DialogTitle>{t('revert_title')}</DialogTitle>
                         <DialogDescription>
-                            This will revert your server&apos;s Docker image back to the egg&apos;s default specification.
+                            {t('revert_description')}
                         </DialogDescription>
                     </DialogHeader>
                     <div className='rounded-xl border border-amber-500/20 bg-linear-to-b from-amber-500/10 to-amber-600/5 p-3'>
                         <p className='text-sm text-amber-200'>
-                            <span className='font-medium'>Warning:</span> You will not be able to set a custom image
-                            back without contacting support.
+                            <span className='font-medium'>{t('warning_label')}:</span> {t('revert_warning')}
                         </p>
                     </div>
-                    <p className='text-sm text-muted-foreground'>Are you sure you want to continue?</p>
+                    <p className='text-sm text-muted-foreground'>{t('revert_confirm')}</p>
                     <DialogFooter>
-                        <Button variant='outline' onClick={() => setRevertModalVisible(false)}>Cancel</Button>
+                        <Button variant='outline' onClick={() => setRevertModalVisible(false)}>{t('cancel')}</Button>
                         <Button variant='default' onClick={revertToEggDefault} disabled={loading}>
-                            Yes, revert to default
+                            {t('revert_yes')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
 
             <div className='space-y-6'>
-                <MainPageHeader direction='column' title='Startup Settings'>
+                <MainPageHeader direction='column' title={t('startup_settings')}>
                     <p className='text-sm leading-relaxed text-muted-foreground'>
-                        Configure how your server starts up. These settings control the startup command and environment
-                        variables.
-                        <span className='font-medium text-amber-400'> Exercise caution when modifying these settings.</span>
+                        {t('startup_description')}
+                        <span className='font-medium text-amber-400'> {t('exercise_caution')}</span>
                     </p>
                 </MainPageHeader>
 
                 <div className='space-y-6'>
                     <Card className='p-6'>
                         <CardHeader>
-                            <CardTitle className='text-xl font-extrabold tracking-tight'>Startup Command</CardTitle>
+                            <CardTitle className='text-xl font-extrabold tracking-tight'>{t('startup_command_title')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className='mb-6 space-y-4'>
                                 <p className='text-sm leading-relaxed text-muted-foreground'>
-                                    Configure the command that starts your server. You can edit the raw command or view the
-                                    processed version with variables resolved.
+                                    {t('startup_command_description')}
                                 </p>
                             </div>
                             {editingCommand ? (
                                 <div className='space-y-4'>
                                     <div className='grid grid-cols-1 gap-4 md:gap-6 xl:grid-cols-2'>
                                         <div>
-                                            <label className='mb-3 block text-sm font-medium text-foreground'>Raw Command</label>
+                                            <label className='mb-3 block text-sm font-medium text-foreground'>{t('raw_command_label')}</label>
                                             <textarea
                                                 className='h-32 w-full resize-none rounded-xl border-2 border-blue-500/30 bg-linear-to-b from-muted/30 to-muted/10 px-3 py-3 font-mono text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-blue-500/60 focus:outline-none focus:ring-2 focus:ring-blue-500/50 sm:h-36 sm:px-4 sm:py-4 sm:text-base md:h-40'
                                                 value={commandValue}
                                                 onChange={(e) => handleCommandChange(e.target.value)}
-                                                placeholder='Enter startup command with variables like {{SERVER_MEMORY}} or {{SERVER_PORT}}...'
+                                                placeholder={t('command_placeholder')}
                                             />
                                         </div>
                                         <div>
-                                            <label className='mb-3 block text-sm font-medium text-foreground'>Live Preview</label>
+                                            <label className='mb-3 block text-sm font-medium text-foreground'>{t('live_preview_label')}</label>
                                             <CopyOnClick text={liveProcessedCommand}>
                                                 <div className='group cursor-pointer'>
                                                     <div className='h-32 w-full overflow-auto rounded-xl border-2 border-green-500/20 bg-linear-to-b from-muted/10 to-muted/5 px-3 py-3 font-mono text-sm text-green-200 transition-all group-hover:border-green-500/40 sm:h-36 sm:px-4 sm:py-4 sm:text-base md:h-40'>
-                                                        {liveProcessedCommand || 'Enter a command to see the live preview...'}
+                                                        {liveProcessedCommand || t('live_preview_placeholder')}
                                                     </div>
                                                 </div>
                                             </CopyOnClick>
@@ -252,14 +251,14 @@ const StartupContainer = () => {
                                     <div className='flex flex-col gap-3 border-t border-border/30 pt-4 sm:flex-row sm:gap-4'>
                                         <InputSpinner visible={commandLoading}>
                                             <Button variant='default' size='default' onClick={updateCommand} disabled={commandLoading || !commandValue.trim()}>
-                                                {commandLoading ? 'Saving...' : 'Save Command'}
+                                                {commandLoading ? t('saving') : t('save_command')}
                                             </Button>
                                         </InputSpinner>
                                         <Button variant='outline' size='default' onClick={loadDefaultCommand} disabled={commandLoading}>
-                                            Load Default
+                                            {t('load_default')}
                                         </Button>
                                         <Button variant='outline' size='default' onClick={cancelEditingCommand} disabled={commandLoading}>
-                                            Cancel
+                                            {t('cancel')}
                                         </Button>
                                     </div>
                                 </div>
@@ -268,10 +267,10 @@ const StartupContainer = () => {
                                     {data.rawStartupCommand && (
                                         <div className='space-y-3'>
                                             <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
-                                                <label className='text-sm font-medium text-foreground'>Raw Command</label>
+                                                <label className='text-sm font-medium text-foreground'>{t('raw_command_label')}</label>
                                                 {canEditCommand && (
                                                     <Button variant='outline' size='sm' onClick={startEditingCommand}>
-                                                        Edit Command
+                                                        {t('edit_command')}
                                                     </Button>
                                                 )}
                                             </div>
@@ -286,8 +285,8 @@ const StartupContainer = () => {
                                     )}
                                     <div className='space-y-3'>
                                         <div className='flex flex-col items-center gap-2 sm:flex-row'>
-                                            <label className='text-sm font-medium text-foreground'>Processed Command</label>
-                                            <span className='w-fit rounded text-xs text-muted-foreground'>Read-only</span>
+                                            <label className='text-sm font-medium text-foreground'>{t('processed_command_label')}</label>
+                                            <span className='w-fit rounded text-xs text-muted-foreground'>{t('read_only')}</span>
                                         </div>
                                         <CopyOnClick text={data.invocation}>
                                             <div className='group cursor-pointer'>
@@ -304,13 +303,12 @@ const StartupContainer = () => {
 
                     <Card className='p-6'>
                         <CardHeader>
-                            <CardTitle className='text-xl font-extrabold tracking-tight'>Docker Image</CardTitle>
+                            <CardTitle className='text-xl font-extrabold tracking-tight'>{t('docker_image_title')}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className='mb-6 space-y-4'>
                                 <p className='text-sm leading-relaxed text-muted-foreground'>
-                                    The container image used to run your server. Different images provide different software
-                                    versions and configurations.
+                                    {t('docker_image_description')}
                                 </p>
                             </div>
                             {Object.keys(data.dockerImages).length > 1 && !isCustomImage ? (
@@ -361,14 +359,11 @@ const StartupContainer = () => {
                                             <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
                                                 <div className='flex-1'>
                                                     <p className='text-sm text-amber-200'>
-                                                        <span className='font-medium'>Notice:</span> This server&apos;s
-                                                        Docker image has been manually set by an administrator and cannot be
-                                                        changed through this interface.
+                                                        <span className='font-medium'>{t('notice_label')}:</span> {t('custom_image_notice')}
                                                     </p>
                                                     {canEditDockerImage && (
                                                         <p className='mt-2 text-xs text-amber-300/80'>
-                                                            You can revert to the egg&apos;s default image, but you
-                                                            won&apos;t be able to set it back without contacting support.
+                                                            {t('custom_image_revert_notice')}
                                                         </p>
                                                     )}
                                                 </div>
@@ -381,7 +376,7 @@ const StartupContainer = () => {
                                                                 onClick={() => setRevertModalVisible(true)}
                                                                 disabled={loading}
                                                             >
-                                                                Revert to Default
+                                                                {t('revert_to_default')}
                                                             </Button>
                                                         </InputSpinner>
                                                     </div>
@@ -398,16 +393,15 @@ const StartupContainer = () => {
                 {data && data.variables.length > 0 && (
                     <div className='space-y-6'>
                         <div className='space-y-3'>
-                            <h3 className='text-2xl font-extrabold text-foreground'>Environment Variables</h3>
+                            <h3 className='text-2xl font-extrabold text-foreground'>{t('env_variables_title')}</h3>
                             <p className='text-sm leading-relaxed text-muted-foreground'>
-                                Configure environment variables that will be available to your server. These variables
-                                can be used to customize server behavior and settings.
+                                {t('env_variables_description')}
                             </p>
                         </div>
 
                         <div className='rounded-xl border border-border/10 bg-linear-to-b from-muted/10 to-muted/5 p-4'>
                             <div className='space-y-3'>
-                                <h4 className='text-sm font-medium text-foreground'>Global Server Variables</h4>
+                                <h4 className='text-sm font-medium text-foreground'>{t('global_variables')}</h4>
                                 <div className='grid grid-cols-1 gap-3 text-xs sm:grid-cols-2 lg:grid-cols-3'>
                                     {[
                                         { label: 'SERVER_MEMORY', value: server?.limits?.memory || 'null' },

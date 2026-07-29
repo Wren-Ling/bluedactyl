@@ -1,6 +1,7 @@
 import { Check, Copy, Crown, Trash2, Wifi, X } from 'lucide-react';
 import debounce from 'debounce';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import isEqual from 'react-fast-compare';
 
 import { Button } from '@/components/ui/button';
@@ -30,6 +31,7 @@ interface Props {
 }
 
 const AllocationRow = ({ allocation }: Props) => {
+    const { t } = useTranslation('network');
     const [loading, setLoading] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
     const [isEditingNotes, setIsEditingNotes] = useState(false);
@@ -107,26 +109,26 @@ const AllocationRow = ({ allocation }: Props) => {
             <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full'>
                 <div className='flex-1 min-w-0'>
                     <div className='flex items-center gap-3 mb-3'>
-                        <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center'>
-                            <Wifi size={22} className='text-zinc-400' />
+                        <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-muted/30 flex items-center justify-center'>
+                            <Wifi size={22} className='text-muted-foreground' />
                         </div>
                         <div className='min-w-0 flex-1'>
                             <div className='flex items-center flex-wrap gap-2'>
                                 <CopyOnClick text={allocationString}>
-                                    <div className='flex items-center gap-2 cursor-pointer hover:text-zinc-50 transition-colors group'>
-                                        <h3 className='text-base font-medium text-zinc-100 font-mono truncate'>
+                                    <div className='flex items-center gap-2 cursor-pointer hover:text-foreground transition-colors group'>
+                                        <h3 className='text-base font-medium text-foreground font-mono truncate'>
                                             {allocation.alias ? allocation.alias : ip(allocation.ip)}:{allocation.port}
                                         </h3>
                                         <Copy
                                             size={22}
-                                            className='text-zinc-500 transition-colors group-hover:text-zinc-400'
+                                            className='text-foreground0 transition-colors group-hover:text-muted-foreground'
                                         />
                                     </div>
                                 </CopyOnClick>
                                 {allocation.isDefault && (
                                     <span className='flex items-center gap-1 text-xs text-foreground font-medium bg-secondary px-2 py-1 rounded'>
                                         <Crown size={22} />
-                                        Primary
+                                        {t('primary')}
                                     </span>
                                 )}
                             </div>
@@ -135,15 +137,15 @@ const AllocationRow = ({ allocation }: Props) => {
 
                     {/* Notes Section - Inline Editable */}
                     <div className='mt-3'>
-                        <p className='text-xs text-zinc-500 uppercase tracking-wide mb-2'>Notes</p>
+                        <p className='text-xs text-foreground0 uppercase tracking-wide mb-2'>{t('notes')}</p>
 
                         {isEditingNotes ? (
                             <div className='space-y-2'>
                                 <InputSpinner visible={loading}>
                                     <Textarea
                                         ref={textareaRef}
-                                        className='w-full bg-white/5 border border-white/5 rounded-lg p-3 text-sm text-foreground placeholder-muted-foreground resize-none focus:ring-1 focus:ring-ring focus:border-ring transition-all'
-                                        placeholder='Add notes for this allocation...'
+                                        className='w-full bg-muted/30 border border-border rounded-lg p-3 text-sm text-foreground placeholder-muted-foreground resize-none focus:ring-1 focus:ring-ring focus:border-ring transition-all'
+                                        placeholder={t('add_notes_placeholder')}
                                         value={notesValue}
                                         onChange={(e) => setNotesValue(e.currentTarget.value)}
                                         rows={3}
@@ -156,21 +158,21 @@ const AllocationRow = ({ allocation }: Props) => {
                                         ) : (
                                             <Check className='mr-1 size-3' />
                                         )}
-                                        Save
+                                        {t('save')}
                                     </Button>
                                     <Button variant='secondary' size='sm' onClick={cancelEdit} disabled={loading}>
                                         <X className='mr-1' size={22} />
-                                        Cancel
+                                        {t('cancel')}
                                     </Button>
                                 </div>
                             </div>
                         ) : (
                             <Can action={'allocation.update'}>
                                 <div
-                                    className={`min-h-[2.5rem] p-3 rounded-lg border border-white/5 bg-background cursor-pointer hover:border-white/10 transition-colors ${allocation.notes ? 'text-sm text-foreground' : 'text-sm text-muted-foreground italic'}`}
+                                    className={`min-h-[2.5rem] p-3 rounded-lg border border-border bg-background cursor-pointer hover:border-border transition-colors ${allocation.notes ? 'text-sm text-foreground' : 'text-sm text-muted-foreground italic'}`}
                                     onClick={startEdit}
                                 >
-                                    {allocation.notes || 'Click to add notes...'}
+                                    {allocation.notes || t('click_to_add_notes')}
                                 </div>
                             </Can>
                         )}
@@ -186,13 +188,13 @@ const AllocationRow = ({ allocation }: Props) => {
                             disabled={allocation.isDefault}
                             title={
                                 allocation.isDefault
-                                    ? 'This is already the primary allocation'
-                                    : 'Make this the primary allocation'
+                                    ? t('already_primary_title')
+                                    : t('make_primary_title')
                             }
                         >
                             <Crown size={22} className='mr-1' />
-                            <span className='hidden sm:inline'>Make Primary</span>
-                            <span className='sm:hidden'>Primary</span>
+                            <span className='hidden sm:inline'>{t('make_primary')}</span>
+                            <span className='sm:hidden'>{t('primary')}</span>
                         </Button>
                     </Can>
                     <Can action={'allocation.delete'}>
@@ -202,7 +204,7 @@ const AllocationRow = ({ allocation }: Props) => {
                             onClick={() => setShowDeleteDialog(true)}
                             disabled={allocation.isDefault || deleteLoading}
                             title={
-                                allocation.isDefault ? 'Cannot delete the primary allocation' : 'Delete this allocation'
+                                allocation.isDefault ? t('cannot_delete_primary') : t('delete_allocation_title')
                             }
                         >
                             {deleteLoading ? (
@@ -210,7 +212,7 @@ const AllocationRow = ({ allocation }: Props) => {
                             ) : (
                                 <Trash2 size={22} className='mr-1' />
                             )}
-                            <span className='hidden sm:inline'>Delete</span>
+                            <span className='hidden sm:inline'>{t('delete')}</span>
                         </Button>
                     </Can>
                 </div>
@@ -218,11 +220,11 @@ const AllocationRow = ({ allocation }: Props) => {
             <Dialog.Confirm
                 open={showDeleteDialog}
                 onClose={() => setShowDeleteDialog(false)}
-                title={'Delete Allocation'}
-                confirm={'Delete'}
+                title={t('delete_allocation_dialog_title')}
+                confirm={t('delete')}
                 onConfirmed={deleteAllocation}
             >
-                Are you sure you want to delete this allocation? This action cannot be undone.
+                {t('delete_allocation_confirm')}
             </Dialog.Confirm>
         </PageListItem>
     );

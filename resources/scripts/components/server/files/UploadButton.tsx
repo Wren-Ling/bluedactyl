@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 
@@ -21,6 +22,8 @@ function isFileOrDirectory(event: DragEvent): boolean {
 }
 
 const UploadButton = () => {
+    const { t } = useTranslation();
+
     const fileUploadInput = useRef<HTMLInputElement>(null);
     const [timeouts, _] = useState<NodeJS.Timeout[]>([]);
     const [visible, setVisible] = useState(false);
@@ -60,7 +63,7 @@ const UploadButton = () => {
         clearAndAddHttpError();
         const list = Array.from(files);
         if (list.some((file) => !file.size || (!file.type && file.size === 4096))) {
-            return addError('Folder uploads are not supported at this time.', 'Error');
+            return addError(t('files:folder_uploads_not_supported'), 'Error');
         }
 
         const uploads = list.map((file) => {
@@ -121,7 +124,7 @@ const UploadButton = () => {
                                 'relative flex flex-col items-center gap-4 bg-foreground w-full rounded-xl py-12 px-4 mx-10 max-w-sm'
                             }
                         >
-                            <div className='absolute inset-4 border-dashed border-white/50 border-2 rounded-xl'></div>
+                            <div className='absolute inset-4 border-dashed border-border0 border-2 rounded-xl'></div>
                             <svg
                                 width='24'
                                 height='24'
@@ -146,7 +149,7 @@ const UploadButton = () => {
                                     'flex-1 text-lg font-bold tracking-tight text-center truncate w-full relative px-4'
                                 }
                             >
-                                Upload to {name}
+                                {t('files:upload_to', { name })}
                             </h1>
                         </div>
                     </div>
@@ -170,7 +173,7 @@ const UploadButton = () => {
                 variant='secondary'
                 onClick={() => fileUploadInput.current && fileUploadInput.current.click()}
             >
-                Upload
+                {t('files:upload')}
             </Button>
         </>
     );

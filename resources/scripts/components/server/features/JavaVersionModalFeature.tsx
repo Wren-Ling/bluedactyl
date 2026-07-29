@@ -101,7 +101,7 @@ const JavaVersionModalFeature = () => {
                         <DropdownMenu onOpenChange={(open) => setDropDownOpen(open)}>
                             <DropdownMenuTrigger asChild>
                                 <button
-                                    className='flex items-center justify-center h-8 px-4 text-sm font-medium text-foreground transition-colors duration-150 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 cursor-pointer'
+                                    className='flex items-center justify-center h-8 px-4 text-sm font-medium text-foreground transition-colors duration-150 bg-muted/30 border border-border rounded-xl hover:bg-muted/50 cursor-pointer'
                                     disabled={!data}
                                 >
                                     {selectedVersion

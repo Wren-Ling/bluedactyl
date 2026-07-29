@@ -1,5 +1,6 @@
 import { ArrowLeft, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
@@ -10,6 +11,7 @@ import { ServerContext } from '@/state/server';
 import { Subuser } from '@/state/server/subusers';
 
 const EditUserContainer = () => {
+    const { t } = useTranslation('users');
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,14 +38,14 @@ const EditUserContainer = () => {
     if (!subuser && subusers.length === 0) {
         return (
             <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
-                <MainPageHeader title={'Edit User'}>
+                <MainPageHeader title={t('edit_title_short')}>
                     <Button
                         variant='outline'
                         onClick={() => navigate(`/server/${serverId}/users`)}
                         className='flex items-center gap-2'
                     >
                         <ArrowLeft className='size-4' />
-                        Back to Users
+                        {t('back_to_users')}
                     </Button>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
@@ -56,14 +58,14 @@ const EditUserContainer = () => {
     if (!subuser) {
         return (
             <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
-                <MainPageHeader title={'Edit User'}>
+                <MainPageHeader title={t('edit_title_short')}>
                     <Button
                         variant='outline'
                         onClick={() => navigate(`/server/${serverId}/users`)}
                         className='flex items-center gap-2'
                     >
                         <ArrowLeft className='size-4' />
-                        Back to Users
+                        {t('back_to_users')}
                     </Button>
                 </MainPageHeader>
                 <div className='flex flex-col items-center justify-center px-4 py-12'>
@@ -71,9 +73,9 @@ const EditUserContainer = () => {
                         <div className='mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-muted'>
                             <Users className='size-8 text-muted-foreground' />
                         </div>
-                        <h3 className='mb-2 text-lg font-medium text-foreground'>User not found</h3>
+                        <h3 className='mb-2 text-lg font-medium text-foreground'>{t('user_not_found')}</h3>
                         <p className='max-w-sm text-sm text-muted-foreground'>
-                            The user you&apos;re trying to edit could not be found.
+                            {t('user_not_found_description')}
                         </p>
                     </div>
                 </div>
@@ -83,7 +85,7 @@ const EditUserContainer = () => {
 
     return (
         <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
-            <MainPageHeader title={`Edit User: ${subuser.email}`}>
+            <MainPageHeader title={t('edit_title', { email: subuser.email })}>
                 <Button
                     variant='outline'
                     onClick={() => navigate(`/server/${serverId}/users`)}
@@ -91,7 +93,7 @@ const EditUserContainer = () => {
                     disabled={isSubmitting}
                 >
                     <ArrowLeft className='size-4' />
-                    Back to Users
+                    {t('back_to_users')}
                 </Button>
             </MainPageHeader>
 

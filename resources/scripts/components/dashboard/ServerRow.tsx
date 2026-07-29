@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
 
@@ -22,6 +23,7 @@ const getStatusColor = (status?: ServerPowerState) =>
     statusColors[status || 'offline'] || 'bg-yellow-500 shadow-[0_0_8px_2px] shadow-yellow-500/50';
 
 const ServerRow = ({ server, className }: { server: Server; className?: string }) => {
+    const { t } = useTranslation();
     const interval = useRef<Timer>(null) as React.MutableRefObject<Timer>;
     const [isSuspended, setIsSuspended] = useState(server.status === 'suspended');
     const [isInstalling, setIsInstalling] = useState(server.status === 'installing');
@@ -71,7 +73,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                                 <CardTitle className='truncate'>{server.name}</CardTitle>
                                 {isSuspended && (
                                     <span className='rounded bg-destructive/10 px-1 py-0.5 text-[11px] font-medium text-destructive'>
-                                        Suspended
+                                        {t('dashboard:suspended')}
                                     </span>
                                 )}
                             </div>
@@ -90,20 +92,20 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                         {!stats || isSuspended || isInstalling ? (
                             <span className='text-xs text-muted-foreground'>
                                 {isSuspended
-                                    ? 'Suspended'
+                                    ? t('dashboard:suspended')
                                     : server.isTransferring
-                                      ? 'Transferring'
+                                      ? t('dashboard:transferring')
                                       : server.status === 'installing'
-                                        ? 'Installing'
+                                        ? t('dashboard:installing')
                                         : server.status === 'restoring_backup'
-                                          ? 'Restoring Backup'
-                                          : 'Unavailable'}
+                                          ? t('dashboard:restoring_backup')
+                                          : t('dashboard:unavailable')}
                             </span>
                         ) : (
                             <>
                                 {(['cpu', 'memory', 'disk'] as const).map((key) => (
                                     <div key={key} className='hidden sm:block text-right'>
-                                        <p className='text-[11px] uppercase text-muted-foreground'>{key}</p>
+                                        <p className='text-[11px] uppercase text-muted-foreground'>{t(`dashboard:stats_${key}`)}</p>
                                         <p className={`text-xs font-medium ${alarms[key] ? 'text-destructive' : ''}`}>
                                             {key === 'cpu'
                                                 ? `${stats.cpuUsagePercent.toFixed(1)}%`

@@ -1,18 +1,18 @@
 @extends('layouts.admin')
 
 @section('title')
-    Nests &rarr; New Egg
+    @lang('admin/nests.egg_new.page_title')
 @endsection
 
 @section('content-header')
-    <h1 class="text-xl font-bold">New Egg</h1>
-    <p class="text-sm text-muted-foreground">Create a new Egg to assign to servers.</p>
+    <h1 class="text-xl font-bold">@lang('admin/nests.egg_new.title')</h1>
+    <p class="text-sm text-muted-foreground">@lang('admin/nests.egg_new.header_description')</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/nests.admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <a href="{{ route('admin.nests') }}">Nests</a>
+        <a href="{{ route('admin.nests') }}">@lang('admin/nests.nests_breadcrumb')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>New Egg</span>
+        <span>@lang('admin/nests.egg_new.title')</span>
     </nav>
 @endsection
 
@@ -22,59 +22,57 @@
         <div>
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">Configuration</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/nests.egg_new.configuration_card_title')</h3>
                 </header>
                 <section>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <div role="group" class="field">
-                                <label for="pNestId" >Associated Nest</label>
+                                <label for="pNestId" >@lang('admin/nests.egg_new.nest_label')</label>
                                 <select name="nest_id" id="pNestId" class="select">
                                     @foreach($nests as $nest)
                                         <option value="{{ $nest->id }}" {{ old('nest_id') != $nest->id ?: 'selected' }}>{{ $nest->name }} &lt;{{ $nest->author }}&gt;</option>
                                     @endforeach
                                 </select>
-                                <p class="text-sm text-muted-foreground">Think of a Nest as a category. You can put multiple Eggs in a nest, but consider putting only Eggs that are related to each other in each Nest.</p>
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_new.nest_hint') !!}</p>
                             </div>
                             <div role="group" class="field">
-                                <label for="pName" >Name</label>
+                                <label for="pName" >@lang('admin/nests.egg_new.name_label')</label>
                                 <input type="text" id="pName" name="name" value="{{ old('name') }}"  />
-                                <p class="text-sm text-muted-foreground">A simple, human-readable name to use as an identifier for this Egg. This is what users will see as their game server type.</p>
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_new.name_hint') !!}</p>
                             </div>
                             <div role="group" class="field">
-                                <label for="pDescription" >Description</label>
+                                <label for="pDescription" >@lang('admin/nests.egg_new.description_label')</label>
                                 <textarea id="pDescription" name="description"  rows="8">{{ old('description') }}</textarea>
-                                <p class="text-sm text-muted-foreground">A description of this Egg.</p>
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_new.description_hint') !!}</p>
                             </div>
                             <div role="group" class="field" data-orientation="horizontal">
                                 <input id="pForceOutgoingIp" name="force_outgoing_ip" type="checkbox" value="1"  {{ \Pterodactyl\Helpers\Utilities::checked('force_outgoing_ip', 0) }} />
-                                <label for="pForceOutgoingIp">Force Outgoing IP</label>
+                                <label for="pForceOutgoingIp">@lang('admin/nests.egg_new.force_outgoing_ip_label')</label>
                                 <p class="text-sm text-muted-foreground">
-                                    Forces all outgoing network traffic to have its Source IP NATed to the IP of the server's primary allocation IP.
-                                    Required for certain games to work properly when the Node has multiple public IP addresses.
+                                    {!! trans('admin/nests.egg_new.force_outgoing_ip_hint') !!}
                                     <br>
                                     <strong>
-                                        Enabling this option will disable internal networking for any servers using this egg,
-                                        causing them to be unable to internally access other servers on the same node.
+                                        {!! trans('admin/nests.egg_new.force_outgoing_ip_warning') !!}
                                     </strong>
                                 </p>
                             </div>
                         </div>
                         <div>
                             <div role="group" class="field">
-                                <label for="pDockerImage" >Docker Images</label>
-                                <textarea id="pDockerImages" name="docker_images" rows="4" placeholder="quay.io/pterodactyl/service" >{{ old('docker_images') }}</textarea>
-                                <p class="text-sm text-muted-foreground">The docker images available to servers using this egg. Enter one per line. Users will be able to select from this list of images if more than one value is provided.</p>
+                                <label for="pDockerImage" >@lang('admin/nests.egg_new.docker_images_label')</label>
+                                <textarea id="pDockerImages" name="docker_images" rows="4" placeholder="@lang('admin/nests.egg_new.docker_images_placeholder')" >{{ old('docker_images') }}</textarea>
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_new.docker_images_hint') !!}</p>
                             </div>
                             <div role="group" class="field">
-                                <label for="pStartup" >Startup Command</label>
+                                <label for="pStartup" >@lang('admin/nests.egg_new.startup_label')</label>
                                 <textarea id="pStartup" name="startup"  rows="10">{{ old('startup') }}</textarea>
-                                <p class="text-sm text-muted-foreground">The default startup command that should be used for new servers created with this Egg. You can change this per-server as needed.</p>
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_new.startup_hint') !!}</p>
                             </div>
                             <div role="group" class="field">
-                                <label for="pConfigFeatures" >Features</label>
-                                <input type="text" id="pConfigFeatures" name="features_input" placeholder="Enter features separated by comma or space" />
-                                <p class="text-sm text-muted-foreground">Additional features belonging to the egg. Useful for configuring additional panel modifications.</p>
+                                <label for="pConfigFeatures" >@lang('admin/nests.egg_new.features_label')</label>
+                                <input type="text" id="pConfigFeatures" name="features_input" placeholder="@lang('admin/nests.egg_new.features_placeholder')" />
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_new.features_hint') !!}</p>
                             </div>
                         </div>
                     </div>
@@ -84,45 +82,45 @@
         <div>
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">Process Management</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/nests.egg_new.process_management_card_title')</h3>
                 </header>
                 <section>
                     <div class="grid gap-6">
                         <div class="col-span-full">
                             <div class="alert" data-variant="warning" role="alert">
-                                <p>All fields are required unless you select a separate option from the 'Copy Settings From' dropdown, in which case fields may be left blank to use the values from that option.</p>
+                                <p>{!! trans('admin/nests.egg_new.process_management_alert') !!}</p>
                             </div>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 col-span-full">
                             <div>
                                 <div role="group" class="field">
-                                    <label for="pConfigFrom" >Copy Settings From</label>
+                                    <label for="pConfigFrom" >@lang('admin/nests.egg_new.copy_from_label')</label>
                                     <select name="config_from" id="pConfigFrom" class="select">
-                                        <option value="">None</option>
+                                        <option value="">@lang('admin/nests.egg_new.copy_from_none')</option>
                                     </select>
-                                    <p class="text-sm text-muted-foreground">If you would like to default to settings from another Egg select it from the dropdown above.</p>
+                                    <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_new.copy_from_hint') !!}</p>
                                 </div>
                                 <div role="group" class="field">
-                                    <label for="pConfigStop" >Stop Command</label>
+                                    <label for="pConfigStop" >@lang('admin/nests.egg_new.stop_command_label')</label>
                                     <input type="text" id="pConfigStop" name="config_stop"  value="{{ old('config_stop') }}" />
-                                    <p class="text-sm text-muted-foreground">The command that should be sent to server processes to stop them gracefully. If you need to send a <code>SIGINT</code> you should enter <code>^C</code> here.</p>
+                                    <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_new.stop_command_hint') !!}</p>
                                 </div>
                                 <div role="group" class="field">
-                                    <label for="pConfigLogs" >Log Configuration</label>
+                                    <label for="pConfigLogs" >@lang('admin/nests.egg_new.log_config_label')</label>
                                     <textarea data-action="handle-tabs" id="pConfigLogs" name="config_logs"  rows="6">{{ old('config_logs') }}</textarea>
-                                    <p class="text-sm text-muted-foreground">This should be a JSON representation of where log files are stored, and whether or not the daemon should be creating custom logs.</p>
+                                    <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_new.log_config_hint') !!}</p>
                                 </div>
                             </div>
                             <div>
                                 <div role="group" class="field">
-                                    <label for="pConfigFiles" >Configuration Files</label>
+                                    <label for="pConfigFiles" >@lang('admin/nests.egg_new.config_files_label')</label>
                                     <textarea data-action="handle-tabs" id="pConfigFiles" name="config_files"  rows="6">{{ old('config_files') }}</textarea>
-                                    <p class="text-sm text-muted-foreground">This should be a JSON representation of configuration files to modify and what parts should be changed.</p>
+                                    <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_new.config_files_hint') !!}</p>
                                 </div>
                                 <div role="group" class="field">
-                                    <label for="pConfigStartup" >Start Configuration</label>
+                                    <label for="pConfigStartup" >@lang('admin/nests.egg_new.start_config_label')</label>
                                     <textarea data-action="handle-tabs" id="pConfigStartup" name="config_startup"  rows="6">{{ old('config_startup') }}</textarea>
-                                    <p class="text-sm text-muted-foreground">This should be a JSON representation of what values the daemon should be looking for when booting a server to determine completion.</p>
+                                    <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_new.start_config_hint') !!}</p>
                                 </div>
                             </div>
                         </div>
@@ -130,7 +128,7 @@
                 </section>
                 <footer>
                     {!! csrf_field() !!}
-                    <button type="submit" class="btn ml-auto" data-size="sm">Create</button>
+                    <button type="submit" class="btn ml-auto" data-size="sm">@lang('admin/nests.egg_new.create')</button>
                 </footer>
             </div>
         </div>
@@ -146,7 +144,7 @@
         $('#pNestId').change();
     });
     $('#pNestId').on('change', function (event) {
-        $('#pConfigFrom').html('<option value="">None</option>');
+        $('#pConfigFrom').html('<option value="">@lang('admin/nests.egg_new.copy_from_none')</option>');
         var eggs = _.get(Pyrodactyl.nests, $(this).val() + '.eggs', []);
         eggs.forEach(function (item) {
             $('#pConfigFrom').append($('<option>', {

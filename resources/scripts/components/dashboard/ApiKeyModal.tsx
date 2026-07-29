@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import CopyOnClick from '@/components/elements/CopyOnClick';
@@ -12,6 +13,7 @@ interface Props {
 }
 
 const ApiKeyModal = ({ apiKey }: Props) => {
+    const { t } = useTranslation();
     const { dismiss } = useContext(ModalContext);
 
     return (
@@ -19,8 +21,7 @@ const ApiKeyModal = ({ apiKey }: Props) => {
             <FlashMessageRender byKey='account' />
 
             <p className='mt-2 text-sm text-muted-foreground'>
-                The API key you have requested is shown below. Please store it in a safe place, as it will not be shown
-                again.
+                {t('account:api_key_modal_description')}
             </p>
 
             <div className='relative mt-6'>
@@ -33,7 +34,7 @@ const ApiKeyModal = ({ apiKey }: Props) => {
 
             <div className='flex justify-end space-x-4'>
                 <Button type='button' onClick={() => dismiss()} variant='destructive'>
-                    Close
+                    {t('account:close')}
                 </Button>
             </div>
         </div>

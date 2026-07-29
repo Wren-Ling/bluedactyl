@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    New Server
+    @lang('admin/server.new.title')
 @endsection
 
 @section('scripts')
@@ -16,14 +16,14 @@
 @endsection
 
 @section('content-header')
-    <h1 class="text-xl font-bold">Create Server</h1>
-    <p class="text-sm text-muted-foreground">Add a new server to the panel.</p>
+    <h1 class="text-xl font-bold">@lang('admin/server.new.header')</h1>
+    <p class="text-sm text-muted-foreground">@lang('admin/server.new.description')</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/server.new.breadcrumb_admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <a href="{{ route('admin.servers') }}">Servers</a>
+        <a href="{{ route('admin.servers') }}">@lang('admin/server.new.breadcrumb_servers')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>Create Server</span>
+        <span>@lang('admin/server.new.breadcrumb_create')</span>
     </nav>
 @endsection
 
@@ -33,45 +33,45 @@
         <div class="col-span-full">
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">Core Details</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/server.new.core_details')</h3>
                 </header>
 
                 <section>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <div role="group" class="field">
-                                <label for="pName">Server Name</label>
-                                <input type="text"  id="pName" name="name" value="{{ old('name') }}" placeholder="Server Name">
-                                <p class="text-sm text-muted-foreground">Character limits: <code>a-z A-Z 0-9 _ - .</code> and <code>[Space]</code>.</p>
+                                <label for="pName">@lang('admin/server.new.server_name')</label>
+                                <input type="text"  id="pName" name="name" value="{{ old('name') }}" placeholder="{{ trans('admin/server.new.server_name_placeholder') }}">
+                                <p class="text-sm text-muted-foreground">@lang('admin/server.new.server_name_help')</p>
                             </div>
 
                             <div role="group" class="field">
-                                <label for="pUserId">Server Owner</label>
+                                <label for="pUserId">@lang('admin/server.new.server_owner')</label>
                                 <input type="hidden" name="owner_id" id="pUserId" value="{{ old('owner_id') }}">
                                 <div class="flex items-center gap-2">
                                     <span id="pUserDisplay" class="text-muted-foreground text-sm">
                                         @if (old('owner_id'))
-                                            Loading...
+                                            @lang('admin/server.new.loading')
                                         @else
-                                            No owner selected
+                                            @lang('admin/server.new.no_owner_selected')
                                         @endif
                                     </span>
-                                    <button type="button" class="btn" data-size="sm" data-variant="outline" id="openUserSearchBtn">Select Owner</button>
+                                    <button type="button" class="btn" data-size="sm" data-variant="outline" id="openUserSearchBtn">@lang('admin/server.new.select_owner')</button>
                                 </div>
-                                <p class="text-sm text-muted-foreground">Email address of the Server Owner.</p>
+                                <p class="text-sm text-muted-foreground">@lang('admin/server.new.server_owner_help')</p>
                             </div>
                         </div>
 
                         <div>
                             <div role="group" class="field">
-                                <label for="pDescription">Server Description</label>
+                                <label for="pDescription">@lang('admin/server.new.server_description')</label>
                                 <textarea id="pDescription" name="description" rows="3" >{{ old('description') }}</textarea>
-                                <p class="text-sm text-muted-foreground">A brief description of this server.</p>
+                                <p class="text-sm text-muted-foreground">@lang('admin/server.new.server_description_help')</p>
                             </div>
 
                             <div role="group" class="field" data-orientation="horizontal">
                                 <input id="pStartOnCreation" name="start_on_completion" type="checkbox"  {{ \Pterodactyl\Helpers\Utilities::checked('start_on_completion', 1) }} />
-                                <label for="pStartOnCreation" class="font-normal">Start Server when Installed</label>
+                                <label for="pStartOnCreation" class="font-normal">@lang('admin/server.new.start_on_creation')</label>
                             </div>
                         </div>
                     </div>
@@ -85,13 +85,13 @@
             <div class="card">
                 <div class="overlay hidden" id="allocationLoader"><x-icon name="refresh-cw" class="size-4 animate-spin" /></div>
                 <header>
-                    <h3 class="text-lg font-semibold">Allocation Management</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/server.new.allocation_management')</h3>
                 </header>
 
                 <section>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div role="group" class="field">
-                            <label for="pNodeId">Node</label>
+                            <label for="pNodeId">@lang('admin/server.new.node')</label>
                             <select name="node_id" id="pNodeId" class="select">
                                 @foreach($locations as $location)
                                     <optgroup label="{{ $location->long }} ({{ $location->short }})">
@@ -106,18 +106,18 @@
                                 @endforeach
                             </select>
 
-                            <p class="text-sm text-muted-foreground">The node which this server will be deployed to.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.node_help')</p>
                         </div>
 
                         <div role="group" class="field">
-                            <label>Allocations</label>
+                            <label>@lang('admin/server.new.allocations')</label>
                             <div class="flex items-center gap-2">
-                                <span id="pAllocSummary" class="text-sm text-muted-foreground">No allocations selected</span>
-                                <button type="button" class="btn" data-size="sm" data-variant="outline" id="openAllocBtn">Select Allocations</button>
+                                <span id="pAllocSummary" class="text-sm text-muted-foreground">@lang('admin/server.new.no_allocations_selected')</span>
+                                <button type="button" class="btn" data-size="sm" data-variant="outline" id="openAllocBtn">@lang('admin/server.new.select_allocations')</button>
                             </div>
                             <input type="hidden" name="allocation_id" id="pAllocation" value="">
                             <select multiple name="allocation_additional[]" id="pAllocationAdditional" class="hidden"></select>
-                            <p class="text-sm text-muted-foreground">Choose which allocations to assign. The first one you select becomes the default.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.allocations_help')</p>
                         </div>
                     </div>
                 </section>
@@ -129,31 +129,31 @@
         <div class="col-span-full">
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">Application Feature Limits</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/server.new.feature_limits')</h3>
                 </header>
 
                 <section>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div role="group" class="field">
-                            <label for="pDatabaseLimit">Database Limit</label>
-                            <input type="text" id="pDatabaseLimit" name="database_limit"  value="{{ old('database_limit') }}" placeholder="Leave blank for unlimited"/>
-                            <p class="text-sm text-muted-foreground">The total number of databases a user is allowed to create for this server. Leave blank for unlimited, set to 0 to disable.</p>
+                            <label for="pDatabaseLimit">@lang('admin/server.new.database_limit')</label>
+                            <input type="text" id="pDatabaseLimit" name="database_limit"  value="{{ old('database_limit') }}" placeholder="{{ trans('admin/server.new.unlimited_placeholder') }}"/>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.database_limit_help')</p>
                         </div>
                         <div role="group" class="field">
-                            <label for="pAllocationLimit">Allocation Limit</label>
-                            <input type="text" id="pAllocationLimit" name="allocation_limit"  value="{{ old('allocation_limit') }}" placeholder="Leave blank for unlimited"/>
-                            <p class="text-sm text-muted-foreground">The total number of allocations a user is allowed to create for this server. Leave blank for unlimited, set to 0 to disable.</p>
+                            <label for="pAllocationLimit">@lang('admin/server.new.allocation_limit')</label>
+                            <input type="text" id="pAllocationLimit" name="allocation_limit"  value="{{ old('allocation_limit') }}" placeholder="{{ trans('admin/server.new.unlimited_placeholder') }}"/>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.allocation_limit_help')</p>
                         </div>
                         <div role="group" class="field">
-                            <label for="pBackupLimit">Backup Limit</label>
-                            <input type="text" id="pBackupLimit" name="backup_limit"  value="{{ old('backup_limit') }}" placeholder="Leave blank for unlimited"/>
-                            <p class="text-sm text-muted-foreground">The total number of backups that can be created for this server. Leave blank for unlimited, set to 0 to disable.</p>
+                            <label for="pBackupLimit">@lang('admin/server.new.backup_limit')</label>
+                            <input type="text" id="pBackupLimit" name="backup_limit"  value="{{ old('backup_limit') }}" placeholder="{{ trans('admin/server.new.unlimited_placeholder') }}"/>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.backup_limit_help')</p>
                         </div>
                         <div role="group" class="field">
-                            <label for="pBackupStorageLimit">Backup Storage Limit</label>
-                            <input type="text" id="pBackupStorageLimit" name="backup_storage_limit" data-multiplicator="true"  value="{{ old('backup_storage_limit') }}" placeholder="Leave blank for unlimited"/>
+                            <label for="pBackupStorageLimit">@lang('admin/server.new.backup_storage_limit')</label>
+                            <input type="text" id="pBackupStorageLimit" name="backup_storage_limit" data-multiplicator="true"  value="{{ old('backup_storage_limit') }}" placeholder="{{ trans('admin/server.new.unlimited_placeholder') }}"/>
                             <span class="px-2 text-muted-foreground">MiB</span>
-                            <p class="text-sm text-muted-foreground">The total storage space that can be used for backups. Leave blank for unlimited storage.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.backup_storage_limit_help')</p>
                         </div>
                     </div>
                 </section>
@@ -165,26 +165,26 @@
         <div class="col-span-full">
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">Resource Management</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/server.new.resource_management')</h3>
                 </header>
 
                 <section>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div role="group" class="field">
-                            <label for="pCPU">CPU Limit</label>
+                            <label for="pCPU">@lang('admin/server.new.cpu_limit')</label>
 
                             <input type="text" id="pCPU" name="cpu"  value="{{ old('cpu', 0) }}" />
                             <span class="px-2 text-muted-foreground">%</span>
 
-                            <p class="text-sm text-muted-foreground">If you do not want to limit CPU usage, set the value to <code>0</code>. To determine a value, take the number of threads and multiply it by 100. For example, on a quad core system without hyperthreading <code>(4 * 100 = 400)</code> there is <code>400%</code> available. To limit a server to using half of a single thread, you would set the value to <code>50</code>. To allow a server to use up to two threads, set the value to <code>200</code>.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.cpu_limit_help')</p>
                         </div>
 
                         <div role="group" class="field">
-                            <label for="pThreads">CPU Pinning</label>
+                            <label for="pThreads">@lang('admin/server.new.cpu_pinning')</label>
 
                             <input type="text" id="pThreads" name="threads"  value="{{ old('threads') }}" />
 
-                            <p class="text-sm text-muted-foreground"><strong>Advanced:</strong> Enter the specific CPU threads that this process can run on, or leave blank to allow all threads. This can be a single number, or a comma separated list. Example: <code>0</code>, <code>0-1,3</code>, or <code>0,1,3,4</code>.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.cpu_pinning_help')</p>
                         </div>
                     </div>
                 </section>
@@ -192,21 +192,21 @@
                 <section>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div role="group" class="field">
-                            <label for="pMemory">Memory</label>
+                            <label for="pMemory">@lang('admin/server.new.memory')</label>
 
                             <input type="text" id="pMemory" name="memory"  value="{{ old('memory') }}" />
                             <span class="px-2 text-muted-foreground">MiB</span>
 
-                            <p class="text-sm text-muted-foreground">The maximum amount of memory allowed for this container. Setting this to <code>0</code> will allow unlimited memory in a container.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.memory_help')</p>
                         </div>
 
                         <div role="group" class="field">
-                            <label for="pOverheadMemory">Overhead Memory</label>
+                            <label for="pOverheadMemory">@lang('admin/server.new.overhead_memory')</label>
 
                             <input type="text" id="pOverheadMemory" name="overhead_memory"  value="{{ old('overhead_memory', 0) }}" />
                             <span class="px-2 text-muted-foreground">MiB</span>
 
-                            <p class="text-sm text-muted-foreground">Additional memory allocated to the container that doesn't go to the SERVER_MEMORY variable. Setting to <code>0</code> disables overhead memory.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.overhead_memory_help')</p>
                         </div>
                     </div>
                 </section>
@@ -214,12 +214,12 @@
                 <section>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div role="group" class="field">
-                            <label for="pSwap">Swap</label>
+                            <label for="pSwap">@lang('admin/server.new.swap')</label>
 
                             <input type="text" id="pSwap" name="swap"  value="{{ old('swap', 0) }}" />
                             <span class="px-2 text-muted-foreground">MiB</span>
 
-                            <p class="text-sm text-muted-foreground">Setting this to <code>0</code> will disable swap space on this server. Setting to <code>-1</code> will allow unlimited swap.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.swap_help')</p>
                         </div>
                     </div>
                 </section>
@@ -227,31 +227,31 @@
                 <section>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div role="group" class="field">
-                            <label for="pDisk">Disk Space</label>
+                            <label for="pDisk">@lang('admin/server.new.disk_space')</label>
 
                             <input type="text" id="pDisk" name="disk"  value="{{ old('disk') }}" />
                             <span class="px-2 text-muted-foreground">MiB</span>
 
-                            <p class="text-sm text-muted-foreground">This server will not be allowed to boot if it is using more than this amount of space. If a server goes over this limit while running it will be safely stopped and locked until enough space is available. Set to <code>0</code> to allow unlimited disk usage.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.disk_space_help')</p>
                         </div>
 
                         <div role="group" class="field">
-                            <label for="pIO">Block IO Weight</label>
+                            <label for="pIO">@lang('admin/server.new.block_io_weight')</label>
 
                             <input type="text" id="pIO" name="io"  value="{{ old('io', 500) }}" />
 
-                            <p class="text-sm text-muted-foreground"><strong>Advanced</strong>: The IO performance of this server relative to other <em>running</em> containers on the system. Value should be between <code>10</code> and <code>1000</code>. Please see <a href="https://docs.docker.com/engine/reference/run/#block-io-bandwidth-blkio-constraint" target="_blank">this documentation</a> for more information about it.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.block_io_weight_help')</p>
                         </div>
                         <div role="group" class="field col-span-full" data-orientation="horizontal">
                             <input type="checkbox" id="pOomDisabled" name="oom_disabled" value="0"  {{ \Pterodactyl\Helpers\Utilities::checked('oom_disabled', 0) }} />
-                            <label for="pOomDisabled" class="font-normal">Enable OOM Killer</label>
+                            <label for="pOomDisabled" class="font-normal">@lang('admin/server.new.enable_oom_killer')</label>
                         </div>
-                        <p class="col-span-full text-sm text-muted-foreground">Terminates the server if it breaches the memory limits. Enabling OOM killer may cause server processes to exit unexpectedly.</p>
+                        <p class="col-span-full text-sm text-muted-foreground">@lang('admin/server.new.oom_killer_help')</p>
                         <div role="group" class="field col-span-full" data-orientation="horizontal">
                             <input type="checkbox" id="pExcludeFromResourceCalculation" name="exclude_from_resource_calculation" value="1"  {{ \Pterodactyl\Helpers\Utilities::checked('exclude_from_resource_calculation', 0) }} />
-                            <label for="pExcludeFromResourceCalculation" class="font-normal">Exclude from Resource Calculation</label>
+                            <label for="pExcludeFromResourceCalculation" class="font-normal">@lang('admin/server.new.exclude_resource_calc')</label>
                         </div>
-                        <p class="col-span-full text-sm text-muted-foreground">When enabled, this server will not be included in resource calculations when provisioning new servers onto this node. Useful for testing or development servers.</p>
+                        <p class="col-span-full text-sm text-muted-foreground">@lang('admin/server.new.exclude_resource_calc_help')</p>
                     </div>
                 </section>
             </div>
@@ -262,13 +262,13 @@
         <div>
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">Nest Configuration</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/server.new.nest_config')</h3>
                 </header>
 
                 <section>
                     <div class="grid gap-6">
                         <div role="group" class="field">
-                            <label for="pNestId">Nest</label>
+                            <label for="pNestId">@lang('admin/server.new.nest')</label>
 
                             <select id="pNestId" name="nest_id" class="select">
                                 @foreach($nests as $nest)
@@ -280,21 +280,21 @@
                                 @endforeach
                             </select>
 
-                            <p class="text-sm text-muted-foreground">Select the Nest that this server will be grouped under.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.nest_help')</p>
                         </div>
 
                         <div role="group" class="field">
-                            <label for="pEggId">Egg</label>
+                            <label for="pEggId">@lang('admin/server.new.egg')</label>
                             <select id="pEggId" name="egg_id" class="select">
-                                <option value="">Select a nest first</option>
+                                <option value="">@lang('admin/server.new.select_nest_first')</option>
                             </select>
-                            <p class="text-sm text-muted-foreground">Select the Egg that will define how this server should operate.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.egg_help')</p>
                         </div>
                         <div role="group" class="field" data-orientation="horizontal">
                             <input type="checkbox" id="pSkipScripting" name="skip_scripts" value="1"  {{ \Pterodactyl\Helpers\Utilities::checked('skip_scripts', 0) }} />
-                            <label for="pSkipScripting" class="font-normal">Skip Egg Install Script</label>
+                            <label for="pSkipScripting" class="font-normal">@lang('admin/server.new.skip_egg_install_script')</label>
                         </div>
-                        <p class="text-sm text-muted-foreground">If the selected Egg has an install script attached to it, the script will run during the install. If you would like to skip this step, check this box.</p>
+                        <p class="text-sm text-muted-foreground">@lang('admin/server.new.skip_egg_install_script_help')</p>
                     </div>
                 </section>
             </div>
@@ -303,18 +303,18 @@
         <div>
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">Docker Configuration</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/server.new.docker_config')</h3>
                 </header>
 
                 <section>
                     <div class="grid gap-6">
                         <div role="group" class="field">
-                            <label for="pDefaultContainer">Docker Image</label>
+                            <label for="pDefaultContainer">@lang('admin/server.new.docker_image')</label>
                             <select id="pDefaultContainer" name="image" class="select">
-                                <option value="">Select an egg first</option>
+                                <option value="">@lang('admin/server.new.select_egg_first')</option>
                             </select>
-                            <input id="pDefaultContainerCustom" name="custom_image" value="{{ old('custom_image') }}" class="input mt-4" placeholder="Or enter a custom image..."/>
-                            <p class="text-sm text-muted-foreground">This is the default Docker image that will be used to run this server. Select an image from the dropdown above, or enter a custom image in the text field above.</p>
+                            <input id="pDefaultContainerCustom" name="custom_image" value="{{ old('custom_image') }}" class="input mt-4" placeholder="{{ trans('admin/server.new.custom_image_placeholder') }}"/>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.docker_image_help')</p>
                         </div>
                     </div>
                 </section>
@@ -326,28 +326,28 @@
         <div class="col-span-full">
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">Startup Configuration</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/server.new.startup_config')</h3>
                 </header>
 
                 <section>
                     <div class="grid gap-6">
                         <div role="group" class="field">
-                            <label for="pStartup">Startup Command</label>
+                            <label for="pStartup">@lang('admin/server.new.startup_command')</label>
                             <input type="text" id="pStartup" name="startup" value="{{ old('startup') }}"  />
-                            <p class="text-sm text-muted-foreground">The following data substitutes are available for the startup command: <code>@{{SERVER_MEMORY}}</code>, <code>@{{SERVER_IP}}</code>, and <code>@{{SERVER_PORT}}</code>. They will be replaced with the allocated memory, server IP, and server port respectively.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.new.startup_command_help')</p>
                         </div>
                     </div>
                 </section>
 
                 <header class="-mt-2">
-                    <h3 class="text-lg font-semibold">Service Variables</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/server.new.service_variables')</h3>
                 </header>
 
                 <section class="grid gap-6" id="appendVariablesTo"></section>
 
                 <footer>
                     {!! csrf_field() !!}
-                    <input type="submit" class="btn ml-auto" value="Create Server" />
+                    <input type="submit" class="btn ml-auto" value="@lang('admin/server.new.create_server_submit')" />
                 </footer>
             </div>
         </div>
@@ -357,49 +357,49 @@
 <dialog class="dialog" id="userSearchModal" aria-labelledby="userSearchModal-title" aria-describedby="userSearchModal-desc" onclick="if (event.target === this) this.close()">
     <div class="sm:max-w-md">
         <header>
-            <h2 id="userSearchModal-title">Select Server Owner</h2>
-            <p id="userSearchModal-desc">Search for a user by email address.</p>
+            <h2 id="userSearchModal-title">@lang('admin/server.new.select_server_owner_title')</h2>
+            <p id="userSearchModal-desc">@lang('admin/server.new.select_server_owner_desc')</p>
         </header>
         <section>
             <div role="group" class="field">
-                <label for="pUserSearch">Search by email</label>
-                <input type="text" id="pUserSearch" placeholder="Type at least 2 characters..." autocomplete="off">
+                <label for="pUserSearch">@lang('admin/server.new.search_by_email')</label>
+                <input type="text" id="pUserSearch" placeholder="{{ trans('admin/server.new.search_placeholder') }}" autocomplete="off">
             </div>
             <div id="pUserSearchResults" class="mt-2 space-y-1 max-h-64 overflow-y-auto"></div>
-            <div id="pUserSearchEmpty" class="hidden text-sm text-muted-foreground text-center py-4">No users found.</div>
+            <div id="pUserSearchEmpty" class="hidden text-sm text-muted-foreground text-center py-4">@lang('admin/server.new.no_users_found')</div>
             <div id="pUserSearchLoading" class="hidden text-sm text-muted-foreground text-center py-4 flex items-center justify-center gap-2">
                 <svg aria-label="Loading" role="status" class="size-4 animate-spin" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
-                Searching...
+                @lang('admin/server.new.searching')
             </div>
         </section>
         <footer>
-            <button type="button" class="btn" data-variant="outline" onclick="this.closest('dialog').close()">Cancel</button>
+            <button type="button" class="btn" data-variant="outline" onclick="this.closest('dialog').close()">@lang('admin/server.new.cancel')</button>
         </footer>
-        <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" aria-label="Close dialog" onclick="this.closest('dialog').close()"><x-icon name="x" class="size-4" /></button>
+        <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" aria-label="@lang('admin/server.new.close_dialog')" onclick="this.closest('dialog').close()"><x-icon name="x" class="size-4" /></button>
     </div>
 </dialog>
 
 <dialog class="dialog" id="allocModal" aria-labelledby="allocModal-title" onclick="if (event.target === this) this.close()">
     <div class="sm:max-w-lg">
         <header>
-            <h2 id="allocModal-title">Select Allocations</h2>
-            <p class="text-sm text-muted-foreground">Select allocations for node <strong id="allocModalNodeName"></strong></p>
+            <h2 id="allocModal-title">@lang('admin/server.new.select_allocations_title')</h2>
+            <p class="text-sm text-muted-foreground">@lang('admin/server.new.select_allocations_desc') <strong id="allocModalNodeName"></strong></p>
         </header>
         <section>
             <div id="pAllocationsList" class="divide-y"></div>
-            <div id="pAllocEmpty" class="hidden text-sm text-muted-foreground text-center py-8">No available allocations for this node.</div>
-            <div id="pAllocLoader" class="hidden text-sm text-muted-foreground text-center py-8">Loading...</div>
+            <div id="pAllocEmpty" class="hidden text-sm text-muted-foreground text-center py-8">@lang('admin/server.new.no_available_allocations')</div>
+            <div id="pAllocLoader" class="hidden text-sm text-muted-foreground text-center py-8">@lang('admin/server.new.loading_allocations')</div>
         </section>
         <footer class="flex items-center justify-between">
             <nav role="navigation" aria-label="pagination">
                 <ul class="flex flex-row items-center gap-1" id="pAllocPagination"></ul>
             </nav>
             <div class="flex items-center gap-2">
-                <span id="pAllocSelectedCount" class="text-xs text-muted-foreground">0 selected</span>
-                <button type="button" class="btn" onclick="confirmAllocations()">Confirm</button>
+                <span id="pAllocSelectedCount" class="text-xs text-muted-foreground">@lang('admin/server.new.x_selected')</span>
+                <button type="button" class="btn" onclick="confirmAllocations()">@lang('admin/server.new.confirm')</button>
             </div>
         </footer>
-        <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" aria-label="Close" onclick="this.closest('dialog').close()"><x-icon name="x" class="size-4" /></button>
+        <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" aria-label="@lang('admin/server.new.close')" onclick="this.closest('dialog').close()"><x-icon name="x" class="size-4" /></button>
     </div>
 </dialog>
 @endsection
@@ -555,7 +555,7 @@
                     });
                 }).fail(function() {
                     $('#pUserSearchLoading').addClass('hidden');
-                    $('#pUserSearchResults').html('<div class="text-sm text-destructive text-center py-2">Failed to search users.</div>');
+                    $('#pUserSearchResults').html('<div class="text-sm text-destructive text-center py-2">{{ trans('admin/server.new.search_failed') }}</div>');
                 });
             }, 300);
         });

@@ -1,8 +1,7 @@
-// FIXME: replace with radix tooltip
-// import Tooltip from '@/components/elements/tooltip/Tooltip';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { QRCodeSVG } from 'qrcode.react';
 import { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import { Button } from '@/components/ui/button';
@@ -25,6 +24,7 @@ interface Props {
 }
 
 const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
+    const { t } = useTranslation();
     const [submitting, setSubmitting] = useState(false);
     const [value, setValue] = useState('');
     const [password, setPassword] = useState('');
@@ -33,6 +33,14 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
     const updateUserData = useStoreActions((actions: Actions<ApplicationStore>) => actions.user.updateUserData);
 
     const { close, setProps } = useContext(DialogWrapperContext);
+
+    useEffect(() => {
+        setProps((state) => ({
+            ...state,
+            title: t('account:setup_totp_title'),
+            description: t('account:setup_totp_description'),
+        }));
+    }, []);
 
     useEffect(() => {
         getTwoFactorTokenData()
@@ -75,12 +83,11 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
             </div>
             <CopyOnClick text={token?.secret}>
                 <p className={'font-mono text-sm text-zinc-100 text-center mt-2'}>
-                    {token?.secret.match(/.{1,4}/g)!.join(' ') || 'Loading...'}
+                    {token?.secret.match(/.{1,4}/g)!.join(' ') || t('common:loading')}
                 </p>
             </CopyOnClick>
             <p id={'totp-code-description'} className={'mt-6'}>
-                Scan the QR code above using an authenticator app, or enter the secret code above. Then, enter the
-                6-digit code it generates below.
+                {t('account:setup_totp_instructions')}
             </p>
             <Input.Text
                 aria-labelledby={'totp-code-description'}
@@ -95,7 +102,7 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                 pattern={'\\d{6}'}
             />
             <label htmlFor={'totp-password'} className={'block mt-3'}>
-                Account Password
+                {t('account:account_password')}
             </label>
             <Input.Text
                 variant={Input.Text.Variants.Loose}
@@ -106,25 +113,15 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
             />
             <Dialog.Footer>
                 <Button variant='secondary' onClick={close}>
-                    Cancel
+                    {t('common:cancel')}
                 </Button>
-                {/* <Tooltip
-                    disabled={password.length > 0 && value.length === 6}
-                    content={
-                        !token
-                            ? 'Waiting for QR code to load...'
-                            : 'You must enter the 6-digit code and your password to continue.'
-                    }
-                    delay={100}
-                > */}
                 <Button
                     disabled={!token || value.length !== 6 || !password.length}
                     type={'submit'}
                     form={'enable-totp-form'}
                 >
-                    Enable
+                    {t('account:setup_totp_enable')}
                 </Button>
-                {/* </Tooltip> */}
             </Dialog.Footer>
         </form>
     );

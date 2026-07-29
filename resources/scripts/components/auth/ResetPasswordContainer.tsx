@@ -1,5 +1,6 @@
 import { Formik, FormikHelpers } from 'formik';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { object, ref, string } from 'yup';
 
@@ -24,6 +25,7 @@ interface Values {
 }
 
 function ResetPasswordContainer() {
+    const { t } = useTranslation();
     const [email, setEmail] = useState('');
 
     const { clearFlashes, clearAndAddHttpError } = useFlash();
@@ -63,7 +65,7 @@ function ResetPasswordContainer() {
                 } else {
                     console.error('Captcha enabled but no response available');
                     console.log(captchaResponse);
-                    clearAndAddHttpError({ error: new Error('Please complete the captcha verification.') });
+                    clearAndAddHttpError({ error: new Error(t('auth:please_complete_captcha')) });
                     setSubmitting(false);
                     return;
                 }
@@ -98,11 +100,11 @@ function ResetPasswordContainer() {
                     }}
                     validationSchema={object().shape({
                         password: string()
-                            .required('A new password is required.')
-                            .min(8, 'Your new password should be at least 8 characters in length.'),
+                            .required(t('auth:validation_new_password_required'))
+                            .min(8, t('auth:validation_password_min_length')),
                         password_confirmation: string()
-                            .required('Your new password does not match.')
-                            .oneOf([ref('password')], 'Your new password does not match.'),
+                            .required(t('auth:validation_password_confirmation_required'))
+                            .oneOf([ref('password')], t('auth:validation_password_match')),
                     })}
                 >
                     {({ isSubmitting }) => (
@@ -117,19 +119,19 @@ function ResetPasswordContainer() {
                                 <Input className='text-center' value={email} disabled />
 
                                 <Field
-                                    label='New Password'
+                                    label={t('auth:new_password')}
                                     name='password'
                                     type='password'
-                                    description='Passwords must be at least 8 characters in length.'
+                                    description={t('auth:password_length_hint')}
                                 />
 
-                                <Field label='Confirm New Password' name='password_confirmation' type='password' />
+                                <Field label={t('auth:confirm_new_password')} name='password_confirmation' type='password' />
 
                                 <Captcha
                                     onError={(error) => {
                                         console.error('Captcha error:', error);
                                         clearAndAddHttpError({
-                                            error: new Error('Captcha verification failed. Please try again.'),
+                                            error: new Error(t('auth:captcha_verification_failed')),
                                         });
                                     }}
                                 />
@@ -141,7 +143,7 @@ function ResetPasswordContainer() {
                                     disabled={isSubmitting}
                                     isLoading={isSubmitting}
                                 >
-                                    Reset Password
+                                    {t('auth:reset_password')}
                                 </Button>
 
                                 <div className='text-center'>
@@ -149,7 +151,7 @@ function ResetPasswordContainer() {
                                         to={'/auth/login'}
                                         className='text-xs text-muted-foreground hover:text-foreground transition-colors'
                                     >
-                                        Return to Login
+                                        {t('auth:return_to_login')}
                                     </Link>
                                 </div>
                             </div>

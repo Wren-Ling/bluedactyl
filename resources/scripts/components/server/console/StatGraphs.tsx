@@ -1,6 +1,7 @@
 import { ArrowDownToLine, ArrowUpToLine } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { useTranslation } from 'react-i18next';
 
 import { ChartContainer, type ChartConfig } from '@/components/ui/chart';
 import { SocketEvent } from '@/components/server/events';
@@ -31,6 +32,7 @@ type DataPoint = { time: number; value: number };
 type NetDataPoint = { time: number; tx: number; rx: number };
 
 const StatGraphs = () => {
+    const { t } = useTranslation();
     const status = ServerContext.useStoreState((state) => state.status.value);
     const limits = ServerContext.useStoreState((state) => state.server.data!.limits);
     const previousNet = useRef({ tx: -1, rx: -1 });
@@ -88,11 +90,11 @@ const StatGraphs = () => {
             >
                 <div className='group h-full rounded-xl border bg-card p-3 text-card-foreground shadow-sm transition-all duration-150 hover:border-foreground/20 sm:p-4'>
                     <div className='mb-3 flex items-center justify-between sm:mb-4'>
-                        <h3 className='text-sm font-semibold'>CPU</h3>
+                        <h3 className='text-sm font-semibold'>{t('console:cpu')}</h3>
                     </div>
                     <div className='z-10 h-40 overflow-hidden rounded-lg sm:h-48'>
                         <ChartContainer config={cpuConfig} className='h-full w-full'>
-                            <AreaChart data={cpuData} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+                            <AreaChart data={cpuData} margin={{ top: 8, right: 0, bottom: 0, left: 0 }}>
                                 <defs>
                                     <linearGradient id='fillCpu' x1='0' y1='0' x2='0' y2='1'>
                                         <stop offset='5%' stopColor='var(--color-chart-1)' stopOpacity={0.3} />
@@ -108,7 +110,7 @@ const StatGraphs = () => {
                                     axisLine={false}
                                     tick={{ fontSize: 11, fontWeight: 600 }}
                                     tickFormatter={(v) => `${v}%`}
-                                    width={35}
+                                    width={40}
                                 />
                                 <Area
                                     type='monotone'
@@ -134,11 +136,11 @@ const StatGraphs = () => {
             >
                 <div className='group h-full rounded-xl border bg-card p-3 text-card-foreground shadow-sm transition-all duration-150 hover:border-foreground/20 sm:p-4'>
                     <div className='mb-3 flex items-center justify-between sm:mb-4'>
-                        <h3 className='text-sm font-semibold'>RAM</h3>
+                        <h3 className='text-sm font-semibold'>{t('console:memory')}</h3>
                     </div>
                     <div className='z-10 h-40 overflow-hidden rounded-lg sm:h-48'>
                         <ChartContainer config={memConfig} className='h-full w-full'>
-                            <AreaChart data={memData} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+                            <AreaChart data={memData} margin={{ top: 8, right: 0, bottom: 0, left: 0 }}>
                                 <defs>
                                     <linearGradient id='fillMem' x1='0' y1='0' x2='0' y2='1'>
                                         <stop offset='5%' stopColor='var(--color-chart-2)' stopOpacity={0.3} />
@@ -154,7 +156,7 @@ const StatGraphs = () => {
                                     axisLine={false}
                                     tick={{ fontSize: 11, fontWeight: 600 }}
                                     tickFormatter={(v) => `${v} MiB`}
-                                    width={45}
+                                    width={55}
                                 />
                                 <Area
                                     type='monotone'
@@ -180,7 +182,7 @@ const StatGraphs = () => {
             >
                 <div className='group h-full rounded-xl border bg-card p-3 text-card-foreground shadow-sm transition-all duration-150 hover:border-foreground/20 sm:p-4'>
                     <div className='mb-3 flex items-center justify-between sm:mb-4'>
-                        <h3 className='text-sm font-semibold'>Network Activity</h3>
+                        <h3 className='text-sm font-semibold'>{t('console:network_activity')}</h3>
                         <div className='flex items-center text-xs text-muted-foreground sm:text-sm'>
                             <div className='flex gap-2'>
                                 <Tooltip>
@@ -190,7 +192,7 @@ const StatGraphs = () => {
                                         </div>
                                     </TooltipTrigger>
                                     <TooltipContent side='top' sideOffset={5}>
-                                        Inbound
+                                        {t('console:inbound')}
                                     </TooltipContent>
                                 </Tooltip>
 
@@ -201,7 +203,7 @@ const StatGraphs = () => {
                                         </div>
                                     </TooltipTrigger>
                                     <TooltipContent side='top' sideOffset={5}>
-                                        Outbound
+                                        {t('console:outbound')}
                                     </TooltipContent>
                                 </Tooltip>
                             </div>
@@ -209,7 +211,7 @@ const StatGraphs = () => {
                     </div>
                     <div className='z-10 h-40 overflow-hidden rounded-lg sm:h-48'>
                         <ChartContainer config={netConfig} className='h-full w-full'>
-                            <AreaChart data={netData} margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+                            <AreaChart data={netData} margin={{ top: 8, right: 0, bottom: 0, left: 0 }}>
                                 <defs>
                                     <linearGradient id='fillNetTx' x1='0' y1='0' x2='0' y2='1'>
                                         <stop offset='5%' stopColor='var(--color-chart-4)' stopOpacity={0.3} />
@@ -228,7 +230,7 @@ const StatGraphs = () => {
                                     axisLine={false}
                                     tick={{ fontSize: 11, fontWeight: 600 }}
                                     tickFormatter={(v) => bytesToString(v)}
-                                    width={50}
+                                    width={60}
                                 />
                                 <Area
                                     type='monotone'

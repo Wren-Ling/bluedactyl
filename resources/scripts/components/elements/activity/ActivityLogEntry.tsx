@@ -4,6 +4,7 @@ import { Terminal } from 'lucide-react';
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 import { formatDistanceToNowStrict } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import ActivityLogMetaButton from '@/components/elements/activity/ActivityLogMetaButton';
@@ -18,65 +19,55 @@ interface Props {
 }
 
 const ActivityLogEntry = ({ activity, children }: Props) => {
+    const { t } = useTranslation();
     const { pathTo } = useLocationHash();
     const actor = activity.relationships.actor;
 
     return (
-        <div className='flex items-center py-2 px-3 border-b border-zinc-800/30 last:border-0 group hover:bg-zinc-800/20 transition-colors duration-150'>
-            {/* Compact Avatar */}
-            <div className='flex-shrink-0 w-8 h-8 rounded-full bg-zinc-600 overflow-hidden mr-3'>
+        <div className='flex items-center py-2 px-3 border-b border-border/30 last:border-0 group hover:bg-muted/30 transition-colors duration-150'>
+            <div className='flex-shrink-0 w-8 h-8 rounded-full bg-muted overflow-hidden mr-3'>
                 {actor?.image ? (
-                    <img src={actor.image} alt={actor.username || 'System'} className='w-full h-full object-cover' />
+                    <img src={actor.image} alt={actor.username || t('common:system')} className='w-full h-full object-cover' />
                 ) : (
-                    <div className='w-full h-full flex items-center justify-center text-zinc-300 text-xs font-semibold'>
+                    <div className='w-full h-full flex items-center justify-center text-muted-foreground text-xs font-semibold'>
                         {(actor?.username || 'S').charAt(0).toUpperCase()}
                     </div>
                 )}
             </div>
-
-            {/* Main Content - Compact Layout */}
             <div className='flex-1 min-w-0'>
                 <div className='flex items-center gap-2 text-sm'>
-                    <span className='font-medium text-zinc-100 truncate'>{actor?.username || 'System'}</span>
-                    <span className='text-zinc-500'>•</span>
+                    <span className='font-medium text-foreground truncate'>{actor?.username || t('common:system')}</span>
+                    <span className='text-muted-foreground/50'>•</span>
                     <Link
                         to={`#${pathTo({ event: activity.event })}`}
-                        className='font-mono text-xs bg-zinc-800/50 text-zinc-300 px-2 py-1 rounded hover:bg-zinc-700/50 hover:text-foreground transition-colors duration-150 truncate'
+                        className='font-mono text-xs bg-muted/50 text-muted-foreground px-2 py-1 rounded hover:bg-muted/80 hover:text-foreground transition-colors duration-150 truncate'
                     >
                         {activity.event}
                     </Link>
-
-                    {/* Compact badges */}
                     <div className='flex items-center gap-1 ml-auto'>
                         {activity.isApi && (
-                            <span className='text-xs bg-blue-900/30 text-blue-300 px-1.5 py-0.5 rounded flex items-center gap-1'>
+                            <span className='text-xs bg-blue-500/10 text-blue-600 dark:text-blue-400 px-1.5 py-0.5 rounded flex items-center gap-1'>
                                 <Terminal size={22} />
-                                API
+                                {t('common:api')}
                             </span>
                         )}
                         {children}
                     </div>
                 </div>
-
-                {/* Compact metadata and timestamp */}
-                <div className='flex items-center gap-3 mt-1 text-xs text-zinc-400'>
+                <div className='flex items-center gap-3 mt-1 text-xs text-muted-foreground'>
                     {activity.ip && (
-                        <span className='font-mono bg-zinc-800/30 px-1.5 py-0.5 rounded'>{activity.ip}</span>
+                        <span className='font-mono bg-muted/30 px-1.5 py-0.5 rounded'>{activity.ip}</span>
                     )}
                     <span>{formatDistanceToNowStrict(activity.timestamp, { addSuffix: true })}</span>
-
-                    {/* Inline properties for compact view */}
                     {!activity.hasAdditionalMetadata &&
                         activity.properties &&
                         Object.keys(activity.properties).length > 0 && (
-                            <span className='text-zinc-500 truncate max-w-xs'>
+                            <span className='text-muted-foreground/70 truncate max-w-xs'>
                                 {formatObjectToIdentString(activity.properties)}
                             </span>
                         )}
                 </div>
             </div>
-
-            {/* Metadata button */}
             {activity.hasAdditionalMetadata && (
                 <div className='flex-shrink-0 ml-2'>
                     <ActivityLogMetaButton meta={activity.properties} />

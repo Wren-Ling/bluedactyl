@@ -9,6 +9,7 @@ import {
     X,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import { Button } from '@/components/ui/button';
@@ -25,6 +26,7 @@ import { useFlashKey } from '@/plugins/useFlash';
 import useLocationHash from '@/plugins/useLocationHash';
 
 const ActivityLogContainer = () => {
+    const { t } = useTranslation();
     const { hash } = useLocationHash();
     const { clearAndAddHttpError } = useFlashKey('account');
     const [filters, setFilters] = useState<ActivityLogFilters>({ page: 1, sorts: { timestamp: -1 } });
@@ -94,7 +96,7 @@ const ActivityLogContainer = () => {
         if (!filteredData?.items) return;
 
         const csvContent = [
-            ['Timestamp', 'Event', 'Actor', 'IP Address', 'Properties'].join(','),
+            [t('account:csv_timestamp'), t('account:csv_event'), t('account:csv_actor'), t('account:csv_ip_address'), t('account:csv_properties')].join(','),
             ...filteredData.items.map((item) =>
                 [
                     new Date(item.timestamp).toISOString(),
@@ -163,36 +165,36 @@ const ActivityLogContainer = () => {
         <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
             <FlashMessageRender byKey={'account'} />
 
-            <MainPageHeader title={'Activity Log'}>
+            <MainPageHeader title={t('account:activity_log')}>
                 <div className='flex flex-wrap items-center gap-2'>
                     <Button
                         variant='outline'
                         onClick={() => setShowFilters(!showFilters)}
                         className='flex items-center gap-2'
-                        title='Toggle Filters (Ctrl+F)'
+                        title={t('account:toggle_filters')}
                     >
                         <Filter className='size-4' />
-                        Filters
+                        {t('account:filters')}
                         {hasActiveFilters && <span className='size-2 rounded-full bg-blue-500' />}
                     </Button>
                     <Button
                         variant={autoRefresh ? 'default' : 'outline'}
                         onClick={() => setAutoRefresh(!autoRefresh)}
                         className='flex items-center gap-2'
-                        title='Auto Refresh (Ctrl+R)'
+                        title={t('account:auto_refresh')}
                     >
                         {autoRefresh ? <RefreshCwOff className='size-4' /> : <RefreshCw className='size-4' />}
-                        {autoRefresh ? 'Live' : 'Refresh'}
+                        {autoRefresh ? t('account:live') : t('account:refresh')}
                     </Button>
                     <Button
                         variant='outline'
                         onClick={exportLogs}
                         disabled={!filteredData?.items?.length}
                         className='flex items-center gap-2'
-                        title='Export CSV (Ctrl+E)'
+                        title={t('account:export_csv')}
                     >
                         <ArrowDownToLine className='size-4' />
-                        Export
+                        {t('account:export')}
                     </Button>
                 </div>
             </MainPageHeader>
@@ -203,17 +205,17 @@ const ActivityLogContainer = () => {
                         <div className='flex size-5 items-center justify-center rounded-lg bg-muted'>
                             <Filter className='size-3 text-muted-foreground' />
                         </div>
-                        <h3 className='text-base font-semibold text-foreground'>Filters</h3>
+                        <h3 className='text-base font-semibold text-foreground'>{t('account:filters')}</h3>
                     </div>
 
                     <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
                         <div>
-                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>Search</label>
+                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>{t('account:search')}</label>
                             <div className='relative'>
                                 <Search className='pointer-events-none absolute left-3 top-1/2 z-10 size-4 -translate-y-1/2 text-muted-foreground' />
                                 <Input
                                     type='text'
-                                    placeholder='Search events, IPs, users...'
+                                    placeholder={t('account:search_placeholder')}
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     className='pl-10'
@@ -222,12 +224,12 @@ const ActivityLogContainer = () => {
                         </div>
 
                         <div>
-                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>Event Type</label>
+                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>{t('account:event_type')}</label>
                             <Select
                                 value={selectedEventType}
                                 onChange={(e) => setSelectedEventType(e.target.value)}
                             >
-                                <option value=''>All Events</option>
+                                <option value=''>{t('account:all_events')}</option>
                                 {eventTypes.map((type) => (
                                     <option key={type} value={type}>
                                         {type}
@@ -237,16 +239,16 @@ const ActivityLogContainer = () => {
                         </div>
 
                         <div>
-                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>Time Range</label>
+                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>{t('account:time_range')}</label>
                             <Select
                                 value={dateRange}
                                 onChange={(e) => setDateRange(e.target.value)}
                             >
-                                <option value='all'>All Time</option>
-                                <option value='1h'>Last Hour</option>
-                                <option value='24h'>Last 24 Hours</option>
-                                <option value='7d'>Last 7 Days</option>
-                                <option value='30d'>Last 30 Days</option>
+                                <option value='all'>{t('account:all_time')}</option>
+                                <option value='1h'>{t('account:last_hour')}</option>
+                                <option value='24h'>{t('account:last_24_hours')}</option>
+                                <option value='7d'>{t('account:last_7_days')}</option>
+                                <option value='30d'>{t('account:last_30_days')}</option>
                             </Select>
                         </div>
 
@@ -258,7 +260,7 @@ const ActivityLogContainer = () => {
                                     className='flex w-full items-center gap-2'
                                 >
                                     <X className='size-4' />
-                                    Clear All Filters
+                                    {t('account:clear_all_filters')}
                                 </Button>
                             )}
                         </div>
@@ -271,10 +273,10 @@ const ActivityLogContainer = () => {
                     <div className='flex size-5 items-center justify-center rounded-lg bg-muted'>
                         <Search className='size-3 text-muted-foreground' />
                     </div>
-                    <h3 className='text-base font-semibold text-foreground'>Activity Events</h3>
+                    <h3 className='text-base font-semibold text-foreground'>{t('account:activity_events')}</h3>
                     {filteredData?.items && (
                         <span className='text-sm text-muted-foreground'>
-                            ({filteredData.items.length} {filteredData.items.length === 1 ? 'event' : 'events'})
+                            ({filteredData.items.length} {filteredData.items.length === 1 ? t('account:event') : t('account:events')})
                         </span>
                     )}
                 </div>
@@ -285,20 +287,20 @@ const ActivityLogContainer = () => {
                     <div className='py-12 text-center'>
                         <RotateCcw className='mx-auto mb-4 size-5 text-muted-foreground' />
                         <h3 className='mb-2 text-lg font-semibold text-foreground'>
-                            {hasActiveFilters ? 'No Matching Activity' : 'No Activity Yet'}
+                            {hasActiveFilters ? t('account:no_matching_activity') : t('account:no_activity_yet')}
                         </h3>
                         <p className='mx-auto mb-4 max-w-lg text-sm leading-relaxed text-muted-foreground'>
                             {hasActiveFilters
-                                ? "Try adjusting your filters or search terms to find the activity you're looking for."
-                                : 'Activity logs will appear here as you use your account. Check back later or perform some actions to see them here.'}
+                                ? t('account:no_matching_activity_desc')
+                                : t('account:no_activity_yet_desc')}
                         </p>
                         {hasActiveFilters && (
                             <div className='flex justify-center gap-2'>
                                 <Button variant='outline' onClick={clearAllFilters}>
-                                    Clear All Filters
+                                    {t('account:clear_all_filters')}
                                 </Button>
                                 <Button variant='outline' onClick={() => setShowFilters(true)}>
-                                    Adjust Filters
+                                    {t('account:adjust_filters')}
                                 </Button>
                             </div>
                         )}

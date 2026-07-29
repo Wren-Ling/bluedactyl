@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { join } from 'pathe';
 
@@ -20,6 +21,8 @@ interface FormikValues {
 type OwnProps = RequiredModalProps & { files: string[]; useMoveTerminology?: boolean };
 
 const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
+    const { t } = useTranslation();
+
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const { mutate } = useFileManagerSwr();
     const { clearFlashes, clearAndAddHttpError } = useFlash();
@@ -65,14 +68,14 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
                     {...props}
                     dismissable={!isSubmitting}
                     showSpinnerOverlay={isSubmitting}
-                    title={useMoveTerminology ? 'Moving files/folders' : 'Renaming file/folder'}
+                    title={useMoveTerminology ? t('files:moving_files') : t('files:renaming_file')}
                 >
                     <Form className={`w-full`}>
                         <div className='w-full'>
-                            <Field type={'string'} id={'file_name'} name={'name'} label={'File Name'} autoFocus />
+                            <Field type={'string'} id={'file_name'} name={'name'} label={t('files:file_name')} autoFocus />
                             {useMoveTerminology && (
                                 <p className={`mt-2 text-xs! break-all`}>
-                                    <strong className={`text-sm text-foreground/80`}>New location: </strong>
+                                    <strong className={`text-sm text-foreground/80`}>{t('files:new_location')}</strong>
                                     <Code>
                                         /root/
                                         <span className={`text-blue-200`}>
@@ -83,7 +86,7 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
                             )}
                             <div className={`flex justify-end w-full my-6`}>
                                 <Button type='submit'>
-                                    {useMoveTerminology ? 'Move' : 'Rename'}
+                                    {useMoveTerminology ? t('files:move') : t('files:rename')}
                                 </Button>
                             </div>
                         </div>

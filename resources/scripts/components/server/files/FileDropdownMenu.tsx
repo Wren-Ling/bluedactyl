@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Play, Copy, FileDown, FileArchive, PencilLine, Shield, Trash2 } from 'lucide-react';
 import { join } from 'pathe';
 import { memo, useState } from 'react';
@@ -23,6 +24,8 @@ import useFlash from '@/plugins/useFlash';
 type ModalType = 'rename' | 'move' | 'chmod';
 
 const FileDropdownMenu = ({ file, onDelete }: { file: FileObject; onDelete?: () => void }) => {
+    const { t } = useTranslation();
+
     const [modal, setModal] = useState<ModalType | null>(null);
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -32,11 +35,11 @@ const FileDropdownMenu = ({ file, onDelete }: { file: FileObject; onDelete?: () 
 
     const doCopy = () => {
         clearFlashes('files');
-        toast.info('Duplicating...');
+        toast.info(t('files:duplicating'));
 
         copyFile(uuid, join(directory, file.name))
             .then(() => mutate())
-            .then(() => toast.success('File successfully duplicated.'))
+            .then(() => toast.success(t('files:successful_duplicate')))
             .catch((error) => clearAndAddHttpError({ key: 'files', error }));
     };
 
@@ -53,21 +56,21 @@ const FileDropdownMenu = ({ file, onDelete }: { file: FileObject; onDelete?: () 
 
     const doArchive = () => {
         clearFlashes('files');
-        toast.info('Archiving files...');
+        toast.info(t('files:archiving'));
 
         compressFiles(uuid, directory, [file.name])
             .then(() => mutate())
-            .then(() => toast.success('Files successfully archived.'))
+            .then(() => toast.success(t('files:successful_archive')))
             .catch((error) => clearAndAddHttpError({ key: 'files', error }));
     };
 
     const doUnarchive = () => {
         clearFlashes('files');
-        toast.info('Unarchiving files...');
+        toast.info(t('files:unarchiving'));
 
         decompressFiles(uuid, directory, file.name)
             .then(() => mutate())
-            .then(() => toast.success('Files successfully unarchived.'))
+            .then(() => toast.success(t('files:successful_unarchive')))
             .catch((error) => clearAndAddHttpError({ key: 'files', error }));
     };
 
@@ -95,50 +98,50 @@ const FileDropdownMenu = ({ file, onDelete }: { file: FileObject; onDelete?: () 
                 <Can action={'file.update'}>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setModal('rename')}>
                         <PencilLine className='h-4! w-4!' />
-                        <span>Rename</span>
+                        <span>{t('files:rename')}</span>
                     </ContextMenuItem>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setModal('move')}>
                         <Play className='h-4! w-4!' />
-                        <span>Move</span>
+                        <span>{t('files:move')}</span>
                     </ContextMenuItem>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setModal('chmod')}>
                         <Shield className='h-4! w-4!' />
-                        <span>Permissions</span>
+                        <span>{t('files:permissions')}</span>
                     </ContextMenuItem>
                 </Can>
                 {file.isFile && (
                     <Can action={'file.create'}>
                         <ContextMenuItem className='flex gap-2' onClick={doCopy}>
                             <Copy className='h-4! w-4!' />
-                            <span>Duplicate</span>
+                            <span>{t('files:duplicate')}</span>
                         </ContextMenuItem>
                     </Can>
                 )}
                 {file.isArchiveType() ? (
                     <Can action={'file.create'}>
-                        <ContextMenuItem className='flex gap-2' onSelect={doUnarchive} title={'Unarchive'}>
+                        <ContextMenuItem className='flex gap-2' onSelect={doUnarchive} title={t('files:unarchive')}>
                             <FileArchive className='h-4! w-4!' />
-                            <span>Unarchive</span>
+                            <span>{t('files:unarchive')}</span>
                         </ContextMenuItem>
                     </Can>
                 ) : (
                     <Can action={'file.archive'}>
                         <ContextMenuItem className='flex gap-2' onSelect={doArchive}>
                             <FileArchive className='h-4! w-4!' />
-                            <span>Archive</span>
+                            <span>{t('files:archive')}</span>
                         </ContextMenuItem>
                     </Can>
                 )}
                 {file.isFile && (
                     <ContextMenuItem className='flex gap-2' onSelect={doDownload}>
                         <FileDown className='h-4! w-4!' />
-                        <span>Download</span>
+                        <span>{t('files:download')}</span>
                     </ContextMenuItem>
                 )}
                 <Can action={'file.delete'}>
                     <ContextMenuItem className='flex gap-2' onClick={onDelete}>
                         <Trash2 className='h-4! w-4!' />
-                        <span>Delete</span>
+                        <span>{t('files:delete')}</span>
                     </ContextMenuItem>
                 </Can>
             </ContextMenuContent>

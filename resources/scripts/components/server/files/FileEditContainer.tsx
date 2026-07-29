@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from 'react-i18next';
 import { encodePathSegments } from '@/helpers';
 import type { LanguageDescription } from '@codemirror/language';
 import { languages } from '@codemirror/language-data';
@@ -33,6 +34,8 @@ import useFlash from '@/plugins/useFlash';
 const Editor = lazy(() => import('@/components/elements/editor/Editor'));
 
 const FileEditContainer = () => {
+    const { t } = useTranslation();
+
     const [error, setError] = useState('');
     const { action, '*': rawFilename } = useParams<{ action: 'edit' | 'new'; '*': string }>();
     const [_, setLoading] = useState(action === 'edit');
@@ -80,13 +83,13 @@ const FileEditContainer = () => {
     const save = (name?: string) => {
         return new Promise<void>((resolve, reject) => {
             setLoading(true);
-            toast.success(`Saving ${name ?? filename}...`);
+            toast.success(t('files:saving', { filename: name ?? filename }));
             clearFlashes('files:view');
             if (fetchFileContent) {
                 fetchFileContent()
                     .then((content) => saveFileContents(uuid, name ?? filename, content))
                     .then(() => {
-                        toast.success(`Saved ${name ?? filename}!`);
+                        toast.success(t('files:saved', { filename: name ?? filename }));
                         if (name) {
                             navigate(`/server/${id}/files/edit/${encodePathSegments(name)}`);
                         }
@@ -108,7 +111,7 @@ const FileEditContainer = () => {
             if (instance) {
                 // they'll stack immediately, so this'll ease that
                 setTimeout(() => {
-                    toast.success('Your server is restarting.');
+                    toast.success(t('files:server_restarting'));
                 }, 500);
                 instance.send('set state', 'restart');
             }
@@ -118,11 +121,11 @@ const FileEditContainer = () => {
     };
 
     if (error) {
-        return <div>An error occurred.</div>;
+        return <div>{t('files:error_occurred')}</div>;
     }
 
     return (
-        <PageContentBlock title={action === 'edit' ? `Editing ${filename}` : `New File`} className='p-0! h-full'>
+        <PageContentBlock title={action === 'edit' ? t('files:page_title_edit', { filename }) : t('files:page_title_new')} className='p-0! h-full'>
             <FlashMessageRender byKey={'files:view'} />
 
             <ErrorBoundary>
@@ -137,12 +140,14 @@ const FileEditContainer = () => {
             {['.pyroignore', '.pyroignore'].includes(filename) ? (
                 <div className={`mb-4 p-4 border-l-4 bg-card rounded-sm border-cyan-400`}>
                     <p className={`text-foreground/80 text-sm`}>
-                        You&apos;re editing a{' '}
-                        <code className={`font-mono bg-muted/50 rounded-sm py-px px-1`}>.pyroignore</code> file. Any files
-                        or directories listed in here will be excluded from backups. Wildcards are supported by using an
-                        asterisk (<code className={`font-mono bg-muted/50 rounded-sm py-px px-1`}>*</code>). You can negate
-                        a prior rule by prepending an exclamation point (
-                        <code className={`font-mono bg-muted/50 rounded-sm py-px px-1`}>!</code>).
+                        <Trans i18nKey='files:pyroignore_help'>
+                            You&apos;re editing a{' '}
+                            <code className={`font-mono bg-muted/50 rounded-sm py-px px-1`}>.pyroignore</code> file. Any files
+                            or directories listed in here will be excluded from backups. Wildcards are supported by using an
+                            asterisk (<code className={`font-mono bg-muted/50 rounded-sm py-px px-1`}>*</code>). You can negate
+                            a prior rule by prepending an exclamation point (
+                            <code className={`font-mono bg-muted/50 rounded-sm py-px px-1`}>!</code>).
+                        </Trans>
                     </p>
                 </div>
             ) : null}
@@ -176,9 +181,8 @@ const FileEditContainer = () => {
                     }}
                     className='w-full h-full'
                 />
-            </div>
 
-            <div className='flex flex-row items-center gap-4 absolute top-2.5 right-2'>
+            <div className='absolute top-2.5 right-2 flex flex-row items-center gap-4'>
                 <DropdownMenu>
                     <DropdownMenuTrigger className='flex items-center gap-2 font-bold text-sm px-3 py-1 rounded-md h-fit bg-muted/30'>
                         <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
@@ -204,7 +208,7 @@ const FileEditContainer = () => {
                                 strokeLinejoin='round'
                             />
                         </svg>
-                        <span className='sm:block hidden'>{language?.name ?? 'Language'}</span>
+                        <span className='sm:block hidden'>{language?.name ?? t('files:language')}</span>
                         <svg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 13 13' fill='none'>
                             <path
                                 fillRule='evenodd'
@@ -239,9 +243,9 @@ const FileEditContainer = () => {
                                 className='rounded-l-full rounded-r-none pl-8 pr-6'
                                 onClick={() => save()}
                             >
-                                Save{' '}
+                                {t('files:save')}{' '}
                                 <span className='ml-2 font-mono text-xs font-bold uppercase lg:inline-block hidden'>
-                                    CTRL + S
+                                    {t('files:ctrl_s')}
                                 </span>
                             </Button>
                             <DropdownMenu>
@@ -271,7 +275,7 @@ const FileEditContainer = () => {
                                     sideOffset={8}
                                 >
                                     <DropdownMenuItem onSelect={() => saveAndRestart()}>
-                                        Save & Restart
+                                        {t('files:save_and_restart')}
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -280,10 +284,11 @@ const FileEditContainer = () => {
                 ) : (
                     <Can action={'file.create'}>
                         <Button variant='secondary' size='lg' onClick={() => setModalVisible(true)}>
-                            Create File
+                            {t('files:create_file')}
                         </Button>
                     </Can>
                 )}
+            </div>
             </div>
         </PageContentBlock>
     );

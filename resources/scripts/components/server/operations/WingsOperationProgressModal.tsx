@@ -142,8 +142,8 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                 {/* Operation ID */}
                 {operationId && (
                     <div className='flex justify-center'>
-                        <div className='px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg'>
-                            <p className='text-xs text-zinc-400 font-mono'>ID: {formatOperationId(operationId)}</p>
+                        <div className='px-3 py-1.5 bg-muted/30 border border-border rounded-lg'>
+                            <p className='text-xs text-muted-foreground font-mono'>ID: {formatOperationId(operationId)}</p>
                         </div>
                     </div>
                 )}
@@ -169,27 +169,27 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                         <div className='flex items-center justify-center space-x-3'>
                             {renderStatusIcon(operation.status)}
                             <span
-                                className={`font-semibold capitalize text-lg ${statusStyling?.color || 'text-zinc-300'}`}
+                                className={`font-semibold capitalize text-lg ${statusStyling?.color || 'text-foreground/80'}`}
                             >
                                 {operation.status}
                             </span>
                         </div>
 
                         {/* Message Box */}
-                        <div className='p-4 bg-white/5 border border-white/10 rounded-lg'>
-                            <p className='text-sm text-zinc-300 text-center'>{operation.message || 'Processing...'}</p>
+                        <div className='p-4 bg-muted/30 border border-border rounded-lg'>
+                            <p className='text-sm text-foreground/80 text-center'>{operation.message || 'Processing...'}</p>
                         </div>
 
                         {/* Progress Bar for Active Operations */}
                         {isActiveStatus(operation.status) && (
                             <div className='space-y-3'>
-                                <div className='w-full bg-white/5 rounded-full h-2 border border-white/10'>
+                                <div className='w-full bg-muted/30 rounded-full h-2 border border-border'>
                                     <div
                                         className='bg-foreground h-2 rounded-full animate-pulse transition-all duration-500 ease-out'
                                         style={{ width: `${UI_CONFIG.ESTIMATED_PROGRESS_WIDTH}%` }}
                                     />
                                 </div>
-                                <p className='text-xs text-zinc-500 text-center'>
+                                <p className='text-xs text-foreground0 text-center'>
                                     This window will close automatically when complete
                                 </p>
                             </div>
@@ -234,7 +234,7 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                     /* Loading State */
                     <div className='flex items-center justify-center space-x-3 py-4'>
                         <Spinner size={'small'} />
-                        <span className='text-zinc-400 font-medium'>Initializing...</span>
+                        <span className='text-muted-foreground font-medium'>Initializing...</span>
                     </div>
                 )}
             </div>

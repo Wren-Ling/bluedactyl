@@ -31,7 +31,7 @@ import {
 import type { CSSProperties } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
-import { ayuMirageHighlightStyle, ayuMirageTheme } from './theme';
+import { ayuMirageHighlightStyle, darkTheme, lightTheme } from './theme';
 
 function findLanguageByFilename(filename: string): LanguageDescription | undefined {
     const language = LanguageDescription.matchFilename(languages, filename);
@@ -42,9 +42,18 @@ function findLanguageByFilename(filename: string): LanguageDescription | undefin
     return undefined;
 }
 
+const themeConfig = new Compartment();
+
+function isDark(): boolean {
+    return document.documentElement.classList.contains('dark');
+}
+
+function getTheme(): Extension {
+    return isDark() ? darkTheme : lightTheme;
+}
+
 const defaultExtensions: Extension = [
-    // Ayu Mirage
-    ayuMirageTheme,
+    themeConfig.of(getTheme()),
     syntaxHighlighting(ayuMirageHighlightStyle),
 
     lineNumbers(),
@@ -225,6 +234,19 @@ export default function Editor(props: EditorProps) {
 
         props.fetchContent(async () => view.state.doc.toJSON().join('\n'));
     }, [view, props.fetchContent, props.onContentSaved]);
+
+    useEffect(() => {
+        if (!view) return;
+
+        const observer = new MutationObserver(() => {
+            view.dispatch({
+                effects: themeConfig.reconfigure(getTheme()),
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+        return () => observer.disconnect();
+    }, [view]);
 
     return <div ref={ref} className={props.className} style={props.style} />;
 }

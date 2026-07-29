@@ -1,20 +1,20 @@
 @extends('layouts.admin')
 
 @section('title')
-    Server — {{ $server->name }}: Databases
+    @lang('admin/server.overview.title') — {{ $server->name }}: @lang('admin/server.database.title')
 @endsection
 
 @section('content-header')
     <h1 class="text-xl font-bold">{{ $server->name }}</h1>
-    <p class="text-sm text-muted-foreground">Manage server databases.</p>
+    <p class="text-sm text-muted-foreground">@lang('admin/server.database.description')</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/server.database.breadcrumb_admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <a href="{{ route('admin.servers') }}">Servers</a>
+        <a href="{{ route('admin.servers') }}">@lang('admin/server.database.breadcrumb_servers')</a>
         <x-icon name="chevron-right" class="size-3" />
         <a href="{{ route('admin.servers.view', $server->id) }}">{{ $server->name }}</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>Databases</span>
+        <span>@lang('admin/server.database.breadcrumb_databases')</span>
     </nav>
 @endsection
 
@@ -23,21 +23,21 @@
 <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
     <div class="md:col-span-7">
         <div class="alert" data-variant="info" role="alert">
-            Database passwords can be viewed when <a href="/server/{{ $server->uuidShort }}/databases">visiting this server</a> on the front-end.
+            @lang('admin/server.database.info_password_view', ['uuid' => $server->uuidShort])
         </div>
         <div class="card">
             <header>
-                <h3 class="text-lg font-semibold">Active Databases</h3>
+                <h3 class="text-lg font-semibold">@lang('admin/server.database.active_databases')</h3>
             </header>
             <section class="table-container no-padding">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Database</th>
-                            <th>Username</th>
-                            <th>Connections From</th>
-                            <th>Host</th>
-                            <th>Max Connections</th>
+                            <th>@lang('admin/server.database.database')</th>
+                            <th>@lang('admin/server.database.username')</th>
+                            <th>@lang('admin/server.database.connections_from')</th>
+                            <th>@lang('admin/server.database.host')</th>
+                            <th>@lang('admin/server.database.max_connections')</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -51,7 +51,7 @@
                                 @if($database->max_connections != null)
                                     <td>{{ $database->max_connections }}</td>
                                 @else
-                                    <td>Unlimited</td>
+                                    <td>@lang('admin/server.database.unlimited')</td>
                                 @endif
                                 <td class="text-center">
                                     <button data-action="reset-password" data-id="{{ $database->id }}" class="btn" data-size="sm"><x-icon name="refresh-cw" class="size-4" /></button>
@@ -67,42 +67,42 @@
     <div class="md:col-span-5">
         <div class="card" data-variant="success">
             <header>
-                <h3 class="text-lg font-semibold">Create New Database</h3>
+                <h3 class="text-lg font-semibold">@lang('admin/server.database.create_new_database')</h3>
             </header>
             <section>
                 <form action="{{ route('admin.servers.view.database', $server->id) }}" method="POST">
                     <div class="grid gap-6">
                         <div role="group" class="field">
-                            <label for="pDatabaseHostId" >Database Host</label>
+                            <label for="pDatabaseHostId" >@lang('admin/server.database.database_host')</label>
                             <select id="pDatabaseHostId" name="database_host_id" class="select">
                                 @foreach($hosts as $host)
                                     <option value="{{ $host->id }}">{{ $host->name }}</option>
                                 @endforeach
                             </select>
-                            <p class="text-sm text-muted-foreground">Select the host database server that this database should be created on.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.database.database_host_help')</p>
                         </div>
                         <div role="group" class="field">
-                            <label for="pDatabaseName" >Database</label>
+                            <label for="pDatabaseName" >@lang('admin/server.database.database_name')</label>
                             <span class="inline-flex items-center px-3 py-2 bg-muted border border-input rounded-l text-sm text-muted-foreground">s{{ $server->id }}_</span>
-                            <input id="pDatabaseName" type="text" name="database"  placeholder="database" />
+                            <input id="pDatabaseName" type="text" name="database"  placeholder="{{ trans('admin/server.database.database_placeholder') }}" />
                         </div>
                         <div role="group" class="field">
-                            <label for="pRemote" >Connections</label>
+                            <label for="pRemote" >@lang('admin/server.database.connections')</label>
                             <input id="pRemote" type="text" name="remote"  value="%" />
-                            <p class="text-sm text-muted-foreground">This should reflect the IP address that connections are allowed from. Uses standard MySQL notation. If unsure leave as <code>%</code>.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.database.connections_help')</p>
                         </div>
                         <div role="group" class="field">
-                            <label for="pmax_connections" >Concurrent Connections</label>
+                            <label for="pmax_connections" >@lang('admin/server.database.concurrent_connections')</label>
                             <input id="pmax_connections" type="text" name="max_connections" />
-                            <p class="text-sm text-muted-foreground">This should reflect the max number of concurrent connections from this user to the database. Leave empty for unlimited.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.database.concurrent_connections_help')</p>
                         </div>
                     </div>
                 </form>
             </section>
             <footer>
                 {!! csrf_field() !!}
-                <p class="text-sm text-muted-foreground">A username and password for this database will be randomly generated after form submission.</p>
-                <input type="submit" class="btn ml-auto" data-size="sm" value="Create Database" />
+                <p class="text-sm text-muted-foreground">@lang('admin/server.database.auto_generate_info')</p>
+                <input type="submit" class="btn ml-auto" data-size="sm" value="@lang('admin/server.database.create_database')" />
             </footer>
         </div>
     </div>
@@ -115,7 +115,7 @@
     $('[data-action="remove"]').click(function (event) {
         event.preventDefault();
         var self = $(this);
-        if (confirm('Are you sure that you want to delete this database? There is no going back, all data will immediately be removed.')) {
+        if (confirm('{{ trans('admin/server.database.confirm_delete') }}')) {
             $.ajax({
                 method: 'DELETE',
                 url: '/admin/servers/view/{{ $server->id }}/database/' + self.data('id') + '/delete',
@@ -124,7 +124,7 @@
                 self.parent().parent().slideUp();
             }).fail(function (jqXHR) {
                 console.error(jqXHR);
-                alert((typeof jqXHR.responseJSON.error !== 'undefined') ? jqXHR.responseJSON.error : 'An error occurred while processing this request.');
+                alert((typeof jqXHR.responseJSON.error !== 'undefined') ? jqXHR.responseJSON.error : '{{ trans('admin/server.database.error_request') }}');
             });
         }
     });
@@ -138,14 +138,14 @@
             headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') },
             data: { database: $(this).data('id') },
         }).done(function (data) {
-            alert('The password for this database has been reset.');
+            alert('{{ trans('admin/server.database.password_reset') }}');
         }).fail(function(jqXHR, textStatus, errorThrown) {
             console.error(jqXHR);
-            var error = 'An error occurred while trying to process this request.';
+            var error = '{{ trans('admin/server.database.error_generic') }}';
             if (typeof jqXHR.responseJSON !== 'undefined' && typeof jqXHR.responseJSON.error !== 'undefined') {
                 error = jqXHR.responseJSON.error;
             }
-            alert('Whoops! ' + error);
+            alert('{{ trans('admin/server.database.whoops') }} ' + error);
         }).always(function () {
             block.removeClass('disabled').find('svg').removeClass('animate-spin');
         });

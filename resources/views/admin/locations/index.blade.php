@@ -1,16 +1,16 @@
 @extends('layouts.admin')
 
 @section('title')
-    Locations
+    @lang('admin/locations.title')
 @endsection
 
 @section('content-header')
-    <h1 class="text-xl font-bold">Locations</h1>
-    <p class="text-sm text-muted-foreground">All locations that nodes can be assigned to for easier categorization.</p>
+    <h1 class="text-xl font-bold">@lang('admin/locations.header')</h1>
+    <p class="text-sm text-muted-foreground">@lang('admin/locations.header_subtitle')</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/locations.breadcrumb_admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>Locations</span>
+        <span>@lang('admin/locations.breadcrumb_locations')</span>
     </nav>
 @endsection
 
@@ -19,9 +19,9 @@
     <div class="col-span-full">
         <div class="card">
             <header>
-                <h3 class="text-lg font-semibold">Location List</h3>
+                <h3 class="text-lg font-semibold">@lang('admin/locations.location_list')</h3>
                 <div class="card-action">
-                    <button class="btn" data-size="sm" onclick="document.getElementById('newLocationModal').showModal()">Create New</button>
+                    <button class="btn" data-size="sm" onclick="document.getElementById('newLocationModal').showModal()">@lang('admin/locations.create_new')</button>
                 </div>
             </header>
             <section>
@@ -29,13 +29,13 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Short Code</th>
-                                <th>Description</th>
-                                <th class="text-center">Memory Alloc%</th>
-                                <th class="text-center">Disk Alloc%</th>
-                                <th class="text-center">Nodes</th>
-                                <th class="text-center">Servers</th>
+                                <th>@lang('admin/locations.id')</th>
+                                <th>@lang('admin/locations.short_code')</th>
+                                <th>@lang('admin/locations.description')</th>
+                                <th class="text-center">@lang('admin/locations.memory_alloc')</th>
+                                <th class="text-center">@lang('admin/locations.disk_alloc')</th>
+                                <th class="text-center">@lang('admin/locations.nodes')</th>
+                                <th class="text-center">@lang('admin/locations.servers')</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -48,10 +48,10 @@
                                     <td><code>{{ $location->id }}</code></td>
                                     <td><a href="{{ route('admin.locations.view', $location->id) }}">{{ $location->short }}</a></td>
                                     <td>{{ $location->long }}</td>
-                                    <td class="text-center" style="color: {{ $memoryColor }}" title="Allocated: {{ humanizeSize($location->allocated_memory * 1024 * 1024) }} / Total: {{ humanizeSize($location->total_memory * 1024 * 1024) }}">
+                                    <td class="text-center" style="color: {{ $memoryColor }}" title="@lang('admin/locations.allocated'): {{ humanizeSize($location->allocated_memory * 1024 * 1024) }} / @lang('admin/locations.total'): {{ humanizeSize($location->total_memory * 1024 * 1024) }}">
                                         {{ round($location->memory_percent) }}%
                                     </td>
-                                    <td class="text-center" style="color: {{ $diskColor }}" title="Allocated: {{ humanizeSize($location->allocated_disk * 1024 * 1024) }} / Total: {{ humanizeSize($location->total_disk * 1024 * 1024) }}">
+                                    <td class="text-center" style="color: {{ $diskColor }}" title="@lang('admin/locations.allocated'): {{ humanizeSize($location->allocated_disk * 1024 * 1024) }} / @lang('admin/locations.total'): {{ humanizeSize($location->total_disk * 1024 * 1024) }}">
                                         {{ round($location->disk_percent) }}%
                                     </td>
                                     <td class="text-center">{{ $location->nodes_count }}</td>
@@ -67,29 +67,29 @@
 </div>
 <dialog class="dialog" id="newLocationModal" tabindex="-1">
     <header>
-        <button type="button" class="btn" data-variant="ghost" onclick="this.closest('dialog').close()" aria-label="Close"><x-icon name="x" class="size-4" /></button>
-        <h4 class="text-lg font-semibold">Create Location</h4>
+        <button type="button" class="btn" data-variant="ghost" onclick="this.closest('dialog').close()" aria-label="@lang('admin/locations.close')"><x-icon name="x" class="size-4" /></button>
+        <h4 class="text-lg font-semibold">@lang('admin/locations.create_location')</h4>
     </header>
     <form action="{{ route('admin.locations') }}" method="POST" id="createLocationForm">
         <section>
             <div class="grid gap-6">
                 <div role="group" class="field">
-                    <label for="pShortModal">Short Code</label>
+                    <label for="pShortModal">@lang('admin/locations.short_code')</label>
                     <input type="text" name="short" id="pShortModal" />
-                    <p class="text-sm text-muted-foreground">A short identifier used to distinguish this location from others. Must be between 1 and 60 characters, for example, <code>us.nyc.lvl3</code>.</p>
+                    <p class="text-sm text-muted-foreground">@lang('admin/locations.short_code_help')</p>
                 </div>
                 <div role="group" class="field">
-                    <label for="pLongModal">Description</label>
+                    <label for="pLongModal">@lang('admin/locations.description')</label>
                     <textarea name="long" id="pLongModal" rows="4"></textarea>
-                    <p class="text-sm text-muted-foreground">A longer description of this location. Must be less than 191 characters.</p>
+                    <p class="text-sm text-muted-foreground">@lang('admin/locations.description_help')</p>
                 </div>
             </div>
             {!! csrf_field() !!}
         </section>
     </form>
     <footer>
-        <button type="button" class="btn" data-size="sm" data-variant="outline" onclick="this.closest('dialog').close()">Cancel</button>
-        <button type="submit" class="btn" data-size="sm" form="createLocationForm">Create</button>
+        <button type="button" class="btn" data-size="sm" data-variant="outline" onclick="this.closest('dialog').close()">@lang('admin/locations.cancel')</button>
+        <button type="submit" class="btn" data-size="sm" form="createLocationForm">@lang('admin/locations.create')</button>
     </footer>
 </dialog>
 @endsection

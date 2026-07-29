@@ -1,5 +1,6 @@
 import type { FormikHelpers } from 'formik';
 import { Formik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { object, string } from 'yup';
 
@@ -23,6 +24,7 @@ interface Values {
 }
 
 const ForgotPasswordContainer = () => {
+    const { t } = useTranslation();
     const { clearFlashes, addFlash } = useFlash();
 
     const handleSubmission = ({ email }: Values, { setSubmitting, resetForm }: FormikHelpers<Values>) => {
@@ -42,11 +44,11 @@ const ForgotPasswordContainer = () => {
         http.post('/auth/password', requestData)
             .then((response) => {
                 resetForm();
-                addFlash({ type: 'success', title: 'Success', message: response.data.status || 'Email sent!' });
+                addFlash({ type: 'success', title: t('auth:success'), message: response.data.status || t('auth:email_sent') });
             })
             .catch((error) => {
                 console.error(error);
-                addFlash({ type: 'error', title: 'Error', message: httpErrorToHuman(error) });
+                addFlash({ type: 'error', title: t('auth:error'), message: httpErrorToHuman(error) });
             })
             .finally(() => {
                 setSubmitting(false);
@@ -60,7 +62,7 @@ const ForgotPasswordContainer = () => {
                     onSubmit={handleSubmission}
                     initialValues={{ email: '' }}
                     validationSchema={object().shape({
-                        email: string().email('Enter a valid email address.').required('Email is required.'),
+                        email: string().email(t('auth:validation_email_format')).required(t('auth:validation_email_required')),
                     })}
                 >
                     {({ isSubmitting }) => (
@@ -71,15 +73,15 @@ const ForgotPasswordContainer = () => {
                                 </div>
                             </Link>
                             <div className='space-y-4'>
-                                <Field id='email' label='Email' name='email' type='email' />
+                                <Field id='email' label={t('auth:email')} name='email' type='email' />
 
                                 <Captcha
                                     onError={(error) => {
                                         console.error('Captcha error:', error);
                                         addFlash({
                                             type: 'error',
-                                            title: 'Error',
-                                            message: 'Captcha verification failed. Please try again.',
+                                            title: t('auth:error'),
+                                            message: t('auth:captcha_verification_failed'),
                                         });
                                     }}
                                 />
@@ -91,7 +93,7 @@ const ForgotPasswordContainer = () => {
                                     isLoading={isSubmitting}
                                     disabled={isSubmitting}
                                 >
-                                    Send Email
+                                    {t('auth:send_email')}
                                 </Button>
 
                                 <div className='text-center'>
@@ -99,7 +101,7 @@ const ForgotPasswordContainer = () => {
                                         to='/auth/login'
                                         className='text-xs text-muted-foreground hover:text-foreground transition-colors'
                                     >
-                                        Return to Login
+                                        {t('auth:return_to_login')}
                                     </Link>
                                 </div>
                             </div>

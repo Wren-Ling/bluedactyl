@@ -1,8 +1,10 @@
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 import { ServerContext } from '@/state/server';
 
 export const StatusPill = () => {
+    const { t } = useTranslation();
     const status = ServerContext.useStoreState((state) => state.status.value);
 
     return (
@@ -26,14 +28,14 @@ export const StatusPill = () => {
             ></div>
             <div className='text-sm font-bold'>
                 {status === 'offline'
-                    ? 'Offline'
+                    ? t('console:offline')
                     : status === 'running'
-                      ? 'Online'
+                      ? t('console:online')
                       : status === 'stopping'
-                        ? 'Stopping'
+                        ? t('console:stopping')
                         : status === 'starting'
-                          ? 'Starting'
-                          : 'Fetching'}
+                          ? t('console:starting')
+                          : t('console:fetching')}
             </div>
         </div>
     );

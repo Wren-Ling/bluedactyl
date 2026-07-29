@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 import Can from '@/components/elements/Can';
 import { Dialog } from '@/components/elements/dialog';
@@ -13,6 +14,7 @@ interface PowerButtonProps {
 }
 
 const PowerButtons = ({ className }: PowerButtonProps) => {
+    const { t } = useTranslation();
     const [open, setOpen] = useState(false);
     const status = ServerContext.useStoreState((state) => state.status.value);
     const instance = ServerContext.useStoreState((state) => state.socket.instance);
@@ -29,11 +31,11 @@ const PowerButtons = ({ className }: PowerButtonProps) => {
 
         if (instance) {
             if (action === 'start') {
-                toast.success('Your server is starting!');
+                toast.success(t('console:server_starting'));
             } else if (action === 'restart') {
-                toast.success('Your server is restarting.');
+                toast.success(t('console:server_restarting'));
             } else {
-                toast.success('Your server is being stopped.');
+                toast.success(t('console:server_stopping'));
             }
             setOpen(false);
             instance.send('set state', action === 'kill-confirmed' ? 'kill' : action);
@@ -56,11 +58,11 @@ const PowerButtons = ({ className }: PowerButtonProps) => {
                 open={open}
                 hideCloseIcon
                 onClose={() => setOpen(false)}
-                title={'Forcibly Stop Process'}
-                confirm={'Continue'}
+                title={t('console:forcibly_stop_process')}
+                confirm={t('console:continue')}
                 onConfirmed={onButtonClick.bind(this, 'kill-confirmed')}
             >
-                Forcibly stopping a server can lead to data corruption.
+                {t('console:forcibly_stop_warning')}
             </Dialog.Confirm>
             <Can action={'control.start'}>
                 <Button
@@ -69,7 +71,7 @@ const PowerButtons = ({ className }: PowerButtonProps) => {
                     disabled={status !== 'offline'}
                     onClick={onButtonClick.bind(this, 'start')}
                 >
-                    Start
+                    {t('console:power_start')}
                 </Button>
             </Can>
             <Can action={'control.restart'}>
@@ -79,7 +81,7 @@ const PowerButtons = ({ className }: PowerButtonProps) => {
                     disabled={!status}
                     onClick={onButtonClick.bind(this, 'restart')}
                 >
-                    Restart
+                    {t('console:power_restart')}
                 </Button>
             </Can>
             <Can action={'control.stop'}>
@@ -89,7 +91,7 @@ const PowerButtons = ({ className }: PowerButtonProps) => {
                     disabled={status === 'offline'}
                     onClick={onButtonClick.bind(this, killable ? 'kill' : 'stop')}
                 >
-                    {killable ? 'Kill' : 'Stop'}
+                    {killable ? t('console:power_kill') : t('console:power_stop')}
                 </Button>
             </Can>
         </div>

@@ -1,16 +1,16 @@
 @extends('layouts.admin')
 
 @section('title')
-    Application API
+    @lang('admin/api.title')
 @endsection
 
 @section('content-header')
-    <h1 class="text-xl font-bold">Application API</h1>
-    <p class="text-sm text-muted-foreground">Control access credentials for managing this Panel via the API.</p>
+    <h1 class="text-xl font-bold">@lang('admin/api.header')</h1>
+    <p class="text-sm text-muted-foreground">@lang('admin/api.header_subtitle')</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/api.breadcrumb_admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>Application API</span>
+        <span>@lang('admin/api.breadcrumb_api')</span>
     </nav>
 @endsection
 
@@ -19,19 +19,19 @@
         <div class="col-span-full">
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">Credentials List</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/api.credentials_list')</h3>
                     <div class="card-action">
-                        <a href="{{ route('admin.api.new') }}" class="btn" data-size="sm">Create New</a>
+                        <a href="{{ route('admin.api.new') }}" class="btn" data-size="sm">@lang('admin/api.create_new')</a>
                     </div>
                 </header>
                 <section>
                     <div class="table-container">
                         <table class="table">
                             <tr>
-                                <th>Key</th>
-                                <th>Memo</th>
-                                <th>Last Used</th>
-                                <th>Created</th>
+                                <th>@lang('admin/api.key')</th>
+                                <th>@lang('admin/api.memo')</th>
+                                <th>@lang('admin/api.last_used')</th>
+                                <th>@lang('admin/api.created')</th>
                                 <th></th>
                             </tr>
                             @foreach($keys as $key)
@@ -42,11 +42,11 @@
                                                 <span class="key-masked">{{ $key->identifier }}••••••••••••</span>
                                                 <span class="key-full break-all hidden"></span>
                                             </code>
-                                            <button type="button" class="btn key-toggle" data-size="icon-sm" data-variant="ghost" title="Show">
+                                            <button type="button" class="btn key-toggle" data-size="icon-sm" data-variant="ghost" title="@lang('admin/api.show')">
                                                 <span class="icon-eye"><x-icon name="eye" class="size-3" /></span>
                                                 <span class="icon-eye-off hidden"><x-icon name="eye-off" class="size-3" /></span>
                                             </button>
-                                            <button type="button" class="btn key-copy" data-size="icon-sm" data-variant="ghost" title="Copy to clipboard">
+                                            <button type="button" class="btn key-copy" data-size="icon-sm" data-variant="ghost" title="@lang('admin/api.copy_to_clipboard')">
                                                 <x-icon name="copy" class="size-3" />
                                             </button>
                                         </div>
@@ -90,28 +90,28 @@
                     full.text(code.data('full')).removeClass('hidden');
                     masked.addClass('hidden');
                     $(this).find('.icon-eye, .icon-eye-off').toggleClass('hidden');
-                    $(this).attr('title', 'Hide');
+                    $(this).attr('title', '{{ trans('admin/api.hide') }}');
                 } else {
                     full.addClass('hidden');
                     masked.removeClass('hidden');
                     $(this).find('.icon-eye, .icon-eye-off').toggleClass('hidden');
-                    $(this).attr('title', 'Show');
+                    $(this).attr('title', '{{ trans('admin/api.show') }}');
                 }
             });
 
             $('.key-copy').on('click', function() {
                 var full = $(this).closest('td').find('.key-display').data('full');
                 navigator.clipboard.writeText(full).then(function() {
-                    alert('API key copied to clipboard.');
+                    alert('{{ trans('admin/api.api_key_copied') }}');
                 }).catch(function() {
-                    alert('Failed to copy API key.');
+                    alert('{{ trans('admin/api.api_key_copy_failed') }}');
                 });
             });
 
             $('[data-action="revoke-key"]').click(function (event) {
                 var self = $(this);
                 event.preventDefault();
-                if (confirm('Once this API key is revoked any applications currently using it will stop working. Are you sure?')) {
+                if (confirm('{{ trans('admin/api.revoke_confirm') }}')) {
                     $.ajax({
                         method: 'DELETE',
                         url: '/admin/api/revoke/' + self.data('attr'),
@@ -119,11 +119,11 @@
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         }
                     }).done(function () {
-                        alert('API Key has been revoked.');
+                        alert('{{ trans('admin/api.api_key_revoked') }}');
                         self.parent().parent().slideUp();
                     }).fail(function (jqXHR) {
                         console.error(jqXHR);
-                        alert('An error occurred while attempting to revoke this key.');
+                        alert('{{ trans('admin/api.revoke_error') }}');
                     });
                 }
             });

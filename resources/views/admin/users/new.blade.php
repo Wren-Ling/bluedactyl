@@ -1,18 +1,18 @@
 @extends('layouts.admin')
 
 @section('title')
-    Create User
+    @lang('admin/users.new.title')
 @endsection
 
 @section('content-header')
-    <h1 class="text-xl font-bold">Create User</h1>
-    <p class="text-sm text-muted-foreground">Add a new user to the system.</p>
+    <h1 class="text-xl font-bold">@lang('admin/users.new.header')</h1>
+    <p class="text-sm text-muted-foreground">@lang('admin/users.new.header_desc')</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/users.new.breadcrumb_admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <a href="{{ route('admin.users') }}">Users</a>
+        <a href="{{ route('admin.users') }}">@lang('admin/users.new.breadcrumb_users')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>Create</span>
+        <span>@lang('admin/users.new.breadcrumb_create')</span>
     </nav>
 @endsection
 
@@ -21,57 +21,57 @@
     <div>
         <div class="card">
             <header>
-                <h3 class="text-lg font-semibold">Identity</h3>
+                <h3 class="text-lg font-semibold">@lang('admin/users.new.identity_title')</h3>
             </header>
             <section>
                 <div class="grid gap-6">
                     <div role="group" class="field">
-                        <label for="email">Email</label>
+                        <label for="email">@lang('admin/users.new.label_email')</label>
                         <input type="text" autocomplete="off" name="email" value="{{ old('email') }}"  />
                     </div>
                     <div role="group" class="field">
-                        <label for="username">Username</label>
+                        <label for="username">@lang('admin/users.new.label_username')</label>
                         <input type="text" autocomplete="off" name="username" value="{{ old('username') }}"  />
                     </div>
                     <div role="group" class="field">
-                        <label for="name_first">Client First Name</label>
+                        <label for="name_first">@lang('admin/users.new.label_first_name')</label>
                         <input type="text" autocomplete="off" name="name_first" value="{{ old('name_first') }}"  />
                     </div>
                     <div role="group" class="field">
-                        <label for="name_last">Client Last Name</label>
+                        <label for="name_last">@lang('admin/users.new.label_last_name')</label>
                         <input type="text" autocomplete="off" name="name_last" value="{{ old('name_last') }}"  />
                     </div>
                     <div role="group" class="field">
-                        <label>Default Language</label>
+                        <label>@lang('admin/users.new.label_default_language')</label>
                         <select name="language" class="select">
                                 @foreach($languages as $key => $value)
                                     <option value="{{ $key }}" @if(config('app.locale') === $key) selected @endif>{{ $value }}</option>
                                 @endforeach
                             </select>
-                            <p class="text-sm text-muted-foreground">The default language to use when rendering the Panel for this user.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/users.new.language_desc')</p>
                         </div>
                     </div>
             </section>
             <footer>
                 {!! csrf_field() !!}
-                <input type="submit" value="Create User" class="btn" data-size="sm">
+                <input type="submit" value="{{ trans('admin/users.new.submit') }}" class="btn" data-size="sm">
             </footer>
         </div>
     </div>
     <div>
         <div class="card">
             <header>
-                <h3 class="text-lg font-semibold">Permissions</h3>
+                <h3 class="text-lg font-semibold">@lang('admin/users.new.permissions_title')</h3>
             </header>
             <section>
                 <div class="grid gap-6">
                     <div role="group" class="field">
-                        <label for="root_admin">Administrator</label>
+                        <label for="root_admin">@lang('admin/users.new.label_administrator')</label>
                         <select name="root_admin" class="select">
                                 <option value="0">@lang('strings.no')</option>
                                 <option value="1">@lang('strings.yes')</option>
                             </select>
-                            <p class="text-sm text-muted-foreground">Setting this to 'Yes' gives a user full administrative access.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/users.new.administrator_desc')</p>
                         </div>
                     </div>
             </section>
@@ -80,16 +80,16 @@
     <div>
         <div class="card">
             <header>
-                <h3 class="text-lg font-semibold">Password</h3>
+                <h3 class="text-lg font-semibold">@lang('admin/users.new.password_title')</h3>
             </header>
             <section>
                 <div class="grid gap-6">
                     <div class="alert" data-variant="info" role="alert">
-                        <p>Providing a user password is optional. New user emails prompt users to create a password the first time they login. If a password is provided here you will need to find a different method of providing it to the user.</p>
+                        <p>@lang('admin/users.new.password_info')</p>
                     </div>
                     <div id="gen_pass" class="alert hidden mb-2.5" data-variant="success" role="alert"></div>
                     <div role="group" class="field">
-                        <label for="pass">Password</label>
+                        <label for="pass">@lang('admin/users.new.label_password')</label>
                         <input type="password" name="password"  />
                     </div>
                 </div>

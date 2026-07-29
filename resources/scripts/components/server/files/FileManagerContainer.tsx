@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { hashToPath } from '@/helpers';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import debounce from 'debounce';
@@ -36,6 +37,8 @@ const sortFiles = (files: FileObject[]): FileObject[] => {
 };
 
 const FileManagerContainer = () => {
+    const { t } = useTranslation();
+
     const parentRef = useRef<HTMLDivElement | null>(null);
 
     const id = ServerContext.useStoreState((state) => state.server.data!.id);
@@ -92,7 +95,7 @@ const FileManagerContainer = () => {
     });
 
     if (error) {
-        return <ServerError title={'Something went wrong.'} message={httpErrorToHuman(error)} />;
+        return <ServerError title={t('files:something_went_wrong')} message={httpErrorToHuman(error)} />;
     }
 
     return (
@@ -101,7 +104,7 @@ const FileManagerContainer = () => {
             <ErrorBoundary>
                 <MainPageHeader
                     direction='column'
-                    title={'Files'}
+                    title={t('files:files_page_title')}
                     titleChildren={
                         <Can action={'file.create'}>
                             <div className='flex flex-row gap-1'>
@@ -114,8 +117,7 @@ const FileManagerContainer = () => {
                     }
                 >
                     <p className='text-sm leading-relaxed text-muted-foreground'>
-                        Manage your server files and directories. Upload, download, edit, and organize your
-                        server&apos;s file system with our integrated file manager.
+                        {t('files:files_page_description')}
                     </p>
                 </MainPageHeader>
                 <div className={'mb-4 flex flex-wrap-reverse md:flex-nowrap'}>
@@ -134,7 +136,7 @@ const FileManagerContainer = () => {
             {!files ? null : (
                 <>
                     {!files.length ? (
-                        <p className={'text-center text-sm text-muted-foreground'}>This folder is empty.</p>
+                        <p className={'text-center text-sm text-muted-foreground'}>{t('files:empty_folder')}</p>
                     ) : (
                         <>
                             <div className='relative mx-2 rounded-md border border-border p-1 sm:ml-12 sm:mr-12'>
@@ -146,7 +148,7 @@ const FileManagerContainer = () => {
                                     ref={searchInputRef}
                                     className='w-full rounded-lg bg-muted/40 px-14 py-4 text-sm font-bold outline-none'
                                     type='text'
-                                    placeholder='Search...'
+                                    placeholder={t('files:search')}
                                     onChange={(event) => debouncedSearchTerm(event.target.value)}
                                 />
                             </div>

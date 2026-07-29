@@ -3,16 +3,16 @@
 @section('contentWidth', 'max-w-6xl')
 
 @section('title')
-    Nests &rarr; Egg: {{ $egg->name }}
+    @lang('admin/nests.egg_view.page_title', ['name' => $egg->name])
 @endsection
 
 @section('content-header')
     <h1 class="text-xl font-bold">{{ $egg->name }}</h1>
     <p class="text-sm text-muted-foreground">{{ str_limit($egg->description, 50) }}</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/nests.admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <a href="{{ route('admin.nests') }}">Nests</a>
+        <a href="{{ route('admin.nests') }}">@lang('admin/nests.nests_breadcrumb')</a>
         <x-icon name="chevron-right" class="size-3" />
         <a href="{{ route('admin.nests.view', $egg->nest->id) }}">{{ $egg->nest->name }}</a>
         <x-icon name="chevron-right" class="size-3" />
@@ -25,9 +25,9 @@
     <div class="col-span-full">
         <div class="tabs" data-variant="line">
             <nav role="tablist">
-                <a href="{{ route('admin.nests.egg.view', $egg->id) }}" role="tab" @if(Route::currentRouteName() === 'admin.nests.egg.view') data-active="true" @endif>Configuration</a>
-                <a href="{{ route('admin.nests.egg.variables', $egg->id) }}" role="tab" @if(Route::currentRouteName() === 'admin.nests.egg.variables') data-active="true" @endif>Variables</a>
-                <a href="{{ route('admin.nests.egg.scripts', $egg->id) }}" role="tab" @if(Route::currentRouteName() === 'admin.nests.egg.scripts') data-active="true" @endif>Install Script</a>
+                <a href="{{ route('admin.nests.egg.view', $egg->id) }}" role="tab" @if(Route::currentRouteName() === 'admin.nests.egg.view') data-active="true" @endif>@lang('admin/nests.egg_view.tab_configuration')</a>
+                <a href="{{ route('admin.nests.egg.variables', $egg->id) }}" role="tab" @if(Route::currentRouteName() === 'admin.nests.egg.variables') data-active="true" @endif>@lang('admin/nests.egg_view.tab_variables')</a>
+                <a href="{{ route('admin.nests.egg.scripts', $egg->id) }}" role="tab" @if(Route::currentRouteName() === 'admin.nests.egg.scripts') data-active="true" @endif>@lang('admin/nests.egg_view.tab_install_script')</a>
             </nav>
         </div>
     </div>
@@ -40,16 +40,16 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="md:col-span-2">
                             <div class="field no-margin-bottom">
-                                <label for="pName" >Egg File</label>
+                                <label for="pName" >@lang('admin/nests.egg_view.egg_file_label')</label>
                                 <div>
                                     <input type="file" name="import_file" class="border-0 -ml-2.5" />
-                                    <p class="text-sm text-muted-foreground no-margin-bottom">If you would like to replace settings for this Egg by uploading a new JSON file, simply select it here and press "Update Egg". This will not change any existing startup strings or Docker images for existing servers.</p>
+                                    <p class="text-sm text-muted-foreground no-margin-bottom">{!! trans('admin/nests.egg_view.egg_file_hint') !!}</p>
                                 </div>
                             </div>
                         </div>
                         <div class="md:col-span-1">
                             {!! csrf_field() !!}
-                            <button type="submit" name="_method" value="PUT" class="btn ml-auto" data-variant="destructive" data-size="sm">Update Egg</button>
+                            <button type="submit" name="_method" value="PUT" class="btn ml-auto" data-variant="destructive" data-size="sm">@lang('admin/nests.egg_view.update_egg')</button>
                         </div>
                     </div>
                 </section>
@@ -62,67 +62,62 @@
         <div class="space-y-8">
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">Configuration</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/nests.egg_view.configuration_card_title')</h3>
                 </header>
                 <section class="space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-6">
                             <div role="group" class="field">
-                                <label for="pName" >Name <span class="field-required"></span></label>
+                                <label for="pName" >@lang('admin/nests.egg_view.name_label') <span class="field-required"></span></label>
                                 <input type="text" id="pName" name="name" value="{{ $egg->name }}"  />
-                                <p class="text-sm text-muted-foreground">A simple, human-readable name to use as an identifier for this Egg.</p>
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_view.name_hint') !!}</p>
                             </div>
                             <div role="group" class="field">
-                                <label for="pUuid" >UUID</label>
+                                <label for="pUuid" >@lang('admin/nests.egg_view.uuid_label')</label>
                                 <input type="text" id="pUuid" readonly value="{{ $egg->uuid }}"  />
-                                <p class="text-sm text-muted-foreground">This is the globally unique identifier for this Egg which the Daemon uses as an identifier.</p>
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_view.uuid_hint') !!}</p>
                             </div>
                             <div role="group" class="field">
-                                <label for="pAuthor" >Author</label>
+                                <label for="pAuthor" >@lang('admin/nests.egg_view.author_label')</label>
                                 <input type="text" id="pAuthor" readonly value="{{ $egg->author }}"  />
-                                <p class="text-sm text-muted-foreground">The author of this version of the Egg. Uploading a new Egg configuration from a different author will change this.</p>
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_view.author_hint') !!}</p>
                             </div>
                             <div role="group" class="field">
-                                <label for="pDockerImage" >Docker Images <span class="field-required"></span></label>
+                                <label for="pDockerImage" >@lang('admin/nests.egg_view.docker_images_label') <span class="field-required"></span></label>
                                 <textarea id="pDockerImages" name="docker_images"  rows="4">{{ implode(PHP_EOL, $images) }}</textarea>
                                 <p class="text-sm text-muted-foreground">
-                                    The docker images available to servers using this egg. Enter one per line. Users
-                                    will be able to select from this list of images if more than one value is provided.
-                                    Optionally, a display name may be provided by prefixing the image with the name
-                                    followed by a pipe character, and then the image URL. Example: <code>Display Name|ghcr.io/my/egg</code>
+                                    {!! trans('admin/nests.egg_view.docker_images_hint') !!}
                                 </p>
                             </div>
                             <div role="group" class="field space-y-2" data-orientation="horizontal">
                                 <div class="flex items-center gap-3">
                                     <input id="pForceOutgoingIp" name="force_outgoing_ip" type="checkbox" value="1"  @if($egg->force_outgoing_ip) checked @endif />
-                                    <label for="pForceOutgoingIp">Force Outgoing IP</label>
+                                    <label for="pForceOutgoingIp">@lang('admin/nests.egg_view.force_outgoing_ip_label')</label>
                                 </div>
                                 <p class="text-sm text-muted-foreground">
-                                    Forces all outgoing network traffic to have its Source IP NATed to the IP of the server's primary allocation IP.
-                                    Required for certain games to work properly when the Node has multiple public IP addresses.
+                                    {!! trans('admin/nests.egg_view.force_outgoing_ip_hint') !!}
                                     <br>
                                     <strong>
-                                        Enabling this option will disable internal networking for any servers using this egg,
-                                        causing them to be unable to internally access other servers on the same node.
+                                        {!! trans('admin/nests.egg_view.force_outgoing_ip_warning') !!}
                                     </strong>
                                 </p>
                             </div>
                         </div>
                         <div class="space-y-6">
                             <div role="group" class="field">
-                                <label for="pDescription" >Description</label>
+                                <label for="pDescription" >@lang('admin/nests.egg_view.description_label')</label>
                                 <textarea id="pDescription" name="description"  rows="8">{{ $egg->description }}</textarea>
-                                <p class="text-sm text-muted-foreground">A description of this Egg that will be displayed throughout the Panel as needed.</p>
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_view.description_hint') !!}</p>
                             </div>
                             <div role="group" class="field">
-                                <label for="pStartup" >Startup Command <span class="field-required"></span></label>
+                                <label for="pStartup" >@lang('admin/nests.egg_view.startup_label') <span class="field-required"></span></label>
                                 <textarea id="pStartup" name="startup"  rows="8">{{ $egg->startup }}</textarea>
-                                <p class="text-sm text-muted-foreground">The default startup command that should be used for new servers using this Egg.</p>
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_view.startup_hint') !!}</p>
                             </div>
                             <div role="group" class="field">
-                                <label for="pConfigFeatures" >Features</label>
-                                <input type="text" id="pConfigFeatures" name="features_input" placeholder="Enter features separated by comma or space" value="{{ implode(', ', $egg->features ?? []) }}" />
-                                <p class="text-sm text-muted-foreground">Additional features belonging to the egg. Useful for configuring additional panel modifications.</p>
+                                <label for="pConfigFeatures" >@lang('admin/nests.egg_view.features_label')</label>
+                                <input type="text" id="pConfigFeatures" name="features_input" placeholder="@lang('admin/nests.egg_view.features_placeholder')" value="{{ implode(', ', $egg->features ?? []) }}" />
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_view.features_hint') !!}</p>
                             </div>
                         </div>
                     </div>
@@ -132,54 +127,54 @@
         <div class="space-y-8">
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">Process Management</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/nests.egg_view.process_management_card_title')</h3>
                 </header>
                 <section class="space-y-6">
                     <div class="alert" data-variant="warning" role="alert">
-                        <p>The following configuration options should not be edited unless you understand how this system works. If wrongly modified it is possible for the daemon to break.</p>
-                        <p>All fields are required unless you select a separate option from the 'Copy Settings From' dropdown, in which case fields may be left blank to use the values from that Egg.</p>
+                        <p>{!! trans('admin/nests.egg_view.process_management_alert1') !!}</p>
+                        <p>{!! trans('admin/nests.egg_view.process_management_alert2') !!}</p>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-6">
                             <div role="group" class="field">
-                                <label for="pConfigFrom" >Copy Settings From</label>
+                                <label for="pConfigFrom" >@lang('admin/nests.egg_view.copy_from_label')</label>
                                 <select name="config_from" id="pConfigFrom" class="select">
-                                    <option value="">None</option>
+                                    <option value="">@lang('admin/nests.egg_view.copy_from_none')</option>
                                     @foreach($egg->nest->eggs as $o)
                                         <option value="{{ $o->id }}" {{ ($egg->config_from !== $o->id) ?: 'selected' }}>{{ $o->name }} &lt;{{ $o->author }}&gt;</option>
                                     @endforeach
                                 </select>
-                                <p class="text-sm text-muted-foreground">If you would like to default to settings from another Egg select it from the menu above.</p>
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_view.copy_from_hint') !!}</p>
                             </div>
                             <div role="group" class="field">
-                                <label for="pConfigStop" >Stop Command</label>
+                                <label for="pConfigStop" >@lang('admin/nests.egg_view.stop_command_label')</label>
                                 <input type="text" id="pConfigStop" name="config_stop"  value="{{ $egg->config_stop }}" />
-                                <p class="text-sm text-muted-foreground">The command that should be sent to server processes to stop them gracefully. If you need to send a <code>SIGINT</code> you should enter <code>^C</code> here.</p>
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_view.stop_command_hint') !!}</p>
                             </div>
                             <div role="group" class="field">
-                                <label for="pConfigLogs" >Log Configuration</label>
+                                <label for="pConfigLogs" >@lang('admin/nests.egg_view.log_config_label')</label>
                                 <textarea data-action="handle-tabs" id="pConfigLogs" name="config_logs"  rows="5">{{ ! is_null($egg->config_logs) ? json_encode(json_decode($egg->config_logs), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : '' }}</textarea>
-                                <p class="text-sm text-muted-foreground">This should be a JSON representation of where log files are stored, and whether or not the daemon should be creating custom logs.</p>
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_view.log_config_hint') !!}</p>
                             </div>
                         </div>
                         <div class="space-y-6">
                             <div role="group" class="field">
-                                <label for="pConfigFiles" >Configuration Files</label>
+                                <label for="pConfigFiles" >@lang('admin/nests.egg_view.config_files_label')</label>
                                 <textarea data-action="handle-tabs" id="pConfigFiles" name="config_files"  rows="5">{{ ! is_null($egg->config_files) ? json_encode(json_decode($egg->config_files), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : '' }}</textarea>
-                                <p class="text-sm text-muted-foreground">This should be a JSON representation of configuration files to modify and what parts should be changed.</p>
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_view.config_files_hint') !!}</p>
                             </div>
                             <div role="group" class="field">
-                                <label for="pConfigStartup" >Start Configuration</label>
+                                <label for="pConfigStartup" >@lang('admin/nests.egg_view.start_config_label')</label>
                                 <textarea data-action="handle-tabs" id="pConfigStartup" name="config_startup"  rows="5">{{ ! is_null($egg->config_startup) ? json_encode(json_decode($egg->config_startup), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) : '' }}</textarea>
-                                <p class="text-sm text-muted-foreground">This should be a JSON representation of what values the daemon should be looking for when booting a server to determine completion.</p>
+                                <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_view.start_config_hint') !!}</p>
                             </div>
                         </div>
                     </div>
                 </section>
                 <footer>
                     {!! csrf_field() !!}
-                    <button type="submit" name="_method" value="PATCH" class="btn ml-auto" data-size="sm">Save</button>
-                    <a href="{{ route('admin.nests.egg.export', $egg->id) }}" class="btn ml-auto mr-2.5" data-size="sm">Export</a>
+                    <button type="submit" name="_method" value="PATCH" class="btn ml-auto" data-size="sm">@lang('admin/nests.egg_view.save')</button>
+                    <a href="{{ route('admin.nests.egg.export', $egg->id) }}" class="btn ml-auto mr-2.5" data-size="sm">@lang('admin/nests.egg_view.export')</a>
                     <button id="deleteButton" type="submit" name="_method" value="DELETE" class="btn" data-variant="destructive" data-size="sm">
                         <x-icon name="trash-2" class="size-4" />
                     </button>
@@ -194,7 +189,7 @@
     @parent
     <script>
     $('#deleteButton').on('mouseenter', function (event) {
-        $(this).find('i').html(' Delete Egg');
+        $(this).find('i').html('{{ trans("admin.nests.egg_view.delete_egg") }}');
     }).on('mouseleave', function (event) {
         $(this).find('i').html('');
     });

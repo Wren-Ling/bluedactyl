@@ -1,5 +1,6 @@
 import { CircleHelp, CloudUpload, PencilLine, Power, Terminal, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
@@ -21,20 +22,21 @@ interface Props {
     task: Task;
 }
 
-const getActionDetails = (action: string): [string, any, boolean?] => {
+const getActionDetails = (action: string, t: (key: string) => string): [string, any, boolean?] => {
     switch (action) {
         case 'command':
-            return ['Send Command', Terminal, true];
+            return [t('action_send_command'), Terminal, true];
         case 'power':
-            return ['Send Power Action', Power];
+            return [t('action_send_power'), Power];
         case 'backup':
-            return ['Create Backup', CloudUpload];
+            return [t('action_create_backup'), CloudUpload];
         default:
-            return ['Unknown Action', CircleHelp];
+            return [t('action_unknown'), CircleHelp];
     }
 };
 
 const ScheduleTaskRow = ({ schedule, task }: Props) => {
+    const { t } = useTranslation('schedules');
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const { clearFlashes, addError } = useFlash();
     const [visible, setVisible] = useState(false);
@@ -59,7 +61,7 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
             });
     };
 
-    const [title, icon, copyOnClick] = getActionDetails(task.action);
+    const [title, icon, copyOnClick] = getActionDetails(task.action, t);
 
     return (
         <ItemContainer
@@ -82,24 +84,24 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
             <Dialog open={visible} onOpenChange={(o) => { if (!o) setVisible(false); }}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Confirm task deletion</DialogTitle>
+                        <DialogTitle>{t('confirm_task_deletion')}</DialogTitle>
                     </DialogHeader>
-                    Are you sure you want to delete this task? This action cannot be undone.
+                    {t('confirm_task_deletion_description')}
                     <DialogFooter>
-                        <Button variant='outline' onClick={() => setVisible(false)}>Cancel</Button>
-                        <Button variant='destructive' onClick={onConfirmDeletion}>Delete Task</Button>
+                        <Button variant='outline' onClick={() => setVisible(false)}>{t('cancel')}</Button>
+                        <Button variant='destructive' onClick={onConfirmDeletion}>{t('delete_task')}</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
             {/* <div className={`flex-none sm:flex-1 w-full sm:w-auto overflow-x-auto`}>
-                <p className={`md:ml-6 text-zinc-200 uppercase text-sm`}>{title}</p>
+                <p className={`md:ml-6 text-foreground uppercase text-sm`}>{title}</p>
                 {task.payload && (
                     <div className={`md:ml-6 mt-2`}>
                         {task.action === 'backup' && (
-                            <p className={`text-xs uppercase text-zinc-400 mb-1`}>Ignoring files & folders:</p>
+                            <p className={`text-xs uppercase text-muted-foreground mb-1`}>Ignoring files & folders:</p>
                         )}
                         <div
-                            className={`font-mono bg-zinc-800 rounded-sm py-1 px-2 text-sm w-auto inline-block whitespace-pre-wrap break-all`}
+                            className={`font-mono bg-muted rounded-sm py-1 px-2 text-sm w-auto inline-block whitespace-pre-wrap break-all`}
                         >
                             {task.payload && task.payload.length > 100
                                 ? `${task.payload.substring(0, 100)}...`
@@ -112,7 +114,7 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                 <div className='mr-0 sm:mr-6'>
                     {task.continueOnFailure && (
                         <div className={`px-2 py-1 bg-yellow-500 text-yellow-800 text-sm rounded-full`}>
-                            Continues on Failure
+                            {t('continues_on_failure')}
                         </div>
                     )}
                     {task.sequenceId > 1 && task.timeOffset > 0 && (
@@ -125,10 +127,10 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                         size='sm'
                         className='flex flex-row items-center gap-2 ml-auto sm:ml-0'
                         onClick={() => setIsEditing(true)}
-                        aria-label='Edit scheduled task'
+                        aria-label={t('edit_scheduled_task_aria')}
                     >
                         <PencilLine size={22} />
-                        Edit
+                        {t('edit')}
                     </Button>
                 </Can>
                 <Can action={'schedule.update'}>
@@ -137,10 +139,10 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                         size='sm'
                         onClick={() => setVisible(true)}
                         className='flex items-center gap-2'
-                        aria-label='Delete scheduled task'
+                        aria-label={t('delete_scheduled_task_aria')}
                     >
                         <Trash2 size={22} className='w-4 h-4' />
-                        <span className='hidden sm:inline'>Delete</span>
+                        <span className='hidden sm:inline'>{t('delete')}</span>
                     </Button>
                 </Can>
             </div>

@@ -1,16 +1,16 @@
 @extends('layouts.admin')
 
 @section('title')
-    List Users
+    @lang('admin/users.list.title')
 @endsection
 
 @section('content-header')
-    <h1 class="text-xl font-bold">Users</h1>
-    <p class="text-sm text-muted-foreground">All registered users on the system.</p>
+    <h1 class="text-xl font-bold">@lang('admin/users.list.header')</h1>
+    <p class="text-sm text-muted-foreground">@lang('admin/users.list.header_desc')</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/users.list.breadcrumb_admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>Users</span>
+        <span>@lang('admin/users.list.breadcrumb_here')</span>
     </nav>
 @endsection
 
@@ -19,15 +19,15 @@
     <div class="col-span-full">
         <div class="card">
             <header>
-                <h3 class="text-lg font-semibold">User List</h3>
+                <h3 class="text-lg font-semibold">@lang('admin/users.list.card_title')</h3>
                 <div class="card-action">
                     <div class="search01">
                         <form action="{{ route('admin.users') }}" method="GET" class="flex items-center gap-1">
                             <div role="group" class="field">
-                                <input type="text" name="filter[email]" value="{{ request()->input('filter.email') }}" placeholder="Search">
+                                <input type="text" name="filter[email]" value="{{ request()->input('filter.email') }}" placeholder="{{ trans('admin/users.list.search_placeholder') }}">
                             </div>
                             <button type="submit" class="btn" data-variant="outline" data-size="sm"><x-icon name="search" class="size-4" /></button>
-                            <a href="{{ route('admin.users.new') }}"><button type="button" class="btn rounded-r-md -ml-px" data-size="sm">Create New</button></a>
+                            <a href="{{ route('admin.users.new') }}"><button type="button" class="btn rounded-r-md -ml-px" data-size="sm">@lang('admin/users.list.create_new')</button></a>
                         </form>
                     </div>
                 </div>
@@ -37,12 +37,12 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Email</th>
-                                <th>Username</th>
-                                <th class="text-center">2FA</th>
-                                <th class="text-center"><span data-tooltip="Servers that this user is marked as the owner of." data-side="top">Servers Owned</span></th>
-                                <th class="text-center"><span data-tooltip="Servers that this user can access because they are marked as a subuser." data-side="top">Can Access</span></th>
+                                <th>@lang('admin/users.list.id')</th>
+                                <th>@lang('admin/users.list.email')</th>
+                                <th>@lang('admin/users.list.username')</th>
+                                <th class="text-center">@lang('admin/users.list.2fa')</th>
+                                <th class="text-center"><span data-tooltip="@lang('admin/users.list.servers_owned_tooltip')" data-side="top">@lang('admin/users.list.servers_owned')</span></th>
+                                <th class="text-center"><span data-tooltip="@lang('admin/users.list.can_access_tooltip')" data-side="top">@lang('admin/users.list.can_access')</span></th>
                                 <th></th>
                             </tr>
                         </thead>

@@ -8,28 +8,22 @@ const background = 'transparent';
 const selection = '#34455A';
 const cursor = '#ffffff';
 
-export const ayuMirageTheme: Extension = EditorView.theme(
+export const darkTheme: Extension = EditorView.theme(
     {
         '&': {
             color: '#CBCCC6',
             backgroundColor: background,
         },
-
         '.cm-content': {
             caretColor: cursor,
+            fontSize: '13px',
         },
-
         '&.cm-focused .cm-cursor': { borderLeftColor: cursor },
         '&.cm-focused .cm-selectionBackground, .cm-selectionBackground, ::selection': {
             backgroundColor: selection,
         },
-
         '.cm-button': { background: '#222222' },
-
         '.cm-panels': { backgroundColor: '#111111', color: '#CBCCC6' },
-        // '.cm-panels.cm-panels-top': { borderBottom: '2px solid black' },
-        // '.cm-panels.cm-panels-bottom': { borderTop: '2px solid black' },
-
         '.cm-searchMatch': {
             backgroundColor: '#72a1ff59',
             outline: '1px solid #457dff',
@@ -37,35 +31,28 @@ export const ayuMirageTheme: Extension = EditorView.theme(
         '.cm-searchMatch.cm-searchMatch-selected': {
             backgroundColor: '#6199ff2f',
         },
-
         '.cm-activeLine': { backgroundColor: highlightBackground },
         '.cm-selectionMatch': { backgroundColor: '#aafe661a' },
-
         '.cm-matchingBracket, .cm-nonmatchingBracket': {
             backgroundColor: '#bad0f847',
             outline: '1px solid #515a6b',
         },
-
         '.cm-gutters': {
             backgroundColor: 'transparent',
             color: '#FF3333',
             border: 'none',
         },
-
         '.cm-gutterElement': {
             color: 'rgba(255, 255, 255, 0.21)',
         },
-
         '.cm-activeLineGutter': {
             backgroundColor: highlightBackground,
         },
-
         '.cm-foldPlaceholder': {
             backgroundColor: 'transparent',
             border: 'none',
             color: '#ddd',
         },
-
         '.cm-tooltip': {
             border: '1px solid #181a1f',
             backgroundColor: '#232834',
@@ -78,6 +65,65 @@ export const ayuMirageTheme: Extension = EditorView.theme(
         },
     },
     { dark: true },
+);
+
+export const lightTheme: Extension = EditorView.theme(
+    {
+        '&': {
+            color: '#1a1a2e',
+            backgroundColor: background,
+        },
+        '.cm-content': {
+            caretColor: '#1a1a2e',
+            fontSize: '13px',
+        },
+        '&.cm-focused .cm-cursor': { borderLeftColor: '#1a1a2e' },
+        '&.cm-focused .cm-selectionBackground, .cm-selectionBackground, ::selection': {
+            backgroundColor: '#d4d4f0',
+        },
+        '.cm-button': { background: '#f0f0f0' },
+        '.cm-panels': { backgroundColor: '#f5f5f5', color: '#1a1a2e' },
+        '.cm-searchMatch': {
+            backgroundColor: '#72a1ff33',
+            outline: '1px solid #457dff',
+        },
+        '.cm-searchMatch.cm-searchMatch-selected': {
+            backgroundColor: '#6199ff2f',
+        },
+        '.cm-activeLine': { backgroundColor: '#f0f0ff' },
+        '.cm-selectionMatch': { backgroundColor: '#aafe661a' },
+        '.cm-matchingBracket, .cm-nonmatchingBracket': {
+            backgroundColor: '#bad0f847',
+            outline: '1px solid #aaa',
+        },
+        '.cm-gutters': {
+            backgroundColor: 'transparent',
+            color: '#999',
+            border: 'none',
+        },
+        '.cm-gutterElement': {
+            color: '#bbb',
+        },
+        '.cm-activeLineGutter': {
+            backgroundColor: '#f0f0ff',
+        },
+        '.cm-foldPlaceholder': {
+            backgroundColor: 'transparent',
+            border: 'none',
+            color: '#999',
+        },
+        '.cm-tooltip': {
+            border: '1px solid #ddd',
+            backgroundColor: '#fff',
+        },
+        '.cm-tooltip-autocomplete': {
+            '& > ul > li[aria-selected]': {
+                backgroundColor: '#f0f0ff',
+                color: '#1a1a2e',
+            },
+        },
+    },
+    { dark: false },
 );
 
 export const ayuMirageHighlightStyle = HighlightStyle.define([

@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    List Nodes
+    @lang('admin/nodes.index.title')
 @endsection
 
 @section('scripts')
@@ -9,12 +9,12 @@
 @endsection
 
 @section('content-header')
-    <h1 class="text-xl font-bold">Nodes</h1>
-    <p class="text-sm text-muted-foreground">All nodes available on the system.</p>
+    <h1 class="text-xl font-bold">@lang('admin/nodes.index.header')</h1>
+    <p class="text-sm text-muted-foreground">@lang('admin/nodes.index.header_subtitle')</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/nodes.common.admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>Nodes</span>
+        <span>@lang('admin/nodes.common.nodes')</span>
     </nav>
 @endsection
 
@@ -23,15 +23,15 @@
     <div class="col-span-full">
         <div class="card">
             <header>
-                <h3 class="text-lg font-semibold">Node List</h3>
+                <h3 class="text-lg font-semibold">@lang('admin/nodes.index.node_list')</h3>
                 <div class="card-action">
                     <div class="search01">
                         <form action="{{ route('admin.nodes') }}" method="GET" class="flex items-center gap-1">
                             <div role="group" class="field">
-                                <input type="text" name="filter[name]" value="{{ request()->input('filter.name') }}" placeholder="Search Nodes">
+                                <input type="text" name="filter[name]" value="{{ request()->input('filter.name') }}" placeholder="@lang('admin/nodes.index.search_placeholder')">
                             </div>
                             <button type="submit" class="btn" data-variant="outline" data-size="sm"><x-icon name="search" class="size-4" /></button>
-                            <a href="{{ route('admin.nodes.new') }}"><button type="button" class="btn rounded-r-md -ml-px" data-size="sm">Create New</button></a>
+                            <a href="{{ route('admin.nodes.new') }}"><button type="button" class="btn rounded-r-md -ml-px" data-size="sm">@lang('admin/nodes.index.create')</button></a>
                         </form>
                     </div>
                 </div>
@@ -42,17 +42,17 @@
                         <tbody>
                             <tr>
                                 <th></th>
-                                <th>Name</th>
-                                <th>Location</th>
-                                <th>Memory%</th>
-                                <th class="hidden lg:table-cell">Allocated Memory</th>
-                                <th class="hidden lg:table-cell">Total Memory</th>
-                                <th>Disk%</th>
-                                <th class="hidden lg:table-cell">Allocated Disk</th>
-                                <th class="hidden lg:table-cell">Total Disk</th>
-                                <th class="text-center">Servers</th>
-                                <th class="text-center hidden md:table-cell">Daemon Type</th>
-                                <th class="text-center hidden md:table-cell">Public</th>
+                                <th>@lang('admin/nodes.index.name')</th>
+                                <th>@lang('admin/nodes.index.location')</th>
+                                <th>@lang('admin/nodes.index.memory_percent')</th>
+                                <th class="hidden lg:table-cell">@lang('admin/nodes.index.allocated_memory')</th>
+                                <th class="hidden lg:table-cell">@lang('admin/nodes.index.total_memory')</th>
+                                <th>@lang('admin/nodes.index.disk_percent')</th>
+                                <th class="hidden lg:table-cell">@lang('admin/nodes.index.allocated_disk')</th>
+                                <th class="hidden lg:table-cell">@lang('admin/nodes.index.total_disk')</th>
+                                <th class="text-center">@lang('admin/nodes.index.servers')</th>
+                                <th class="text-center hidden md:table-cell">@lang('admin/nodes.index.daemon_type')</th>
+                                <th class="text-center hidden md:table-cell">@lang('admin/nodes.index.public')</th>
                             </tr>
                             @foreach ($nodes as $node)
                                 <tr>
@@ -105,7 +105,7 @@
                 $(element).attr('title', 'v' + data.version);
                 $(element).removeClass('text-muted-foreground').find('svg').removeClass().addClass('lucide lucide-check-circle').css('color', '#50af51');
             }).fail(function (error) {
-                var errorText = 'Error connecting to node! Check browser console for details.';
+                var errorText = '{{ trans('admin/nodes.index.ping_error') }}';
                 try {
                     errorText = error.responseJSON.errors[0].detail || errorText;
                 } catch (ex) {}

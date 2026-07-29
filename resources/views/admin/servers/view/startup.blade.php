@@ -1,20 +1,20 @@
 @extends('layouts.admin')
 
 @section('title')
-    Server — {{ $server->name }}: Startup
+    @lang('admin/server.overview.title') — {{ $server->name }}: @lang('admin/server.startup.title')
 @endsection
 
 @section('content-header')
     <h1 class="text-xl font-bold">{{ $server->name }}</h1>
-    <p class="text-sm text-muted-foreground">Control startup command as well as variables.</p>
+    <p class="text-sm text-muted-foreground">@lang('admin/server.startup.description')</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/server.startup.breadcrumb_admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <a href="{{ route('admin.servers') }}">Servers</a>
+        <a href="{{ route('admin.servers') }}">@lang('admin/server.startup.breadcrumb_servers')</a>
         <x-icon name="chevron-right" class="size-3" />
         <a href="{{ route('admin.servers.view', $server->id) }}">{{ $server->name }}</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>Startup</span>
+        <span>@lang('admin/server.startup.breadcrumb_startup')</span>
     </nav>
 @endsection
 
@@ -25,28 +25,28 @@
         <div class="col-span-full">
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">Startup Command Modification</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/server.startup.startup_command_modification')</h3>
                 </header>
                 <section>
                     <div class="grid gap-6">
                         <div role="group" class="field">
-                            <label for="pStartup" class="font-semibold">Startup Command</label>
+                            <label for="pStartup" class="font-semibold">@lang('admin/server.startup.startup_command')</label>
                             <input id="pStartup" name="startup" type="text" value="{{ old('startup', $server->startup) }}" />
-                            <p class="text-sm text-muted-foreground">Edit your server's startup command here. The following variables are available by default: <code>@{{SERVER_MEMORY}}</code>, <code>@{{SERVER_IP}}</code>, and <code>@{{SERVER_PORT}}</code>.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.startup.startup_command_help')</p>
                         </div>
                     </div>
                 </section>
                 <section>
                     <div class="grid gap-6">
                         <div role="group" class="field">
-                            <label for="pDefaultStartupCommand" class="font-semibold">Default Service Start Command</label>
+                            <label for="pDefaultStartupCommand" class="font-semibold">@lang('admin/server.startup.default_start_command')</label>
                             <input id="pDefaultStartupCommand" type="text" readonly />
                         </div>
                     </div>
                 </section>
                 <footer>
                     {!! csrf_field() !!}
-                    <button type="submit" class="btn ml-auto" data-size="sm">Save Modifications</button>
+                    <button type="submit" class="btn ml-auto" data-size="sm">@lang('admin/server.startup.save_modifications')</button>
                 </footer>
             </div>
         </div>
@@ -55,21 +55,20 @@
         <div>
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">Service Configuration</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/server.startup.service_config')</h3>
                 </header>
                 <section>
                     <div class="grid gap-6">
                         <div>
                             <p class="text-sm text-destructive">
-                                Changing any of the below values will result in the server processing a re-install command. The server will be stopped and will then proceed.
-                                If you would like the service scripts to not run, ensure the box is checked at the bottom.
+                                @lang('admin/server.startup.service_config_warning')
                             </p>
                             <p class="text-sm text-destructive">
-                                <strong>This is a destructive operation in many cases. This server will be stopped immediately in order for this action to proceed.</strong>
+                                @lang('admin/server.startup.service_config_danger')
                             </p>
                         </div>
                         <div role="group" class="field">
-                            <label for="pNestId">Nest</label>
+                            <label for="pNestId">@lang('admin/server.startup.nest')</label>
                             <select name="nest_id" id="pNestId" class="select">
                                 @foreach($nests as $nest)
                                     <option value="{{ $nest->id }}"
@@ -79,32 +78,32 @@
                                     >{{ $nest->name }}</option>
                                 @endforeach
                             </select>
-                            <p class="text-sm text-muted-foreground">Select the Nest that this server will be grouped into.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.startup.nest_help')</p>
                         </div>
                         <div role="group" class="field">
-                            <label for="pEggId">Egg</label>
+                            <label for="pEggId">@lang('admin/server.startup.egg')</label>
                             <select name="egg_id" id="pEggId" class="select"></select>
-                            <p class="text-sm text-muted-foreground">Select the Egg that will provide processing data for this server.</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.startup.egg_help')</p>
                         </div>
                         <div role="group" class="field" data-orientation="horizontal">
                             <input id="pSkipScripting" name="skip_scripts" type="checkbox" value="1" @if($server->skip_scripts) checked @endif />
-                            <label for="pSkipScripting" class="font-normal">Skip Egg Install Script</label>
+                            <label for="pSkipScripting" class="font-normal">@lang('admin/server.startup.skip_egg_install_script')</label>
                         </div>
-                        <p class="text-sm text-muted-foreground">If the selected Egg has an install script attached to it, the script will run during install. If you would like to skip this step, check this box.</p>
+                        <p class="text-sm text-muted-foreground">@lang('admin/server.startup.skip_egg_install_script_help')</p>
                     </div>
                 </section>
             </div>
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">Docker Image Configuration</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/server.startup.docker_image_config')</h3>
                 </header>
                 <section>
                     <div class="grid gap-6">
                         <div role="group" class="field">
-                            <label for="pDockerImage">Image</label>
+                            <label for="pDockerImage">@lang('admin/server.startup.image')</label>
                             <select id="pDockerImage" name="docker_image" class="select"></select>
-                            <input id="pDockerImageCustom" name="custom_docker_image" value="{{ old('custom_docker_image') }}" placeholder="Or enter a custom image..."/>
-                            <p class="text-sm text-muted-foreground">This is the Docker image that will be used to run this server. Select an image from the dropdown or enter a custom image in the text field above.</p>
+                            <input id="pDockerImageCustom" name="custom_docker_image" value="{{ old('custom_docker_image') }}" placeholder="{{ trans('admin/server.startup.custom_image_placeholder') }}"/>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.startup.docker_image_help')</p>
                         </div>
                     </div>
                 </section>
@@ -156,7 +155,7 @@
             }
 
             if (!_.get(objectChain, 'startup', false)) {
-                $('#pDefaultStartupCommand').val(_.get(parentChain, 'startup', 'ERROR: Startup Not Defined!'));
+                $('#pDefaultStartupCommand').val(_.get(parentChain, 'startup', '{{ trans('admin/server.startup.error_startup_not_defined') }}'));
             } else {
                 $('#pDefaultStartupCommand').val(_.get(objectChain, 'startup'));
             }
@@ -164,7 +163,7 @@
             $('#appendVariablesTo').html('');
             $.each(_.get(objectChain, 'variables', []), function (i, item) {
                 var setValue = _.get(Pyrodactyl.server_variables, item.env_variable, item.default_value);
-                var isRequired = (item.required === 1) ? '<span class="badge" data-variant="destructive">Required</span> ' : '';
+                var isRequired = (item.required === 1) ? '<span class="badge" data-variant="destructive">{{ trans('admin/server.startup.required') }}</span> ' : '';
                 var dataAppend = ' \
                     <div> \
                         <div class="card"> \
@@ -178,8 +177,8 @@
                                 </div> \
                             </section> \
                             <footer> \
-                                <p class="text-sm text-muted-foreground"><strong>Startup Command Variable:</strong> <code>' + escapeHtml(item.env_variable) + '</code></p> \
-                                <p class="text-sm text-muted-foreground"><strong>Input Rules:</strong> <code>' + escapeHtml(item.rules) + '</code></p> \
+                                <p class="text-sm text-muted-foreground"><strong>{{ trans('admin/server.startup.startup_command_variable') }}</strong> <code>' + escapeHtml(item.env_variable) + '</code></p> \
+                                <p class="text-sm text-muted-foreground"><strong>{{ trans('admin/server.startup.input_rules') }}</strong> <code>' + escapeHtml(item.rules) + '</code></p> \
                             </footer> \
                         </div> \
                     </div>';

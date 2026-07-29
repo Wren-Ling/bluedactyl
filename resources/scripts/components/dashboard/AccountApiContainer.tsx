@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -37,6 +38,7 @@ interface CreateValues {
 }
 
 const AccountApiContainer = () => {
+    const { t } = useTranslation();
     const [deleteIdentifier, setDeleteIdentifier] = useState('');
     const [keys, setKeys] = useState<ApiKey[]>([]);
     const [loading, setLoading] = useState(true);
@@ -99,7 +101,7 @@ const AccountApiContainer = () => {
             <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Create API Key</DialogTitle>
+                        <DialogTitle>{t('account:create_api_key')}</DialogTitle>
                     </DialogHeader>
                     <Formik
                         onSubmit={submitCreate}
@@ -114,24 +116,24 @@ const AccountApiContainer = () => {
                                 <SpinnerOverlay visible={isSubmitting} />
 
                                 <FormikFieldWrapper
-                                    label='Description'
+                                    label={t('account:description')}
                                     name='description'
-                                    description='A description of this API key.'
+                                    description={t('account:api_key_description_hint')}
                                 >
                                     <Field name='description' as={Input} className='w-full' />
                                 </FormikFieldWrapper>
 
                                 <FormikFieldWrapper
-                                    label='Allowed IPs'
+                                    label={t('account:allowed_ips')}
                                     name='allowedIps'
-                                    description='Leave blank to allow any IP address to use this API key, otherwise provide each IP address on a new line. Note: You can also use CIDR ranges here.'
+                                    description={t('account:allowed_ips_description')}
                                 >
                                     <Field name='allowedIps' as={Input} className='w-full' />
                                 </FormikFieldWrapper>
 
                                 <DialogFooter>
                                     <Button type='submit' disabled={isSubmitting}>
-                                        Create Key
+                                        {t('account:create_key')}
                                     </Button>
                                 </DialogFooter>
                             </Form>
@@ -142,11 +144,11 @@ const AccountApiContainer = () => {
 
             <div className='flex w-full flex-1 flex-col px-2 sm:px-0'>
                 <MainPageHeader
-                    title='API Keys'
+                    title={t('account:api_keys')}
                     titleChildren={
                         <Button onClick={() => setShowCreateModal(true)} className='flex items-center gap-2'>
                             <Plus className='size-5' />
-                            Create API Key
+                            {t('account:create_api_key')}
                         </Button>
                     }
                 />
@@ -157,17 +159,17 @@ const AccountApiContainer = () => {
                 <Dialog open={!!deleteIdentifier} onOpenChange={(o) => !o && setDeleteIdentifier('')}>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>Delete API Key</DialogTitle>
+                            <DialogTitle>{t('account:delete_api_key')}</DialogTitle>
                             <DialogDescription>
-                                All requests using the <code className='rounded bg-muted px-1 font-mono text-sm'>{deleteIdentifier}</code> key will be invalidated.
+                                {t('account:delete_api_key_description', { identifier: deleteIdentifier })}
                             </DialogDescription>
                         </DialogHeader>
                         <DialogFooter>
                             <Button variant='outline' onClick={() => setDeleteIdentifier('')}>
-                                Cancel
+                                {t('account:cancel')}
                             </Button>
                             <Button variant='destructive' onClick={() => doDeletion(deleteIdentifier)}>
-                                Delete Key
+                                {t('account:delete_key')}
                             </Button>
                         </DialogFooter>
                     </DialogContent>
@@ -178,11 +180,11 @@ const AccountApiContainer = () => {
                         <div className='mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-muted'>
                             <Key className='size-5 text-muted-foreground' />
                         </div>
-                        <h3 className='mb-2 text-lg font-medium text-foreground'>No API Keys</h3>
+                        <h3 className='mb-2 text-lg font-medium text-foreground'>{t('account:no_api_keys')}</h3>
                         <p className='mx-auto max-w-sm text-sm text-muted-foreground'>
                             {loading
-                                ? 'Loading your API keys...'
-                                : "You haven't created any API keys yet. Create one to get started with the API."}
+                                ? t('account:loading_api_keys')
+                                : t('account:no_api_keys_desc')}
                         </p>
                     </div>
                 ) : (
@@ -201,13 +203,13 @@ const AccountApiContainer = () => {
                                         </div>
                                         <div className='flex items-center gap-4 text-xs text-muted-foreground'>
                                             <span>
-                                                Last used:{' '}
+                                                {t('account:last_used')}{' '}
                                                 {key.lastUsedAt
                                                     ? format(key.lastUsedAt, 'MMM d, yyyy HH:mm')
-                                                    : 'Never'}
+                                                    : t('account:never')}
                                             </span>
                                             <div className='flex items-center gap-2'>
-                                                <span>Key:</span>
+                                                <span>{t('account:key_label')}</span>
                                                 <code className='rounded border bg-muted px-2 py-1 font-mono text-muted-foreground'>
                                                     {showKeys[key.identifier]
                                                         ? key.identifier

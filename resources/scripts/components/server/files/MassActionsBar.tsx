@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -16,6 +17,8 @@ import useFileManagerSwr from '@/plugins/useFileManagerSwr';
 import useFlash from '@/plugins/useFlash';
 
 const MassActionsBar = () => {
+    const { t } = useTranslation();
+
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
 
     const { mutate } = useFileManagerSwr();
@@ -36,7 +39,7 @@ const MassActionsBar = () => {
     const onClickCompress = () => {
         setLoading(true);
         clearFlashes('files');
-        setLoadingMessage('Archiving files...');
+        setLoadingMessage(t('files:archiving'));
 
         compressFiles(uuid, directory, selectedFiles)
             .then(() => mutate())
@@ -49,7 +52,7 @@ const MassActionsBar = () => {
         setLoading(true);
         setShowConfirm(false);
         clearFlashes('files');
-        setLoadingMessage('Deleting files...');
+        setLoadingMessage(t('files:deleting'));
 
         deleteFiles(uuid, directory, selectedFiles)
             .then(async () => {
@@ -71,19 +74,23 @@ const MassActionsBar = () => {
                 </SpinnerOverlay>
                 <Dialog open={showConfirm} onOpenChange={setShowConfirm}>
                     <DialogContent>
-                        <DialogHeader><DialogTitle>Delete Files</DialogTitle></DialogHeader>
+                        <DialogHeader><DialogTitle>{t('files:confirm_delete_files')}</DialogTitle></DialogHeader>
                         <p className={'mb-2'}>
-                            Are you sure you want to delete&nbsp;
-                            <span className={'font-semibold text-foreground'}>{selectedFiles.length} files</span>? This is a
-                            permanent action and the files cannot be recovered.
+                            <Trans i18nKey='files:confirm_delete_files_body' count={selectedFiles.length}>
+                                Are you sure you want to delete{' '}
+                                <span className={'font-semibold text-foreground'}>
+                                    {{ count: selectedFiles.length }} files
+                                </span>
+                                ? This is a permanent action and the files cannot be recovered.
+                            </Trans>
                         </p>
                         {selectedFiles.slice(0, 15).map((file) => (
                             <li key={file}>{file}</li>
                         ))}
-                        {selectedFiles.length > 15 && <li>and {selectedFiles.length - 15} others</li>}
+                        {selectedFiles.length > 15 && <li>{t('files:confirm_delete_others', { count: selectedFiles.length - 15 })}</li>}
                         <DialogFooter>
-                            <Button variant='outline' onClick={() => setShowConfirm(false)}>Cancel</Button>
-                            <Button variant='destructive' onClick={onClickConfirmDeletion} disabled={loading}>Delete</Button>
+                            <Button variant='outline' onClick={() => setShowConfirm(false)}>{t('files:cancel')}</Button>
+                            <Button variant='destructive' onClick={onClickConfirmDeletion} disabled={loading}>{t('files:delete')}</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
@@ -102,18 +109,18 @@ const MassActionsBar = () => {
                             'pointer-events-none fixed bottom-0 left-0 right-0 mb-6 flex justify-center w-full z-50'
                         }
                     >
-                        <div className={`flex items-center space-x-4 pointer-events-auto rounded-sm p-4 bg-black/50`}>
+                        <div className={`flex items-center space-x-4 pointer-events-auto rounded-sm p-4 bg-card border border-border shadow-lg`}>
                             <Button onClick={() => setShowMove(true)} disabled={loading}>
                                 {loading && loadingMessage.includes('Moving') && <Spinner size='small' />}
-                                Move
+                                {t('files:move')}
                             </Button>
                             <Button onClick={onClickCompress} disabled={loading}>
                                 {loading && loadingMessage.includes('Archiving') && <Spinner size='small' />}
-                                Archive
+                                {t('files:archive')}
                             </Button>
                             <Button variant='destructive' onClick={() => setShowConfirm(true)} disabled={loading}>
                                 {loading && loadingMessage.includes('Deleting') && <Spinner size='small' />}
-                                Delete
+                                {t('files:delete')}
                             </Button>
                         </div>
                     </div>

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import StatBlock from '@/components/server/console/StatBlock';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
@@ -19,6 +20,7 @@ type Stats = Record<'memory' | 'cpu' | 'disk' | 'uptime' | 'rx' | 'tx', number>;
 const Limit = ({ limit, children }: { limit: string | null; children: React.ReactNode }) => <>{children}</>;
 
 const ServerDetailsBlock = ({ className }: { className?: string }) => {
+    const { t } = useTranslation();
     const [stats, setStats] = useState<Stats>({ memory: 0, cpu: 0, disk: 0, uptime: 0, tx: 0, rx: 0 });
     const [subdomainInfo, setSubdomainInfo] = useState<SubdomainInfo | null>(null);
 
@@ -95,24 +97,24 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
 
     return (
         <div className={cn('grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4', className)}>
-            <StatBlock title={'IP Address'} copyOnClick={displayAddress}>
+            <StatBlock title={t('console:ip_address')} copyOnClick={displayAddress}>
                 {displayAddress}
             </StatBlock>
-            <StatBlock title={'CPU'}>
+            <StatBlock title={t('console:cpu')}>
                 {status === 'offline' ? (
-                    <span className='text-muted-foreground'>Offline</span>
+                    <span className='text-muted-foreground'>{t('console:offline')}</span>
                 ) : (
                     <Limit limit={textLimits.cpu}>{stats.cpu.toFixed(2)}%</Limit>
                 )}
             </StatBlock>
-            <StatBlock title={'RAM'}>
+            <StatBlock title={t('console:memory')}>
                 {status === 'offline' ? (
-                    <span className='text-muted-foreground'>Offline</span>
+                    <span className='text-muted-foreground'>{t('console:offline')}</span>
                 ) : (
                     <Limit limit={textLimits.memory}>{bytesToString(stats.memory)}</Limit>
                 )}
             </StatBlock>
-            <StatBlock title={'Storage'}>
+            <StatBlock title={t('console:storage')}>
                 <Limit limit={textLimits.disk}>{bytesToString(stats.disk)}</Limit>
             </StatBlock>
         </div>

@@ -70,11 +70,11 @@ const EulaModalFeature = () => {
         >
             <div className='flex flex-col'>
                 <FlashMessageRender key={'feature:eula'} />
-                <p className={`text-zinc-200`}>
+                <p className={`text-foreground/90`}>
                     Before starting your Minecraft server, you need to accept the{' '}
                     <a
                         target={'_blank'}
-                        className={`text-zinc-300 underline transition-colors duration-150 hover:text-zinc-400`}
+                        className={`text-foreground/80 underline transition-colors duration-150 hover:text-muted-foreground`}
                         rel={'noreferrer noopener'}
                         href='https://www.aka.ms/MinecraftEULA'
                     >

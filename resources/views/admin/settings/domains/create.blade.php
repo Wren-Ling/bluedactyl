@@ -2,20 +2,20 @@
 @include('partials/admin.settings.nav', ['activeTab' => 'domains'])
 
 @section('title')
-  Create Domain
+  @lang('admin/settings.domains.create.title')
 @endsection
 
 @section('content-header')
-  <h1 class="text-xl font-bold">Create Domain</h1>
-  <p class="text-sm text-muted-foreground">Add a new DNS domain for subdomain management.</p>
+  <h1 class="text-xl font-bold">@lang('admin/settings.domains.create.title')</h1>
+  <p class="text-sm text-muted-foreground">@lang('admin/settings.domains.create.desc')</p>
   <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-    <a href="{{ route('admin.index') }}">Admin</a>
+    <a href="{{ route('admin.index') }}">@lang('admin/settings.admin')</a>
     <x-icon name="chevron-right" class="size-3" />
-    <a href="{{ route('admin.settings') }}">Settings</a>
+    <a href="{{ route('admin.settings') }}">@lang('admin/settings.nav')</a>
     <x-icon name="chevron-right" class="size-3" />
-    <a href="{{ route('admin.settings.domains.index') }}">Domains</a>
+    <a href="{{ route('admin.settings.domains.index') }}">@lang('admin/settings.domains.nav')</a>
     <x-icon name="chevron-right" class="size-3" />
-    <span>Create</span>
+    <span>@lang('admin/settings.domains.create.nav')</span>
   </nav>
 @endsection
 
@@ -26,27 +26,27 @@
       <form action="{{ route('admin.settings.domains.store') }}" method="POST" id="domain-form">
         <div class="card">
           <header>
-            <h3 class="text-lg font-semibold">Domain Information</h3>
+            <h3 class="text-lg font-semibold">@lang('admin/settings.domains.create.domain_info')</h3>
           </header>
           <section>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div role="group" class="field">
-                <label for="name">Domain Name </label>
+                <label for="name">@lang('admin/settings.domains.create.domain_name') </label>
                 <input type="text" name="name" id="name" value="{{ old('name') }}"
-                  placeholder="example.com" required />
-                <p class="text-sm text-muted-foreground">The domain name that will be used for subdomains (e.g., example.com).</p>
+                  placeholder="@lang('admin/settings.domains.create.domain_name_placeholder')" required />
+                <p class="text-sm text-muted-foreground">@lang('admin/settings.domains.create.domain_name_help')</p>
               </div>
               <div role="group" class="field">
-                <label for="dns_provider">DNS Provider </label>
+                <label for="dns_provider">@lang('admin/settings.domains.create.dns_provider') </label>
                 <select name="dns_provider" id="dns_provider" class="select" required>
-                  <option value="">Select a DNS provider...</option>
+                  <option value="">@lang('admin/settings.domains.create.dns_provider_placeholder')</option>
                   @foreach($providers as $key => $provider)
                     <option value="{{ $key }}" @if(old('dns_provider') === $key) selected @endif>
                       {{ $provider['name'] }}
                     </option>
                   @endforeach
                 </select>
-                <p class="text-sm text-muted-foreground">The DNS service provider that manages this domain.</p>
+                <p class="text-sm text-muted-foreground">@lang('admin/settings.domains.create.dns_provider_help')</p>
               </div>
             </div>
           </section>
@@ -54,7 +54,7 @@
 
         <div class="card hidden" id="dns-config-box">
           <header>
-            <h3 class="text-lg font-semibold">DNS Provider Configuration</h3>
+            <h3 class="text-lg font-semibold">@lang('admin/settings.domains.create.dns_config')</h3>
           </header>
           <section id="dns-config-content">
           </section>
@@ -62,39 +62,39 @@
 
         <div class="card">
           <header>
-            <h3 class="text-lg font-semibold">Additional Settings</h3>
+            <h3 class="text-lg font-semibold">@lang('admin/settings.domains.create.additional_settings')</h3>
           </header>
           <section>
             <div class="grid gap-6">
               <div role="group" class="field col-span-full" data-orientation="responsive">
                 <section>
-                  <label>Status</label>
-                  <p>Whether this domain should be available for subdomain creation.</p>
+                  <label>@lang('admin/settings.domains.create.status_label')</label>
+                  <p>@lang('admin/settings.domains.create.status_help')</p>
                 </section>
-                <div role="radiogroup" aria-label="Domain status">
+                <div role="radiogroup" aria-label="{{ trans('admin/settings.domains.create.aria_status') }}">
                   <div role="group" class="field" data-orientation="horizontal">
                     <input type="radio" name="is_active" id="create-active" value="1" @if(old('is_active', true)) checked @endif />
-                    <label for="create-active" class="font-normal">Active</label>
+                    <label for="create-active" class="font-normal">@lang('admin/settings.domains.create.status_active')</label>
                   </div>
                   <div role="group" class="field" data-orientation="horizontal">
                     <input type="radio" name="is_active" id="create-inactive" value="0" @if(!old('is_active', true)) checked @endif />
-                    <label for="create-inactive" class="font-normal">Inactive</label>
+                    <label for="create-inactive" class="font-normal">@lang('admin/settings.domains.create.status_inactive')</label>
                   </div>
                 </div>
               </div>
               <div role="group" class="field col-span-full" data-orientation="responsive">
                 <section>
-                  <label>Default Domain</label>
-                  <p>Whether this domain should be used as the default for automatic subdomain generation.</p>
+                  <label>@lang('admin/settings.domains.create.default_label')</label>
+                  <p>@lang('admin/settings.domains.create.default_help')</p>
                 </section>
-                <div role="radiogroup" aria-label="Default domain">
+                <div role="radiogroup" aria-label="{{ trans('admin/settings.domains.create.aria_default') }}">
                   <div role="group" class="field" data-orientation="horizontal">
                     <input type="radio" name="is_default" id="create-default-yes" value="1" @if(old('is_default', false)) checked @endif />
-                    <label for="create-default-yes" class="font-normal">Yes</label>
+                    <label for="create-default-yes" class="font-normal">@lang('admin/settings.domains.create.default_yes')</label>
                   </div>
                   <div role="group" class="field" data-orientation="horizontal">
                     <input type="radio" name="is_default" id="create-default-no" value="0" @if(!old('is_default', false)) checked @endif />
-                    <label for="create-default-no" class="font-normal">No</label>
+                    <label for="create-default-no" class="font-normal">@lang('admin/settings.domains.create.default_no')</label>
                   </div>
                 </div>
               </div>
@@ -106,10 +106,10 @@
           <footer>
             {{ csrf_field() }}
             <button type="button" id="test-connection" class="btn" data-size="sm" data-variant="secondary" disabled>
-              <x-icon name="refresh-cw" class="size-4 hidden" /> Test Connection
+              <x-icon name="refresh-cw" class="size-4 hidden" /> @lang('admin/settings.domains.create.test_connection')
             </button>
-            <a href="{{ route('admin.settings.domains.index') }}" class="btn" data-size="sm" data-variant="outline">Cancel</a>
-            <button type="submit" class="btn ml-auto" data-size="sm">Create Domain</button>
+            <a href="{{ route('admin.settings.domains.index') }}" class="btn" data-size="sm" data-variant="outline">@lang('admin/settings.domains.create.cancel')</a>
+            <button type="submit" class="btn ml-auto" data-size="sm">@lang('admin/settings.domains.create.create_domain')</button>
           </footer>
         </div>
       </form>
@@ -165,14 +165,14 @@
         })
           .done(function (response) {
             if (response.success) {
-              alert('Connection Successful: ' + response.message);
+              alert('{{ trans("admin.settings.domains.connection_successful") }} ' + response.message);
             } else {
-              alert('Connection Failed: ' + response.message);
+              alert('{{ trans("admin.settings.domains.connection_failed") }} ' + response.message);
             }
           })
           .fail(function (xhr) {
             const response = xhr.responseJSON || {};
-            alert('Connection Failed: ' + (response.message || 'An unexpected error occurred.'));
+            alert('{{ trans("admin.settings.domains.connection_failed") }} ' + (response.message || '{{ trans("admin.settings.domains.unexpected_error") }}'));
           })
           .always(function () {
             $button.prop('disabled', false);

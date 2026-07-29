@@ -1,20 +1,20 @@
 @extends('layouts.admin')
 
 @section('title')
-    {{ $node->name }}: Allocations
+    {{ $node->name }}: @lang('admin/nodes.common.allocation')
 @endsection
 
 @section('content-header')
     <h1 class="text-xl font-bold">{{ $node->name }}</h1>
-    <p class="text-sm text-muted-foreground">Control allocations available for servers on this node.</p>
+    <p class="text-sm text-muted-foreground">@lang('admin/nodes.allocation.header_subtitle')</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/nodes.common.admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <a href="{{ route('admin.nodes') }}">Nodes</a>
+        <a href="{{ route('admin.nodes') }}">@lang('admin/nodes.common.nodes')</a>
         <x-icon name="chevron-right" class="size-3" />
         <a href="{{ route('admin.nodes.view', $node->id) }}">{{ $node->name }}</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>Allocations</span>
+        <span>@lang('admin/nodes.common.allocation')</span>
     </nav>
 @endsection
 
@@ -23,11 +23,11 @@
     <div class="col-span-full">
         <div class="tabs">
             <nav role="tablist" aria-orientation="horizontal" data-variant="line">
-                <a href="{{ route('admin.nodes.view', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">About</a>
-                <a href="{{ route('admin.nodes.view.settings', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">Settings</a>
-                <a href="{{ route('admin.nodes.view.configuration', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">Configuration</a>
-                <a href="{{ route('admin.nodes.view.allocation', $node->id) }}" role="tab" aria-selected="true" tabindex="0">Allocation</a>
-                <a href="{{ route('admin.nodes.view.servers', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">Servers</a>
+                <a href="{{ route('admin.nodes.view', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">@lang('admin/nodes.common.about')</a>
+                <a href="{{ route('admin.nodes.view.settings', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">@lang('admin/nodes.common.settings')</a>
+                <a href="{{ route('admin.nodes.view.configuration', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">@lang('admin/nodes.common.configuration')</a>
+                <a href="{{ route('admin.nodes.view.allocation', $node->id) }}" role="tab" aria-selected="true" tabindex="0">@lang('admin/nodes.common.allocation')</a>
+                <a href="{{ route('admin.nodes.view.servers', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">@lang('admin/nodes.common.servers')</a>
             </nav>
         </div>
     </div>
@@ -36,7 +36,7 @@
     <div class="md:col-span-2">
         <div class="card">
             <header>
-                <h3 class="text-lg font-semibold">Existing Allocations</h3>
+                <h3 class="text-lg font-semibold">@lang('admin/nodes.allocation.existing_allocations')</h3>
             </header>
             <section class="table-container no-padding">
                 <table class="table">
@@ -45,14 +45,14 @@
                         <th>
                             <input type="checkbox" class="input select-all-files max-sm:hidden" data-action="selectAll">
                         </th>
-                        <th>IP Address <x-icon name="minus-square" class="size-4" onclick="document.getElementById('allocationModal').showModal()" /></th>
-                        <th>IP Alias</th>
-                        <th>Port</th>
-                        <th>Assigned To</th>
+                        <th>@lang('admin/nodes.allocation.ip_address') <x-icon name="minus-square" class="size-4" onclick="document.getElementById('allocationModal').showModal()" /></th>
+                        <th>@lang('admin/nodes.allocation.ip_alias')</th>
+                        <th>@lang('admin/nodes.allocation.port')</th>
+                        <th>@lang('admin/nodes.allocation.assigned_to')</th>
                         <th>
                             <div class="flex items-center gap-2">
                                 <button type="button" id="mass_actions" class="btn" data-variant="outline" data-size="sm" disabled
-                                        onclick="deleteSelected()">Delete Selected <x-icon name="trash-2" class="size-4" />
+                                        onclick="deleteSelected()">@lang('admin/nodes.allocation.delete_selected') <x-icon name="trash-2" class="size-4" />
                                 </button>
                             </div>
                         </th>
@@ -70,7 +70,7 @@
                             </td>
                             <td class="sm:w-1/4 middle" data-identifier="ip">{{ $allocation->ip }}</td>
                             <td class="sm:w-1/4 middle">
-                                <input  data-size="sm" type="text" value="{{ $allocation->ip_alias }}" data-action="set-alias" data-id="{{ $allocation->id }}" placeholder="none" />
+                                <input  data-size="sm" type="text" value="{{ $allocation->ip_alias }}" data-action="set-alias" data-id="{{ $allocation->id }}" placeholder="@lang('admin/nodes.allocation.none_placeholder')" />
                                 <span class="input-loader"><x-icon name="refresh-cw" class="size-4 animate-spin" /></span>
                             </td>
                             <td class="sm:w-1/6 middle" data-identifier="port">{{ $allocation->port }}</td>
@@ -94,9 +94,9 @@
                     <nav role="navigation" aria-label="pagination" class="mx-auto flex w-full justify-center">
                         <ul class="flex flex-row items-center gap-1">
                             @if($node->allocations->onFirstPage())
-                                <li><span class="btn" data-variant="ghost" data-size="sm" aria-disabled="true"><x-icon name="chevron-left" class="size-4" /> <span>Previous</span></span></li>
+                                <li><span class="btn" data-variant="ghost" data-size="sm" aria-disabled="true"><x-icon name="chevron-left" class="size-4" /> <span>@lang('admin/nodes.allocation.previous')</span></span></li>
                             @else
-                                <li><a href="{{ $node->allocations->previousPageUrl() }}" class="btn" data-variant="ghost" data-size="sm"><x-icon name="chevron-left" class="size-4" /> <span>Previous</span></a></li>
+                                <li><a href="{{ $node->allocations->previousPageUrl() }}" class="btn" data-variant="ghost" data-size="sm"><x-icon name="chevron-left" class="size-4" /> <span>@lang('admin/nodes.allocation.previous')</span></a></li>
                             @endif
 
                             @for($page = 1; $page <= $node->allocations->lastPage(); $page++)
@@ -108,9 +108,9 @@
                             @endfor
 
                             @if($node->allocations->hasMorePages())
-                                <li><a href="{{ $node->allocations->nextPageUrl() }}" class="btn" data-variant="ghost" data-size="sm"><span>Next</span> <x-icon name="chevron-right" class="size-4" /></a></li>
+                                <li><a href="{{ $node->allocations->nextPageUrl() }}" class="btn" data-variant="ghost" data-size="sm"><span>@lang('admin/nodes.allocation.next')</span> <x-icon name="chevron-right" class="size-4" /></a></li>
                             @else
-                                <li><span class="btn" data-variant="ghost" data-size="sm" aria-disabled="true"><span>Next</span> <x-icon name="chevron-right" class="size-4" /></span></li>
+                                <li><span class="btn" data-variant="ghost" data-size="sm" aria-disabled="true"><span>@lang('admin/nodes.allocation.next')</span> <x-icon name="chevron-right" class="size-4" /></span></li>
                             @endif
                         </ul>
                     </nav>
@@ -122,33 +122,33 @@
         <form action="{{ route('admin.nodes.view.allocation', $node->id) }}" method="POST">
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">Assign New Allocations</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/nodes.allocation.assign_new')</h3>
                 </header>
                 <section>
                     <div role="group" class="field">
-                        <label for="pAllocationIP" >IP Address</label>
-                        <input type="text" class="input" name="allocation_ip" id="pAllocationIP" list="pAllocationIPList" placeholder="Select or type an IP address" />
+                        <label for="pAllocationIP" >@lang('admin/nodes.allocation.ip_address_label')</label>
+                        <input type="text" class="input" name="allocation_ip" id="pAllocationIP" list="pAllocationIPList" placeholder="@lang('admin/nodes.allocation.ip_placeholder')" />
                         <datalist id="pAllocationIPList">
                             @foreach($allocations as $allocation)
                                 <option value="{{ $allocation->ip }}">
                             @endforeach
                         </datalist>
-                        <p class="text-sm text-muted-foreground">Select an IP address to assign ports to.</p>
+                        <p class="text-sm text-muted-foreground">@lang('admin/nodes.allocation.ip_help')</p>
                     </div>
                     <div role="group" class="field">
-                        <label for="pAllocationAlias" >IP Alias</label>
-                        <input type="text" id="pAllocationAlias"  name="allocation_alias" placeholder="alias" />
-                        <p class="text-sm text-muted-foreground">If you would like to assign a default alias to these allocations enter it here.</p>
+                        <label for="pAllocationAlias" >@lang('admin/nodes.allocation.ip_alias_label')</label>
+                        <input type="text" id="pAllocationAlias"  name="allocation_alias" placeholder="@lang('admin/nodes.allocation.alias_placeholder')" />
+                        <p class="text-sm text-muted-foreground">@lang('admin/nodes.allocation.alias_help')</p>
                     </div>
                     <div role="group" class="field">
-                        <label for="pAllocationPorts" >Ports</label>
-                        <input type="text" id="pAllocationPorts" placeholder="e.g. 25565, 25566, 27000-27100" />
-                        <p class="text-sm text-muted-foreground">Enter individual ports or port ranges separated by commas or spaces.</p>
+                        <label for="pAllocationPorts" >@lang('admin/nodes.allocation.ports')</label>
+                        <input type="text" id="pAllocationPorts" placeholder="@lang('admin/nodes.allocation.ports_placeholder')" />
+                        <p class="text-sm text-muted-foreground">@lang('admin/nodes.allocation.ports_help')</p>
                     </div>
                 </section>
                 <footer>
                     {!! csrf_field() !!}
-                    <button type="submit" class="btn ml-auto" data-size="sm">Submit</button>
+                    <button type="submit" class="btn ml-auto" data-size="sm">@lang('admin/nodes.allocation.submit')</button>
                 </footer>
             </div>
         </form>
@@ -157,13 +157,13 @@
 <dialog class="dialog" id="allocationModal" onclick="if (event.target === this) this.close()">
     <div class="sm:max-w-sm">
         <header>
-            <h4>Delete Allocations for IP Block</h4>
+            <h4>@lang('admin/nodes.allocation.delete_block_title')</h4>
         </header>
         <form action="{{ route('admin.nodes.view.allocation.removeBlock', $node->id) }}" method="POST">
             <section>
                 <div class="grid gap-4">
                     <div role="group" class="field">
-                        <label for="pIP">IP Address</label>
+                        <label for="pIP">@lang('admin/nodes.allocation.ip_address_label')</label>
                         <select class="select" name="ip" id="pIP">
                             @foreach($allocations as $allocation)
                                 <option value="{{ $allocation->ip }}">{{ $allocation->ip }}</option>
@@ -174,11 +174,11 @@
             </section>
             <footer>
                 @csrf
-                <button type="button" class="btn" data-variant="outline" onclick="this.closest('dialog').close()">Close</button>
-                <button type="submit" class="btn" data-variant="destructive">Delete Allocations</button>
+                <button type="button" class="btn" data-variant="outline" onclick="this.closest('dialog').close()">@lang('admin/nodes.allocation.close')</button>
+                <button type="submit" class="btn" data-variant="destructive">@lang('admin/nodes.allocation.delete_allocations')</button>
             </footer>
         </form>
-        <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" aria-label="Close dialog" onclick="this.closest('dialog').close()"><x-icon name="x" class="size-4" /></button>
+        <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" aria-label="@lang('admin/nodes.allocation.close_dialog')" onclick="this.closest('dialog').close()"><x-icon name="x" class="size-4" /></button>
     </div>
 </dialog>
 @endsection
@@ -218,17 +218,17 @@
         event.preventDefault();
         var element = $(this);
         var allocation = $(this).data('id');
-        if (confirm('Are you sure you want to delete this allocation?')) {
+        if (confirm('{{ trans('admin/nodes.allocation.delete_confirm_single') }}')) {
             $.ajax({
                 method: 'DELETE',
                 url: '/admin/nodes/view/' + {{ $node->id }} + '/allocation/remove/' + allocation,
                 headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') },
             }).done(function (data) {
                 element.parent().parent().addClass('warning').delay(100).fadeOut();
-                alert('Port Deleted!');
+                alert('{{ trans('admin/nodes.allocation.port_deleted') }}');
             }).fail(function (jqXHR) {
                 console.error(jqXHR);
-                alert('Whoops! ' + jqXHR.responseJSON.error);
+                alert('{{ trans('admin/nodes.allocation.delete_error') }} ' + jqXHR.responseJSON.error);
             });
         }
     });
@@ -301,10 +301,10 @@
 
             formattedItems = formattedItems.slice(0, -2);
             if (selectedItems.length > 5) {
-                formattedItems += ', and ' + (selectedItems.length - 5) + ' other(s)';
+                formattedItems += ', {{ trans('admin/nodes.allocation.and_others') }}'.replace(':count', selectedItems.length - 5);
             }
 
-            if (confirm('Are you sure you want to delete the following allocations: ' + formattedItems + '?')) {
+            if (confirm('{{ trans('admin/nodes.allocation.delete_confirm_multiple') }}' + formattedItems + '?')) {
                 $.ajax({
                     method: 'DELETE',
                     url: '/admin/nodes/view/' + {{ $node->id }} + '/allocations',
@@ -323,14 +323,14 @@
                         $(this).addClass('warning').delay(200).fadeOut();
                     });
 
-                    alert('Allocations Deleted');
+                    alert('{{ trans('admin/nodes.allocation.allocations_deleted') }}');
                 }).fail(function (jqXHR) {
                     console.error(jqXHR);
-                    alert('Whoops! An error occurred while attempting to delete these allocations. Please try again.');
+                    alert('{{ trans('admin/nodes.allocation.delete_batch_error') }}');
                 });
             }
         } else {
-            alert('Please select allocation(s) to delete.');
+            alert('{{ trans('admin/nodes.allocation.select_allocations') }}');
         }
     }
     </script>

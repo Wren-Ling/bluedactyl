@@ -6,11 +6,11 @@
 
 @section('content-header')
   <h1 class="text-xl font-bold">{{ $node->name }}</h1>
-  <p class="text-sm text-muted-foreground">A quick overview of your node.</p>
+  <p class="text-sm text-muted-foreground">@lang('admin/nodes.about.header_subtitle')</p>
   <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-    <a href="{{ route('admin.index') }}">Admin</a>
+    <a href="{{ route('admin.index') }}">@lang('admin/nodes.common.admin')</a>
     <x-icon name="chevron-right" class="size-3" />
-    <a href="{{ route('admin.nodes') }}">Nodes</a>
+    <a href="{{ route('admin.nodes') }}">@lang('admin/nodes.common.nodes')</a>
     <x-icon name="chevron-right" class="size-3" />
     <span>{{ $node->name }}</span>
   </nav>
@@ -21,11 +21,11 @@
     <div class="col-span-full">
     <div class="tabs">
       <nav role="tablist" aria-orientation="horizontal" data-variant="line">
-      <a href="{{ route('admin.nodes.view', $node->id) }}" role="tab" aria-selected="true" tabindex="0">About</a>
-      <a href="{{ route('admin.nodes.view.settings', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">Settings</a>
-      <a href="{{ route('admin.nodes.view.configuration', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">Configuration</a>
-      <a href="{{ route('admin.nodes.view.allocation', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">Allocation</a>
-      <a href="{{ route('admin.nodes.view.servers', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">Servers</a>
+      <a href="{{ route('admin.nodes.view', $node->id) }}" role="tab" aria-selected="true" tabindex="0">@lang('admin/nodes.common.about')</a>
+      <a href="{{ route('admin.nodes.view.settings', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">@lang('admin/nodes.common.settings')</a>
+      <a href="{{ route('admin.nodes.view.configuration', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">@lang('admin/nodes.common.configuration')</a>
+      <a href="{{ route('admin.nodes.view.allocation', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">@lang('admin/nodes.common.allocation')</a>
+      <a href="{{ route('admin.nodes.view.servers', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">@lang('admin/nodes.common.servers')</a>
       </nav>
     </div>
     </div>
@@ -36,22 +36,22 @@
       <div>
       <div class="card">
         <header>
-        <h3 class="text-lg font-semibold">Information</h3>
+        <h3 class="text-lg font-semibold">@lang('admin/nodes.about.information')</h3>
         </header>
         <section class="table-container no-padding">
         <table class="table">
           <tr>
-          <td>Daemon Version</td>
-          <td><code data-attr="info-version"><x-icon name="refresh-cw" class="size-4 animate-spin" /></code> (Latest:
+          <td>@lang('admin/nodes.about.daemon_version')</td>
+          <td><code data-attr="info-version"><x-icon name="refresh-cw" class="size-4 animate-spin" /></code> (@lang('admin/nodes.about.latest')
             <code>{{ $version->getDaemon() }}</code>)
           </td>
           </tr>
           <tr>
-          <td>System Information</td>
+          <td>@lang('admin/nodes.about.system_information')</td>
           <td data-attr="info-system"><x-icon name="refresh-cw" class="size-4 animate-spin" /></td>
           </tr>
           <tr>
-          <td>Total CPU Threads</td>
+          <td>@lang('admin/nodes.about.total_cpu_threads')</td>
           <td data-attr="info-cpus"><x-icon name="refresh-cw" class="size-4 animate-spin" /></td>
           </tr>
         </table>
@@ -62,7 +62,7 @@
       <div>
       <div class="card" data-variant="outline">
       <header>
-      Description
+      @lang('admin/nodes.about.description')
       </header>
       <section class="table-container">
       <pre>{{ $node->description }}</pre>
@@ -73,17 +73,16 @@
       <div>
       <div class="card" data-variant="destructive">
         <header>
-        <h3 class="text-lg font-semibold">Delete Node</h3>
+        <h3 class="text-lg font-semibold">@lang('admin/nodes.about.delete_node')</h3>
         </header>
         <section>
-        <p class="no-margin">Deleting a node is a irreversible action and will immediately remove this node from the
-          panel. There must be no servers associated with this node in order to continue.</p>
+        <p class="no-margin">@lang('admin/nodes.about.delete_node_help')</p>
         </section>
         <footer>
         <form action="{{ route('admin.nodes.view.delete', $node->id) }}" method="POST">
           {!! csrf_field() !!}
           {!! method_field('DELETE') !!}
-          <button type="submit" class="btn ml-auto" data-variant="destructive" data-size="sm" {{ ($node->servers_count < 1) ?: 'disabled' }}>Yes, Delete This Node</button>
+          <button type="submit" class="btn ml-auto" data-variant="destructive" data-size="sm" {{ ($node->servers_count < 1) ?: 'disabled' }}>@lang('admin/nodes.about.yes_delete')</button>
         </form>
         </footer>
       </div>
@@ -102,28 +101,28 @@
     <div>
       <div class="card">
         <header>
-          <h3 class="text-lg font-semibold">At-a-Glance</h3>
+          <h3 class="text-lg font-semibold">@lang('admin/nodes.about.at_a_glance')</h3>
         </header>
         <section>
           <div class="grid gap-6">
             @if($node->maintenance_mode)
               <div class="alert" data-variant="warning" role="alert">
                 <x-icon name="wrench" class="size-4" />
-                <span>This node is under maintenance</span>
+                <span>@lang('admin/nodes.about.maintenance_mode')</span>
               </div>
             @endif
             <div class="w-full min-w-0 [&_canvas]:!max-w-full [&_.chart]:w-full">
-              <canvas id="disk-chart" aria-label="Disk space allocation"></canvas>
+              <canvas id="disk-chart" aria-label="@lang('admin/nodes.about.disk_aria_label')"></canvas>
             </div>
             <div class="w-full min-w-0 [&_canvas]:!max-w-full [&_.chart]:w-full">
-              <canvas id="memory-chart" aria-label="Memory allocation"></canvas>
+              <canvas id="memory-chart" aria-label="@lang('admin/nodes.about.memory_aria_label')"></canvas>
             </div>
           </div>
         </section>
         <div>
           <div class="card" data-variant="outline">
             <section class="text-center">
-              <p class="text-sm text-muted-foreground">Total Servers</p>
+              <p class="text-sm text-muted-foreground">@lang('admin/nodes.about.total_servers')</p>
               <p class="text-3xl font-bold">{{ $node->servers_count }}</p>
             </section>
           </div>
@@ -148,11 +147,11 @@
         type: 'bar',
         labelKey: 'label',
         data: [
-          { label: 'Disk', used: diskPercent, free: 100 - diskPercent },
+          { label: '@lang("admin.nodes.about.disk_chart_label")', used: diskPercent, free: 100 - diskPercent },
         ],
         series: {
-          used: { label: 'Used ({{ $allocatedDisk }})', color: 'var(--chart-1)' },
-          free: { label: 'Free ({{ $totalDisk }})', color: 'var(--chart-2)' },
+          used: { label: '@lang("admin.nodes.about.used", ["value" => $allocatedDisk])', color: 'var(--chart-1)' },
+          free: { label: '@lang("admin.nodes.about.free", ["value" => $totalDisk])', color: 'var(--chart-2)' },
         },
         legend: true,
         options: {
@@ -168,11 +167,11 @@
         type: 'bar',
         labelKey: 'label',
         data: [
-          { label: 'Memory', used: memoryPercent, free: 100 - memoryPercent },
+          { label: '@lang("admin.nodes.about.memory_chart_label")', used: memoryPercent, free: 100 - memoryPercent },
         ],
         series: {
-          used: { label: 'Used ({{ $allocatedMemory }})', color: 'var(--chart-1)' },
-          free: { label: 'Free ({{ $totalMemory }})', color: 'var(--chart-2)' },
+          used: { label: '@lang("admin.nodes.about.used", ["value" => $allocatedMemory])', color: 'var(--chart-1)' },
+          free: { label: '@lang("admin.nodes.about.free", ["value" => $totalMemory])', color: 'var(--chart-2)' },
         },
         legend: true,
         options: {

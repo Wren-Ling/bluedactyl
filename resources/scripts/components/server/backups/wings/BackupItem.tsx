@@ -1,6 +1,7 @@
 import { Cloud, Lock } from 'lucide-react';
 
 import { format, formatDistanceToNow } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 import Can from '@/components/elements/Can';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
@@ -23,6 +24,7 @@ interface Props {
 }
 
 const BackupItem = ({ backup }: Props) => {
+    const { t } = useTranslation('backups');
     const { mutate } = getServerBackups();
 
     useWebsocketEvent(`${SocketEvent.BACKUP_COMPLETED}:${backup.uuid}` as SocketEvent, async (data) => {
@@ -73,24 +75,24 @@ const BackupItem = ({ backup }: Props) => {
                 <PageListItem>
                     <div className='flex items-center gap-3 w-full'>
                         <div className='flex flex-row align-middle items-center gap-6 truncate'>
-                            <div className='flex-shrink-0 w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center'>
+                            <div className='flex-shrink-0 w-9 h-9 rounded-lg bg-muted/30 flex items-center justify-center'>
                                 {getStatusIcon()}
                             </div>
                             <div className='flex-1 min-w-0'>
                                 <div className='flex items-center gap-2 mb-1.5'>
-                                    <h3 className='text-sm font-medium text-zinc-100 truncate'>{backup.name}</h3>
+                                    <h3 className='text-sm font-medium text-foreground truncate'>{backup.name}</h3>
                                     {backup.isAutomatic && (
                                         <span className='text-xs text-blue-400 font-medium bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded'>
-                                            Automatic
+                                            {t('automatic')}
                                         </span>
                                     )}
                                     {backup.isLocked && (
                                         <span className='text-xs text-red-400 font-medium bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded'>
-                                            Locked
+                                            {t('locked')}
                                         </span>
                                     )}
                                 </div>
-                                {backup.checksum && <p className='text-xs text-zinc-400 font-mono truncate'>{backup.checksum}</p>}
+                                {backup.checksum && <p className='text-xs text-muted-foreground font-mono truncate'>{backup.checksum}</p>}
                             </div>
                         </div>
                     </div>
@@ -98,21 +100,21 @@ const BackupItem = ({ backup }: Props) => {
                     <div className='visible sm:block flex-shrink-0 text-right min-w-[90px] '>
                         {backup.completedAt && backup.bytes ? (
                             <>
-                                <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Size</p>
-                                <p className='text-sm text-zinc-300 font-medium'>{bytesToString(backup.bytes)}</p>
+                                <p className='text-xs text-foreground0 uppercase tracking-wide mb-1'>{t('size')}</p>
+                                <p className='text-sm text-foreground/80 font-medium'>{bytesToString(backup.bytes)}</p>
                             </>
                         ) : (
                             <>
-                                <p className='text-xs text-transparent uppercase tracking-wide mb-1'>Size</p>
+                                <p className='text-xs text-transparent uppercase tracking-wide mb-1'>{t('size')}</p>
                                 <p className='text-sm text-transparent font-medium'>-</p>
                             </>
                         )}
                     </div>
 
                     <div className='hidden sm:block flex-shrink-0 text-right min-w-[130px] mr-5'>
-                        <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Created</p>
+                        <p className='text-xs text-foreground0 uppercase tracking-wide mb-1'>{t('created')}</p>
                         <p
-                            className='text-sm text-zinc-300 font-medium'
+                            className='text-sm text-foreground/80 font-medium'
                             title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')}
                         >
                             {formatDistanceToNow(backup.createdAt, { includeSeconds: true, addSuffix: true })}

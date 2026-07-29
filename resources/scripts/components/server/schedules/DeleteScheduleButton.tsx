@@ -1,5 +1,6 @@
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const DeleteScheduleButton = ({ scheduleId, onDeleted }: Props) => {
+    const { t } = useTranslation('schedules');
     const [visible, setVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -44,15 +46,15 @@ const DeleteScheduleButton = ({ scheduleId, onDeleted }: Props) => {
             <Dialog.Confirm
                 open={visible}
                 onClose={() => setVisible(false)}
-                title={'Delete Schedule'}
-                confirm={'Delete'}
+                title={t('delete_schedule_title')}
+                confirm={t('delete')}
                 onConfirmed={onDelete}
                 loading={isLoading}
             >
-                All tasks will be removed and any running processes will be terminated.
+                {t('delete_schedule_description')}
             </Dialog.Confirm>
             <Button variant='destructive' className={'flex-1 sm:flex-none'} onClick={() => setVisible(true)}>
-                Delete
+                {t('delete')}
             </Button>
         </>
     );

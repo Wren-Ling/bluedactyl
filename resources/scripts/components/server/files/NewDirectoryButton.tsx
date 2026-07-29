@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { join } from 'pathe';
 import { useEffect, useState } from 'react';
@@ -21,10 +22,6 @@ interface Values {
     directoryName: string;
 }
 
-const schema = object().shape({
-    directoryName: string().required('A valid directory name must be provided.'),
-});
-
 // removed to prevent linting issues, you're welcome.
 //
 // const generateDirectoryData = (name: string): FileObject => ({
@@ -43,11 +40,17 @@ const schema = object().shape({
 // });
 
 const NewDirectoryDialog = ({ open, onClose }: { open: boolean; onClose: (v: boolean) => void }) => {
+    const { t } = useTranslation();
+
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
 
     const { mutate } = useFileManagerSwr();
     const { clearAndAddHttpError } = useFlashKey('files:directory-modal');
+
+    const schema = object().shape({
+        directoryName: string().required(t('files:valid_directory_name')),
+    });
 
     useEffect(() => {
         return () => {
@@ -71,12 +74,12 @@ const NewDirectoryDialog = ({ open, onClose }: { open: boolean; onClose: (v: boo
             {({ submitForm, values }) => (
                 <Dialog open={open} onOpenChange={onClose}>
                     <DialogContent>
-                        <DialogHeader><DialogTitle>New Folder</DialogTitle></DialogHeader>
+                        <DialogHeader><DialogTitle>{t('files:new_folder')}</DialogTitle></DialogHeader>
                         <FlashMessageRender byKey='files:directory-modal' />
                         <Form className={`m-0`}>
-                            <Field autoFocus id={'directoryName'} name={'directoryName'} label={'Name'} />
+                            <Field autoFocus id={'directoryName'} name={'directoryName'} label={t('files:name')} />
                             <p className={`mt-2 text-xs! break-all`}>
-                                <span className={`text-foreground/80`}>This folder will be created as&nbsp;</span>
+                                <span className={`text-foreground/80`}>{t('files:folder_created_as')}&nbsp;</span>
                                 <Code>
                                     /root/
                                     <span className={`text-blue-200`}>
@@ -87,10 +90,10 @@ const NewDirectoryDialog = ({ open, onClose }: { open: boolean; onClose: (v: boo
                         </Form>
                         <DialogFooter>
                             <Button variant='outline' className={'w-full sm:w-auto'} onClick={() => onClose(false)}>
-                                Cancel
+                                {t('files:cancel')}
                             </Button>
                             <Button className={'w-full sm:w-auto'} onClick={submitForm}>
-                                Create
+                                {t('files:create')}
                             </Button>
                         </DialogFooter>
                     </DialogContent>
@@ -101,13 +104,15 @@ const NewDirectoryDialog = ({ open, onClose }: { open: boolean; onClose: (v: boo
 };
 
 const NewDirectoryButton = () => {
+    const { t } = useTranslation();
+
     const [open, setOpen] = useState(false);
 
     return (
         <>
             <NewDirectoryDialog open={open} onClose={setOpen} />
             <Button variant='secondary' onClick={() => setOpen(true)}>
-                New Folder
+                {t('files:new_folder')}
             </Button>
         </>
     );

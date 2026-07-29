@@ -1,5 +1,6 @@
 import { Clock } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -18,6 +19,7 @@ import { ServerContext } from '@/state/server';
 import useFlash from '@/plugins/useFlash';
 
 function ScheduleContainer() {
+    const { t } = useTranslation('schedules');
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const { clearFlashes, addError } = useFlash();
     const [loading, setLoading] = useState(true);
@@ -43,18 +45,17 @@ function ScheduleContainer() {
             <FlashMessageRender byKey={'schedules'} />
             <MainPageHeader
                 direction='column'
-                title={'Schedules'}
+                title={t('title')}
                 titleChildren={
                     <Can action={'schedule.create'}>
                         <Button variant='default' onClick={() => setVisible(true)}>
-                            New Schedule
+                            {t('new_schedule')}
                         </Button>
                     </Can>
                 }
             >
                 <p className='text-sm leading-relaxed text-muted-foreground'>
-                    Automate server tasks with scheduled commands. Create recurring tasks to manage your server, run
-                    backups, or execute custom commands.
+                    {t('description')}
                 </p>
             </MainPageHeader>
             <Can action={'schedule.create'}>
@@ -68,10 +69,9 @@ function ScheduleContainer() {
                                 <div className='mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-muted'>
                                     <Clock className='size-8 text-muted-foreground' />
                                 </div>
-                                <h3 className='mb-2 text-lg font-medium text-foreground'>No schedules found</h3>
+                                <h3 className='mb-2 text-lg font-medium text-foreground'>{t('no_schedules')}</h3>
                                 <p className='max-w-sm text-sm text-muted-foreground'>
-                                    Your server does not have any scheduled tasks. Create one to automate server
-                                    management.
+                                    {t('no_schedules_description')}
                                 </p>
                             </div>
                         </div>

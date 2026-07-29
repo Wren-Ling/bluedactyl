@@ -1,20 +1,20 @@
 @extends('layouts.admin')
 
 @section('title')
-    Server — {{ $server->name }}: Mounts
+    @lang('admin/server.overview.title') — {{ $server->name }}: @lang('admin/server.mounts.title')
 @endsection
 
 @section('content-header')
     <h1 class="text-xl font-bold">{{ $server->name }}</h1>
-    <p class="text-sm text-muted-foreground">Manage server mounts.</p>
+    <p class="text-sm text-muted-foreground">@lang('admin/server.mounts.description')</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/server.mounts.breadcrumb_admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <a href="{{ route('admin.servers') }}">Servers</a>
+        <a href="{{ route('admin.servers') }}">@lang('admin/server.mounts.breadcrumb_servers')</a>
         <x-icon name="chevron-right" class="size-3" />
         <a href="{{ route('admin.servers.view', $server->id) }}">{{ $server->name }}</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>Mounts</span>
+        <span>@lang('admin/server.mounts.breadcrumb_mounts')</span>
     </nav>
 @endsection
 
@@ -25,17 +25,17 @@
         <div class="col-span-full">
             <div class="card">
                 <header>
-                    <h3 class="text-lg font-semibold">Available Mounts</h3>
+                    <h3 class="text-lg font-semibold">@lang('admin/server.mounts.available_mounts')</h3>
                 </header>
 
                 <section class="table-container no-padding">
                     <table class="table">
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Source</th>
-                            <th>Target</th>
-                            <th>Status</th>
+                            <th>@lang('admin/server.mounts.id')</th>
+                            <th>@lang('admin/server.mounts.name')</th>
+                            <th>@lang('admin/server.mounts.source')</th>
+                            <th>@lang('admin/server.mounts.target')</th>
+                            <th>@lang('admin/server.mounts.status')</th>
                             <th></th>
                         </tr>
 
@@ -48,7 +48,7 @@
 
                                 @if (! in_array($mount->id, $server->mounts->pluck('id')->toArray()))
                                     <td>
-                                        <span class="badge" data-variant="primary">Unmounted</span>
+                                        <span class="badge" data-variant="primary">@lang('admin/server.mounts.unmounted')</span>
                                     </td>
 
                                     <td>
@@ -60,7 +60,7 @@
                                     </td>
                                 @else
                                     <td>
-                                        <span class="badge" data-variant="success">Mounted</span>
+                                        <span class="badge" data-variant="success">@lang('admin/server.mounts.mounted')</span>
                                     </td>
 
                                     <td>

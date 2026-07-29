@@ -1,20 +1,20 @@
 @extends('layouts.admin')
 
 @section('title')
-    Server — {{ $server->name }}: Delete
+    @lang('admin/server.overview.title') — {{ $server->name }}: @lang('admin/server.delete.title')
 @endsection
 
 @section('content-header')
     <h1 class="text-xl font-bold">{{ $server->name }}</h1>
-    <p class="text-sm text-muted-foreground">Delete this server from the panel.</p>
+    <p class="text-sm text-muted-foreground">@lang('admin/server.delete.description')</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/server.delete.breadcrumb_admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <a href="{{ route('admin.servers') }}">Servers</a>
+        <a href="{{ route('admin.servers') }}">@lang('admin/server.delete.breadcrumb_servers')</a>
         <x-icon name="chevron-right" class="size-3" />
         <a href="{{ route('admin.servers.view', $server->id) }}">{{ $server->name }}</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>Delete</span>
+        <span>@lang('admin/server.delete.breadcrumb_delete')</span>
     </nav>
 @endsection
 
@@ -24,16 +24,16 @@
     <div>
         <div class="card">
             <header>
-                <h3 class="text-lg font-semibold">Safely Delete Server</h3>
+                <h3 class="text-lg font-semibold">@lang('admin/server.delete.safely_delete')</h3>
             </header>
             <section>
-                <p>This action will attempt to delete the server from both the panel and daemon. If either one reports an error the action will be cancelled.</p>
-                <p class="text-sm text-destructive">Deleting a server is an irreversible action. <strong>All server data</strong> (including files and users) will be removed from the system.</p>
+                <p>@lang('admin/server.delete.safely_delete_desc')</p>
+                <p class="text-sm text-destructive">@lang('admin/server.delete.safely_delete_warning')</p>
             </section>
             <footer>
                 <form id="deleteform" action="{{ route('admin.servers.view.delete', $server->id) }}" method="POST">
                     {!! csrf_field() !!}
-                    <button id="deletebtn" class="btn" data-variant="destructive">Safely Delete This Server</button>
+                    <button id="deletebtn" class="btn" data-variant="destructive">@lang('admin/server.delete.safely_delete_button')</button>
                 </form>
             </footer>
         </div>
@@ -41,17 +41,17 @@
     <div>
         <div class="card" data-variant="destructive">
             <header>
-                <h3 class="text-lg font-semibold">Force Delete Server</h3>
+                <h3 class="text-lg font-semibold">@lang('admin/server.delete.force_delete')</h3>
             </header>
             <section>
-                <p>This action will attempt to delete the server from both the panel and daemon. If the daemon does not respond, or reports an error the deletion will continue.</p>
-                <p class="text-sm text-destructive">Deleting a server is an irreversible action. <strong>All server data</strong> (including files and users) will be removed from the system. This method may leave dangling files on your daemon if it reports an error.</p>
+                <p>@lang('admin/server.delete.force_delete_desc')</p>
+                <p class="text-sm text-destructive">@lang('admin/server.delete.force_delete_warning')</p>
             </section>
             <footer>
                 <form id="forcedeleteform" action="{{ route('admin.servers.view.delete', $server->id) }}" method="POST">
                     {!! csrf_field() !!}
                     <input type="hidden" name="force_delete" value="1" />
-                    <button id="forcedeletebtn" class="btn" data-variant="destructive">Forcibly Delete This Server</button>
+                    <button id="forcedeletebtn" class="btn" data-variant="destructive">@lang('admin/server.delete.force_delete_button')</button>
                 </form>
             </footer>
         </div>
@@ -64,14 +64,14 @@
     <script>
     $('#deletebtn').click(function (event) {
         event.preventDefault();
-        if (confirm('Are you sure that you want to delete this server? There is no going back, all data will immediately be removed.')) {
+        if (confirm('{{ trans('admin/server.delete.confirm_delete') }}')) {
             $('#deleteform').submit();
         }
     });
 
     $('#forcedeletebtn').click(function (event) {
         event.preventDefault();
-        if (confirm('Are you sure that you want to delete this server? There is no going back, all data will immediately be removed.')) {
+        if (confirm('{{ trans('admin/server.delete.confirm_delete') }}')) {
             $('#forcedeleteform').submit();
         }
     });

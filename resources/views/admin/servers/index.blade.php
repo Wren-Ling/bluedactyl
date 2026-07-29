@@ -1,16 +1,16 @@
 @extends('layouts.admin')
 
 @section('title')
-    List Servers
+    @lang('admin/server.index.title')
 @endsection
 
 @section('content-header')
-    <h1 class="text-xl font-bold">Servers</h1>
-    <p class="text-sm text-muted-foreground">All servers available on the system.</p>
+    <h1 class="text-xl font-bold">@lang('admin/server.index.header')</h1>
+    <p class="text-sm text-muted-foreground">@lang('admin/server.index.description')</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">Admin</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/server.index.breadcrumb_admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>Servers</span>
+        <span>@lang('admin/server.index.breadcrumb_servers')</span>
     </nav>
 @endsection
 
@@ -19,15 +19,15 @@
     <div class="col-span-full">
         <div class="card">
             <header>
-                <h3 class="text-lg font-semibold">Server List</h3>
+                <h3 class="text-lg font-semibold">@lang('admin/server.index.card_title')</h3>
                 <div class="card-action">
                     <div class="search01">
                         <form action="{{ route('admin.servers') }}" method="GET" class="flex items-center gap-1">
                             <div role="group" class="field">
-                                <input type="text" name="filter[*]" value="{{ request()->input()['filter']['*'] ?? '' }}" placeholder="Search Servers">
+                                <input type="text" name="filter[*]" value="{{ request()->input()['filter']['*'] ?? '' }}" placeholder="{{ trans('admin/server.index.search_placeholder') }}">
                             </div>
                             <button type="submit" class="btn" data-variant="outline" data-size="sm"><x-icon name="search" class="size-4" /></button>
-                            <a href="{{ route('admin.servers.new') }}"><button type="button" class="btn rounded-r-md -ml-px" data-size="sm">Create New</button></a>
+                            <a href="{{ route('admin.servers.new') }}"><button type="button" class="btn rounded-r-md -ml-px" data-size="sm">@lang('admin/server.index.create')</button></a>
                         </form>
                     </div>
                 </div>
@@ -37,11 +37,11 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Server Name</th>
-                                <th>UUID</th>
-                                <th>Owner</th>
-                                <th>Node</th>
-                                <th>Connection</th>
+                                <th>@lang('admin/server.index.server_name')</th>
+                                <th>@lang('admin/server.index.uuid')</th>
+                                <th>@lang('admin/server.index.owner')</th>
+                                <th>@lang('admin/server.index.node')</th>
+                                <th>@lang('admin/server.index.connection')</th>
                                 <!-- <th>Domain</th> -->
                                 <th></th>
                                 <th></th>
@@ -60,15 +60,15 @@
                                     <!-- <td>{{ $server->domain }}</td> -->
                                     <td class="text-center">
                                         @if($server->isSuspended())
-                                            <span class="badge" data-variant="destructive">Suspended</span>
+                                            <span class="badge" data-variant="destructive">@lang('admin/server.index.suspended')</span>
                                         @elseif(! $server->isInstalled())
-                                            <span class="badge" data-variant="warning">Installing</span>
+                                            <span class="badge" data-variant="warning">@lang('admin/server.index.installing')</span>
                                         @else
-                                            <span class="badge" data-variant="success">Active</span>
+                                            <span class="badge" data-variant="success">@lang('admin/server.index.active')</span>
                                         @endif
 
                                         @if($server->exclude_from_resource_calculation)
-                                            <br><small><span class="badge" data-variant="info" title="Excluded from resource calculations">Excluded</span></small>
+                                            <br><small><span class="badge" data-variant="info" title="@lang('admin/server.index.excluded_title')">@lang('admin/server.index.excluded')</span></small>
                                         @endif
                                     </td>
                                     <td class="text-center">
