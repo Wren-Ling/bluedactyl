@@ -120,7 +120,7 @@ public function index(Request $request): View
     public function store(NewUserFormRequest $request): RedirectResponse
     {
         $user = $this->creationService->handle($request->normalize());
-        $this->alert->success($this->translator->get('admin/user.notices.account_created'))->flash();
+        $this->alert->success($this->translator->get('admin/users.notices.account_created'))->flash();
 
         return redirect()->route('admin.users.view', $user->id);
     }

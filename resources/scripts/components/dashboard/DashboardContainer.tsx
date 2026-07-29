@@ -1,4 +1,4 @@
-import { ChevronDown, House, LayoutGrid, Menu } from 'lucide-react';
+import { ChevronDown, House, LayoutGrid, Menu, SlidersVertical } from 'lucide-react';
 import { useStoreState } from 'easy-peasy';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -12,7 +12,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import Pagination from '@/components/elements/Pagination';
@@ -120,36 +119,27 @@ const DashboardContainer = () => {
                         titleChildren={
                             <div className='flex items-center gap-3'>
                                 <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant='outline' size='sm'>
-                                            <ChevronDown className='size-3.5' />
-                                            {getTitle()}
-                                        </Button>
+                                    <DropdownMenuTrigger className='inline-flex h-9 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md border border-border bg-background px-3 py-1.5 text-sm font-medium text-muted-foreground transition-all hover:bg-muted hover:text-foreground focus-visible:outline-hidden'>
+                                        <SlidersVertical className='size-3.5' />
+                                        {getTitle()}
+                                        <ChevronDown className='size-3.5' />
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent className='z-50' sideOffset={8}>
                                         <DropdownMenuItem
-                                            onSelect={() => setServerViewMode('owner')}
+                                            onClick={() => setServerViewMode('owner')}
                                             className={serverViewMode === 'owner' ? 'bg-accent' : ''}
                                         >
                                             {t('dashboard:your_servers_only')}
                                         </DropdownMenuItem>
 
                                         {rootAdmin && (
-                                            <>
-                                                <DropdownMenuItem
-                                                    onSelect={() => setServerViewMode('admin-all')}
-                                                    className={serverViewMode === 'admin-all' ? 'bg-accent' : ''}
-                                                >
-                                                    {t('dashboard:all_servers_admin')}
-                                                </DropdownMenuItem>
-                                            </>
+                                            <DropdownMenuItem
+                                                onClick={() => setServerViewMode('admin-all')}
+                className={serverViewMode === 'admin-all' ? 'bg-accent' : ''}
+                                            >
+                                                {t('dashboard:all_servers_admin')}
+                                            </DropdownMenuItem>
                                         )}
-                                        <DropdownMenuItem
-                                            onSelect={() => setServerViewMode('all')}
-                                            className={serverViewMode === 'all' ? 'bg-accent' : ''}
-                                        >
-                                            {t('dashboard:all_servers')}
-                                        </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
 
