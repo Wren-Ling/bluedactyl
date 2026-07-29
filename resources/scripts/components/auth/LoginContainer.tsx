@@ -22,6 +22,8 @@ import login from '@/api/auth/login';
 
 import i18n from '@/i18n/config';
 
+import { store } from '@/state';
+
 import { httpErrorToHuman } from '@/api/http';
 
 const LANGUAGES = [
@@ -46,6 +48,18 @@ const LoginContainer = () => {
         try {
             const res = await login({ user: credential, password });
             if (res.complete) {
+                if (res.user) {
+                    store.getActions().user.setUserData({
+                        uuid: res.user.uuid,
+                        username: res.user.username,
+                        email: res.user.email,
+                        language: res.user.language,
+                        rootAdmin: res.user.root_admin,
+                        useTotp: res.user.use_totp,
+                        createdAt: new Date(res.user.created_at),
+                        updatedAt: new Date(res.user.updated_at),
+                    });
+                }
                 navigate(res.intended || '/');
             } else if (res.confirmationToken) {
                 navigate(`/auth/login/checkpoint/${res.confirmationToken}`);

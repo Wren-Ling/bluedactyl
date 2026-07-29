@@ -11,6 +11,16 @@ export interface LoginResponse {
     intended?: string;
     confirmationToken?: string;
     error?: string;
+    user?: {
+        uuid: string;
+        username: string;
+        email: string;
+        language: string;
+        root_admin: boolean;
+        use_totp: boolean;
+        created_at: string;
+        updated_at: string;
+    };
 }
 
 export default async (data: LoginData): Promise<LoginResponse> => {
@@ -34,14 +44,14 @@ export default async (data: LoginData): Promise<LoginResponse> => {
             throw new Error('Invalid server response format');
         }
 
+        const body = response.data.data ?? response.data;
+
         return {
-            complete: response.data.complete ?? response.data.data?.complete ?? false,
-            intended: response.data.intended ?? response.data.data?.intended,
-            confirmationToken:
-                response.data.confirmationToken ??
-                response.data.data?.confirmation_token ??
-                response.data.data?.confirmationToken,
-            error: response.data.error ?? response.data.message,
+            complete: body.complete ?? false,
+            intended: body.intended,
+            confirmationToken: body.confirmation_token ?? body.confirmationToken,
+            error: body.error ?? body.message,
+            user: body.user,
         };
     } catch (error: any) {
         const loginError = new Error(
