@@ -1,96 +1,81 @@
 @extends('layouts.admin')
 
 @section('title')
-    @lang('admin/dashboard.title')
+    @lang('admin/users.list.title')
 @endsection
 
 @section('content-header')
-    <h1 class="text-xl font-bold">@lang('admin/dashboard.header')</h1>
-    <p class="text-sm text-muted-foreground">@lang('admin/dashboard.header_subtitle')</p>
+    <h1 class="text-xl font-bold">@lang('admin/users.list.header')</h1>
+    <p class="text-sm text-muted-foreground">@lang('admin/users.list.header_desc')</p>
     <nav class="flex items-center gap-1 text-sm text-muted-foreground">
-        <a href="{{ route('admin.index') }}">@lang('admin/dashboard.breadcrumb_admin')</a>
+        <a href="{{ route('admin.index') }}">@lang('admin/users.list.breadcrumb_admin')</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>@lang('admin/dashboard.breadcrumb_index')</span>
+        <span>@lang('admin/users.list.breadcrumb_here')</span>
     </nav>
 @endsection
 
 @section('content')
-    <div class="grid gap-6">
-        <div class="col-span-full">
-            <div class="card">
-                <header>
-                    <h3 class="text-lg font-semibold">@lang('admin/dashboard.system_info')</h3>
-                </header>
-                <section>
-                    @lang('admin/dashboard.system_info_text', ['version' => config('app.version')])
-                </section>
-
-
-            </div>
+<div class="grid gap-6">
+    <div class="col-span-full">
+        <div class="card overflow-hidden">
+            <header>
+                <h3 class="text-lg font-semibold">@lang('admin/users.list.card_title')</h3>
+                <div class="card-action">
+                    <div class="search01">
+                        <form action="{{ route('admin.users') }}" method="GET" class="flex items-center gap-1">
+                            <div role="group" class="field">
+                                <input type="text" name="filter[email]" value="{{ request()->input('filter.email') }}" placeholder="{{ trans('admin/users.list.search_placeholder') }}">
+                            </div>
+                            <button type="submit" class="btn" data-variant="outline" data-size="sm"><x-icon name="search" class="size-4" /></button>
+                            <a href="{{ route('admin.users.new') }}"><button type="button" class="btn rounded-r-md -ml-px" data-size="sm">@lang('admin/users.list.create_new')</button></a>
+                        </form>
+                    </div>
+                </div>
+            </header>
+            <section>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="hidden sm:table-cell">@lang('admin/users.list.id')</th>
+                                <th>@lang('admin/users.list.email')</th>
+                                <th>@lang('admin/users.list.username')</th>
+                                <th class="text-center hidden md:table-cell">@lang('admin/users.list.2fa')</th>
+                                <th class="text-center hidden lg:table-cell"><span data-tooltip="@lang('admin/users.list.servers_owned_tooltip')" data-side="top">@lang('admin/users.list.servers_owned')</span></th>
+                                <th class="text-center hidden lg:table-cell"><span data-tooltip="@lang('admin/users.list.can_access_tooltip')" data-side="top">@lang('admin/users.list.can_access')</span></th>
+                                <th class="hidden sm:table-cell"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($users as $user)
+                                <tr class="align-middle">
+                                    <td class="hidden sm:table-cell"><code>{{ $user->id }}</code></td>
+                                    <td><a href="{{ route('admin.users.view', $user->id) }}">{{ $user->email }}</a> @if($user->root_admin)<x-icon name="star" class="size-4" />@endif</td>
+                                    <td>{{ $user->username }}</td>
+                                    <td class="text-center hidden md:table-cell">
+                                        @if($user->use_totp)
+                                            <x-icon name="lock" class="size-4" />
+                                        @else
+                                            <x-icon name="unlock" class="size-4" />
+                                        @endif
+                                    </td>
+                                    <td class="text-center hidden lg:table-cell">
+                                        <a href="{{ route('admin.servers', ['filter[owner_id]' => $user->id]) }}">{{ $user->servers_count }}</a>
+                                    </td>
+                                    <td class="text-center hidden lg:table-cell">{{ $user->subuser_of_count }}</td>
+                                    <td class="text-center hidden sm:table-cell"><img src="https://cravatar.cn/avatar/{{ md5(strtolower($user->email)) }}?s=100" class="rounded-full h-5" /></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            @if($users->hasPages())
+                <footer class="flex items-center justify-center">
+                    <div class="text-center">{!! $users->appends(['query' => Request::input('query')])->render() !!}</div>
+                </footer>
+            @endif
         </div>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div class="text-center">
-            <a href="https://discord.gg/UhuYKKK2uM"><button class="btn w-full" data-variant="secondary"><x-icon name="headphones" class="size-4" /> @lang('admin/dashboard.get_help')</button></a>
-        </div>
-        <div class="text-center">
-            <a href="https://pyrodactyl.dev"><button class="btn w-full"><x-icon name="link" class="size-4" /> @lang('admin/dashboard.documentation')</button></a>
-        </div>
-        <div class="text-center">
-            <a href="https://github.com/pyrohost/pyrodactyl"><button class="btn w-full"><x-icon name="headphones" class="size-4" /> @lang('admin/dashboard.github')</button></a>
-        </div>
-        <div class="text-center">
-            <a href="{{ $version->getDonations() }}"><button class="btn w-full"><x-icon name="dollar-sign" class="size-4" /> @lang('admin/dashboard.support_project')</button></a>
-        </div>
-    </div>
-@endsection
-
-@section('footer-scripts')
-    @parent
-    <script>
-        $(document).ready(function () {
-            function formatBytes(bytes, decimals = 2) {
-                if (!bytes) return '0 B';
-                const k = 1024;
-                const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-                const i = Math.floor(Math.log(bytes) / Math.log(k));
-                return `${parseFloat((bytes / Math.pow(k, i)).toFixed(decimals))} ${sizes[i]}`;
-            }
-
-            function formatUptime(seconds) {
-                const days = Math.floor(seconds / 86400);
-                const hours = Math.floor((seconds % 86400) / 3600);
-                const minutes = Math.floor((seconds % 3600) / 60);
-                return `${days}d ${hours}h ${minutes}m`;
-            }
-
-            function updateSystemMetrics() {
-                $.ajax({
-                    url: '/api/application/panel/status',
-                    method: 'GET',
-                    success: function (data) {
-                        $('#cpu-load').text(`${data.metrics.cpu.toFixed(1)}%`);
-                        $('#ram-usage').html(
-                            `${formatBytes(data.metrics.memory.used)} Used <br><small>of ${formatBytes(data.metrics.memory.total)}</small>`
-                        );
-                        $('#disk-usage').html(
-                            `${formatBytes(data.metrics.disk.used)} Used <br><small>of ${formatBytes(data.metrics.disk.total)}</small>`
-                        );
-                        $('#uptime').text(formatUptime(data.metrics.uptime));
-                    },
-                    error: function (xhr) {
-                        console.error('Failed to fetch system metrics:', xhr.responseText);
-                    }
-                });
-            }
-
-            // Initial update
-            // updateSystemMetrics();
-
-            // Update every 60 seconds
-            // setInterval(updateSystemMetrics, 60000);
-        });
-    </script>
-
-
+</div>
 @endsection
