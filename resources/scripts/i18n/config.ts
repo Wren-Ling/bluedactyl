@@ -50,7 +50,7 @@ function getStoredLanguage(): string {
     if (fromStorage) return fromStorage;
     const fromCookie = getCookie('language');
     if (fromCookie) return fromCookie;
-    return (window as any).PterodactylUser?.language || 'en';
+    return (window as any).PterodactylUser?.language || (window as any).SiteConfiguration?.locale || 'zh';
 }
 
 function persistLanguage(lng: string) {
@@ -99,7 +99,7 @@ i18n.use(initReactI18next).init({
 
     },
     lng: language,
-    fallbackLng: 'en',
+    fallbackLng: 'zh',
     ns: [
         'common', 'server', 'console', 'files', 'databases', 'schedules',
         'backups', 'network', 'startup', 'users', 'settings',

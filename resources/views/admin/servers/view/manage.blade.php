@@ -193,9 +193,12 @@
 
 @section('footer-scripts')
     @parent
-    {!! Theme::js('vendor/lodash/lodash.js') !!}
 
     @if($canTransfer)
-        {!! Theme::js('js/admin/server/transfer.js') !!}
+        <script>
+            window.Pyrodactyl = window.Pyrodactyl || {};
+            window.Pyrodactyl.nodeData = @json($nodeData);
+        </script>
+        {!! Theme::js('js/admin/server/transfer.js?v=20260902') !!}
     @endif
 @endsection

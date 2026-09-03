@@ -91,29 +91,7 @@
             </section>
             @if($node->allocations->hasPages())
                 <footer class="text-center">
-                    <nav role="navigation" aria-label="pagination" class="mx-auto flex w-full justify-center">
-                        <ul class="flex flex-row items-center gap-1">
-                            @if($node->allocations->onFirstPage())
-                                <li><span class="btn" data-variant="ghost" data-size="sm" aria-disabled="true"><x-icon name="chevron-left" class="size-4" /> <span>@lang('admin/nodes.allocation.previous')</span></span></li>
-                            @else
-                                <li><a href="{{ $node->allocations->previousPageUrl() }}" class="btn" data-variant="ghost" data-size="sm"><x-icon name="chevron-left" class="size-4" /> <span>@lang('admin/nodes.allocation.previous')</span></a></li>
-                            @endif
-
-                            @for($page = 1; $page <= $node->allocations->lastPage(); $page++)
-                                @if($page == $node->allocations->currentPage())
-                                    <li><a href="{{ $node->allocations->url($page) }}" class="btn" data-variant="outline" data-size="icon" aria-current="page">{{ $page }}</a></li>
-                                @else
-                                    <li><a href="{{ $node->allocations->url($page) }}" class="btn" data-variant="ghost" data-size="icon">{{ $page }}</a></li>
-                                @endif
-                            @endfor
-
-                            @if($node->allocations->hasMorePages())
-                                <li><a href="{{ $node->allocations->nextPageUrl() }}" class="btn" data-variant="ghost" data-size="sm"><span>@lang('admin/nodes.allocation.next')</span> <x-icon name="chevron-right" class="size-4" /></a></li>
-                            @else
-                                <li><span class="btn" data-variant="ghost" data-size="sm" aria-disabled="true"><span>@lang('admin/nodes.allocation.next')</span> <x-icon name="chevron-right" class="size-4" /></span></li>
-                            @endif
-                        </ul>
-                    </nav>
+                    @include('admin.partials.pagination', ['paginator' => $node->allocations])
                 </footer>
             @endif
         </div>

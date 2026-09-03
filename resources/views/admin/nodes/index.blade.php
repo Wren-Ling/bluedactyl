@@ -56,7 +56,7 @@
                             </tr>
                             @foreach ($nodes as $node)
                                 <tr>
-                                    <td class="text-center text-muted-foreground left-icon" data-action="ping" data-secret="{{ $node->getDecryptedKey() }}" data-location="{{ $node->scheme }}://{{ $node->fqdn }}:{{ $node->daemonListen }}/api/system"><x-icon name="refresh-cw" class="size-4" /></td>
+                                    <td class="admin-status-icon text-center text-muted-foreground left-icon" data-action="ping" data-secret="{{ $node->getDecryptedKey() }}" data-location="{{ $node->scheme }}://{{ $node->fqdn }}:{{ $node->daemonListen }}/api/system"><x-icon name="refresh-cw" /></td>
                                     <td>
                                         @if($node->maintenance_mode)
                                             <span class="badge" data-variant="warning"><x-icon name="wrench" class="size-4" /></span>
@@ -81,7 +81,7 @@
             </section>
             @if($nodes->hasPages())
                 <footer class="flex items-center justify-center">
-                    <div class="text-center">{!! $nodes->appends(['query' => Request::input('query')])->render() !!}</div>
+                    @include('admin.partials.pagination', ['paginator' => $nodes->appends(['query' => Request::input('query')])])
                 </footer>
             @endif
         </div>

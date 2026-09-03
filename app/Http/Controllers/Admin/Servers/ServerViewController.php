@@ -133,14 +133,13 @@ class ServerViewController extends Controller
             $canTransfer = true;
         }
 
-        \JavaScript::put([
-            'nodeData' => $this->nodeRepository->getNodesForServerCreation(),
-        ]);
+        $nodeData = $this->nodeRepository->getNodesForServerCreation();
 
         return $this->view->make('admin.servers.view.manage', [
             'server' => $server,
             'locations' => $this->locationRepository->all(),
             'canTransfer' => $canTransfer,
+            'nodeData' => $nodeData,
         ]);
     }
 

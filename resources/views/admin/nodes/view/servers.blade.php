@@ -57,7 +57,7 @@
                 </table>
                 @if($servers->hasPages())
                     <footer class="with-border">
-                        <div class="text-center">{!! $servers->render() !!}</div>
+                        @include('admin.partials.pagination', ['paginator' => $servers])
                     </footer>
                 @endif
             </section>
