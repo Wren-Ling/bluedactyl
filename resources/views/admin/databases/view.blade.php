@@ -128,7 +128,7 @@
             </section>
             @if($databases->hasPages())
                 <footer class="flex justify-center">
-                    {!! $databases->render() !!}
+                    @include('admin.partials.pagination', ['paginator' => $databases])
                 </footer>
             @endif
         </div>

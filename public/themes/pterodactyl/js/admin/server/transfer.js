@@ -1,56 +1,55 @@
-$(document).ready(function () {
-    $('#pNodeId').select2({
-        placeholder: 'Select a Node',
-    }).change();
+document.addEventListener('DOMContentLoaded', function () {
+    const nodeSelect = document.getElementById('pNodeId');
+    const allocationSelect = document.getElementById('pAllocation');
+    const additionalAllocationsSelect = document.getElementById('pAllocationAdditional');
 
-    $('#pAllocation').select2({
-        placeholder: 'Select a Default Allocation',
-    });
+    if (!nodeSelect || !allocationSelect || !additionalAllocationsSelect) {
+        return;
+    }
 
-    $('#pAllocationAdditional').select2({
-        placeholder: 'Select Additional Allocations',
-    });
-});
+    function getCurrentNode() {
+        const nodes = window.Pyrodactyl?.nodeData ?? [];
 
-$('#pNodeId').on('change', function () {
-    let currentNode = $(this).val();
+        return nodes.find(function (node) {
+            return String(node.id) === nodeSelect.value;
+        });
+    }
 
-    $.each(Pterodactyl.nodeData, function (i, v) {
-        if (v.id == currentNode) {
-            $('#pAllocation').html('').select2({
-                data: v.allocations,
-                placeholder: 'Select a Default Allocation',
-            });
+    function appendOptions(select, allocations) {
+        allocations.forEach(function (allocation) {
+            select.add(new Option(allocation.text, allocation.id));
+        });
+    }
 
-            updateAdditionalAllocations();
+    function updateAdditionalAllocations() {
+        const node = getCurrentNode();
+
+        additionalAllocationsSelect.replaceChildren();
+        if (!node) {
+            return;
         }
-    });
-});
 
-$('#pAllocation').on('change', function () {
-    updateAdditionalAllocations();
-});
+        appendOptions(
+            additionalAllocationsSelect,
+            node.allocations.filter(function (allocation) {
+                return String(allocation.id) !== allocationSelect.value;
+            })
+        );
+    }
 
-function updateAdditionalAllocations() {
-    let currentAllocation = $('#pAllocation').val();
-    let currentNode = $('#pNodeId').val();
+    nodeSelect.addEventListener('change', function () {
+        const node = getCurrentNode();
 
-    $.each(Pterodactyl.nodeData, function (i, v) {
-        if (v.id == currentNode) {
-            let allocations = [];
-
-            for (let i = 0; i < v.allocations.length; i++) {
-                const allocation = v.allocations[i];
-
-                if (allocation.id != currentAllocation) {
-                    allocations.push(allocation);
-                }
-            }
-
-            $('#pAllocationAdditional').html('').select2({
-                data: allocations,
-                placeholder: 'Select Additional Allocations',
-            });
+        allocationSelect.replaceChildren();
+        additionalAllocationsSelect.replaceChildren();
+        if (!node) {
+            return;
         }
+
+        appendOptions(allocationSelect, node.allocations);
+        updateAdditionalAllocations();
     });
-}
+
+    allocationSelect.addEventListener('change', updateAdditionalAllocations);
+    nodeSelect.dispatchEvent(new Event('change'));
+});

@@ -18,8 +18,8 @@
 
 @section('content')
 @include('admin.servers.partials.navigation')
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="md:col-span-2">
+<div class="grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-3">
+    <div class="min-w-0 lg:col-span-2">
         <div class="grid gap-6">
             <div class="col-span-full">
                 <div class="card">
@@ -127,55 +127,55 @@
             </div>
         </div>
     </div>
-    <div>
-        <div class="card">
-            <section class="pb-0">
-                <div class="grid gap-6">
+    <div class="min-w-0">
+        <div class="grid gap-6">
                     @if($server->isSuspended())
-                        <div>
-                            <div class="card" data-variant="warning">
-                                <section>
-                                    <h3 class="text-lg font-semibold no-margin">@lang('admin/server.overview.suspended')</h3>
-                                </section>
-                            </div>
+                        <div class="card" data-variant="warning">
+                            <section>
+                                <h3 class="text-lg font-semibold no-margin">@lang('admin/server.overview.suspended')</h3>
+                            </section>
                         </div>
                     @endif
                     @if(!$server->isInstalled())
-                        <div>
-                            <div class="card" data-variant="info">
-                                <section>
-                                    <h3 class="text-lg font-semibold no-margin">{{ (! $server->isInstalled()) ? trans('admin/server.overview.installing') : trans('admin/server.overview.install_failed') }}</h3>
-                                </section>
-                            </div>
+                        <div class="card" data-variant="info">
+                            <section>
+                                <h3 class="text-lg font-semibold no-margin">{{ (! $server->isInstalled()) ? trans('admin/server.overview.installing') : trans('admin/server.overview.install_failed') }}</h3>
+                            </section>
                         </div>
                     @endif
-                    <div>
-                        <div class="card">
-                            <section>
-                                <h3>{{ str_limit($server->user->username, 16) }}</h3>
-                                <p>{{ $server->user->email }}</p>
-                                <p>@lang('admin/server.overview.server_owner')</p>
-                            </section>
-                            <x-icon name="user" class="size-4" />
-                            <a href="{{ route('admin.users.view', $server->user->id) }}" class="flex items-center gap-1 px-4 py-2 text-sm">
+                    <div class="card min-w-0">
+                        <header>
+                            <h3 class="flex min-w-0 items-center gap-2 text-base font-semibold">
+                                <x-icon name="user" class="size-4 shrink-0" />
+                                <span class="truncate" title="{{ $server->user->username }}">{{ $server->user->username }}</span>
+                            </h3>
+                        </header>
+                        <section class="min-w-0 space-y-1">
+                            <p class="truncate text-sm" title="{{ $server->user->email }}">{{ $server->user->email }}</p>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.overview.server_owner')</p>
+                        </section>
+                        <footer>
+                            <a href="{{ route('admin.users.view', $server->user->id) }}" class="btn" data-variant="ghost" data-size="sm">
                                 @lang('admin/server.overview.more_info') <x-icon name="arrow-right" class="size-4" />
                             </a>
-                        </div>
+                        </footer>
                     </div>
-                    <div>
-                        <div class="card">
-                            <section>
-                                <h3>{{ str_limit($server->node->name, 16) }}</h3>
-                                <p>@lang('admin/server.overview.server_node')</p>
-                            </section>
-                            <x-icon name="box" class="size-4" />
-                            <a href="{{ route('admin.nodes.view', $server->node->id) }}" class="flex items-center gap-1 px-4 py-2 text-sm">
+                    <div class="card min-w-0">
+                        <header>
+                            <h3 class="flex min-w-0 items-center gap-2 text-base font-semibold">
+                                <x-icon name="box" class="size-4 shrink-0" />
+                                <span class="truncate" title="{{ $server->node->name }}">{{ $server->node->name }}</span>
+                            </h3>
+                        </header>
+                        <section>
+                            <p class="text-sm text-muted-foreground">@lang('admin/server.overview.server_node')</p>
+                        </section>
+                        <footer>
+                            <a href="{{ route('admin.nodes.view', $server->node->id) }}" class="btn" data-variant="ghost" data-size="sm">
                                 @lang('admin/server.overview.more_info') <x-icon name="arrow-right" class="size-4" />
                             </a>
-                        </div>
+                        </footer>
                     </div>
-                </div>
-            </section>
         </div>
     </div>
 </div>

@@ -52,11 +52,11 @@
                                     <td><code>{{ $user->id }}</code></td>
                                     <td><a href="{{ route('admin.users.view', $user->id) }}">{{ $user->email }}</a> @if($user->root_admin)<x-icon name="star" class="size-4" />@endif</td>
                                     <td>{{ $user->username }}</td>
-                                    <td class="text-center">
+                                    <td class="admin-status-icon text-center">
                                         @if($user->use_totp)
-                                            <x-icon name="lock" class="size-4" />
+                                            <x-icon name="lock" />
                                         @else
-                                            <x-icon name="unlock" class="size-4" />
+                                            <x-icon name="unlock" />
                                         @endif
                                     </td>
                                     <td class="text-center">
@@ -72,7 +72,7 @@
             </section>
             @if($users->hasPages())
                 <footer class="flex items-center justify-center">
-                    <div class="text-center">{!! $users->appends(['query' => Request::input('query')])->render() !!}</div>
+                    @include('admin.partials.pagination', ['paginator' => $users->appends(['query' => Request::input('query')])])
                 </footer>
             @endif
         </div>
