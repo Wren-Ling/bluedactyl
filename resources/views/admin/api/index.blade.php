@@ -4,6 +4,8 @@
     @lang('admin/api.title')
 @endsection
 
+@section('contentWidth', 'max-w-none')
+
 @section('content-header')
     <h1 class="text-xl font-bold">@lang('admin/api.header')</h1>
     <p class="text-sm text-muted-foreground">@lang('admin/api.header_subtitle')</p>
@@ -15,25 +17,28 @@
 @endsection
 
 @section('content')
-    <div class="grid gap-6">
-        <div class="col-span-full">
-            <div class="card">
+    <div class="grid min-w-0 gap-6">
+        <div class="col-span-full min-w-0">
+            <div class="server-list-card card min-w-0 w-full">
                 <header>
                     <h3 class="text-lg font-semibold">@lang('admin/api.credentials_list')</h3>
                     <div class="card-action">
                         <a href="{{ route('admin.api.new') }}" class="btn" data-size="sm">@lang('admin/api.create_new')</a>
                     </div>
                 </header>
-                <section>
-                    <div class="table-container">
-                        <table class="table">
+                <section class="min-w-0">
+                    <div class="table-container w-full max-w-full">
+                        <table class="table w-full min-w-[760px] table-fixed">
+                            <thead>
                             <tr>
-                                <th>@lang('admin/api.key')</th>
-                                <th>@lang('admin/api.memo')</th>
-                                <th>@lang('admin/api.last_used')</th>
-                                <th>@lang('admin/api.created')</th>
-                                <th></th>
+                                <th class="w-[34%]">@lang('admin/api.key')</th>
+                                <th class="w-[20%]">@lang('admin/api.memo')</th>
+                                <th class="w-[20%]">@lang('admin/api.last_used')</th>
+                                <th class="w-[20%]">@lang('admin/api.created')</th>
+                                <th class="w-[6%]"></th>
                             </tr>
+                            </thead>
+                            <tbody>
                             @foreach($keys as $key)
                                 <tr>
                                     <td>
@@ -67,6 +72,7 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </section>

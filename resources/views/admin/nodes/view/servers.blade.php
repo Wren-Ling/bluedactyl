@@ -4,6 +4,8 @@
     {{ $node->name }}: @lang('admin/nodes.common.servers')
 @endsection
 
+@section('contentWidth', 'max-w-none')
+
 @section('content-header')
     <h1 class="text-xl font-bold">{{ $node->name }}</h1>
     <p class="text-sm text-muted-foreground">@lang('admin/nodes.servers.header_subtitle')</p>
@@ -19,8 +21,9 @@
 @endsection
 
 @section('content')
-<div class="grid gap-6">
-    <div class="col-span-full">
+<div class="admin-responsive-detail">
+<div class="grid min-w-0 gap-6">
+    <div class="col-span-full min-w-0">
         <div class="tabs">
             <nav role="tablist" aria-orientation="horizontal" data-variant="line">
                 <a href="{{ route('admin.nodes.view', $node->id) }}" role="tab" aria-selected="false" tabindex="-1">@lang('admin/nodes.common.about')</a>
@@ -32,19 +35,19 @@
         </div>
     </div>
 </div>
-<div class="grid gap-6">
-    <div class="col-span-full">
-        <div class="card">
+<div class="grid min-w-0 gap-6">
+    <div class="col-span-full min-w-0">
+        <div class="server-list-card card min-w-0 w-full">
             <header>
                 <h3 class="text-lg font-semibold">@lang('admin/nodes.servers.process_manager')</h3>
             </header>
-            <section class="table-container no-padding">
-                <table class="table">
+            <section class="table-container no-padding w-full max-w-full">
+                <table class="table w-full min-w-[760px] table-fixed">
                     <tr>
-                        <th>@lang('admin/nodes.servers.id')</th>
-                        <th>@lang('admin/nodes.servers.server_name')</th>
-                        <th>@lang('admin/nodes.servers.owner')</th>
-                        <th>@lang('admin/nodes.servers.service')</th>
+                        <th class="w-[15%]">@lang('admin/nodes.servers.id')</th>
+                        <th class="w-[25%]">@lang('admin/nodes.servers.server_name')</th>
+                        <th class="w-[35%]">@lang('admin/nodes.servers.owner')</th>
+                        <th class="w-[25%]">@lang('admin/nodes.servers.service')</th>
                     </tr>
                     @foreach($servers as $server)
                         <tr data-server="{{ $server->uuid }}">
@@ -55,13 +58,14 @@
                         </tr>
                     @endforeach
                 </table>
+            </section>
                 @if($servers->hasPages())
-                    <footer class="with-border">
+                    <footer class="flex items-center justify-center">
                         @include('admin.partials.pagination', ['paginator' => $servers])
                     </footer>
                 @endif
-            </section>
         </div>
     </div>
+</div>
 </div>
 @endsection

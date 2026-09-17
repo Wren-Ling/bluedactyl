@@ -17,6 +17,7 @@
 @endsection
 
 @section('content')
+  <div class="admin-responsive-detail">
   <div class="grid gap-6">
     <div class="col-span-full">
     <div class="tabs">
@@ -131,11 +132,36 @@
     </div>
   </div>
   </div>
-  </div>
 @endsection
 
 @section('footer-scripts')
   @parent
+  <script>
+    (async function getInformation() {
+      var controller = new AbortController();
+      var timeout = setTimeout(function () { controller.abort(); }, {{ (max(15, (int) config('pterodactyl.guzzle.timeout', 15)) + 5) * 1000 }});
+      try {
+        var response = await fetch(@json(route('admin.nodes.view.system-information', $node->id)), {
+          headers: { Accept: 'application/json' },
+          signal: controller.signal,
+        });
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        var data = await response.json();
+        if (!data.system || data.version == null) throw new Error('Invalid system information');
+        document.querySelector('[data-attr="info-version"]').textContent = data.version;
+        document.querySelector('[data-attr="info-system"]').textContent = data.system.type + ' (' + data.system.arch + ') ' + data.system.release;
+        document.querySelector('[data-attr="info-cpus"]').textContent = data.system.cpus;
+      } catch (error) {
+        document.querySelectorAll('[data-attr^="info-"]').forEach(function (element) {
+          element.textContent = @json(trans('admin/nodes.about.information_unavailable'));
+        });
+        console.error('Failed to fetch node system information:', error);
+      } finally {
+        clearTimeout(timeout);
+        setTimeout(getInformation, 10000);
+      }
+    })();
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/basecoat-css@1.0.2/dist/js/chart.min.js" defer></script>
   <script>
@@ -184,26 +210,5 @@
       });
     });
 
-    function escapeHtml(str) {
-    var div = document.createElement('div');
-    div.appendChild(document.createTextNode(str));
-    return div.innerHTML;
-    }
-
-    (function getInformation() {
-    $.ajax({
-      method: 'GET',
-      url: '/admin/nodes/view/{{ $node->id }}/system-information',
-      timeout: 5000,
-    }).done(function (data) {
-      $('[data-attr="info-version"]').html(escapeHtml(data.version));
-      $('[data-attr="info-system"]').html(escapeHtml(data.system.type) + ' (' + escapeHtml(data.system.arch) + ') <code>' + escapeHtml(data.system.release) + '</code>');
-      $('[data-attr="info-cpus"]').html(data.system.cpus);
-    }).fail(function (jqXHR) {
-
-    }).always(function () {
-      setTimeout(getInformation, 10000);
-    });
-    })();
   </script>
 @endsection

@@ -4,6 +4,8 @@
     @lang('admin/nests.nest_list.title')
 @endsection
 
+@section('contentWidth', 'max-w-none')
+
 @section('content-header')
     <h1 class="text-xl font-bold">@lang('admin/nests.nest_list.title')</h1>
     <p class="text-sm text-muted-foreground">@lang('admin/nests.nest_list.header_description')</p>
@@ -15,42 +17,42 @@
 @endsection
 
 @section('content')
-<div class="grid gap-6">
-    <div class="col-span-full">
+<div class="grid min-w-0 gap-6">
+    <div class="col-span-full min-w-0">
         <div class="alert" data-variant="destructive" role="alert">
             {!! trans('admin/nests.nest_list.alert') !!}
         </div>
     </div>
-    <div class="col-span-full">
-        <div class="card">
+    <div class="col-span-full min-w-0">
+        <div class="server-list-card card min-w-0 w-full">
             <header>
                 <h3 class="text-lg font-semibold">@lang('admin/nests.nest_list.card_title')</h3>
                 <div class="card-action">
-                    <div class="flex items-center gap-2">
+                    <div class="flex flex-wrap items-center gap-2">
                         <a href="#" class="btn" data-size="sm" onclick="document.getElementById('importServiceOptionModal').showModal()" role="button"><x-icon name="upload" class="size-4" /> @lang('admin/nests.nest_list.import_egg')</a>
                         <a href="#" class="btn" data-size="sm" onclick="document.getElementById('importServiceOptionFromUrlModal').showModal()" role="button"><x-icon name="upload" class="size-4" /> @lang('admin/nests.nest_list.import_egg_from_url')</a>
                         <a href="{{ route('admin.nests.new') }}" class="btn" data-size="sm">@lang('admin/nests.nest_list.create_new')</a>
                     </div>
                 </div>
             </header>
-            <section>
-                <div class="table-container">
-                    <table class="table">
+            <section class="min-w-0">
+                <div class="table-container w-full max-w-full">
+                    <table class="table w-full min-w-[760px] table-fixed">
                         <thead>
                             <tr>
-                            <th>@lang('admin/nests.nest_list.table_id')</th>
-                            <th>@lang('admin/nests.nest_list.table_name')</th>
-                            <th>@lang('admin/nests.nest_list.table_description')</th>
-                            <th class="text-center">@lang('admin/nests.nest_list.table_eggs')</th>
-                            <th class="text-center">@lang('admin/nests.nest_list.table_servers')</th>
+                             <th class="w-[8%]">@lang('admin/nests.nest_list.table_id')</th>
+                             <th class="w-[22%]">@lang('admin/nests.nest_list.table_name')</th>
+                             <th class="w-[50%]">@lang('admin/nests.nest_list.table_description')</th>
+                             <th class="w-[10%] text-center">@lang('admin/nests.nest_list.table_eggs')</th>
+                             <th class="w-[10%] text-center">@lang('admin/nests.nest_list.table_servers')</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($nests as $nest)
                             <tr>
                                 <td class="middle"><code>{{ $nest->id }}</code></td>
-                                <td class="middle"><a href="{{ route('admin.nests.view', $nest->id) }}" data-tooltip="{{ $nest->author }}" data-side="right">{{ $nest->name }}</a></td>
-                                <td class="w-1/2 middle">{{ $nest->description }}</td>
+                                <td class="middle truncate" title="{{ $nest->name }}"><a href="{{ route('admin.nests.view', $nest->id) }}" data-tooltip="{{ $nest->author }}" data-side="right">{{ $nest->name }}</a></td>
+                                <td class="middle break-words">{{ $nest->description }}</td>
                                 <td class="text-center middle">{{ $nest->eggs_count }}</td>
                                 <td class="text-center middle">{{ $nest->servers_count }}</td>
                             </tr>
@@ -125,4 +127,3 @@
     </div>
 </dialog>
 @endsection
-

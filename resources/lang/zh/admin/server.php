@@ -352,6 +352,7 @@ return [
         'node_help' => '此服务器将被转移到的节点。',
         'default_allocation' => '默认分配',
         'default_allocation_help' => '将分配给此服务器的主要分配。',
+        'no_available_allocations' => '无可分配端口',
         'additional_allocations' => '额外分配',
         'additional_allocations_help' => '创建时分配给此服务器的额外分配。',
         'cancel' => '取消',

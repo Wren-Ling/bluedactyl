@@ -21,6 +21,7 @@
 @endsection
 
 @section('content')
+<div class="admin-responsive-detail">
 <div class="grid gap-6">
     <div class="col-span-full">
         <div class="tabs" data-variant="line">
@@ -42,7 +43,7 @@
                             <div class="field no-margin-bottom">
                                 <label for="pName" >@lang('admin/nests.egg_view.egg_file_label')</label>
                                 <div>
-                                    <input type="file" name="import_file" class="border-0 -ml-2.5" />
+                                    <input type="file" name="import_file" class="border-0 max-w-full" />
                                     <p class="text-sm text-muted-foreground no-margin-bottom">{!! trans('admin/nests.egg_view.egg_file_hint') !!}</p>
                                 </div>
                             </div>
@@ -65,7 +66,7 @@
                     <h3 class="text-lg font-semibold">@lang('admin/nests.egg_view.configuration_card_title')</h3>
                 </header>
                 <section class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
                         <div class="space-y-6">
                             <div role="group" class="field">
                                 <label for="pName" >@lang('admin/nests.egg_view.name_label') <span class="field-required"></span></label>
@@ -134,7 +135,7 @@
                         <p>{!! trans('admin/nests.egg_view.process_management_alert1') !!}</p>
                         <p>{!! trans('admin/nests.egg_view.process_management_alert2') !!}</p>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
                         <div class="space-y-6">
                             <div role="group" class="field">
                                 <label for="pConfigFrom" >@lang('admin/nests.egg_view.copy_from_label')</label>
@@ -183,6 +184,7 @@
         </div>
     </div>
 </form>
+</div>
 @endsection
 
 @section('footer-scripts')
