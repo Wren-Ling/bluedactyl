@@ -352,6 +352,7 @@ return [
         'node_help' => 'The node which this server will be transferred to.',
         'default_allocation' => 'Default Allocation',
         'default_allocation_help' => 'The main allocation that will be assigned to this server.',
+        'no_available_allocations' => 'No ports available',
         'additional_allocations' => 'Additional Allocation(s)',
         'additional_allocations_help' => 'Additional allocations to assign to this server on creation.',
         'cancel' => 'Cancel',

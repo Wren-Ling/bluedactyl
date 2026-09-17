@@ -142,7 +142,6 @@
     <dialog class="dialog" id="transferServerModal">
         <form action="{{ route('admin.servers.view.manage.transfer', $server->id) }}" method="POST">
             <header>
-                <button type="button" class="btn" data-variant="outline" data-size="sm" onclick="this.closest('dialog').close()" aria-label="@lang('admin/server.manage.close')"><x-icon name="x" class="size-4" /></button>
                 <h3 class="text-lg font-semibold">@lang('admin/server.manage.transfer_dialog_title')</h3>
             </header>
 
@@ -157,7 +156,7 @@
 
                                         @if($node->id != $server->node_id)
                                             <option value="{{ $node->id }}"
-                                                    @if($location->id === old('location_id')) selected @endif
+                                                    @if((string) $node->id === (string) old('node_id')) selected @endif
                                             >{{ $node->name }}</option>
                                         @endif
 
@@ -170,13 +169,13 @@
 
                     <div role="group" class="field">
                         <label for="pAllocation">@lang('admin/server.manage.default_allocation')</label>
-                        <select name="allocation_id" id="pAllocation" class="select"></select>
+                        <select name="allocation_id" id="pAllocation" class="select" required data-selected="{{ old('allocation_id') }}" data-empty="@lang('admin/server.manage.no_available_allocations')"></select>
                         <p class="text-sm text-muted-foreground">@lang('admin/server.manage.default_allocation_help')</p>
                     </div>
 
                     <div role="group" class="field">
                         <label for="pAllocationAdditional">@lang('admin/server.manage.additional_allocations')</label>
-                        <select name="allocation_additional[]" id="pAllocationAdditional" class="select" multiple></select>
+                        <select name="allocation_additional[]" id="pAllocationAdditional" class="select" multiple data-selected='@json(old("allocation_additional", []))' data-empty="@lang('admin/server.manage.no_available_allocations')"></select>
                         <p class="text-sm text-muted-foreground">@lang('admin/server.manage.additional_allocations_help')</p>
                     </div>
                 </div>
@@ -199,6 +198,6 @@
             window.Pyrodactyl = window.Pyrodactyl || {};
             window.Pyrodactyl.nodeData = @json($nodeData);
         </script>
-        {!! Theme::js('js/admin/server/transfer.js?v=20260902') !!}
+        {!! Theme::js('js/admin/server/transfer.js?v=20260917') !!}
     @endif
 @endsection

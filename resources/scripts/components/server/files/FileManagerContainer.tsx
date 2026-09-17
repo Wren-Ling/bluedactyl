@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import Can from '@/components/elements/Can';
-import { Checkbox } from '@/components/ui/checkbox';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import { ServerError } from '@/components/elements/ScreenBlock';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
@@ -16,7 +15,10 @@ import FileManagerStatus from '@/components/server/files/FileManagerStatus';
 import FileObjectRow from '@/components/server/files/FileObjectRow';
 import MassActionsBar from '@/components/server/files/MassActionsBar';
 import NewDirectoryButton from '@/components/server/files/NewDirectoryButton';
+import PullFileButton from '@/components/server/files/PullFileButton';
 import UploadButton from '@/components/server/files/UploadButton';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 
 import { httpErrorToHuman } from '@/api/http';
 import type { FileObject } from '@/api/server/files/loadDirectory';
@@ -103,7 +105,7 @@ const FileManagerContainer = () => {
             <div className='px-2 sm:px-14 pt-2 h-full sm:pt-14'>
                 <ErrorBoundary>
                     <div className='mb-4'>
-                        <div className='flex flex-row justify-between items-start'>
+                        <div className='flex flex-col gap-4 xl:flex-row xl:justify-between xl:items-start'>
                             <div>
                                 <h2 className='text-2xl font-semibold'>{t('files:files_page_title')}</h2>
                                 <p className='text-sm text-muted-foreground leading-relaxed mt-1'>
@@ -111,17 +113,18 @@ const FileManagerContainer = () => {
                                 </p>
                             </div>
                             <Can action={'file.create'}>
-                                <div className='flex flex-row gap-2 items-center'>
+                                <div className='flex flex-wrap gap-2 items-center'>
                                     <FileManagerStatus />
                                     <NewDirectoryButton />
                                     <NewFileButton id={id} />
+                                    <PullFileButton />
                                     <UploadButton />
                                 </div>
                             </Can>
                         </div>
                     </div>
 
-                    <div className='flex flex-wrap-reverse md:flex-nowrap mb-4'>
+                    <div className='flex flex-wrap items-center justify-between gap-2 mb-4'>
                         <FileManagerBreadcrumbs
                             renderLeft={
                                 <Checkbox
@@ -131,6 +134,9 @@ const FileManagerContainer = () => {
                                 />
                             }
                         />
+                        <Button variant='secondary' size='sm' onClick={() => void mutate().catch(() => undefined)}>
+                            {t('files:refresh')}
+                        </Button>
                     </div>
                 </ErrorBoundary>
             </div>
@@ -143,8 +149,19 @@ const FileManagerContainer = () => {
                         <>
                             <div className='relative p-1 border border-border rounded-md sm:ml-12 sm:mr-12 mx-2'>
                                 <div className='absolute left-4 top-1/2 pl-2 -translate-y-1/2 pointer-events-none'>
-                                    <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1.5} stroke='currentColor' className='w-5 h-5 opacity-40'>
-                                        <path strokeLinecap='round' strokeLinejoin='round' d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z' />
+                                    <svg
+                                        xmlns='http://www.w3.org/2000/svg'
+                                        fill='none'
+                                        viewBox='0 0 24 24'
+                                        strokeWidth={1.5}
+                                        stroke='currentColor'
+                                        className='w-5 h-5 opacity-40'
+                                    >
+                                        <path
+                                            strokeLinecap='round'
+                                            strokeLinejoin='round'
+                                            d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
+                                        />
                                     </svg>
                                 </div>
 

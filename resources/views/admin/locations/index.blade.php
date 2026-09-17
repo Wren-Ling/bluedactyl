@@ -4,6 +4,8 @@
     @lang('admin/locations.title')
 @endsection
 
+@section('contentWidth', 'max-w-none')
+
 @section('content-header')
     <h1 class="text-xl font-bold">@lang('admin/locations.header')</h1>
     <p class="text-sm text-muted-foreground">@lang('admin/locations.header_subtitle')</p>
@@ -15,23 +17,23 @@
 @endsection
 
 @section('content')
-<div class="grid gap-6">
-    <div class="col-span-full">
-        <div class="card">
+<div class="grid min-w-0 gap-6">
+    <div class="col-span-full min-w-0">
+        <div class="server-list-card card min-w-0 w-full">
             <header>
                 <h3 class="text-lg font-semibold">@lang('admin/locations.location_list')</h3>
                 <div class="card-action">
                     <button class="btn" data-size="sm" onclick="document.getElementById('newLocationModal').showModal()">@lang('admin/locations.create_new')</button>
                 </div>
             </header>
-            <section>
-                <div class="table-container">
-                    <table class="table">
+            <section class="min-w-0">
+                <div class="table-container w-full max-w-full">
+                    <table class="table w-full min-w-[760px] table-fixed">
                         <thead>
                             <tr>
-                                <th>@lang('admin/locations.id')</th>
-                                <th>@lang('admin/locations.short_code')</th>
-                                <th>@lang('admin/locations.description')</th>
+                                <th class="w-[6%]">@lang('admin/locations.id')</th>
+                                <th class="w-[16%]">@lang('admin/locations.short_code')</th>
+                                <th class="w-[30%]">@lang('admin/locations.description')</th>
                                 <th class="text-center">@lang('admin/locations.memory_alloc')</th>
                                 <th class="text-center">@lang('admin/locations.disk_alloc')</th>
                                 <th class="text-center">@lang('admin/locations.nodes')</th>

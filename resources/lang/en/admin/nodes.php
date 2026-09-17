@@ -88,6 +88,7 @@ return [
     'about' => [
         'header_subtitle' => 'A quick overview of your node.',
         'information' => 'Information',
+        'information_unavailable' => 'Probe failed; retrying shortly',
         'daemon_version' => 'Daemon Version',
         'system_information' => 'System Information',
         'total_cpu_threads' => 'Total CPU Threads',

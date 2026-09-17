@@ -5,6 +5,8 @@
     @lang('admin/mounts.title')
 @endsection
 
+@section('contentWidth', 'max-w-none')
+
 @section('content-header')
     <h1 class="text-xl font-bold">@lang('admin/mounts.header')</h1>
     <p class="text-sm text-muted-foreground">@lang('admin/mounts.header_subtitle')</p>
@@ -16,9 +18,9 @@
 @endsection
 
 @section('content')
-    <div class="grid gap-6">
-        <div class="col-span-full">
-            <div class="card">
+    <div class="grid min-w-0 gap-6">
+        <div class="col-span-full min-w-0">
+            <div class="server-list-card card min-w-0 w-full">
                 <header>
                     <h3 class="text-lg font-semibold">@lang('admin/mounts.mount_list')</h3>
                     <div class="card-action">
@@ -26,26 +28,26 @@
                     </div>
                 </header>
 
-                <section>
-                    <div class="table-container">
-                        <table class="table">
+                <section class="min-w-0">
+                    <div class="table-container w-full max-w-full">
+                        <table class="table w-full min-w-[760px] table-fixed">
                             <tbody>
                                 <tr>
-                                    <th>@lang('admin/mounts.id')</th>
-                                    <th>@lang('admin/mounts.name')</th>
-                                    <th>@lang('admin/mounts.source')</th>
-                                    <th>@lang('admin/mounts.target')</th>
-                                    <th class="text-center">@lang('admin/mounts.eggs')</th>
-                                    <th class="text-center">@lang('admin/mounts.nodes')</th>
-                                    <th class="text-center">@lang('admin/mounts.servers')</th>
+                                    <th class="w-[8%]">@lang('admin/mounts.id')</th>
+                                    <th class="w-[20%]">@lang('admin/mounts.name')</th>
+                                    <th class="w-[24%]">@lang('admin/mounts.source')</th>
+                                    <th class="w-[24%]">@lang('admin/mounts.target')</th>
+                                    <th class="w-[8%] text-center">@lang('admin/mounts.eggs')</th>
+                                    <th class="w-[8%] text-center">@lang('admin/mounts.nodes')</th>
+                                    <th class="w-[8%] text-center">@lang('admin/mounts.servers')</th>
                                 </tr>
 
                                 @foreach ($mounts as $mount)
                                     <tr>
                                         <td><code>{{ $mount->id }}</code></td>
-                                        <td><a href="{{ route('admin.mounts.view', $mount->id) }}">{{ $mount->name }}</a></td>
-                                        <td><code>{{ $mount->source }}</code></td>
-                                        <td><code>{{ $mount->target }}</code></td>
+                                        <td class="truncate" title="{{ $mount->name }}"><a href="{{ route('admin.mounts.view', $mount->id) }}">{{ $mount->name }}</a></td>
+                                        <td class="truncate" title="{{ $mount->source }}"><code>{{ $mount->source }}</code></td>
+                                        <td class="truncate" title="{{ $mount->target }}"><code>{{ $mount->target }}</code></td>
                                         <td class="text-center">{{ $mount->eggs_count }}</td>
                                         <td class="text-center">{{ $mount->nodes_count }}</td>
                                         <td class="text-center">{{ $mount->servers_count }}</td>

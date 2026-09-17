@@ -17,6 +17,7 @@
 @endsection
 
 @section('content')
+<div class="admin-responsive-detail">
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <form action="{{ route('admin.nests.view', $nest->id) }}" method="POST">
         <div class="card">
@@ -60,14 +61,14 @@
         </div>
     </div>
 </div>
-<div class="grid gap-6">
-    <div class="col-span-full">
-        <div class="card">
+<div class="grid min-w-0 gap-6">
+    <div class="col-span-full min-w-0">
+        <div class="server-list-card card min-w-0 w-full">
             <header>
                 <h3 class="text-lg font-semibold">@lang('admin/nests.nest_view.eggs_card_title')</h3>
             </header>
-            <section class="table-container no-padding">
-                <table class="table table-fixed w-full">
+            <section class="table-container no-padding w-full max-w-full">
+                <table class="table table-fixed w-full min-w-[760px]">
                     <colgroup>
                         <col class="w-[60px]">
                         <col class="w-[180px]">
@@ -88,7 +89,7 @@
                         @foreach($nest->eggs as $egg)
                         <tr>
                             <td class="align-middle"><code>{{ $egg->id }}</code></td>
-                            <td class="align-middle"><a href="{{ route('admin.nests.egg.view', $egg->id) }}" data-tooltip="{{ $egg->author }}" data-side="right">{{ $egg->name }}</a></td>
+                            <td class="align-middle truncate" title="{{ $egg->name }}"><a href="{{ route('admin.nests.egg.view', $egg->id) }}" data-tooltip="{{ $egg->author }}" data-side="right">{{ $egg->name }}</a></td>
                             <td class="align-middle break-words"><span class="line-clamp-2" title="{{ $egg->description }}">{{ $egg->description }}</span></td>
                             <td class="text-center align-middle"><code>{{ $egg->servers->count() }}</code></td>
                             <td class="align-middle">
@@ -104,6 +105,7 @@
             </footer>
         </div>
     </div>
+</div>
 </div>
 @endsection
 

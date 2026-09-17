@@ -88,6 +88,7 @@ return [
     'about' => [
         'header_subtitle' => '您的节点的快速概览。',
         'information' => '信息',
+        'information_unavailable' => '探测失败，稍后自动重试',
         'daemon_version' => '守护进程版本',
         'system_information' => '系统信息',
         'total_cpu_threads' => '总 CPU 线程数',

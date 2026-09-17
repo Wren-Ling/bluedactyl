@@ -4,6 +4,8 @@
     @lang('admin/databases.title')
 @endsection
 
+@section('contentWidth', 'max-w-none')
+
 @section('content-header')
     <h1 class="text-xl font-bold">@lang('admin/databases.header')</h1>
     <p class="text-sm text-muted-foreground">@lang('admin/databases.header_subtitle')</p>
@@ -15,19 +17,19 @@
 @endsection
 
 @section('content')
-<div class="grid gap-6">
-    <div class="col-span-full">
-        <div class="card">
+<div class="grid min-w-0 gap-6">
+    <div class="col-span-full min-w-0">
+        <div class="server-list-card card min-w-0 w-full">
             <header>
                 <h3 class="text-lg font-semibold">@lang('admin/databases.host_list')</h3>
                 <div class="card-action">
                     <button class="btn" data-size="sm" onclick="document.getElementById('newHostModal').showModal()">@lang('admin/databases.create_new')</button>
                 </div>
             </header>
-            <section>
-                <div class="table-container">
-                    <table class="table">
-                        <tbody>
+            <section class="min-w-0">
+                <div class="table-container w-full max-w-full">
+                    <table class="table w-full min-w-[760px] table-fixed">
+                        <thead>
                             <tr>
                                 <th>@lang('admin/databases.id')</th>
                                 <th>@lang('admin/databases.name')</th>
@@ -37,6 +39,8 @@
                                 <th class="text-center">@lang('admin/databases.databases')</th>
                                 <th class="text-center">@lang('admin/databases.node')</th>
                             </tr>
+                        </thead>
+                        <tbody>
                             @foreach ($hosts as $host)
                                 <tr>
                                     <td><code>{{ $host->id }}</code></td>

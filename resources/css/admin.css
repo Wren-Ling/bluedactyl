@@ -12,6 +12,53 @@
     height: 0.875rem;
 }
 
+.server-list-card .table-container {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.server-list-card .table th,
+.server-list-card .table td:not(.truncate) {
+    overflow-wrap: anywhere;
+    white-space: normal;
+}
+
+.admin-responsive-detail,
+.admin-responsive-detail .grid > *,
+.admin-responsive-detail .field {
+    min-width: 0;
+}
+
+.admin-responsive-detail .card,
+.admin-responsive-detail .field {
+    overflow-wrap: anywhere;
+}
+
+.admin-responsive-detail input:not([type='checkbox']):not([type='radio']),
+.admin-responsive-detail select,
+.admin-responsive-detail textarea {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.admin-responsive-detail .card > footer {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.admin-responsive-detail .tabs,
+.admin-responsive-detail .tabs > nav {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.admin-responsive-detail .tabs [role='tab'] {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
 @media (max-width: 639px) {
     .server-list-card > header {
         display: flex;
@@ -23,6 +70,8 @@
     .server-list-card .search01 {
         width: 100%;
         align-self: stretch;
+        grid-column: auto;
+        grid-row: auto;
     }
 
     .server-list-card .card-action form {
@@ -34,5 +83,9 @@
     .server-list-card .table-container {
         overscroll-behavior-x: contain;
         -webkit-overflow-scrolling: touch;
+    }
+
+    .admin-responsive-detail .field[data-orientation='horizontal'] {
+        flex-wrap: wrap;
     }
 }

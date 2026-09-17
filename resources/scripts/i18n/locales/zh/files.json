@@ -19,6 +19,7 @@
     "delete": "删除",
     "deleting": "正在删除文件...",
     "download": "下载",
+    "download_url": "下载链接",
     "duplicate": "复制",
     "duplicating": "正在复制...",
     "empty_folder": "此文件夹为空。",
@@ -45,6 +46,12 @@
     "page_title_new": "新建文件",
     "permissions": "权限",
     "pyroignore_help": "您正在编辑所选文件。其中列出的任何文件或目录将从备份中排除。使用星号（<1>*</1>）支持通配符。您可以通过在规则前加感叹号（<2>!</2>）来否定之前的规则。",
+    "refresh": "刷新",
+    "remote_download": "远程下载",
+    "remote_download_description": "服务器将直接从 HTTP 或 HTTPS 链接下载文件到当前目录。请求受理不代表下载完成，请稍后刷新文件列表。",
+    "remote_download_directory": "保存目录：{{directory}}",
+    "remote_download_submitted": "下载请求已受理，请稍后刷新文件列表查看结果。",
+    "remote_download_submitting": "正在提交...",
     "rename": "重命名",
     "renaming_file": "正在重命名文件/文件夹",
     "root": "根目录",
@@ -64,5 +71,6 @@
     "update": "更新",
     "upload": "上传",
     "upload_to": "上传到 {{name}}",
-    "valid_directory_name": "必须提供有效的目录名称。"
+    "valid_directory_name": "必须提供有效的目录名称。",
+    "valid_download_url": "请输入有效的 HTTP 或 HTTPS 下载链接。"
 }

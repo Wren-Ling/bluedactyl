@@ -19,6 +19,7 @@
     "delete": "Delete",
     "deleting": "Deleting files...",
     "download": "Download",
+    "download_url": "Download URL",
     "duplicate": "Duplicate",
     "duplicating": "Duplicating...",
     "empty_folder": "This folder is empty.",
@@ -45,6 +46,12 @@
     "page_title_new": "New File",
     "permissions": "Permissions",
     "pyroignore_help": "You're editing a <0>.pyroignore</0> file. Any files or directories listed in here will be excluded from backups. Wildcards are supported by using an asterisk (<1>*</1>). You can negate a prior rule by prepending an exclamation point (<2>!</2>).",
+    "refresh": "Refresh",
+    "remote_download": "Remote Download",
+    "remote_download_description": "The server will download the file directly from an HTTP or HTTPS URL into the current directory. An accepted request does not mean the download is complete. Refresh the file list later to check the result.",
+    "remote_download_directory": "Save directory: {{directory}}",
+    "remote_download_submitted": "Download request accepted. Refresh the file list later to check the result.",
+    "remote_download_submitting": "Submitting...",
     "rename": "Rename",
     "renaming_file": "Renaming file/folder",
     "root": "root",
@@ -64,5 +71,6 @@
     "update": "Update",
     "upload": "Upload",
     "upload_to": "Upload to {{name}}",
-    "valid_directory_name": "A valid directory name must be provided."
+    "valid_directory_name": "A valid directory name must be provided.",
+    "valid_download_url": "Enter a valid HTTP or HTTPS download URL."
 }
