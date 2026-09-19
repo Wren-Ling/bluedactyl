@@ -65,6 +65,7 @@
     --container-md: 28rem;
     --container-lg: 32rem;
     --container-xl: 36rem;
+    --container-2xl: 42rem;
     --container-3xl: 48rem;
     --container-4xl: 56rem;
     --container-6xl: 72rem;
@@ -5193,6 +5194,11 @@
       width: auto;
     }
   }
+  .sm\:max-w-2xl {
+    @media (width >= 40rem) {
+      max-width: var(--container-2xl);
+    }
+  }
   .sm\:max-w-lg {
     @media (width >= 40rem) {
       max-width: var(--container-lg);
@@ -5637,6 +5643,11 @@
   .xl\:p-12 {
     @media (width >= 80rem) {
       padding: calc(var(--spacing) * 12);
+    }
+  }
+  .\32 xl\:grid-cols-2 {
+    @media (width >= 96rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
   .ltr\:-translate-x-1\/2 {
@@ -12895,6 +12906,26 @@
 .admin-responsive-detail .tabs [role='tab'] {
   flex-shrink: 0;
   white-space: nowrap;
+}
+.admin-form-dialog,
+.admin-form-dialog > section,
+.admin-form-dialog form,
+.admin-form-dialog .field {
+  min-width: 0;
+}
+.admin-form-dialog > section {
+  min-height: 0;
+  overflow-y: auto;
+}
+.admin-form-dialog input:not([type='checkbox']):not([type='radio']),
+.admin-form-dialog select,
+.admin-form-dialog textarea {
+  min-width: 0;
+  max-width: 100%;
+}
+.admin-form-dialog > footer {
+  flex-shrink: 0;
+  flex-wrap: wrap;
 }
 @media (max-width: 639px) {
   .server-list-card > header {

@@ -66,65 +66,67 @@
     </div>
 </div>
 
-<dialog class="dialog" id="newHostModal" tabindex="-1">
-    <header>
-        <button type="button" class="btn" data-variant="ghost" onclick="this.closest('dialog').close()" aria-label="@lang('admin/databases.close')"><x-icon name="x" class="size-4" /></button>
-        <h4 class="text-lg font-semibold">@lang('admin/databases.create_host')</h4>
-    </header>
-    <form action="{{ route('admin.databases') }}" method="POST" id="databaseHostForm">
+<dialog class="dialog" id="newHostModal" tabindex="-1" onclick="if (event.target === this) this.close()">
+    <div class="admin-form-dialog sm:max-w-2xl">
+        <header>
+            <h2 class="text-lg font-semibold">@lang('admin/databases.create_host')</h2>
+        </header>
         <section>
-            <div id="testResult" class="hidden"></div>
+            <form action="{{ route('admin.databases') }}" method="POST" id="databaseHostForm" class="grid gap-6">
+                <div id="testResult" class="hidden"></div>
 
-            <div role="group" class="field">
-                <label for="pName">@lang('admin/databases.name')</label>
-                <input type="text" name="name" id="pName" value="{{ old('name') }}" />
-                <p class="text-sm text-muted-foreground">@lang('admin/databases.name_help')</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div role="group" class="field">
-                    <label for="pHost">@lang('admin/databases.host')</label>
-                    <input type="text" name="host" id="pHost" value="{{ old('host') }}" />
-                    <p class="text-sm text-muted-foreground">@lang('admin/databases.host_help')</p>
+                    <label for="pName">@lang('admin/databases.name')</label>
+                    <input type="text" name="name" id="pName" value="{{ old('name') }}" />
+                    <p class="text-sm text-muted-foreground">@lang('admin/databases.name_help')</p>
+                </div>
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <div role="group" class="field">
+                        <label for="pHost">@lang('admin/databases.host')</label>
+                        <input type="text" name="host" id="pHost" value="{{ old('host') }}" />
+                        <p class="text-sm text-muted-foreground">@lang('admin/databases.host_help')</p>
+                    </div>
+                    <div role="group" class="field">
+                        <label for="pPort">@lang('admin/databases.port')</label>
+                        <input type="text" name="port" id="pPort" value="{{ old('port', '3306') }}" />
+                        <p class="text-sm text-muted-foreground">@lang('admin/databases.port_help')</p>
+                    </div>
+                    <div role="group" class="field">
+                        <label for="pUsername">@lang('admin/databases.username')</label>
+                        <input type="text" name="username" id="pUsername" value="{{ old('username') }}" />
+                        <p class="text-sm text-muted-foreground">@lang('admin/databases.username_help')</p>
+                    </div>
+                    <div role="group" class="field">
+                        <label for="pPassword">@lang('admin/databases.password')</label>
+                        <input type="password" name="password" id="pPassword" />
+                        <p class="text-sm text-muted-foreground">@lang('admin/databases.password_help')</p>
+                    </div>
                 </div>
                 <div role="group" class="field">
-                    <label for="pPort">@lang('admin/databases.port')</label>
-                    <input type="text" name="port" id="pPort" value="{{ old('port', '3306') }}" />
-                    <p class="text-sm text-muted-foreground">@lang('admin/databases.port_help')</p>
+                    <label for="pNodeId">@lang('admin/databases.linked_node')</label>
+                    <select name="node_id" id="pNodeId" class="select">
+                        <option value="">@lang('admin/databases.none')</option>
+                        @foreach($locations as $location)
+                            <optgroup label="{{ $location->short }}">
+                                @foreach($location->nodes as $node)
+                                    <option value="{{ $node->id }}" {{ old('node_id') == $node->id ? 'selected' : '' }}>{{ $node->name }}</option>
+                                @endforeach
+                            </optgroup>
+                        @endforeach
+                    </select>
+                    <p class="text-sm text-muted-foreground">@lang('admin/databases.linked_node_help')</p>
                 </div>
-                <div role="group" class="field">
-                    <label for="pUsername">@lang('admin/databases.username')</label>
-                    <input type="text" name="username" id="pUsername" value="{{ old('username') }}" />
-                    <p class="text-sm text-muted-foreground">@lang('admin/databases.username_help')</p>
-                </div>
-                <div role="group" class="field">
-                    <label for="pPassword">@lang('admin/databases.password')</label>
-                    <input type="password" name="password" id="pPassword" />
-                    <p class="text-sm text-muted-foreground">@lang('admin/databases.password_help')</p>
-                </div>
-            </div>
-            <div role="group" class="field">
-                <label for="pNodeId">@lang('admin/databases.linked_node')</label>
-                <select name="node_id" id="pNodeId" class="select">
-                    <option value="">@lang('admin/databases.none')</option>
-                    @foreach($locations as $location)
-                        <optgroup label="{{ $location->short }}">
-                            @foreach($location->nodes as $node)
-                                <option value="{{ $node->id }}" {{ old('node_id') == $node->id ? 'selected' : '' }}>{{ $node->name }}</option>
-                            @endforeach
-                        </optgroup>
-                    @endforeach
-                </select>
-                <p class="text-sm text-muted-foreground">@lang('admin/databases.linked_node_help')</p>
-            </div>
-            {!! csrf_field() !!}
+                {!! csrf_field() !!}
+            </form>
         </section>
-    </form>
-    <footer>
-        <p class="text-sm text-destructive text-left">@lang('admin/databases.grant_warning')</p>
-        <button type="button" class="btn" data-size="sm" data-variant="outline" onclick="this.closest('dialog').close()">@lang('admin/databases.cancel')</button>
-        <button type="button" id="testDatabaseBtn" class="btn" data-size="sm">@lang('admin/databases.test_database')</button>
-        <button type="submit" class="btn" data-size="sm" form="databaseHostForm">@lang('admin/databases.create')</button>
-    </footer>
+        <footer>
+            <p class="w-full text-left text-sm text-destructive">@lang('admin/databases.grant_warning')</p>
+            <button type="button" class="btn" data-size="sm" data-variant="outline" onclick="this.closest('dialog').close()">@lang('admin/databases.cancel')</button>
+            <button type="button" id="testDatabaseBtn" class="btn" data-size="sm">@lang('admin/databases.test_database')</button>
+            <button type="submit" class="btn" data-size="sm" form="databaseHostForm">@lang('admin/databases.create')</button>
+        </footer>
+        <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" onclick="this.closest('dialog').close()" aria-label="@lang('admin/databases.close')"><x-icon name="x" class="size-4" /></button>
+    </div>
 </dialog>
 @endsection
 

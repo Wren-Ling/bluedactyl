@@ -59,6 +59,30 @@
     white-space: nowrap;
 }
 
+.admin-form-dialog,
+.admin-form-dialog > section,
+.admin-form-dialog form,
+.admin-form-dialog .field {
+    min-width: 0;
+}
+
+.admin-form-dialog > section {
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.admin-form-dialog input:not([type='checkbox']):not([type='radio']),
+.admin-form-dialog select,
+.admin-form-dialog textarea {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.admin-form-dialog > footer {
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
 @media (max-width: 639px) {
     .server-list-card > header {
         display: flex;

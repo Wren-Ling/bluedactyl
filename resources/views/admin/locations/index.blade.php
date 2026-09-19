@@ -67,31 +67,33 @@
         </div>
     </div>
 </div>
-<dialog class="dialog" id="newLocationModal" tabindex="-1">
-    <header>
-        <button type="button" class="btn" data-variant="ghost" onclick="this.closest('dialog').close()" aria-label="@lang('admin/locations.close')"><x-icon name="x" class="size-4" /></button>
-        <h4 class="text-lg font-semibold">@lang('admin/locations.create_location')</h4>
-    </header>
-    <form action="{{ route('admin.locations') }}" method="POST" id="createLocationForm">
+<dialog class="dialog" id="newLocationModal" tabindex="-1" onclick="if (event.target === this) this.close()">
+    <div class="admin-form-dialog sm:max-w-lg">
+        <header>
+            <h2 class="text-lg font-semibold">@lang('admin/locations.create_location')</h2>
+        </header>
         <section>
-            <div class="grid gap-6">
-                <div role="group" class="field">
-                    <label for="pShortModal">@lang('admin/locations.short_code')</label>
-                    <input type="text" name="short" id="pShortModal" />
-                    <p class="text-sm text-muted-foreground">@lang('admin/locations.short_code_help')</p>
+            <form action="{{ route('admin.locations') }}" method="POST" id="createLocationForm">
+                <div class="grid gap-6">
+                    <div role="group" class="field">
+                        <label for="pShortModal">@lang('admin/locations.short_code')</label>
+                        <input type="text" name="short" id="pShortModal" />
+                        <p class="text-sm text-muted-foreground">@lang('admin/locations.short_code_help')</p>
+                    </div>
+                    <div role="group" class="field">
+                        <label for="pLongModal">@lang('admin/locations.description')</label>
+                        <textarea name="long" id="pLongModal" rows="4"></textarea>
+                        <p class="text-sm text-muted-foreground">@lang('admin/locations.description_help')</p>
+                    </div>
                 </div>
-                <div role="group" class="field">
-                    <label for="pLongModal">@lang('admin/locations.description')</label>
-                    <textarea name="long" id="pLongModal" rows="4"></textarea>
-                    <p class="text-sm text-muted-foreground">@lang('admin/locations.description_help')</p>
-                </div>
-            </div>
-            {!! csrf_field() !!}
+                {!! csrf_field() !!}
+            </form>
         </section>
-    </form>
-    <footer>
-        <button type="button" class="btn" data-size="sm" data-variant="outline" onclick="this.closest('dialog').close()">@lang('admin/locations.cancel')</button>
-        <button type="submit" class="btn" data-size="sm" form="createLocationForm">@lang('admin/locations.create')</button>
-    </footer>
+        <footer>
+            <button type="button" class="btn" data-size="sm" data-variant="outline" onclick="this.closest('dialog').close()">@lang('admin/locations.cancel')</button>
+            <button type="submit" class="btn" data-size="sm" form="createLocationForm">@lang('admin/locations.create')</button>
+        </footer>
+        <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" onclick="this.closest('dialog').close()" aria-label="@lang('admin/locations.close')"><x-icon name="x" class="size-4" /></button>
+    </div>
 </dialog>
 @endsection

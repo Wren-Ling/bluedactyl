@@ -61,65 +61,76 @@
         </div>
     </div>
 
-    <dialog class="dialog" id="newMountModal" tabindex="-1">
-        <header>
-            <button type="button" class="btn" data-variant="ghost" onclick="this.closest('dialog').close()" aria-label="@lang('admin/mounts.close')">
-                <x-icon name="x" class="size-4" />
-            </button>
-            <h4 class="text-lg font-semibold">@lang('admin/mounts.create_mount')</h4>
-        </header>
-
-        <form action="{{ route('admin.mounts') }}" method="POST" id="newMountForm">
+    <dialog class="dialog" id="newMountModal" tabindex="-1" onclick="if (event.target === this) this.close()">
+        <div class="admin-form-dialog sm:max-w-2xl">
+            <header>
+                <h2 class="text-lg font-semibold">@lang('admin/mounts.create_mount')</h2>
+            </header>
             <section>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div role="group" class="field col-span-full">
-                        <label for="pName">@lang('admin/mounts.name')</label>
-                        <input type="text" id="pName" name="name" />
-                        <p class="text-sm text-muted-foreground">@lang('admin/mounts.name_help')</p>
-                    </div>
+                <form action="{{ route('admin.mounts') }}" method="POST" id="newMountForm">
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                        <div role="group" class="field col-span-full">
+                            <label for="pName">@lang('admin/mounts.name')</label>
+                            <input type="text" id="pName" name="name" />
+                            <p class="text-sm text-muted-foreground">@lang('admin/mounts.name_help')</p>
+                        </div>
 
-                    <div role="group" class="field col-span-full">
-                        <label for="pDescription">@lang('admin/mounts.description')</label>
-                        <textarea id="pDescription" name="description" rows="4"></textarea>
-                        <p class="text-sm text-muted-foreground">@lang('admin/mounts.description_help')</p>
-                    </div>
+                        <div role="group" class="field col-span-full">
+                            <label for="pDescription">@lang('admin/mounts.description')</label>
+                            <textarea id="pDescription" name="description" rows="4"></textarea>
+                            <p class="text-sm text-muted-foreground">@lang('admin/mounts.description_help')</p>
+                        </div>
 
-                    <div role="group" class="field">
-                        <label for="pSource">@lang('admin/mounts.source')</label>
-                        <input type="text" id="pSource" name="source" />
-                        <p class="text-sm text-muted-foreground">@lang('admin/mounts.source_help')</p>
-                    </div>
+                        <div role="group" class="field">
+                            <label for="pSource">@lang('admin/mounts.source')</label>
+                            <input type="text" id="pSource" name="source" />
+                            <p class="text-sm text-muted-foreground">@lang('admin/mounts.source_help')</p>
+                        </div>
 
-                    <div role="group" class="field">
-                        <label for="pTarget">@lang('admin/mounts.target')</label>
-                        <input type="text" id="pTarget" name="target" />
-                        <p class="text-sm text-muted-foreground">@lang('admin/mounts.target_help')</p>
-                    </div>
+                        <div role="group" class="field">
+                            <label for="pTarget">@lang('admin/mounts.target')</label>
+                            <input type="text" id="pTarget" name="target" />
+                            <p class="text-sm text-muted-foreground">@lang('admin/mounts.target_help')</p>
+                        </div>
 
-                    <div role="group" class="field" data-orientation="horizontal">
-                        <label>@lang('admin/mounts.read_only')</label>
-                        <input type="radio" id="pReadOnlyFalse" name="read_only" value="0" checked>
-                        <label for="pReadOnlyFalse" class="font-normal">@lang('admin/mounts.false')</label>
-                        <input type="radio" id="pReadOnly" name="read_only" value="1">
-                        <label for="pReadOnly" class="font-normal">@lang('admin/mounts.true')</label>
-                        <p class="text-sm text-muted-foreground">@lang('admin/mounts.read_only_help')</p>
-                    </div>
+                        <div role="group" class="field">
+                            <span class="font-medium">@lang('admin/mounts.read_only')</span>
+                            <div role="radiogroup" class="flex flex-wrap gap-4">
+                                <label for="pReadOnlyFalse" class="flex items-center gap-2 font-normal">
+                                    <input type="radio" id="pReadOnlyFalse" name="read_only" value="0" checked>
+                                    <span>@lang('admin/mounts.false')</span>
+                                </label>
+                                <label for="pReadOnly" class="flex items-center gap-2 font-normal">
+                                    <input type="radio" id="pReadOnly" name="read_only" value="1">
+                                    <span>@lang('admin/mounts.true')</span>
+                                </label>
+                            </div>
+                            <p class="text-sm text-muted-foreground">@lang('admin/mounts.read_only_help')</p>
+                        </div>
 
-                    <div role="group" class="field" data-orientation="horizontal">
-                        <label>@lang('admin/mounts.user_mountable')</label>
-                        <input type="radio" id="pUserMountableFalse" name="user_mountable" value="0" checked>
-                        <label for="pUserMountableFalse" class="font-normal">@lang('admin/mounts.false')</label>
-                        <input type="radio" id="pUserMountable" name="user_mountable" value="1">
-                        <label for="pUserMountable" class="font-normal">@lang('admin/mounts.true')</label>
-                        <p class="text-sm text-muted-foreground">@lang('admin/mounts.user_mountable_help')</p>
+                        <div role="group" class="field">
+                            <span class="font-medium">@lang('admin/mounts.user_mountable')</span>
+                            <div role="radiogroup" class="flex flex-wrap gap-4">
+                                <label for="pUserMountableFalse" class="flex items-center gap-2 font-normal">
+                                    <input type="radio" id="pUserMountableFalse" name="user_mountable" value="0" checked>
+                                    <span>@lang('admin/mounts.false')</span>
+                                </label>
+                                <label for="pUserMountable" class="flex items-center gap-2 font-normal">
+                                    <input type="radio" id="pUserMountable" name="user_mountable" value="1">
+                                    <span>@lang('admin/mounts.true')</span>
+                                </label>
+                            </div>
+                            <p class="text-sm text-muted-foreground">@lang('admin/mounts.user_mountable_help')</p>
+                        </div>
                     </div>
-                </div>
+                    {!! csrf_field() !!}
+                </form>
             </section>
-            {!! csrf_field() !!}
-        </form>
-        <footer>
-            <button type="button" class="btn" data-size="sm" data-variant="outline" onclick="this.closest('dialog').close()">@lang('admin/mounts.cancel')</button>
-            <button type="submit" class="btn" data-size="sm" form="newMountForm">@lang('admin/mounts.create')</button>
-        </footer>
+            <footer>
+                <button type="button" class="btn" data-size="sm" data-variant="outline" onclick="this.closest('dialog').close()">@lang('admin/mounts.cancel')</button>
+                <button type="submit" class="btn" data-size="sm" form="newMountForm">@lang('admin/mounts.create')</button>
+            </footer>
+            <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" onclick="this.closest('dialog').close()" aria-label="@lang('admin/mounts.close')"><x-icon name="x" class="size-4" /></button>
+        </div>
     </dialog>
 @endsection
