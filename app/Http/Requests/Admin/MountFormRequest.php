@@ -12,6 +12,10 @@ class MountFormRequest extends AdminFormRequest
     public function rules(): array
     {
         if ($this->method() === 'PATCH') {
+            if ($this->input('action') === 'delete') {
+                return [];
+            }
+
             return Mount::getRulesForUpdate($this->route()->parameter('mount')->id);
         }
 

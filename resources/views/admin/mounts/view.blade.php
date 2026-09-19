@@ -26,7 +26,9 @@
                 </header>
 
                     <section>
-                        <form action="{{ route('admin.mounts.view', $mount->id) }}" method="POST">
+                        <form action="{{ route('admin.mounts.view', $mount->id) }}" method="POST" id="mountDetailsForm">
+                            @csrf
+                            @method('PATCH')
                             <div class="grid gap-6">
                                 <div role="group" class="field">
                                     <label for="PUniqueID">@lang('admin/mounts.unique_id')</label>
@@ -83,11 +85,8 @@
                     </section>
 
                     <footer>
-                        {!! csrf_field() !!}
-                        {!! method_field('PATCH') !!}
-
-                        <button name="action" value="edit" class="btn ml-auto" data-size="sm">@lang('admin/mounts.save')</button>
-                        <button name="action" value="delete" class="btn mr-auto" data-size="sm" data-variant="destructive"><x-icon name="trash-2" class="size-4" /></button>
+                        <button type="submit" form="mountDetailsForm" name="action" value="edit" class="btn ml-auto" data-size="sm">@lang('admin/mounts.save')</button>
+                        <button type="submit" form="mountDetailsForm" name="action" value="delete" class="btn mr-auto" data-size="sm" data-variant="destructive"><x-icon name="trash-2" class="size-4" /></button>
                     </footer>
             </div>
         </div>
@@ -244,7 +243,6 @@
             $('button[data-action="detach-egg"]').click(function (event) {
                 event.preventDefault();
 
-                const element = $(this);
                 const eggId = $(this).data('id');
 
                 $.ajax({
@@ -252,21 +250,17 @@
                     url: '/admin/mounts/' + {{ $mount->id }} + '/eggs/' + eggId,
                     headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') },
                 }).done(function () {
-                    element.parent().parent().className = 'warning';
-                    setTimeout(function() {
-                        element.parent().parent().style.display = 'none';
-                    }, 100);
                     alert('{{ trans('admin/mounts.egg_detached') }}');
+                    window.location.reload();
                 }).fail(function (jqXHR) {
                     console.error(jqXHR);
-                    alert(jqXHR.responseJSON.error);
+                    alert(jqXHR.responseJSON?.error || jqXHR.statusText);
                 });
             });
 
             $('button[data-action="detach-node"]').click(function (event) {
                 event.preventDefault();
 
-                const element = $(this);
                 const nodeId = $(this).data('id');
 
                 $.ajax({
@@ -274,14 +268,11 @@
                     url: '/admin/mounts/' + {{ $mount->id }} + '/nodes/' + nodeId,
                     headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') },
                 }).done(function () {
-                    element.parent().parent().className = 'warning';
-                    setTimeout(function() {
-                        element.parent().parent().style.display = 'none';
-                    }, 100);
                     alert('{{ trans('admin/mounts.node_detached') }}');
+                    window.location.reload();
                 }).fail(function (jqXHR) {
                     console.error(jqXHR);
-                    alert(jqXHR.responseJSON.error);
+                    alert(jqXHR.responseJSON?.error || jqXHR.statusText);
                 });
             });
         });
