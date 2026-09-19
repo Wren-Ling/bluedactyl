@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('contentWidth', 'max-w-6xl')
+
 @section('title')
     @lang('admin/server.overview.title') — {{ $server->name }}: @lang('admin/server.build.title')
 @endsection
@@ -20,9 +22,9 @@
 
 @section('content')
 @include('admin.servers.partials.navigation')
-<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<div class="admin-responsive-detail grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-2">
     <form action="{{ route('admin.servers.view.build', $server->id) }}" method="POST" class="contents">
-        <div class="md:col-span-5">
+        <div class="min-w-0">
             <div class="card">
                 <header>
                     <h3 class="text-lg font-semibold">@lang('admin/server.build.resource_management')</h3>
@@ -97,9 +99,9 @@
                 </section>
             </div>
         </div>
-        <div class="md:col-span-7">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
+        <div class="min-w-0">
+            <div class="grid min-w-0 gap-6">
+                <div class="min-w-0">
                     <div class="card">
                         <header>
                             <h3 class="text-lg font-semibold">@lang('admin/server.build.feature_limits')</h3>
@@ -131,7 +133,7 @@
                         </section>
                     </div>
                 </div>
-                <div>
+                <div class="min-w-0">
                     <div class="card">
                         <header>
                             <h3 class="text-lg font-semibold">@lang('admin/server.build.allocation_management')</h3>
@@ -139,7 +141,7 @@
                         <section>
                             <div role="group" class="field">
                                 <label for="pAllocation" >@lang('admin/server.build.game_port')</label>
-                                <select id="pAllocation" name="allocation_id" class="select">
+                                <select id="pAllocation" name="allocation_id" class="select w-full">
                                     @foreach ($assigned as $assignment)
                                         <option value="{{ $assignment->id }}"
                                             @if($assignment->id === $server->allocation_id)
@@ -152,7 +154,7 @@
                             </div>
                             <div role="group" class="field">
                                 <label for="pAddAllocations" >@lang('admin/server.build.assign_additional_ports')</label>
-                                <select name="add_allocations[]" class="select" multiple id="pAddAllocations">
+                                <select name="add_allocations[]" class="select w-full" multiple id="pAddAllocations">
                                     @foreach ($unassigned as $assignment)
                                         <option value="{{ $assignment->id }}">{{ $assignment->alias }}:{{ $assignment->port }}</option>
                                     @endforeach
@@ -161,7 +163,7 @@
                             </div>
                             <div role="group" class="field">
                                 <label for="pRemoveAllocations" >@lang('admin/server.build.remove_additional_ports')</label>
-                                <select name="remove_allocations[]" class="select" multiple id="pRemoveAllocations">
+                                <select name="remove_allocations[]" class="select w-full" multiple id="pRemoveAllocations">
                                     @foreach ($assigned as $assignment)
                                         <option value="{{ $assignment->id }}">{{ $assignment->alias }}:{{ $assignment->port }}</option>
                                     @endforeach
