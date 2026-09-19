@@ -172,23 +172,22 @@
             </header>
             <section>
                 <form action="{{ route('admin.mounts.eggs', $mount->id) }}" method="POST" id="addEggsForm">
-                    <div class="grid gap-6">
-                        <div role="group" class="field">
-                            <label for="pEggs">@lang('admin/mounts.add_eggs_label')</label>
-                            <select id="pEggs" name="eggs[]" class="select" multiple>
-                                @foreach ($nests as $nest)
-                                    <optgroup label="{{ $nest->name }}">
-                                        @foreach ($nest->eggs as $egg)
-
-                                            @if (! in_array($egg->id, $mount->eggs->pluck('id')->toArray()))
-                                                <option value="{{ $egg->id }}">{{ $egg->name }}</option>
-                                            @endif
-
-                                        @endforeach
-                                    </optgroup>
-                                @endforeach
-                            </select>
-                        </div>
+                    <div class="grid gap-4">
+                        <p class="text-sm font-medium">@lang('admin/mounts.add_eggs_label')</p>
+                        @foreach ($nests as $nest)
+                            @php($availableEggs = $nest->eggs->whereNotIn('id', $mount->eggs->pluck('id')))
+                            @if ($availableEggs->isNotEmpty())
+                                <fieldset class="grid gap-2">
+                                    <legend class="mb-2 text-sm font-semibold">{{ $nest->name }}</legend>
+                                    @foreach ($availableEggs as $egg)
+                                        <label class="flex items-center gap-2 text-sm">
+                                            <input type="checkbox" name="eggs[]" value="{{ $egg->id }}" class="input" />
+                                            <span>{{ $egg->name }}</span>
+                                        </label>
+                                    @endforeach
+                                </fieldset>
+                            @endif
+                        @endforeach
                     </div>
                     {!! csrf_field() !!}
                 </form>
@@ -208,23 +207,22 @@
             </header>
             <section>
                 <form action="{{ route('admin.mounts.nodes', $mount->id) }}" method="POST" id="addNodesForm">
-                    <div class="grid gap-6">
-                        <div role="group" class="field">
-                            <label for="pNodes">@lang('admin/mounts.add_nodes_label')</label>
-                            <select id="pNodes" name="nodes[]" class="select" multiple>
-                                @foreach ($locations as $location)
-                                    <optgroup label="{{ $location->long }} ({{ $location->short }})">
-                                        @foreach ($location->nodes as $node)
-
-                                            @if (! in_array($node->id, $mount->nodes->pluck('id')->toArray()))
-                                                <option value="{{ $node->id }}">{{ $node->name }}</option>
-                                            @endif
-
-                                        @endforeach
-                                    </optgroup>
-                                @endforeach
-                            </select>
-                        </div>
+                    <div class="grid gap-4">
+                        <p class="text-sm font-medium">@lang('admin/mounts.add_nodes_label')</p>
+                        @foreach ($locations as $location)
+                            @php($availableNodes = $location->nodes->whereNotIn('id', $mount->nodes->pluck('id')))
+                            @if ($availableNodes->isNotEmpty())
+                                <fieldset class="grid gap-2">
+                                    <legend class="mb-2 text-sm font-semibold">{{ $location->long }} ({{ $location->short }})</legend>
+                                    @foreach ($availableNodes as $node)
+                                        <label class="flex items-center gap-2 text-sm">
+                                            <input type="checkbox" name="nodes[]" value="{{ $node->id }}" class="input" />
+                                            <span>{{ $node->name }}</span>
+                                        </label>
+                                    @endforeach
+                                </fieldset>
+                            @endif
+                        @endforeach
                     </div>
                     {!! csrf_field() !!}
                 </form>
