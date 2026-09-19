@@ -89,7 +89,7 @@
                         @foreach($nest->eggs as $egg)
                         <tr>
                             <td class="align-middle"><code>{{ $egg->id }}</code></td>
-                            <td class="align-middle truncate" title="{{ $egg->name }}"><a href="{{ route('admin.nests.egg.view', $egg->id) }}" data-tooltip="{{ $egg->author }}" data-side="right">{{ $egg->name }}</a></td>
+                            <td class="align-middle truncate"><a href="{{ route('admin.nests.egg.view', $egg->id) }}" title="{{ $egg->name }} ({{ $egg->author }})">{{ $egg->name }}</a></td>
                             <td class="align-middle break-words"><span class="line-clamp-2" title="{{ $egg->description }}">{{ $egg->description }}</span></td>
                             <td class="text-center align-middle"><code>{{ $egg->servers->count() }}</code></td>
                             <td class="align-middle">

@@ -51,7 +51,7 @@
                         @foreach($nests as $nest)
                             <tr>
                                 <td class="middle"><code>{{ $nest->id }}</code></td>
-                                <td class="middle truncate" title="{{ $nest->name }}"><a href="{{ route('admin.nests.view', $nest->id) }}" data-tooltip="{{ $nest->author }}" data-side="right">{{ $nest->name }}</a></td>
+                                <td class="middle truncate"><a href="{{ route('admin.nests.view', $nest->id) }}" title="{{ $nest->name }} ({{ $nest->author }})">{{ $nest->name }}</a></td>
                                 <td class="middle break-words">{{ $nest->description }}</td>
                                 <td class="text-center middle">{{ $nest->eggs_count }}</td>
                                 <td class="text-center middle">{{ $nest->servers_count }}</td>

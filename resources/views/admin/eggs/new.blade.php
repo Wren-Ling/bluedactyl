@@ -17,16 +17,16 @@
 @endsection
 
 @section('content')
-<form action="{{ route('admin.nests.egg.new') }}" method="POST">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<form action="{{ route('admin.nests.egg.new') }}" method="POST" class="admin-responsive-detail">
+    <div class="grid grid-cols-1 2xl:grid-cols-2 gap-6">
         <div>
             <div class="card">
                 <header>
                     <h3 class="text-lg font-semibold">@lang('admin/nests.egg_new.configuration_card_title')</h3>
                 </header>
                 <section>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
+                    <div class="grid gap-6">
+                        <div class="space-y-6">
                             <div role="group" class="field">
                                 <label for="pNestId" >@lang('admin/nests.egg_new.nest_label')</label>
                                 <select name="nest_id" id="pNestId" class="select">
@@ -46,9 +46,11 @@
                                 <textarea id="pDescription" name="description"  rows="8">{{ old('description') }}</textarea>
                                 <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_new.description_hint') !!}</p>
                             </div>
-                            <div role="group" class="field" data-orientation="horizontal">
-                                <input id="pForceOutgoingIp" name="force_outgoing_ip" type="checkbox" value="1"  {{ \Pterodactyl\Helpers\Utilities::checked('force_outgoing_ip', 0) }} />
-                                <label for="pForceOutgoingIp">@lang('admin/nests.egg_new.force_outgoing_ip_label')</label>
+                            <div role="group" class="field">
+                                <div class="flex items-center gap-3">
+                                    <input id="pForceOutgoingIp" name="force_outgoing_ip" type="checkbox" value="1"  {{ \Pterodactyl\Helpers\Utilities::checked('force_outgoing_ip', 0) }} />
+                                    <label for="pForceOutgoingIp">@lang('admin/nests.egg_new.force_outgoing_ip_label')</label>
+                                </div>
                                 <p class="text-sm text-muted-foreground">
                                     {!! trans('admin/nests.egg_new.force_outgoing_ip_hint') !!}
                                     <br>
@@ -58,7 +60,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div>
+                        <div class="space-y-6">
                             <div role="group" class="field">
                                 <label for="pDockerImage" >@lang('admin/nests.egg_new.docker_images_label')</label>
                                 <textarea id="pDockerImages" name="docker_images" rows="4" placeholder="@lang('admin/nests.egg_new.docker_images_placeholder')" >{{ old('docker_images') }}</textarea>
@@ -91,8 +93,8 @@
                                 <p>{!! trans('admin/nests.egg_new.process_management_alert') !!}</p>
                             </div>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 col-span-full">
-                            <div>
+                        <div class="grid gap-6 col-span-full">
+                            <div class="space-y-6">
                                 <div role="group" class="field">
                                     <label for="pConfigFrom" >@lang('admin/nests.egg_new.copy_from_label')</label>
                                     <select name="config_from" id="pConfigFrom" class="select">
@@ -111,7 +113,7 @@
                                     <p class="text-sm text-muted-foreground">{!! trans('admin/nests.egg_new.log_config_hint') !!}</p>
                                 </div>
                             </div>
-                            <div>
+                            <div class="space-y-6">
                                 <div role="group" class="field">
                                     <label for="pConfigFiles" >@lang('admin/nests.egg_new.config_files_label')</label>
                                     <textarea data-action="handle-tabs" id="pConfigFiles" name="config_files"  rows="6">{{ old('config_files') }}</textarea>
