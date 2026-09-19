@@ -28,7 +28,7 @@
 @endsection
 
 @section('content')
-<form action="{{ route('admin.servers.new') }}" method="POST">
+<form action="{{ route('admin.servers.new') }}" method="POST" class="admin-responsive-detail">
     <div class="grid gap-6">
         <div class="col-span-full">
             <div class="card">
@@ -48,7 +48,7 @@
                             <div role="group" class="field">
                                 <label for="pUserId">@lang('admin/server.new.server_owner')</label>
                                 <input type="hidden" name="owner_id" id="pUserId" value="{{ old('owner_id') }}">
-                                <div class="flex items-center gap-2">
+                                <div class="flex flex-wrap items-center gap-2">
                                     <span id="pUserDisplay" class="text-muted-foreground text-sm">
                                         @if (old('owner_id'))
                                             @lang('admin/server.new.loading')
@@ -111,7 +111,7 @@
 
                         <div role="group" class="field">
                             <label>@lang('admin/server.new.allocations')</label>
-                            <div class="flex items-center gap-2">
+                            <div class="flex flex-wrap items-center gap-2">
                                 <span id="pAllocSummary" class="text-sm text-muted-foreground">@lang('admin/server.new.no_allocations_selected')</span>
                                 <button type="button" class="btn" data-size="sm" data-variant="outline" id="openAllocBtn">@lang('admin/server.new.select_allocations')</button>
                             </div>
@@ -385,7 +385,7 @@
             <h2 id="allocModal-title">@lang('admin/server.new.select_allocations_title')</h2>
             <p class="text-sm text-muted-foreground">@lang('admin/server.new.select_allocations_desc') <strong id="allocModalNodeName"></strong></p>
         </header>
-        <section>
+        <section class="min-h-0 overflow-y-auto">
             <div id="pAllocationsList" class="divide-y"></div>
             <div id="pAllocEmpty" class="hidden text-sm text-muted-foreground text-center py-8">@lang('admin/server.new.no_available_allocations')</div>
             <div id="pAllocLoader" class="hidden text-sm text-muted-foreground text-center py-8">@lang('admin/server.new.loading_allocations')</div>
@@ -406,7 +406,6 @@
 
 @section('footer-scripts')
     @parent
-    {!! Theme::js('vendor/lodash/lodash.js') !!}
 
     <script>
     window.Pyrodactyl = window.Pyrodactyl || {};
@@ -425,137 +424,152 @@
 
                 @if (old('environment'))
                     @foreach (old('environment') as $key => $value)
-                        $('#' + ids['{{ $key }}']).val('{{ $value }}');
+                        if (ids[@json($key)]) {
+                            document.getElementById(ids[@json($key)]).value = @json($value);
+                        }
                     @endforeach
                 @endif
             @endif
             @if(old('image'))
-                $('#pDefaultContainer').val('{{ old('image') }}');
+                document.getElementById('pDefaultContainer').value = @json(old('image'));
             @endif
         }
         // END Persist 'Service Variables'
     </script>
 
-    {!! Theme::js('js/admin/new-server.js?v=20260724') !!}
+    {!! Theme::js('js/admin/new-server.js?v=20260919') !!}
 
     <script type="application/javascript">
         function selectUser(user) {
-            $('#pUserId').val(user.id);
-            var html = '<span class="inline-flex items-center gap-2 rounded-md border px-3 py-1.5"> \
-                <img class="size-6 rounded-full" src="https://cravatar.cn/avatar/' + escapeHtml(user.md5) + '?s=48" alt=""> \
-                <span>' + escapeHtml(user.name_first) + ' ' + escapeHtml(user.name_last) + '</span> \
-                <span class="text-muted-foreground">(' + escapeHtml(user.email) + ')</span> \
-            </span>';
-            $('#pUserDisplay').html(html);
+            var display = document.getElementById('pUserDisplay');
+            var selection = document.createElement('span');
+            var avatar = document.createElement('img');
+            var name = document.createElement('span');
+            var email = document.createElement('span');
+
+            document.getElementById('pUserId').value = user.id;
+            selection.className = 'inline-flex items-center gap-2 rounded-md border px-3 py-1.5';
+            avatar.className = 'size-6 rounded-full';
+            avatar.src = 'https://cravatar.cn/avatar/' + encodeURIComponent(user.md5) + '?s=48';
+            avatar.alt = '';
+            name.textContent = (user.name_first || '') + ' ' + (user.name_last || '');
+            email.className = 'text-muted-foreground';
+            email.textContent = '(' + user.email + ')';
+            selection.append(avatar, name, email);
+            display.replaceChildren(selection);
             document.getElementById('userSearchModal').close();
         }
 
-        $(document).ready(function() {
-            // Bind modal open button
-            document.getElementById('openUserSearchBtn').onclick = function() {
-                document.getElementById('userSearchModal').showModal();
-            };
-
-            // Persist 'Server Owner'
-            @if (old('owner_id'))
-                $.ajax({
-                    url: '/admin/users/accounts.json?user_id={{ old('owner_id') }}',
-                    dataType: 'json',
-                }).then(function (data) {
-                    selectUser(data);
-                });
-            @endif
-
-            // Persist 'Node'
-            @if (old('node_id'))
-                $('#pNodeId').val('{{ old('node_id') }}').change();
-
-                @if (old('allocation_id') || old('allocation_additional'))
-                    setTimeout(function() {
-                        var data = window.Pyrodactyl && Pyrodactyl.nodeData ? Pyrodactyl.nodeData : [];
-                        var node = data.find(function(v) { return v.id == '{{ old('node_id') }}'; });
-                        if (node) {
-                            allAllocations = node.allocations;
-                            @if (old('allocation_id'))
-                                var firstId = '{{ old('allocation_id') }}';
-                                $.each(node.allocations, function(i, a) {
-                                    if (a.id == firstId) {
-                                        selectedAllocs[firstId] = a.text;
-                                    }
-                                });
-                            @endif
-                            @if (old('allocation_additional'))
-                                @foreach (old('allocation_additional') as $id)
-                                    $.each(node.allocations, function(i, a) {
-                                        if (a.id == '{{ $id }}') {
-                                            selectedAllocs['{{ $id }}'] = a.text;
-                                        }
-                                    });
-                                @endforeach
-                            @endif
-                            updateAllocSummary();
-                        }
-                    }, 50);
-                @endif
-            @endif
-
-            // Persist 'Nest'
-            @if (old('nest_id'))
-                $('#pNestId').val('{{ old('nest_id') }}').change();
-
-                @if (old('egg_id'))
-                    $('#pEggId').val('{{ old('egg_id') }}').change();
-                @endif
-            @endif
-
-            // Initial population of dependent selects (matches original Pterodactyl behavior)
-            $('#pNodeId').change();
-            $('#pNestId').change();
+        document.getElementById('openUserSearchBtn').addEventListener('click', function () {
+            document.getElementById('userSearchModal').showModal();
+            document.getElementById('pUserSearch').focus();
         });
+
+        // Persist 'Server Owner'
+        @if (old('owner_id'))
+            fetch('/admin/users/accounts.json?user_id={{ old('owner_id') }}', {
+                headers: { Accept: 'application/json' },
+            }).then(function (response) {
+                if (!response.ok) throw new Error('Unable to load owner.');
+                return response.json();
+            }).then(selectUser);
+        @endif
+
+        // Persist 'Node'
+        @if (old('node_id'))
+            document.getElementById('pNodeId').value = @json(old('node_id'));
+            document.getElementById('pNodeId').dispatchEvent(new Event('change'));
+
+            @if (old('allocation_id') || old('allocation_additional'))
+                var node = Pyrodactyl.nodeData.find(function (item) {
+                    return String(item.id) === String(@json(old('node_id')));
+                });
+                if (node) {
+                    allAllocations = node.allocations;
+                    var persistedAllocationIds = @json(array_values(array_filter(array_merge([old('allocation_id')], old('allocation_additional', [])))));
+                    persistedAllocationIds.forEach(function (id) {
+                        var allocation = node.allocations.find(function (item) {
+                            return String(item.id) === String(id);
+                        });
+                        if (allocation) selectedAllocs[String(id)] = allocation.text;
+                    });
+                    updateAllocSummary();
+                }
+            @endif
+        @endif
+
+        // Persist 'Nest'
+        @if (old('nest_id'))
+            document.getElementById('pNestId').value = @json(old('nest_id'));
+            document.getElementById('pNestId').dispatchEvent(new Event('change'));
+
+            @if (old('egg_id'))
+                document.getElementById('pEggId').value = @json(old('egg_id'));
+                document.getElementById('pEggId').dispatchEvent(new Event('change'));
+            @endif
+        @endif
 
         // User search in modal
         var searchTimeout;
-        $('#pUserSearch').on('input', function() {
+        document.getElementById('pUserSearch').addEventListener('input', function () {
             clearTimeout(searchTimeout);
-            var term = $(this).val();
+            var term = this.value.trim();
+            var results = document.getElementById('pUserSearchResults');
+            var empty = document.getElementById('pUserSearchEmpty');
+            var loading = document.getElementById('pUserSearchLoading');
+
             if (term.length < 2) {
-                $('#pUserSearchResults').empty();
-                $('#pUserSearchEmpty').addClass('hidden');
-                $('#pUserSearchLoading').addClass('hidden');
+                results.replaceChildren();
+                empty.classList.add('hidden');
+                loading.classList.add('hidden');
                 return;
             }
-            $('#pUserSearchResults').empty();
-            $('#pUserSearchEmpty').addClass('hidden');
-            $('#pUserSearchLoading').removeClass('hidden');
-            searchTimeout = setTimeout(function() {
-                $.ajax({
-                    url: '/admin/users/accounts.json',
-                    data: { 'filter[email]': term },
-                    dataType: 'json',
-                }).done(function(data) {
-                    $('#pUserSearchLoading').addClass('hidden');
+
+            results.replaceChildren();
+            empty.classList.add('hidden');
+            loading.classList.remove('hidden');
+            searchTimeout = setTimeout(function () {
+                var query = new URLSearchParams({ 'filter[email]': term });
+                fetch('/admin/users/accounts.json?' + query.toString(), {
+                    headers: { Accept: 'application/json' },
+                }).then(function (response) {
+                    if (!response.ok) throw new Error('Unable to search users.');
+                    return response.json();
+                }).then(function (data) {
+                    loading.classList.add('hidden');
                     var users = data && data.data ? data.data : data;
                     if (!users || users.length === 0) {
-                        $('#pUserSearchEmpty').removeClass('hidden');
+                        empty.classList.remove('hidden');
                         return;
                     }
-                    var $results = $('#pUserSearchResults').empty();
-                    $.each(users, function(i, user) {
-                        var card = $('<div>').addClass('flex items-center gap-3 rounded-md border p-3 cursor-pointer hover:bg-accent')
-                            .attr('data-user-id', user.id)
-                            .on('click', function() { selectUser(user); });
-                        var img = $('<img>').addClass('size-10 rounded-full')
-                            .attr('src', 'https://cravatar.cn/avatar/' + escapeHtml(user.md5) + '?s=80')
-                            .attr('alt', '');
-                        var info = $('<div>').addClass('flex-1 min-w-0');
-                        $('<div>').addClass('font-medium truncate').text(user.name_first + ' ' + user.name_last).appendTo(info);
-                        $('<div>').addClass('text-sm text-muted-foreground truncate').text(user.email + ' — ' + user.username).appendTo(info);
-                        card.append(img, info);
-                        $results.append(card);
+
+                    users.forEach(function (user) {
+                        var card = document.createElement('button');
+                        var avatar = document.createElement('img');
+                        var info = document.createElement('span');
+                        var name = document.createElement('span');
+                        var details = document.createElement('span');
+                        card.type = 'button';
+                        card.className = 'flex w-full items-center gap-3 rounded-md border p-3 text-left hover:bg-accent';
+                        card.addEventListener('click', function () { selectUser(user); });
+                        avatar.className = 'size-10 rounded-full';
+                        avatar.src = 'https://cravatar.cn/avatar/' + encodeURIComponent(user.md5) + '?s=80';
+                        avatar.alt = '';
+                        info.className = 'min-w-0 flex-1';
+                        name.className = 'block truncate font-medium';
+                        name.textContent = (user.name_first || '') + ' ' + (user.name_last || '');
+                        details.className = 'block truncate text-sm text-muted-foreground';
+                        details.textContent = user.email + ' - ' + user.username;
+                        info.append(name, details);
+                        card.append(avatar, info);
+                        results.append(card);
                     });
-                }).fail(function() {
-                    $('#pUserSearchLoading').addClass('hidden');
-                    $('#pUserSearchResults').html('<div class="text-sm text-destructive text-center py-2">{{ trans('admin/server.new.search_failed') }}</div>');
+                }).catch(function () {
+                    loading.classList.add('hidden');
+                    var error = document.createElement('div');
+                    error.className = 'py-2 text-center text-sm text-destructive';
+                    error.textContent = @json(trans('admin/server.new.search_failed'));
+                    results.replaceChildren(error);
                 });
             }, 300);
         });
