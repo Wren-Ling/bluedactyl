@@ -6,7 +6,6 @@ use Ramsey\Uuid\Uuid;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Pterodactyl\Models\Nest;
-use Illuminate\Http\Response;
 use Pterodactyl\Models\Mount;
 use Pterodactyl\Models\Location;
 use Illuminate\Http\RedirectResponse;
@@ -144,20 +143,24 @@ class MountController extends Controller
     /**
      * Deletes an egg from the mount's many-to-many relation.
      */
-    public function deleteEgg(Mount $mount, int $egg_id): Response
+    public function deleteEgg(Mount $mount, int $egg_id): RedirectResponse
     {
         $mount->eggs()->detach($egg_id);
 
-        return response('', 204);
+        $this->alert->success('Mount was updated successfully.')->flash();
+
+        return redirect()->route('admin.mounts.view', $mount->id);
     }
 
     /**
      * Deletes a node from the mount's many-to-many relation.
      */
-    public function deleteNode(Mount $mount, int $node_id): Response
+    public function deleteNode(Mount $mount, int $node_id): RedirectResponse
     {
         $mount->nodes()->detach($node_id);
 
-        return response('', 204);
+        $this->alert->success('Mount was updated successfully.')->flash();
+
+        return redirect()->route('admin.mounts.view', $mount->id);
     }
 }

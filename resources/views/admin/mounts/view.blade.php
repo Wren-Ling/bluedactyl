@@ -116,7 +116,11 @@
                                     <td class="sm:w-1/6 middle"><code>{{ $egg->id }}</code></td>
                                     <td class="middle"><a href="{{ route('admin.nests.egg.view', $egg->id) }}">{{ $egg->name }}</a></td>
                                     <td class="sm:w-1/12 middle">
-                                        <button data-action="detach-egg" data-id="{{ $egg->id }}" class="btn" data-size="sm" data-variant="destructive"><x-icon name="trash-2" class="size-4" /></button>
+                                        <form action="{{ route('admin.mounts.eggs.delete', [$mount->id, $egg->id]) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn" data-size="sm" data-variant="destructive" aria-label="@lang('admin/mounts.delete') {{ $egg->name }}"><x-icon name="trash-2" class="size-4" /></button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -152,7 +156,11 @@
                                     <td class="middle"><a href="{{ route('admin.nodes.view', $node->id) }}">{{ $node->name }}</a></td>
                                     <td class="middle"><code>{{ $node->fqdn }}</code></td>
                                     <td class="sm:w-1/12 middle">
-                                        <button data-action="detach-node" data-id="{{ $node->id }}" class="btn" data-size="sm" data-variant="destructive"><x-icon name="trash-2" class="size-4" /></button>
+                                        <form action="{{ route('admin.mounts.nodes.delete', [$mount->id, $node->id]) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn" data-size="sm" data-variant="destructive" aria-label="@lang('admin/mounts.delete') {{ $node->name }}"><x-icon name="trash-2" class="size-4" /></button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -233,48 +241,4 @@
             <button type="button" class="btn" data-variant="ghost" data-size="icon-sm" onclick="this.closest('dialog').close()" aria-label="@lang('admin/mounts.close')"><x-icon name="x" class="size-4" /></button>
         </div>
     </dialog>
-@endsection
-
-@section('footer-scripts')
-    @parent
-
-    <script>
-        $(document).ready(function() {
-            $('button[data-action="detach-egg"]').click(function (event) {
-                event.preventDefault();
-
-                const eggId = $(this).data('id');
-
-                $.ajax({
-                    method: 'DELETE',
-                    url: '/admin/mounts/' + {{ $mount->id }} + '/eggs/' + eggId,
-                    headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') },
-                }).done(function () {
-                    alert('{{ trans('admin/mounts.egg_detached') }}');
-                    window.location.reload();
-                }).fail(function (jqXHR) {
-                    console.error(jqXHR);
-                    alert(jqXHR.responseJSON?.error || jqXHR.statusText);
-                });
-            });
-
-            $('button[data-action="detach-node"]').click(function (event) {
-                event.preventDefault();
-
-                const nodeId = $(this).data('id');
-
-                $.ajax({
-                    method: 'DELETE',
-                    url: '/admin/mounts/' + {{ $mount->id }} + '/nodes/' + nodeId,
-                    headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') },
-                }).done(function () {
-                    alert('{{ trans('admin/mounts.node_detached') }}');
-                    window.location.reload();
-                }).fail(function (jqXHR) {
-                    console.error(jqXHR);
-                    alert(jqXHR.responseJSON?.error || jqXHR.statusText);
-                });
-            });
-        });
-    </script>
 @endsection

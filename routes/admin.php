@@ -204,8 +204,8 @@ Route::group(['prefix' => 'mounts'], function () {
 
     Route::patch('/view/{mount:id}', [Admin\MountController::class, 'update']);
 
-    Route::delete('/{mount:id}/eggs/{egg_id}', [Admin\MountController::class, 'deleteEgg']);
-    Route::delete('/{mount:id}/nodes/{node_id}', [Admin\MountController::class, 'deleteNode']);
+    Route::delete('/{mount:id}/eggs/{egg_id}', [Admin\MountController::class, 'deleteEgg'])->name('admin.mounts.eggs.delete');
+    Route::delete('/{mount:id}/nodes/{node_id}', [Admin\MountController::class, 'deleteNode'])->name('admin.mounts.nodes.delete');
 });
 
 /*
