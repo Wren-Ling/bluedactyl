@@ -18,18 +18,18 @@
         <x-icon name="chevron-right" class="size-3" />
         <a href="{{ route('admin.nests.egg.view', $egg->id) }}">{{ $egg->name }}</a>
         <x-icon name="chevron-right" class="size-3" />
-        <span>{{ $egg->name }}</span>
+        <span>@lang('admin/nests.egg_scripts.tab_install_script')</span>
     </nav>
 @endsection
 
 @section('content')
 <div class="grid gap-6">
     <div class="col-span-full">
-        <div class="tabs" data-variant="line">
-            <nav role="tablist">
-                <a href="{{ route('admin.nests.egg.view', $egg->id) }}" role="tab">@lang('admin/nests.egg_scripts.tab_configuration')</a>
-                <a href="{{ route('admin.nests.egg.variables', $egg->id) }}" role="tab">@lang('admin/nests.egg_scripts.tab_variables')</a>
-                <a href="{{ route('admin.nests.egg.scripts', $egg->id) }}" role="tab" data-active="true">@lang('admin/nests.egg_scripts.tab_install_script')</a>
+        <div class="tabs">
+            <nav role="tablist" aria-orientation="horizontal" data-variant="line">
+                <a href="{{ route('admin.nests.egg.view', $egg->id) }}" role="tab" aria-selected="false">@lang('admin/nests.egg_scripts.tab_configuration')</a>
+                <a href="{{ route('admin.nests.egg.variables', $egg->id) }}" role="tab" aria-selected="false">@lang('admin/nests.egg_scripts.tab_variables')</a>
+                <a href="{{ route('admin.nests.egg.scripts', $egg->id) }}" role="tab" aria-selected="true">@lang('admin/nests.egg_scripts.tab_install_script')</a>
             </nav>
         </div>
     </div>
@@ -49,7 +49,8 @@
                     </section>
                 @endif
                 <section class="no-padding">
-                    <div id="editor_install" class="h-[300px]">{{ $egg->script_install }}</div>
+                    <textarea id="script_install" name="script_install" rows="16" class="w-full font-mono" aria-label="@lang('admin/nests.egg_scripts.card_title')">{{ $egg->script_install }}</textarea>
+                    <div id="editor_install" class="h-[300px]" style="display: none;"></div>
                 </section>
                 <section>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -91,7 +92,6 @@
                 </section>
                 <footer>
                     {!! csrf_field() !!}
-                    <textarea name="script_install" class="hidden"></textarea>
                     <button type="submit" name="_method" value="PATCH" class="btn ml-auto" data-size="sm">@lang('admin/nests.egg_scripts.save')</button>
                 </footer>
             </div>
@@ -102,20 +102,25 @@
 
 @section('footer-scripts')
     @parent
-    {!! Theme::js('vendor/ace/ace.js') !!}
-    {!! Theme::js('vendor/ace/ext-modelist.js') !!}
+    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.43.3/src-min-noconflict/ace.js"></script>
     <script>
     $(document).ready(function () {
-        const InstallEditor = ace.edit('editor_install');
-        const Modelist = ace.require('ace/ext/modelist')
+        if (typeof ace === 'undefined') return;
 
+        const textarea = document.getElementById('script_install');
+        const editorElement = document.getElementById('editor_install');
+        ace.config.set('basePath', 'https://cdn.jsdelivr.net/npm/ace-builds@1.43.3/src-min-noconflict');
+        editorElement.style.display = 'block';
+        const InstallEditor = ace.edit(editorElement);
+        InstallEditor.setValue(textarea.value, -1);
         InstallEditor.setTheme('ace/theme/chrome');
         InstallEditor.getSession().setMode('ace/mode/sh');
         InstallEditor.getSession().setUseWrapMode(true);
         InstallEditor.setShowPrintMargin(false);
+        textarea.classList.add('hidden');
 
-        $('form').on('submit', function (e) {
-            $('textarea[name="script_install"]').val(InstallEditor.getValue());
+        textarea.form.addEventListener('submit', function () {
+            textarea.value = InstallEditor.getValue();
         });
     });
     </script>

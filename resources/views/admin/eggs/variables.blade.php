@@ -25,11 +25,11 @@
 @section('content')
 <div class="grid gap-6">
     <div class="col-span-full">
-        <div class="tabs" data-variant="line">
-            <nav role="tablist">
-                <a href="{{ route('admin.nests.egg.view', $egg->id) }}" role="tab">@lang('admin/nests.egg_variables.tab_configuration')</a>
-                <a href="{{ route('admin.nests.egg.variables', $egg->id) }}" role="tab" data-active="true">@lang('admin/nests.egg_variables.tab_variables')</a>
-                <a href="{{ route('admin.nests.egg.scripts', $egg->id) }}" role="tab">@lang('admin/nests.egg_variables.tab_install_script')</a>
+        <div class="tabs">
+            <nav role="tablist" aria-orientation="horizontal" data-variant="line">
+                <a href="{{ route('admin.nests.egg.view', $egg->id) }}" role="tab" aria-selected="false">@lang('admin/nests.egg_variables.tab_configuration')</a>
+                <a href="{{ route('admin.nests.egg.variables', $egg->id) }}" role="tab" aria-selected="true">@lang('admin/nests.egg_variables.tab_variables')</a>
+                <a href="{{ route('admin.nests.egg.scripts', $egg->id) }}" role="tab" aria-selected="false">@lang('admin/nests.egg_variables.tab_install_script')</a>
             </nav>
         </div>
     </div>
