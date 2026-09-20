@@ -1,5 +1,9 @@
 # Pyrodactyl
 
+<p align="center">
+    <img src="https://img.cdn1.vip/i/6aafad413b953_1789898049.webp" alt="Banner with Bluedactyl Logo">
+</p>
+
 基于 [Pterodactyl](https://pterodactyl.io/) 构建的开源游戏服务器管理面板。Pyrodactyl 使用 Laravel 与 React 提供服务器控制台、文件管理、备份、数据库、网络分配、子用户、计划任务和节点管理等功能，并通过 Wings/Elytra 守护进程运行隔离的游戏服务器实例。
 
 > 当前版本为 `canary`，适合开发、测试和参与贡献。生产部署前请自行完成安全审查、备份与升级验证。
