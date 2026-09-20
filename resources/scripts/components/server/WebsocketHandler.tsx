@@ -39,6 +39,9 @@ function WebsocketHandler() {
 
         socket.on('auth success', () => setConnectionState(true));
         socket.on('SOCKET_CLOSE', () => setConnectionState(false));
+        socket.on('SOCKET_CONNECT_ERROR', () => {
+            setError('Unable to connect to the WebSocket after several attempts. Please refresh the page.');
+        });
         socket.on('SOCKET_ERROR', () => {
             setError('connecting');
             setConnectionState(false);

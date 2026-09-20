@@ -2,12 +2,6 @@ import { EventEmitter } from 'events';
 import Sockette from 'sockette';
 
 export class Websocket extends EventEmitter {
-    // Timer instance for this socket.
-    private timer: any = null;
-
-    // The backoff for the timer, in milliseconds.
-    private backoff = 5000;
-
     // The socket instance being tracked.
     private socket: Sockette | null = null;
 
@@ -26,6 +20,8 @@ export class Websocket extends EventEmitter {
         this.url = url;
 
         this.socket = new Sockette(`${this.url}`, {
+            timeout: 1000,
+            maxAttempts: 20,
             onmessage: (e) => {
                 try {
                     const { event, args } = JSON.parse(e.data);
@@ -39,29 +35,22 @@ export class Websocket extends EventEmitter {
                 }
             },
             onopen: () => {
-                // Clear the timers, we managed to connect just fine.
-                if (this.timer) clearTimeout(this.timer);
-                this.backoff = 5000;
-
                 this.emit('SOCKET_OPEN');
                 this.authenticate();
             },
-            onreconnect: () => {
-                this.emit('SOCKET_RECONNECT');
-                this.authenticate();
+            onreconnect: (event) => {
+                // Wings uses these codes when reconnecting should be aborted.
+                // @ts-expect-error Sockette forwards a CloseEvent here.
+                if (event.code === 4409 || event.code === 4400) {
+                    this.close(1000);
+                } else {
+                    this.emit('SOCKET_RECONNECT');
+                }
             },
             onclose: () => this.emit('SOCKET_CLOSE'),
             onerror: (error) => this.emit('SOCKET_ERROR', error),
+            onmaximum: () => this.emit('SOCKET_CONNECT_ERROR'),
         });
-
-        this.timer = setTimeout(() => {
-            this.backoff = this.backoff + 2500 >= 20000 ? 20000 : this.backoff + 2500;
-            if (this.socket) this.socket.close();
-            clearTimeout(this.timer);
-
-            // Re-attempt connecting to the socket.
-            this.connect(url);
-        }, this.backoff);
 
         return this;
     }
