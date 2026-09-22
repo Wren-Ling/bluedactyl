@@ -17,12 +17,12 @@
         "subdomain_minecraft"
     ],
     "docker_images": {
-        "Java 25": "ghcr.io/pyrodactyl-oss/images:java_25",
-        "Java 21": "ghcr.io\/pterodactyl\/yolks:java_21",
-        "Java 17": "ghcr.io\/pterodactyl\/yolks:java_17",
-        "Java 16": "ghcr.io\/pterodactyl\/yolks:java_16",
-        "Java 11": "ghcr.io\/pterodactyl\/yolks:java_11",
-        "Java 8": "ghcr.io\/pterodactyl\/yolks:java_8"
+        "Java 25": "crpi-61s8ghuciu93bus8.cn-shanghai.personal.cr.aliyuncs.com/pterocn-eggs/yolks:java_25",
+        "Java 21": "crpi-61s8ghuciu93bus8.cn-shanghai.personal.cr.aliyuncs.com/pterocn-eggs/yolks:java_21",
+        "Java 17": "crpi-61s8ghuciu93bus8.cn-shanghai.personal.cr.aliyuncs.com/pterocn-eggs/yolks:java_17",
+        "Java 16": "crpi-61s8ghuciu93bus8.cn-shanghai.personal.cr.aliyuncs.com/pterocn-eggs/yolks:java_16",
+        "Java 11": "crpi-61s8ghuciu93bus8.cn-shanghai.personal.cr.aliyuncs.com/pterocn-eggs/yolks:java_11",
+        "Java 8": "crpi-61s8ghuciu93bus8.cn-shanghai.personal.cr.aliyuncs.com/pterocn-eggs/yolks:java_8"
     },
     "file_denylist": [],
     "startup": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true $( [[  ! -f unix_args.txt ]] && printf %s \"-jar {{SERVER_JARFILE}}\" || printf %s \"@unix_args.txt\" )",

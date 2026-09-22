@@ -10,7 +10,7 @@
     "description": "Mumble is an open source, low-latency, high quality voice chat software primarily intended for use while gaming.",
     "features": null,
     "docker_images": {
-        "Mumble": "ghcr.io\/parkervcp\/yolks:voice_mumble"
+        "Mumble": "crpi-61s8ghuciu93bus8.cn-shanghai.personal.cr.aliyuncs.com/pterocn-eggs/yolks:voice_mumble"
     },
     "file_denylist": [],
     "startup": "mumble-server -fg -ini murmur.ini",
@@ -23,7 +23,7 @@
     "scripts": {
         "installation": {
             "script": "#!\/bin\/ash\r\n\r\nif [ ! -d \/mnt\/server\/ ]; then\r\n    mkdir \/mnt\/server\/\r\nfi\r\n\r\ncd \/mnt\/server\r\n\r\nFILE=\/mnt\/server\/murmur.ini\r\nif [ -f \"$FILE\" ]; then\r\n    echo \"Config file already exists.\"\r\nelse \r\n    echo \"Downloading the config file.\"\r\n    apk add --no-cache murmur\r\n    cp \/etc\/murmur.ini \/mnt\/server\/murmur.ini\r\n    apk del murmur\r\nfi\r\necho \"done\"",
-            "container": "ghcr.io\/pterodactyl\/installers:alpine",
+            "container": "crpi-61s8ghuciu93bus8.cn-shanghai.personal.cr.aliyuncs.com/pterocn-eggs/installers:alpine",
             "entrypoint": "ash"
         }
     },
