@@ -244,6 +244,8 @@ return [
         'timeout_label' => '请求超时（秒）',
         'rate_limit_label' => '频率限制',
         'rate_limit_help' => '每用户请求数,时间(分钟)。默认 20,1。',
+        'daily_limit_label' => '每用户每日上限',
+        'daily_limit_help' => '单个用户每天可发起的助手请求数上限，与频率限制同时生效。填 0 表示不限制每日总量。接口始终拒绝 API 密钥，因此助手只能从面板界面调用，无法被反代出来当接口用。',
         'console_lines_label' => '作为上下文的控制台行数',
         'console_lines_help' => '传给模型的最近控制台输出行数。',
         'file_limit_label' => '目录列表上限',

@@ -2,8 +2,8 @@
 
 namespace Pterodactyl\Services\Ai;
 
-use Pterodactyl\Enums\Ai\ChatFormat;
 use Pterodactyl\Enums\Ai\Provider;
+use Pterodactyl\Enums\Ai\ChatFormat;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
@@ -32,7 +32,8 @@ class AiSettingsService
         private SettingsRepositoryInterface $settings,
         private ConfigRepository $config,
         private Encrypter $encrypter,
-    ) {}
+    ) {
+    }
 
     public function isEnabled(): bool
     {
@@ -181,6 +182,17 @@ class AiSettingsService
     }
 
     /**
+     * Hard ceiling on assistant requests per user per calendar day. Zero means
+     * no daily limit, leaving only the per-minute throttle in place.
+     */
+    public function dailyLimitPerUser(): int
+    {
+        $value = $this->get('daily_limit_per_user', $this->config->get('ai.daily_limit_per_user', 200));
+
+        return is_numeric($value) ? max(0, (int) $value) : 200;
+    }
+
+    /**
      * True when the assistant is switched on and has everything it needs to run.
      */
     public function isUsable(): bool
@@ -259,6 +271,8 @@ class AiSettingsService
             'console_buffer_lines' => $this->consoleBufferLines(),
             'file_listing_limit' => $this->fileListingLimit(),
             'system_prompt' => $this->systemPrompt(),
+            'rate_limit' => $this->rateLimit(),
+            'daily_limit_per_user' => $this->dailyLimitPerUser(),
             'missing' => $this->missingRequirements(),
         ];
     }

@@ -27,6 +27,7 @@ class AiSettingsFormRequest extends AdminFormRequest
             'pterodactyl:ai:console_buffer_lines' => ['nullable', 'integer', 'between:20,1000'],
             'pterodactyl:ai:file_listing_limit' => ['nullable', 'integer', 'between:10,1000'],
             'pterodactyl:ai:rate_limit' => ['nullable', 'string', 'max:32'],
+            'pterodactyl:ai:daily_limit_per_user' => ['nullable', 'integer', 'between:0,100000'],
         ];
     }
 
@@ -49,6 +50,7 @@ class AiSettingsFormRequest extends AdminFormRequest
             'pterodactyl:ai:console_buffer_lines' => 'Console Context Lines',
             'pterodactyl:ai:file_listing_limit' => 'File Listing Limit',
             'pterodactyl:ai:rate_limit' => 'Rate Limit',
+            'pterodactyl:ai:daily_limit_per_user' => 'Daily Limit Per User',
         ];
     }
 

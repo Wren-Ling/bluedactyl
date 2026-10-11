@@ -48,4 +48,10 @@ return [
 
     // Rate limiting applied to the client-facing assistant endpoints.
     'rate_limit' => env('AI_ASSISTANT_RATE_LIMIT', '20,1'),
+
+    // Hard ceiling on assistant requests per user per calendar day, applied on
+    // top of the per-minute throttle. This is the backstop against a user
+    // trickling requests slowly to stay under the burst limit while still
+    // spending the panel's upstream budget around the clock. 0 disables it.
+    'daily_limit_per_user' => env('AI_ASSISTANT_DAILY_LIMIT', 200),
 ];

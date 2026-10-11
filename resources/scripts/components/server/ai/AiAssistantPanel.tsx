@@ -8,6 +8,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Textarea } from '@/components/ui/textarea';
 
 import { takeConsoleLines } from '@/lib/ai/consoleBuffer';
+import { cn } from '@/lib/utils';
 
 import { httpErrorToHuman } from '@/api/http';
 import { AiMessage, analyzeCrash, getAiDirectory, readAiFile, streamChat } from '@/api/server/ai/assistant';
@@ -15,6 +16,8 @@ import { AiMessage, analyzeCrash, getAiDirectory, readAiFile, streamChat } from 
 import { ServerContext } from '@/state/server';
 
 import { useFlashKey } from '@/plugins/useFlash';
+
+import AiMarkdown from './AiMarkdown';
 
 /**
  * Pull a fenced code block out of an assistant reply, if one is present.
@@ -296,9 +299,19 @@ const AiAssistantPanel = ({ visible, onClose }: AiAssistantPanelProps) => {
                                 >
                                     {turn.role === 'assistant' ? (
                                         <div className='flex flex-col gap-2'>
-                                            <pre className='whitespace-pre-wrap break-words font-sans text-sm leading-relaxed'>
-                                                {turn.content || (turn.pending ? t('ai:thinking') : '')}
-                                            </pre>
+                                            {turn.error || (turn.pending && !turn.content) ? (
+                                                <p
+                                                    className={cn(
+                                                        'text-sm leading-relaxed whitespace-pre-wrap break-words',
+                                                        turn.error && 'text-destructive',
+                                                        !turn.content && !turn.error && 'text-muted-foreground',
+                                                    )}
+                                                >
+                                                    {turn.content || t('ai:thinking')}
+                                                </p>
+                                            ) : (
+                                                <AiMarkdown content={turn.content} />
+                                            )}
                                             {!turn.pending && !turn.error && turn.content && (
                                                 <div className='flex flex-wrap gap-1.5'>
                                                     <Button
@@ -357,11 +370,25 @@ const AiAssistantPanel = ({ visible, onClose }: AiAssistantPanelProps) => {
                             rows={2}
                         />
                         {busy ? (
-                            <Button variant='outline' size='icon' onClick={stop} title={t('ai:stop')}>
+                            <Button
+                                variant='outline'
+                                size='icon'
+                                className='rounded-full'
+                                onClick={stop}
+                                title={t('ai:stop')}
+                                aria-label={t('ai:stop')}
+                            >
                                 <Square className='size-4' />
                             </Button>
                         ) : (
-                            <Button size='icon' onClick={send} disabled={!input.trim()} title={t('ai:send')}>
+                            <Button
+                                size='icon'
+                                className='rounded-full'
+                                onClick={send}
+                                disabled={!input.trim()}
+                                title={t('ai:send')}
+                                aria-label={t('ai:send')}
+                            >
                                 <Send className='size-4' />
                             </Button>
                         )}

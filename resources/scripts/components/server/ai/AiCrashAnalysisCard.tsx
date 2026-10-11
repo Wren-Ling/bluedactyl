@@ -18,6 +18,8 @@ import { ServerContext } from '@/state/server';
 
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
+import AiMarkdown from './AiMarkdown';
+
 const ANALYSIS_DEBOUNCE = 1500;
 
 /**
@@ -159,9 +161,7 @@ const AiCrashAnalysisCard = () => {
                         ) : error ? (
                             <p className='py-4 text-sm text-destructive'>{error}</p>
                         ) : (
-                            <pre className='whitespace-pre-wrap break-words font-sans text-sm leading-relaxed'>
-                                {reply}
-                            </pre>
+                            <AiMarkdown content={reply ?? ''} />
                         )}
                     </div>
                 </DialogContent>

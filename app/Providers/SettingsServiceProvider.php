@@ -51,6 +51,7 @@ class SettingsServiceProvider extends ServiceProvider
     'pterodactyl:ai:console_buffer_lines',
     'pterodactyl:ai:file_listing_limit',
     'pterodactyl:ai:rate_limit',
+    'pterodactyl:ai:daily_limit_per_user',
   ];
 
 

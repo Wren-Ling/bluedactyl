@@ -4,11 +4,12 @@ namespace Pterodactyl\Providers;
 
 use Illuminate\Http\Request;
 use Pterodactyl\Models\Database;
-use Pterodactyl\Enums\Limits\ResourceLimit;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\RateLimiter;
+use Pterodactyl\Enums\Limits\ResourceLimit;
 use Pterodactyl\Http\Middleware\TrimStrings;
+use Pterodactyl\Services\Ai\AiSettingsService;
 use Pterodactyl\Http\Middleware\AdminAuthenticate;
 use Pterodactyl\Http\Middleware\RequireTwoFactorAuthentication;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -110,13 +111,18 @@ class RouteServiceProvider extends ServiceProvider
 
         // The AI assistant fans out to a paid upstream on every call, so it gets
         // its own tighter bucket keyed on the authenticated user rather than the
-        // shared client API budget.
+        // shared client API budget. The budget is read through AiSettingsService
+        // because the administrator sets it on the settings screen: reading
+        // config('ai.rate_limit') directly would ignore that value and quietly
+        // fall back to the environment default.
         RateLimiter::for('ai-assistant', function (Request $request) {
             $key = optional($request->user())->uuid ?: $request->ip();
 
-            [$attempts, $decay] = array_pad(explode(',', (string) config('ai.rate_limit', '20,1')), 2, '1');
+            $configured = app(AiSettingsService::class)->rateLimit();
 
-            return Limit::perMinutes((int) $decay, (int) $attempts)->by($key);
+            [$attempts, $decay] = array_pad(explode(',', $configured), 2, '1');
+
+            return Limit::perMinutes(max(1, (int) $decay), max(1, (int) $attempts))->by($key);
         });
 
         ResourceLimit::boot();

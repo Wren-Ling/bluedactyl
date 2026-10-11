@@ -208,6 +208,12 @@
             <p class="text-sm text-muted-foreground">@lang('admin/settings.ai.rate_limit_help')</p>
           </div>
           <div role="group" class="field">
+            <label for="ai-daily-limit">@lang('admin/settings.ai.daily_limit_label')</label>
+            <input type="number" min="0" max="100000" name="pterodactyl:ai:daily_limit_per_user" id="ai-daily-limit"
+                   value="{{ old('pterodactyl:ai:daily_limit_per_user', $configuration['daily_limit_per_user'] ?? 200) }}">
+            <p class="text-sm text-muted-foreground">@lang('admin/settings.ai.daily_limit_help')</p>
+          </div>
+          <div role="group" class="field">
             <label for="ai-console-lines">@lang('admin/settings.ai.console_lines_label')</label>
             <input type="number" min="20" max="1000" name="pterodactyl:ai:console_buffer_lines" id="ai-console-lines"
                    value="{{ old('pterodactyl:ai:console_buffer_lines', $configuration['console_buffer_lines']) }}">

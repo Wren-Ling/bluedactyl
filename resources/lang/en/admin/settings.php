@@ -244,6 +244,8 @@ return [
         'timeout_label' => 'Request timeout (seconds)',
         'rate_limit_label' => 'Rate limit',
         'rate_limit_help' => 'Requests,minutes per user. Default 20,1.',
+        'daily_limit_label' => 'Daily limit per user',
+        'daily_limit_help' => 'Maximum assistant requests a single user can make in one day, on top of the rate limit. Set to 0 to disable the daily cap. API keys are always refused, so the assistant can only be used from the panel interface.',
         'console_lines_label' => 'Console lines sent as context',
         'console_lines_help' => 'How much recent console output is handed to the model.',
         'file_limit_label' => 'Directory listing limit',
