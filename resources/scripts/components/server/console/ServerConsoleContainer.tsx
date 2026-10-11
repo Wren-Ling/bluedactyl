@@ -1,3 +1,4 @@
+import { useStoreState } from 'easy-peasy';
 import { memo, useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 import { useTranslation } from 'react-i18next';
@@ -5,13 +6,14 @@ import { useTranslation } from 'react-i18next';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Spinner from '@/components/elements/Spinner';
+import { Alert } from '@/components/elements/alert';
+import AiCrashAnalysisCard from '@/components/server/ai/AiCrashAnalysisCard';
 import Console from '@/components/server/console/Console';
 import PowerButtons from '@/components/server/console/PowerButtons';
 import ServerDetailsBlock from '@/components/server/console/ServerDetailsBlock';
 import StatGraphs from '@/components/server/console/StatGraphs';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 import { CrashAnalysisCard } from '@/components/server/features/MclogsFeature';
-import { Alert } from '@/components/elements/alert';
 
 import { ServerContext } from '@/state/server';
 
@@ -34,6 +36,9 @@ const ServerConsoleContainer = () => {
     const instance = ServerContext.useStoreState((state) => state.socket.instance);
     const eggFeatures = ServerContext.useStoreState((state) => state.server.data!.eggFeatures, isEqual);
     const isNodeUnderMaintenance = ServerContext.useStoreState((state) => state.server.data!.isNodeUnderMaintenance);
+    const aiCrashAnalysis = useStoreState((state) =>
+        Boolean(state.settings.data?.ai?.enabled && state.settings.data?.ai?.allow_crash_analysis),
+    );
     const [uptime, setUptime] = useState<UptimeStat>({ uptime: 0 });
 
     useEffect(() => {
@@ -63,8 +68,8 @@ const ServerConsoleContainer = () => {
                     {isNodeUnderMaintenance
                         ? t('console:node_maintenance')
                         : isInstalling
-                            ? t('console:server_installing')
-                            : t('console:server_transferring')}
+                          ? t('console:server_installing')
+                          : t('console:server_transferring')}
                 </Alert>
             )}
 
@@ -75,9 +80,7 @@ const ServerConsoleContainer = () => {
                         {t('console:uptime_label')}: {UptimeDuration(uptime)}
                     </p>
                 }
-                titleChildren={
-                    <PowerButtons className='flex items-center justify-center gap-1' />
-                }
+                titleChildren={<PowerButtons className='flex items-center justify-center gap-1' />}
             />
 
             {description && (
@@ -91,7 +94,13 @@ const ServerConsoleContainer = () => {
                     <ServerDetailsBlock />
                 </div>
 
-                {eggFeatures.map((v) => v.toLowerCase()).includes('mclogs') && <CrashAnalysisCard />}
+                {/* The AI assistant supersedes the external mclogs upload when it is
+                    configured, so only one crash-analysis surface is ever shown. */}
+                {aiCrashAnalysis ? (
+                    <AiCrashAnalysisCard />
+                ) : (
+                    eggFeatures.map((v) => v.toLowerCase()).includes('mclogs') && <CrashAnalysisCard />
+                )}
 
                 <div className='rounded-xl border bg-card p-3 text-card-foreground shadow-sm sm:p-4'>
                     <Console />

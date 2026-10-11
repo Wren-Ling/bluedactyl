@@ -70,6 +70,9 @@ Route::group(['prefix' => 'settings'], function () {
     Route::get('/mail', [Admin\Settings\MailController::class, 'index'])->name('admin.settings.mail');
     Route::get('/advanced', [Admin\Settings\AdvancedController::class, 'index'])->name('admin.settings.advanced');
     Route::get('/captcha', [Admin\Settings\CaptchaController::class, 'index'])->name('admin.settings.captcha');
+    Route::get('/ai', [Admin\Settings\AiController::class, 'index'])->name('admin.settings.ai');
+    Route::post('/ai/test', [Admin\Settings\AiController::class, 'test'])->name('admin.settings.ai.test');
+    Route::get('/ai/models', [Admin\Settings\AiController::class, 'models'])->name('admin.settings.ai.models');
 
     Route::group(['prefix' => 'domains'], function () {
         Route::get('/', [Admin\Settings\DomainsController::class, 'index'])->name('admin.settings.domains.index');
@@ -90,6 +93,7 @@ Route::group(['prefix' => 'settings'], function () {
     Route::patch('/mail', [Admin\Settings\MailController::class, 'update']);
     Route::patch('/advanced', [Admin\Settings\AdvancedController::class, 'update']);
     Route::patch('/captcha', [Admin\Settings\CaptchaController::class, 'update']);
+    Route::patch('/ai', [Admin\Settings\AiController::class, 'update']);
 });
 
 /*

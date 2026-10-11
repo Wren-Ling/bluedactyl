@@ -4,11 +4,11 @@ import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import Spinner from '@/components/elements/Spinner';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
 import { Input } from '@/components/elements/inputs';
+import { Button } from '@/components/ui/button';
 
 import asDialog from '@/hoc/asDialog';
 

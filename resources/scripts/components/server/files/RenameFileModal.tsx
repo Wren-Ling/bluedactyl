@@ -1,11 +1,11 @@
-import { useTranslation } from 'react-i18next';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { join } from 'pathe';
+import { useTranslation } from 'react-i18next';
 
-import { Button } from '@/components/ui/button';
 import Code from '@/components/elements/Code';
 import Field from '@/components/elements/Field';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
+import { Button } from '@/components/ui/button';
 
 import renameFiles from '@/api/server/files/renameFiles';
 
@@ -72,7 +72,13 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
                 >
                     <Form className={`w-full`}>
                         <div className='w-full'>
-                            <Field type={'string'} id={'file_name'} name={'name'} label={t('files:file_name')} autoFocus />
+                            <Field
+                                type={'string'}
+                                id={'file_name'}
+                                name={'name'}
+                                label={t('files:file_name')}
+                                autoFocus
+                            />
                             {useMoveTerminology && (
                                 <p className={`mt-2 text-xs! break-all`}>
                                     <strong className={`text-sm text-foreground/80`}>{t('files:new_location')}</strong>

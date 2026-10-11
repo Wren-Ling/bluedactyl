@@ -18,7 +18,7 @@
     "stats_cpu": "CPU",
     "stats_memory": "内存",
     "stats_disk": "磁盘",
-    "pyrodactyl": "Pyrodactyl",
+    "bluedactyl": "Bluedactyl",
     "management": "管理",
     "sidebar_servers": "服务器",
     "sidebar_api_keys": "API 密钥",

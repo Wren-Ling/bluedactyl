@@ -1,12 +1,12 @@
 {
-    "name": "pyrodactyl-oss/pyrodactyl",
-    "description": "Pyrodactyl is the Pterodactyl-based game server panel that's faster, smaller, safer, and more accessible.",
+    "name": "bluedactyl-oss/bluedactyl",
+    "description": "Bluedactyl is the Pterodactyl-based game server panel that's faster, smaller, safer, and more accessible.",
     "license": "Apache-2.0",
     "authors": [
         {
-            "name": "Pyrodactyl-Oss",
-            "email": "me@pyrodactyl.dev",
-            "homepage": "https://pyrodactyl.dev",
+            "name": "Bluedactyl-Oss",
+            "email": "me@bluedactyl.dev",
+            "homepage": "https://bluedactyl.dev",
             "role": "Maintainer"
         },
         {
@@ -75,7 +75,7 @@
         "Pterodactyl\\Repositories\\Elytra\\": "app/Repositories/Wings/",
         "Pterodactyl\\Services\\Subdomain\\Features\\": "app/Services/Subdomain/Features/",
             "Pterodactyl\\": "app/",
-            "Pyrodactyl\\": "app/",
+            "Bluedactyl\\": "app/",
             "Database\\Factories\\": "database/Factories/",
             "Database\\Seeders\\": "database/Seeders/",
             "Pterodactyl\\\\Services\\\\Subdomain\\\\Features\\\\": "app/Services/Subdomain/Features/",
@@ -89,7 +89,7 @@
         "Pterodactyl\\Repositories\\Elytra\\": "app/Repositories/Wings/",
         "Pterodactyl\\Services\\Subdomain\\Features\\": "app/Services/Subdomain/Features/",
             "Pterodactyl\\Tests\\": "tests/",
-            "Pyrodactyl\\Tests\\": "tests/"
+            "Bluedactyl\\Tests\\": "tests/"
         }
     },
     "scripts": {

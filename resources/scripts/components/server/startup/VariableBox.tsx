@@ -1,10 +1,11 @@
-import { ChevronDown, ChevronUp, Lock } from 'lucide-react';
 import debounce from 'debounce';
+import { ChevronDown, ChevronUp, Lock } from 'lucide-react';
 import { memo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import isEqual from 'react-fast-compare';
+import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import InputSpinner from '@/components/elements/InputSpinner';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -12,9 +13,8 @@ import {
     DropdownMenuRadioItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import InputSpinner from '@/components/elements/InputSpinner';
-import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
 
 import { ServerEggVariable } from '@/api/server/types';
 import updateStartupVariable from '@/api/server/updateStartupVariable';
@@ -77,10 +77,7 @@ const VariableBox = ({ variable }: Props) => {
                 <div className='flex flex-col items-baseline sm:flex-row sm:justify-between gap-2 sm:gap-3'>
                     <div className='flex items-center gap-2 min-w-0'>
                         {!variable.isEditable && (
-                            <Lock
-                                size={22}
-                                className='text-muted-foreground/70 w-4 h-4 flex-shrink-0'
-                            />
+                            <Lock size={22} className='text-muted-foreground/70 w-4 h-4 flex-shrink-0' />
                         )}
                         <span className='text-sm font-medium text-foreground break-words'>{variable.name}</span>
                     </div>

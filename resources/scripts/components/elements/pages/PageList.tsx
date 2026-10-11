@@ -6,9 +6,7 @@ interface Props {
 }
 
 const PageListContainer = ({ className, children }: Props) => (
-    <div
-        className={cn(className, 'p-2 border rounded-xl bg-card')}
-    >
+    <div className={cn(className, 'p-2 border rounded-xl bg-card')}>
         <div className='flex h-full w-full flex-col gap-3 overflow-hidden rounded-lg'>{children}</div>
     </div>
 );

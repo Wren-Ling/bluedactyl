@@ -1,12 +1,12 @@
-import { Trans, useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
-import { Button } from '@/components/ui/button';
 import Spinner from '@/components/elements/Spinner';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
 import RenameFileModal from '@/components/server/files/RenameFileModal';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 import compressFiles from '@/api/server/files/compressFiles';
 import deleteFiles from '@/api/server/files/deleteFiles';
@@ -74,7 +74,9 @@ const MassActionsBar = () => {
                 </SpinnerOverlay>
                 <Dialog open={showConfirm} onOpenChange={setShowConfirm}>
                     <DialogContent>
-                        <DialogHeader><DialogTitle>{t('files:confirm_delete_files')}</DialogTitle></DialogHeader>
+                        <DialogHeader>
+                            <DialogTitle>{t('files:confirm_delete_files')}</DialogTitle>
+                        </DialogHeader>
                         <p className={'mb-2'}>
                             <Trans i18nKey='files:confirm_delete_files_body' count={selectedFiles.length}>
                                 Are you sure you want to delete{' '}
@@ -87,10 +89,16 @@ const MassActionsBar = () => {
                         {selectedFiles.slice(0, 15).map((file) => (
                             <li key={file}>{file}</li>
                         ))}
-                        {selectedFiles.length > 15 && <li>{t('files:confirm_delete_others', { count: selectedFiles.length - 15 })}</li>}
+                        {selectedFiles.length > 15 && (
+                            <li>{t('files:confirm_delete_others', { count: selectedFiles.length - 15 })}</li>
+                        )}
                         <DialogFooter>
-                            <Button variant='outline' onClick={() => setShowConfirm(false)}>{t('files:cancel')}</Button>
-                            <Button variant='destructive' onClick={onClickConfirmDeletion} disabled={loading}>{t('files:delete')}</Button>
+                            <Button variant='outline' onClick={() => setShowConfirm(false)}>
+                                {t('files:cancel')}
+                            </Button>
+                            <Button variant='destructive' onClick={onClickConfirmDeletion} disabled={loading}>
+                                {t('files:delete')}
+                            </Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
@@ -109,7 +117,9 @@ const MassActionsBar = () => {
                             'pointer-events-none fixed bottom-0 left-0 right-0 mb-6 flex justify-center w-full z-50'
                         }
                     >
-                        <div className={`flex items-center space-x-4 pointer-events-auto rounded-sm p-4 bg-card border border-border shadow-lg`}>
+                        <div
+                            className={`flex items-center space-x-4 pointer-events-auto rounded-sm p-4 bg-card border border-border shadow-lg`}
+                        >
                             <Button onClick={() => setShowMove(true)} disabled={loading}>
                                 {loading && loadingMessage.includes('Moving') && <Spinner size='small' />}
                                 {t('files:move')}

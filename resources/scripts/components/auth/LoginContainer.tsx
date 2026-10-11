@@ -1,8 +1,10 @@
+import i18n from '@/i18n/config';
 import { Globe } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { AnimatedThemeToggler as ModeToggle } from '@/components/ui/animated-theme-toggler';
 import { Button } from '@/components/ui/button';
 import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -14,17 +16,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { AnimatedThemeToggler as ModeToggle } from '@/components/ui/animated-theme-toggler';
 import { Meteors } from '@/components/ui/meteors';
 import { NeonGradientCard } from '@/components/ui/neon-gradient-card';
 
 import login from '@/api/auth/login';
-
-import i18n from '@/i18n/config';
+import { httpErrorToHuman } from '@/api/http';
 
 import { store } from '@/state';
-
-import { httpErrorToHuman } from '@/api/http';
 
 const LANGUAGES = [
     { code: 'en', label: 'English' },
@@ -89,10 +87,7 @@ const LoginContainer = () => {
                         </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align='end'>
-                        <DropdownMenuRadioGroup
-                            value={i18n.language}
-                            onValueChange={(v) => i18n.changeLanguage(v)}
-                        >
+                        <DropdownMenuRadioGroup value={i18n.language} onValueChange={(v) => i18n.changeLanguage(v)}>
                             {LANGUAGES.map((l) => (
                                 <DropdownMenuRadioItem key={l.code} value={l.code}>
                                     {l.label}
@@ -152,17 +147,12 @@ const LoginContainer = () => {
 
                         {error && <p className='text-sm text-destructive'>{error}</p>}
 
-                        <Button
-                            type='submit'
-                            disabled={loading}
-                            className='w-full'
-                        >
+                        <Button type='submit' disabled={loading} className='w-full'>
                             {loading ? t('auth:loading') : t('auth:login')}
                         </Button>
                     </form>
                 </CardContent>
             </NeonGradientCard>
-
         </div>
     );
 };

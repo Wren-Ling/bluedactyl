@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 import { object, string } from 'yup';
 
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
-import { Button } from '@/components/ui/button';
 import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
-import { Card, CardContent } from '@/components/ui/card';
 import Field from '@/components/elements/Field';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 
 import CaptchaManager from '@/lib/captcha';
 
@@ -44,7 +44,11 @@ const ForgotPasswordContainer = () => {
         http.post('/auth/password', requestData)
             .then((response) => {
                 resetForm();
-                addFlash({ type: 'success', title: t('auth:success'), message: response.data.status || t('auth:email_sent') });
+                addFlash({
+                    type: 'success',
+                    title: t('auth:success'),
+                    message: response.data.status || t('auth:email_sent'),
+                });
             })
             .catch((error) => {
                 console.error(error);
@@ -62,7 +66,9 @@ const ForgotPasswordContainer = () => {
                     onSubmit={handleSubmission}
                     initialValues={{ email: '' }}
                     validationSchema={object().shape({
-                        email: string().email(t('auth:validation_email_format')).required(t('auth:validation_email_required')),
+                        email: string()
+                            .email(t('auth:validation_email_format'))
+                            .required(t('auth:validation_email_required')),
                     })}
                 >
                     {({ isSubmitting }) => (

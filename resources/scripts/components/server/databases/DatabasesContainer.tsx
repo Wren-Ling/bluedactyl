@@ -1,18 +1,18 @@
-import { Database } from 'lucide-react';
 import { Form, Formik, FormikHelpers } from 'formik';
+import { Database } from 'lucide-react';
 import { For } from 'million/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import Field from '@/components/elements/Field';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Modal from '@/components/elements/Modal';
 import { PageListContainer } from '@/components/elements/pages/PageList';
 import DatabaseRow from '@/components/server/databases/DatabaseRow';
+import { Button } from '@/components/ui/button';
 
 import { httpErrorToHuman } from '@/api/http';
 import createServerDatabase from '@/api/server/databases/createServerDatabase';
@@ -115,9 +115,7 @@ const DatabasesContainer = () => {
                     </Can>
                 }
             >
-                <p className='text-sm leading-relaxed text-muted-foreground'>
-                    {t('description')}
-                </p>
+                <p className='text-sm leading-relaxed text-muted-foreground'>{t('description')}</p>
             </MainPageHeader>
 
             <Formik
@@ -186,9 +184,7 @@ const DatabasesContainer = () => {
                             {databaseLimit === 0 ? t('unavailable') : t('no_databases')}
                         </h3>
                         <p className='max-w-sm text-sm text-muted-foreground'>
-                            {databaseLimit === 0
-                                ? t('cannot_create')
-                                : t('create_one_to_start')}
+                            {databaseLimit === 0 ? t('cannot_create') : t('create_one_to_start')}
                         </p>
                     </div>
                 </div>

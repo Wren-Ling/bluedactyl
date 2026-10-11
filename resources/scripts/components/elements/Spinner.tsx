@@ -1,10 +1,9 @@
 import { Suspense } from 'react';
 
-import { cn } from '@/lib/utils';
-
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
-
 import { Spinner as ShadcnSpinner, type SpinnerSize } from '@/components/ui/spinner';
+
+import { cn } from '@/lib/utils';
 
 export type SpinnerSize = 'small' | 'base' | 'large';
 
@@ -32,11 +31,7 @@ const Spinner: Spinner = ({ centered, visible = true, size = 'base' }) => {
     const spinner = <ShadcnSpinner className={cn(sizeMap[size])} />;
 
     if (centered) {
-        return (
-            <div className='flex justify-center items-center w-full sm:absolute sm:inset-0 sm:z-50'>
-                {spinner}
-            </div>
-        );
+        return <div className='flex justify-center items-center w-full sm:absolute sm:inset-0 sm:z-50'>{spinner}</div>;
     }
 
     return spinner;

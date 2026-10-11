@@ -2,7 +2,7 @@
     "your_api_key": "Your API Key",
     "api_key_modal_description": "The API key you have requested is shown below. Please store it in a safe place, as it will not be shown again.",
     "close": "Close",
-    "account_settings_title": "Account Settings | Pyrodactyl",
+    "account_settings_title": "Account Settings | Bluedactyl",
     "two_factor_required": "2-Factor Required",
     "two_factor_required_desc": "Your account must have two-factor authentication enabled in order to continue.",
     "account_email": "Account Email",

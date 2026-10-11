@@ -74,6 +74,23 @@ Route::group([
     Route::get('/', [Client\ServerController::class, 'index'])->name('api.client.servers.daemonType');
     Route::get('/resources', [Client\ServerController::class, 'resources'])->name('api.client.servers.resources');
 
+    /*
+     * The AI assistant works against both daemons (they share the same file
+     * repository and console protocol), so it is registered here rather than
+     * inside the per-daemon route files.
+     */
+    Route::group(['prefix' => '/ai'], function () {
+        Route::get('/config', [Client\Servers\AiAssistantController::class, 'config']);
+        Route::post('/chat', [Client\Servers\AiAssistantController::class, 'chat'])
+            ->middleware('throttle:ai-assistant');
+        Route::post('/stream', [Client\Servers\AiAssistantController::class, 'stream'])
+            ->middleware('throttle:ai-assistant');
+        Route::post('/crash-analysis', [Client\Servers\AiAssistantController::class, 'crashAnalysis'])
+            ->middleware('throttle:ai-assistant');
+        Route::get('/files', [Client\Servers\AiAssistantController::class, 'directory']);
+        Route::get('/file', [Client\Servers\AiAssistantController::class, 'readFile']);
+    });
+
     Route::group(['prefix' => '/subdomain'], function () {
         Route::get('/', [Elytra\SubdomainController::class, 'index']);
         Route::post('/', [Elytra\SubdomainController::class, 'store'])

@@ -1,16 +1,16 @@
-import { Plus, Users } from 'lucide-react';
 import { Actions, useStoreActions, useStoreState } from 'easy-peasy';
+import { Plus, Users } from 'lucide-react';
 import { For } from 'million/react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import { PageListContainer } from '@/components/elements/pages/PageList';
 import UserRow from '@/components/server/users/UserRow';
+import { Button } from '@/components/ui/button';
 
 import { httpErrorToHuman } from '@/api/http';
 import getServerSubusers from '@/api/server/users/getServerSubusers';
@@ -81,14 +81,12 @@ const UsersContainer = () => {
                         </div>
                     }
                 >
-                    <p className='text-sm leading-relaxed text-muted-foreground'>
-                        {t('description')}
-                    </p>
+                    <p className='text-sm leading-relaxed text-muted-foreground'>{t('description')}</p>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
                     <div className='size-8 animate-spin rounded-full border-b-2 border-primary' />
                 </div>
-            </>
+            </>,
         );
     }
 
@@ -99,7 +97,9 @@ const UsersContainer = () => {
                 title={t('title')}
                 titleChildren={
                     <div className='flex flex-col items-center justify-end gap-4 sm:flex-row'>
-                        <p className='text-center text-sm text-muted-foreground sm:text-right'>{t('count', { count: subusers.length })}</p>
+                        <p className='text-center text-sm text-muted-foreground sm:text-right'>
+                            {t('count', { count: subusers.length })}
+                        </p>
                         <Can action={'user.create'}>
                             <Button
                                 variant='default'
@@ -113,9 +113,7 @@ const UsersContainer = () => {
                     </div>
                 }
             >
-                <p className='text-sm leading-relaxed text-muted-foreground'>
-                    {t('description')}
-                </p>
+                <p className='text-sm leading-relaxed text-muted-foreground'>{t('description')}</p>
             </MainPageHeader>
             {!subusers.length ? (
                 <div className='flex min-h-[60vh] flex-col items-center justify-center px-4 py-12'>
@@ -124,9 +122,7 @@ const UsersContainer = () => {
                             <Users className='size-8 text-muted-foreground' />
                         </div>
                         <h3 className='mb-2 text-lg font-medium text-foreground'>{t('no_users')}</h3>
-                        <p className='max-w-sm text-sm text-muted-foreground'>
-                            {t('no_users_description')}
-                        </p>
+                        <p className='max-w-sm text-sm text-muted-foreground'>{t('no_users_description')}</p>
                     </div>
                 </div>
             ) : (
@@ -136,7 +132,7 @@ const UsersContainer = () => {
                     </For>
                 </PageListContainer>
             )}
-        </>
+        </>,
     );
 };
 

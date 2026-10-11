@@ -1,13 +1,16 @@
-import { Eye, EyeOff, Key, Plus, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { Eye, EyeOff, Key, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ApiKeyModal from '@/components/dashboard/ApiKeyModal';
+import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
+import { MainPageHeader } from '@/components/elements/MainPageHeader';
+import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -18,10 +21,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import { Input } from '@/components/ui/input';
-import { MainPageHeader } from '@/components/elements/MainPageHeader';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 
 import createApiKey from '@/api/account/createApiKey';
 import deleteApiKey from '@/api/account/deleteApiKey';
@@ -182,9 +182,7 @@ const AccountApiContainer = () => {
                         </div>
                         <h3 className='mb-2 text-lg font-medium text-foreground'>{t('account:no_api_keys')}</h3>
                         <p className='mx-auto max-w-sm text-sm text-muted-foreground'>
-                            {loading
-                                ? t('account:loading_api_keys')
-                                : t('account:no_api_keys_desc')}
+                            {loading ? t('account:loading_api_keys') : t('account:no_api_keys_desc')}
                         </p>
                     </div>
                 ) : (
@@ -211,9 +209,7 @@ const AccountApiContainer = () => {
                                             <div className='flex items-center gap-2'>
                                                 <span>{t('account:key_label')}</span>
                                                 <code className='rounded border bg-muted px-2 py-1 font-mono text-muted-foreground'>
-                                                    {showKeys[key.identifier]
-                                                        ? key.identifier
-                                                        : '••••••••••••••••'}
+                                                    {showKeys[key.identifier] ? key.identifier : '••••••••••••••••'}
                                                 </code>
                                                 <Button
                                                     variant='ghost'

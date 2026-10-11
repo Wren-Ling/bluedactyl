@@ -1,10 +1,10 @@
 import { ArrowDownToLine, ArrowUpToLine } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { useTranslation } from 'react-i18next';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
-import { ChartContainer, type ChartConfig } from '@/components/ui/chart';
 import { SocketEvent } from '@/components/server/events';
+import { type ChartConfig, ChartContainer } from '@/components/ui/chart';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 import { bytesToString } from '@/lib/formatters';
@@ -65,7 +65,10 @@ const StatGraphs = () => {
         });
 
         setMemData((prev) => {
-            const next = [...prev.slice(1), { time: prev.length, value: Math.floor(values.memory_bytes / 1024 / 1024) }];
+            const next = [
+                ...prev.slice(1),
+                { time: prev.length, value: Math.floor(values.memory_bytes / 1024 / 1024) },
+            ];
             return next;
         });
 

@@ -71,6 +71,8 @@ class Permission extends Model
 
     public const ACTION_MOD_DOWNLOAD = 'mod.download';
 
+    public const ACTION_AI_USE = 'ai.use';
+
     /**
      * Should timestamps be used on this model.
      */
@@ -223,6 +225,13 @@ class Permission extends Model
                 'download' => '允许用户下载模组到服务器',
                 'resolver' => '允许用户访问依赖解析器',
                 'update' => '允许用户更新已安装的模组',
+            ],
+        ],
+
+        'ai' => [
+            'description' => '控制用户使用服务器 AI 助手的权限。',
+            'keys' => [
+                'use' => '允许用户在控制台中打开 AI 助手并提出问题。文件内容仍受 file 权限限制。',
             ],
         ],
     ];

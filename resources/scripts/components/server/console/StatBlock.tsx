@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils';
-
 import CopyOnClick from '@/components/elements/CopyOnClick';
+
+import { cn } from '@/lib/utils';
 
 interface StatBlockProps {
     title: string;

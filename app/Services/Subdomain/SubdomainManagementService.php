@@ -659,7 +659,7 @@ class SubdomainManagementService
         /**
          * Get the subdomain hierarchy for DNS record creation
          *
-         * For 'servers.pyrodactyl.dev' returns 'servers'
+         * For 'servers.bluedactyl.dev' returns 'servers'
          * For 'api.v1.service.github.io' returns 'api.v1.service'
          * For 'www.example.com' returns 'www'
          * For 'example.com' returns ''
@@ -700,7 +700,7 @@ class SubdomainManagementService
 
 # TODO: Move these to dedicated test in the test suite
 /* $testCases = [ */
-/*     ['servername', 'servers.pyrodactyl.dev'], */
+/*     ['servername', 'servers.bluedactyl.dev'], */
 /*     ['node1', 'api.v1.service.github.io'], */
 /*     ['web01', 'www.example.com'], */
 /*     ['db01', 'example.com'], */

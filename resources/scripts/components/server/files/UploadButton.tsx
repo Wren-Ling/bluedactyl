@@ -1,9 +1,9 @@
-import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { Button } from '@/components/ui/button';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
+import { Button } from '@/components/ui/button';
 
 import getFileUploadUrl from '@/api/server/files/getFileUploadUrl';
 
@@ -169,10 +169,7 @@ const UploadButton = () => {
                 }}
                 multiple
             />
-            <Button
-                variant='secondary'
-                onClick={() => fileUploadInput.current && fileUploadInput.current.click()}
-            >
+            <Button variant='secondary' onClick={() => fileUploadInput.current && fileUploadInput.current.click()}>
                 {t('files:upload')}
             </Button>
         </>

@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Button } from '@/components/ui/button';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import UserFormComponent from '@/components/server/users/UserFormComponent';
+import { Button } from '@/components/ui/button';
 
 import { ServerContext } from '@/state/server';
 import { Subuser } from '@/state/server/subusers';
@@ -74,9 +74,7 @@ const EditUserContainer = () => {
                             <Users className='size-8 text-muted-foreground' />
                         </div>
                         <h3 className='mb-2 text-lg font-medium text-foreground'>{t('user_not_found')}</h3>
-                        <p className='max-w-sm text-sm text-muted-foreground'>
-                            {t('user_not_found_description')}
-                        </p>
+                        <p className='max-w-sm text-sm text-muted-foreground'>{t('user_not_found_description')}</p>
                     </div>
                 </div>
             </div>

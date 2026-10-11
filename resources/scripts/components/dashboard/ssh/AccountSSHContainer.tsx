@@ -1,12 +1,15 @@
-import { Eye, EyeOff, Key, Plus, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { Eye, EyeOff, Key, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
+import { MainPageHeader } from '@/components/elements/MainPageHeader';
+import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -16,10 +19,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import { Input } from '@/components/ui/input';
-import { MainPageHeader } from '@/components/elements/MainPageHeader';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 
 import { createSSHKey, deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
 import { httpErrorToHuman } from '@/api/http';
@@ -179,9 +179,7 @@ const AccountSSHContainer = () => {
                         </div>
                         <h3 className='mb-2 text-lg font-medium text-foreground'>{t('account:no_ssh_keys')}</h3>
                         <p className='mx-auto max-w-sm text-sm text-muted-foreground'>
-                            {!data
-                                ? t('account:loading_ssh_keys')
-                                : t('account:no_ssh_keys_desc')}
+                            {!data ? t('account:loading_ssh_keys') : t('account:no_ssh_keys_desc')}
                         </p>
                     </div>
                 ) : (
@@ -194,12 +192,12 @@ const AccountSSHContainer = () => {
                                 <div className='flex items-center justify-between'>
                                     <div className='min-w-0 flex-1'>
                                         <div className='mb-2 flex items-center gap-3'>
-                                            <h4 className='truncate text-sm font-medium text-foreground'>
-                                                {key.name}
-                                            </h4>
+                                            <h4 className='truncate text-sm font-medium text-foreground'>{key.name}</h4>
                                         </div>
                                         <div className='flex items-center gap-4 text-xs text-muted-foreground'>
-                                            <span>{t('account:added')} {format(key.createdAt, 'MMM d, yyyy HH:mm')}</span>
+                                            <span>
+                                                {t('account:added')} {format(key.createdAt, 'MMM d, yyyy HH:mm')}
+                                            </span>
                                             <div className='flex items-center gap-2'>
                                                 <span>{t('account:fingerprint')}</span>
                                                 <code className='rounded border bg-muted px-2 py-1 font-mono text-muted-foreground'>
@@ -225,9 +223,7 @@ const AccountSSHContainer = () => {
                                         variant='destructive'
                                         size='icon-sm'
                                         className='ml-4'
-                                        onClick={() =>
-                                            setDeleteKey({ name: key.name, fingerprint: key.fingerprint })
-                                        }
+                                        onClick={() => setDeleteKey({ name: key.name, fingerprint: key.fingerprint })}
                                     >
                                         <Trash2 className='size-4' />
                                     </Button>

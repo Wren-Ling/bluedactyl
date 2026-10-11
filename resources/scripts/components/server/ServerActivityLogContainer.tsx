@@ -3,13 +3,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Select from '@/components/elements/Select';
 import Spinner from '@/components/elements/Spinner';
 import ActivityLogEntry from '@/components/elements/activity/ActivityLogEntry';
-import { Input } from '@/components/ui/input';
 import PaginationFooter from '@/components/elements/table/PaginationFooter';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 import { ActivityLogFilters } from '@/api/account/activity';
 import { useActivityLogs } from '@/api/server/activity';
@@ -57,10 +57,18 @@ const ServerActivityLogContainer = () => {
             const now = new Date();
             const cutoff = new Date();
             switch (dateRange) {
-                case '1h': cutoff.setHours(now.getHours() - 1); break;
-                case '24h': cutoff.setDate(now.getDate() - 1); break;
-                case '7d': cutoff.setDate(now.getDate() - 7); break;
-                case '30d': cutoff.setDate(now.getDate() - 30); break;
+                case '1h':
+                    cutoff.setHours(now.getHours() - 1);
+                    break;
+                case '24h':
+                    cutoff.setDate(now.getDate() - 1);
+                    break;
+                case '7d':
+                    cutoff.setDate(now.getDate() - 7);
+                    break;
+                case '30d':
+                    cutoff.setDate(now.getDate() - 30);
+                    break;
             }
             filtered = filtered.filter((item) => new Date(item.timestamp) >= cutoff);
         }
@@ -70,7 +78,13 @@ const ServerActivityLogContainer = () => {
     const exportLogs = () => {
         if (!filteredData?.items) return;
         const csvContent = [
-            [t('account:csv_timestamp'), t('account:csv_event'), t('account:csv_actor'), t('account:csv_ip_address'), t('account:csv_properties')].join(','),
+            [
+                t('account:csv_timestamp'),
+                t('account:csv_event'),
+                t('account:csv_actor'),
+                t('account:csv_ip_address'),
+                t('account:csv_properties'),
+            ].join(','),
             ...filteredData.items.map((item) =>
                 [
                     new Date(item.timestamp).toISOString(),
@@ -78,7 +92,9 @@ const ServerActivityLogContainer = () => {
                     item.relationships.actor?.username || 'System',
                     item.ip || '',
                     JSON.stringify(item.properties).replace(/"/g, '""'),
-                ].map((field) => `"${field}"`).join(','),
+                ]
+                    .map((field) => `"${field}"`)
+                    .join(','),
             ),
         ].join('\n');
         const blob = new Blob([csvContent], { type: 'text/csv' });
@@ -97,14 +113,21 @@ const ServerActivityLogContainer = () => {
         setDateRange('all');
     };
 
-    const hasActiveFilters = filters.filters?.event || filters.filters?.ip || searchTerm || selectedEventType || dateRange !== 'all';
+    const hasActiveFilters =
+        filters.filters?.event || filters.filters?.ip || searchTerm || selectedEventType || dateRange !== 'all';
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.ctrlKey || e.metaKey) {
                 switch (e.key) {
-                    case 'f': e.preventDefault(); setShowFilters(!showFilters); break;
-                    case 'e': e.preventDefault(); exportLogs(); break;
+                    case 'f':
+                        e.preventDefault();
+                        setShowFilters(!showFilters);
+                        break;
+                    case 'e':
+                        e.preventDefault();
+                        exportLogs();
+                        break;
                 }
             }
         };
@@ -129,21 +152,30 @@ const ServerActivityLogContainer = () => {
                 title={t('account:activity_log')}
                 titleChildren={
                     <div className='flex flex-wrap items-center gap-2'>
-                        <Button variant='outline' onClick={() => setShowFilters(!showFilters)} className='flex items-center gap-2' title={t('account:toggle_filters')}>
+                        <Button
+                            variant='outline'
+                            onClick={() => setShowFilters(!showFilters)}
+                            className='flex items-center gap-2'
+                            title={t('account:toggle_filters')}
+                        >
                             <Filter className='size-4' />
                             {t('account:filters')}
                             {hasActiveFilters && <span className='size-2 rounded-full bg-primary' />}
                         </Button>
-                        <Button variant='outline' onClick={exportLogs} disabled={!filteredData?.items?.length} className='flex items-center gap-2' title={t('account:export_csv')}>
+                        <Button
+                            variant='outline'
+                            onClick={exportLogs}
+                            disabled={!filteredData?.items?.length}
+                            className='flex items-center gap-2'
+                            title={t('account:export_csv')}
+                        >
                             <ArrowDownToLine className='size-4' />
                             {t('account:export')}
                         </Button>
                     </div>
                 }
             >
-                <p className='text-sm leading-relaxed text-muted-foreground'>
-                    {t('account:activity_desc')}
-                </p>
+                <p className='text-sm leading-relaxed text-muted-foreground'>{t('account:activity_desc')}</p>
             </MainPageHeader>
 
             {showFilters && (
@@ -157,23 +189,39 @@ const ServerActivityLogContainer = () => {
 
                     <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
                         <div>
-                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>{t('account:search')}</label>
+                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>
+                                {t('account:search')}
+                            </label>
                             <div className='relative'>
                                 <Search className='pointer-events-none absolute left-3 top-1/2 z-10 size-4 -translate-y-1/2 text-muted-foreground' />
-                                <Input type='text' placeholder={t('account:search_placeholder')} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className='pl-10' />
+                                <Input
+                                    type='text'
+                                    placeholder={t('account:search_placeholder')}
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className='pl-10'
+                                />
                             </div>
                         </div>
 
                         <div>
-                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>{t('account:event_type')}</label>
+                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>
+                                {t('account:event_type')}
+                            </label>
                             <Select value={selectedEventType} onChange={(e) => setSelectedEventType(e.target.value)}>
                                 <option value=''>{t('account:all_events')}</option>
-                                {eventTypes.map((type) => (<option key={type} value={type}>{type}</option>))}
+                                {eventTypes.map((type) => (
+                                    <option key={type} value={type}>
+                                        {type}
+                                    </option>
+                                ))}
                             </Select>
                         </div>
 
                         <div>
-                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>{t('account:time_range')}</label>
+                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>
+                                {t('account:time_range')}
+                            </label>
                             <Select value={dateRange} onChange={(e) => setDateRange(e.target.value)}>
                                 <option value='all'>{t('account:all_time')}</option>
                                 <option value='1h'>{t('account:last_hour')}</option>
@@ -185,7 +233,11 @@ const ServerActivityLogContainer = () => {
 
                         <div className='flex items-end'>
                             {hasActiveFilters && (
-                                <Button variant='outline' onClick={clearAllFilters} className='flex w-full items-center gap-2'>
+                                <Button
+                                    variant='outline'
+                                    onClick={clearAllFilters}
+                                    className='flex w-full items-center gap-2'
+                                >
                                     <X className='size-4' />
                                     {t('account:clear_all_filters')}
                                 </Button>
@@ -203,7 +255,8 @@ const ServerActivityLogContainer = () => {
                     <h3 className='text-base font-semibold text-foreground'>{t('account:activity_events')}</h3>
                     {filteredData?.items && (
                         <span className='text-sm text-muted-foreground'>
-                            ({filteredData.items.length} {filteredData.items.length === 1 ? t('account:event') : t('account:events')})
+                            ({filteredData.items.length}{' '}
+                            {filteredData.items.length === 1 ? t('account:event') : t('account:events')})
                         </span>
                     )}
                 </div>
@@ -223,8 +276,12 @@ const ServerActivityLogContainer = () => {
                         </p>
                         {hasActiveFilters && (
                             <div className='flex justify-center gap-2'>
-                                <Button variant='outline' onClick={clearAllFilters}>{t('account:clear_all_filters')}</Button>
-                                <Button variant='outline' onClick={() => setShowFilters(true)}>{t('account:adjust_filters')}</Button>
+                                <Button variant='outline' onClick={clearAllFilters}>
+                                    {t('account:clear_all_filters')}
+                                </Button>
+                                <Button variant='outline' onClick={() => setShowFilters(true)}>
+                                    {t('account:adjust_filters')}
+                                </Button>
                             </div>
                         )}
                     </div>

@@ -6,12 +6,12 @@ import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ApiKeyModal from '@/components/dashboard/ApiKeyModal';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
-import { Input } from '@/components/ui/input';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 
 import createApiKey from '@/api/account/createApiKey';
 import { ApiKey } from '@/api/account/getApiKeys';

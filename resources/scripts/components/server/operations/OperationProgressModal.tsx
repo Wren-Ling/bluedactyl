@@ -1,9 +1,9 @@
 import { TriangleAlert } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
-import { Button } from '@/components/ui/button';
 import Spinner from '@/components/elements/Spinner';
 import { Dialog } from '@/components/elements/dialog';
+import { Button } from '@/components/ui/button';
 
 import {
     UI_CONFIG,
@@ -111,9 +111,7 @@ const OperationProgressModal: React.FC<Props> = ({
                     </div>
                 );
             case 'error':
-                return (
-                    <TriangleAlert size={22} className='w-5 h-5 text-red-400' />
-                );
+                return <TriangleAlert size={22} className='w-5 h-5 text-red-400' />;
             default:
                 return <Spinner size={'small'} />;
         }
@@ -143,7 +141,9 @@ const OperationProgressModal: React.FC<Props> = ({
                 {operationId && (
                     <div className='flex justify-center'>
                         <div className='px-3 py-1.5 bg-muted/30 border border-border rounded-lg'>
-                            <p className='text-xs text-muted-foreground font-mono'>ID: {formatOperationId(operationId)}</p>
+                            <p className='text-xs text-muted-foreground font-mono'>
+                                ID: {formatOperationId(operationId)}
+                            </p>
                         </div>
                     </div>
                 )}
@@ -152,10 +152,7 @@ const OperationProgressModal: React.FC<Props> = ({
                 {error ? (
                     <div className='space-y-4'>
                         <div className='flex items-center justify-center space-x-3'>
-                            <TriangleAlert
-                                size={22}
-                                className='w-6 h-6 text-red-400'
-                            />
+                            <TriangleAlert size={22} className='w-6 h-6 text-red-400' />
                             <span className='text-red-400 font-semibold text-lg'>Error</span>
                         </div>
                         <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
@@ -177,7 +174,9 @@ const OperationProgressModal: React.FC<Props> = ({
 
                         {/* Message Box */}
                         <div className='p-4 bg-muted/30 border border-border rounded-lg'>
-                            <p className='text-sm text-foreground/80 text-center'>{operation.message || 'Processing...'}</p>
+                            <p className='text-sm text-foreground/80 text-center'>
+                                {operation.message || 'Processing...'}
+                            </p>
                         </div>
 
                         {/* Progress Bar for Active Operations */}
@@ -218,10 +217,7 @@ const OperationProgressModal: React.FC<Props> = ({
                         {isFailedStatus(operation.status) && (
                             <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
                                 <div className='flex items-center justify-center space-x-2 mb-2'>
-                                    <TriangleAlert
-                                        size={22}
-                                        className='w-5 h-5 text-red-400'
-                                    />
+                                    <TriangleAlert size={22} className='w-5 h-5 text-red-400' />
                                     <p className='text-sm text-red-300 font-medium'>Operation failed</p>
                                 </div>
                                 {operation.message && (
@@ -244,9 +240,7 @@ const OperationProgressModal: React.FC<Props> = ({
                     <Button onClick={handleClose} variant='outline' className='mr-3'>
                         Cancel
                     </Button>
-                    <Button onClick={handleClose}>
-                        {operation?.is_completed ? 'Done' : 'Close'}
-                    </Button>
+                    <Button onClick={handleClose}>{operation?.is_completed ? 'Done' : 'Close'}</Button>
                 </Dialog.Footer>
             )}
         </Dialog>

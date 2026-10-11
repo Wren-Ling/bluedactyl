@@ -2,7 +2,7 @@
     "your_api_key": "您的 API 密钥",
     "api_key_modal_description": "您请求的 API 密钥如下所示。请将其保存在安全的地方，因为它将不再显示。",
     "close": "关闭",
-    "account_settings_title": "账号设置 | Pyrodactyl",
+    "account_settings_title": "账号设置 | Bluedactyl",
     "two_factor_required": "需要双因素认证",
     "two_factor_required_desc": "您的账号必须启用双因素认证才能继续。",
     "account_email": "账号邮箱",

@@ -1,9 +1,12 @@
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { Button } from '@/components/ui/button';
 // import { Options } from '@/components/elements/button/types';
 import Can from '@/components/elements/Can';
+import Modal from '@/components/elements/Modal';
+import Spinner from '@/components/elements/Spinner';
+import { SocketEvent, SocketRequest } from '@/components/server/events';
+import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,9 +14,6 @@ import {
     DropdownMenuRadioItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import Modal from '@/components/elements/Modal';
-import Spinner from '@/components/elements/Spinner';
-import { SocketEvent, SocketRequest } from '@/components/server/events';
 
 import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
 import getServerStartup from '@/api/swr/getServerStartup';

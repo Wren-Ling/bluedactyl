@@ -107,6 +107,18 @@ class RouteServiceProvider extends ServiceProvider
                 config('http.rate_limit.application')
             )->by($key);
         });
+
+        // The AI assistant fans out to a paid upstream on every call, so it gets
+        // its own tighter bucket keyed on the authenticated user rather than the
+        // shared client API budget.
+        RateLimiter::for('ai-assistant', function (Request $request) {
+            $key = optional($request->user())->uuid ?: $request->ip();
+
+            [$attempts, $decay] = array_pad(explode(',', (string) config('ai.rate_limit', '20,1')), 2, '1');
+
+            return Limit::perMinutes((int) $decay, (int) $attempts)->by($key);
+        });
+
         ResourceLimit::boot();
     }
 }

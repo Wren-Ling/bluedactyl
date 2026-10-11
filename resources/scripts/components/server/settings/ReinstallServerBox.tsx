@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 import { httpErrorToHuman } from '@/api/http';
 import reinstallServer from '@/api/server/reinstallServer';
@@ -56,9 +56,7 @@ const ReinstallServerBox = () => {
                         <DialogHeader>
                             <DialogTitle>{t('reinstall_confirm_title')}</DialogTitle>
                         </DialogHeader>
-                        <div className='text-sm text-muted-foreground'>
-                            {t('reinstall_confirm_description')}
-                        </div>
+                        <div className='text-sm text-muted-foreground'>{t('reinstall_confirm_description')}</div>
                         <DialogFooter>
                             <Button variant='outline' onClick={() => setModalVisible(false)} disabled={loading}>
                                 {t('cancel')}
@@ -71,9 +69,7 @@ const ReinstallServerBox = () => {
                 </Dialog>
                 <p className={`text-sm`}>
                     {t('reinstall_description')}&nbsp;
-                    <strong className={`font-medium`}>
-                        {t('reinstall_warning')}
-                    </strong>
+                    <strong className={`font-medium`}>{t('reinstall_warning')}</strong>
                 </p>
                 <div className={`mt-6 text-right`}>
                     <Button variant='destructive' onClick={() => setModalVisible(true)}>

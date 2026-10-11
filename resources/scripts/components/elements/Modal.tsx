@@ -4,9 +4,9 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@/components/ui/button';
 import Spinner from '@/components/elements/Spinner';
 import { DialogContext, IconPosition } from '@/components/elements/dialog';
+import { Button } from '@/components/ui/button';
 
 export interface RequiredModalProps {
     visible: boolean;

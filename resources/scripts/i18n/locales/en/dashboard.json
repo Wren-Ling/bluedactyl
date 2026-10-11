@@ -18,7 +18,7 @@
     "stats_cpu": "CPU",
     "stats_memory": "Memory",
     "stats_disk": "Disk",
-    "pyrodactyl": "Pyrodactyl",
+    "bluedactyl": "Bluedactyl",
     "management": "Management",
     "sidebar_servers": "Servers",
     "sidebar_api_keys": "API Keys",

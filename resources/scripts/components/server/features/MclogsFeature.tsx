@@ -1,13 +1,13 @@
 import { Check, Link, TriangleAlert } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
-import { Button } from '@/components/ui/button';
 import Modal from '@/components/elements/Modal';
 import Spinner from '@/components/elements/Spinner';
 import { Alert } from '@/components/elements/alert';
 import { SocketEvent } from '@/components/server/events';
+import { Button } from '@/components/ui/button';
 
 import { debounce, isCrashLine } from '@/lib/mclogsUtils';
 
@@ -277,9 +277,7 @@ const AnalysisModal = ({
         <div className='flex flex-col items-center justify-center py-12' aria-busy='true'>
             <Spinner size='large' />
             <h3 className='text-lg font-medium text-neutral-200 mt-4'>{t('server:analyzing_server_logs')}</h3>
-            <p className='text-neutral-400 mt-2 text-center max-w-md'>
-                {t('server:analyzing_logs_description')}
-            </p>
+            <p className='text-neutral-400 mt-2 text-center max-w-md'>{t('server:analyzing_logs_description')}</p>
         </div>
     );
 
@@ -288,17 +286,12 @@ const AnalysisModal = ({
         <div className='space-y-6'>
             <div className='bg-red-500/10 border border-red-500/20 rounded-lg p-4'>
                 <div className='flex items-start gap-3'>
-                    <TriangleAlert
-                        size={22}
-                        className='w-6 h-6 text-red-400 flex-shrink-0 mt-0.5'
-                    />
+                    <TriangleAlert size={22} className='w-6 h-6 text-red-400 flex-shrink-0 mt-0.5' />
                     <div className='flex-1'>
                         <h3 className='font-semibold text-red-400 text-lg'>{t('server:analysis_failed')}</h3>
                         <p className='text-neutral-300 mt-2'>{error}</p>
                         {(/latest\.log/i.test(error!) || /no log content/i.test(error!)) && (
-                            <p className='text-neutral-400 mt-3 text-sm'>
-                                {t('server:no_log_file_hint')}
-                            </p>
+                            <p className='text-neutral-400 mt-3 text-sm'>{t('server:no_log_file_hint')}</p>
                         )}
                     </div>
                 </div>
@@ -374,15 +367,10 @@ const AnalysisModal = ({
             return (
                 <div className='bg-green-500/10 border border-green-500/20 rounded-lg p-4 mb-6'>
                     <div className='flex items-start gap-3'>
-                        <Check
-                            size={22}
-                            className='w-6 h-6 text-green-400 flex-shrink-0 mt-0.5'
-                        />
+                        <Check size={22} className='w-6 h-6 text-green-400 flex-shrink-0 mt-0.5' />
                         <div>
                             <h3 className='font-semibold text-green-400 text-lg'>{t('server:no_issues_detected')}</h3>
-                            <p className='text-neutral-300 mt-2'>
-                                {t('server:no_issues_message')}
-                            </p>
+                            <p className='text-neutral-300 mt-2'>{t('server:no_issues_message')}</p>
                         </div>
                     </div>
                 </div>
@@ -391,23 +379,24 @@ const AnalysisModal = ({
 
         return (
             <div className='space-y-4 mb-6'>
-                <h3 className='text-lg font-semibold text-red-400'>{t('server:issues_found', { count: problems.length })}</h3>
+                <h3 className='text-lg font-semibold text-red-400'>
+                    {t('server:issues_found', { count: problems.length })}
+                </h3>
 
                 <div className='space-y-3'>
                     {problems.map((problem, idx) => (
                         <div key={idx} className='bg-red-500/10 border border-red-500/20 rounded-lg overflow-hidden'>
                             <div className='p-4'>
                                 <div className='flex items-start gap-3'>
-                                    <TriangleAlert
-                                        size={22}
-                                        className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5'
-                                    />
+                                    <TriangleAlert size={22} className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5' />
                                     <div className='flex-1'>
                                         <h4 className='font-medium text-red-400 mb-2'>{problem.message}</h4>
 
                                         {!!problem.entry?.lines?.length && (
                                             <div className='bg-red-500/5 border border-red-500/10 rounded-lg p-3 mb-3'>
-                                                <p className='text-red-400/70 text-sm mb-2 font-medium'>{t('server:error_log')}</p>
+                                                <p className='text-red-400/70 text-sm mb-2 font-medium'>
+                                                    {t('server:error_log')}
+                                                </p>
                                                 <div className='max-h-40 overflow-y-auto font-mono text-sm space-y-1'>
                                                     {problem.entry.lines.map((line, lineIdx) => (
                                                         <div key={lineIdx} className='flex'>
@@ -443,17 +432,16 @@ const AnalysisModal = ({
 
         return (
             <div className='space-y-4'>
-                <h3 className='text-lg font-semibold text-green-400'>{t('server:recommended_solutions', { count: allSolutions.length })}</h3>
+                <h3 className='text-lg font-semibold text-green-400'>
+                    {t('server:recommended_solutions', { count: allSolutions.length })}
+                </h3>
 
                 <div className='bg-green-500/10 border border-green-500/20 rounded-lg p-4'>
                     <div className='space-y-3'>
                         {allSolutions.map((solution, idx) => (
                             <div key={idx} className='flex items-start gap-3'>
                                 <div className='bg-green-500/20 rounded-full p-1 flex-shrink-0 mt-0.5'>
-                                    <Check
-                                        size={22}
-                                        className='w-4 h-4 text-green-400'
-                                    />
+                                    <Check size={22} className='w-4 h-4 text-green-400' />
                                 </div>
                                 <div className='flex-1'>
                                     <p className='text-neutral-200 leading-relaxed'>{solution.message}</p>

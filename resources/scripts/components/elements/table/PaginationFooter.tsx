@@ -1,8 +1,9 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
+
+import { cn } from '@/lib/utils';
 
 import { PaginationDataSet } from '@/api/http';
 
@@ -36,7 +37,11 @@ const PaginationFooter = ({ pagination, className, onPageSelect }: Props) => {
     return (
         <div className={cn('flex items-center justify-between my-2', className)}>
             <p className={'text-sm text-muted-foreground'}>
-                {t('common:showing_results', { start: Math.max(start, Math.min(pagination.total, 1)), end, total: pagination.total })}
+                {t('common:showing_results', {
+                    start: Math.max(start, Math.min(pagination.total, 1)),
+                    end,
+                    total: pagination.total,
+                })}
             </p>
             {pagination.totalPages > 1 && (
                 <div className={'flex space-x-1'}>
@@ -59,12 +64,7 @@ const PaginationFooter = ({ pagination, className, onPageSelect }: Props) => {
                             {value}
                         </Button>
                     ))}
-                    <Button
-                        variant='default'
-                        size='sm'
-                        className='w-8'
-                        disabled
-                    >
+                    <Button variant='default' size='sm' className='w-8' disabled>
                         {current}
                     </Button>
                     {pages.next.map((value) => (

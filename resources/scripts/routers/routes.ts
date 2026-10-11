@@ -15,11 +15,11 @@ import {
 import type { ComponentType, SVGProps } from 'react';
 import { lazy } from 'react';
 
+import LanguageSettingsContainer from '@/components/account/LanguageSettingsContainer';
 import AccountApiContainer from '@/components/dashboard/AccountApiContainer';
 import AccountOverviewContainer from '@/components/dashboard/AccountOverviewContainer';
 import ActivityLogContainer from '@/components/dashboard/activity/ActivityLogContainer';
 import AccountSSHContainer from '@/components/dashboard/ssh/AccountSSHContainer';
-import LanguageSettingsContainer from '@/components/account/LanguageSettingsContainer';
 import ServerActivityLogContainer from '@/components/server/ServerActivityLogContainer';
 import BackupContainer from '@/components/server/backups/BackupContainer';
 import ServerConsoleContainer from '@/components/server/console/ServerConsoleContainer';

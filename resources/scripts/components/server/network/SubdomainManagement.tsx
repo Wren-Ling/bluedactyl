@@ -1,12 +1,12 @@
-import { Link } from 'lucide-react';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { Link } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
+import { Button } from '@/components/ui/button';
 
 import {
     SubdomainInfo,
@@ -183,9 +183,7 @@ const SubdomainManagement = () => {
     };
 
     const handleDeleteSubdomain = async () => {
-        if (
-            !confirm(t('delete_subdomain_confirm'))
-        ) {
+        if (!confirm(t('delete_subdomain_confirm'))) {
             return;
         }
 
@@ -237,9 +235,7 @@ const SubdomainManagement = () => {
                             </svg>
                         </div>
                         <h4 className='text-md font-medium text-foreground/90 mb-1'>{t('no_domains_configured')}</h4>
-                        <p className='text-sm text-muted-foreground max-w-sm'>
-                            {t('contact_admin')}
-                        </p>
+                        <p className='text-sm text-muted-foreground max-w-sm'>{t('contact_admin')}</p>
                     </div>
                 </div>
             </div>
@@ -292,12 +288,7 @@ const SubdomainManagement = () => {
                         >
                             {loading ? t('deleting') : t('delete_subdomain')}
                         </Button>
-                        <Button
-                            type='button'
-                            onClick={() => setIsEditing(true)}
-                            disabled={loading}
-                            size='sm'
-                        >
+                        <Button type='button' onClick={() => setIsEditing(true)} disabled={loading} size='sm'>
                             {t('edit_subdomain')}
                         </Button>
                     </div>

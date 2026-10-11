@@ -1,6 +1,7 @@
 import { Play } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
+import Logo from '@/components/elements/PyroLogo';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -8,7 +9,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import Logo from '@/components/elements/PyroLogo';
 
 interface MobileTopBarProps {
     onMenuToggle: () => void;

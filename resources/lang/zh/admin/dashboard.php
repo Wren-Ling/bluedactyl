@@ -7,7 +7,7 @@ return [
     'breadcrumb_admin' => '管理',
     'breadcrumb_index' => '首页',
     'system_info' => '系统信息',
-    'system_info_text' => '您正在运行 Pyrodactyl 面板版本 :version。',
+    'system_info_text' => '您正在运行 Bluedactyl 面板版本 :version。',
     'get_help' => '获取帮助',
     'via_discord' => '（通过 Discord）',
     'documentation' => '文档',

@@ -1,11 +1,11 @@
-import { Cloud, CloudUpload, Lock } from 'lucide-react';
 import { format, formatDistanceToNow } from 'date-fns';
+import { Cloud, CloudUpload, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import Can from '@/components/elements/Can';
-import { Checkbox } from '@/components/ui/checkbox';
 import Spinner from '@/components/elements/Spinner';
 import { PageListItem } from '@/components/elements/pages/PageList';
+import { Checkbox } from '@/components/ui/checkbox';
 
 import { bytesToString } from '@/lib/formatters';
 
@@ -171,8 +171,9 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                             </div>
                             <div className='w-full bg-muted rounded-full h-2'>
                                 <div
-                                    className={`h-2 rounded-full transition-all duration-300 ${backup.status === 'completed' ? 'bg-green-500' : 'bg-blue-500'
-                                        }`}
+                                    className={`h-2 rounded-full transition-all duration-300 ${
+                                        backup.status === 'completed' ? 'bg-green-500' : 'bg-blue-500'
+                                    }`}
                                     style={{ width: `${backup.progress || 0}%` }}
                                 />
                             </div>
@@ -184,7 +185,9 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                         <p className='text-xs text-red-400 truncate mb-1.5'>{backup.message}</p>
                     )}
 
-                    {backup.checksum && <p className='text-xs text-muted-foreground font-mono truncate'>{backup.checksum}</p>}
+                    {backup.checksum && (
+                        <p className='text-xs text-muted-foreground font-mono truncate'>{backup.checksum}</p>
+                    )}
                 </div>
 
                 {/* Size info for completed backups */}

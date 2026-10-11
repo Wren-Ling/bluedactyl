@@ -4,6 +4,7 @@ return [
     'permissions' => [
         'websocket_*' => '允许访问此服务器的 WebSocket。',
         'control_console' => '允许用户向服务器控制台发送数据。',
+        'ai_use' => '允许用户打开 AI 助手并就本服务器提问。可读取的文件内容仍受上方文件权限限制。',
         'control_start' => '允许用户启动服务器实例。',
         'control_stop' => '允许用户停止服务器实例。',
         'control_restart' => '允许用户重启服务器实例。',

@@ -109,7 +109,7 @@
         "compose:down": "docker compose down",
         "build": "vite build",
         "build:turbo": "turbo build",
-        "build:docker:dev": "docker buildx build -t pyrodactyl:develop --build-arg DEV=true .",
+        "build:docker:dev": "docker buildx build -t bluedactyl:develop --build-arg DEV=true .",
         "ship": "turbo lint build && npm run build:admin",
         "build:admin": "node -e \"const p=require('postcss'),t=require('@tailwindcss/postcss'),f=require('fs');const c=f.readFileSync('resources/css/admin.css','utf8');p([t()]).process(c,{from:'resources/css/admin.css',to:'public/themes/pterodactyl/css/admin.css'}).then(r=>{f.writeFileSync('public/themes/pterodactyl/css/admin.css',r.css);console.log('Admin CSS built:',(r.css.length/1024).toFixed(1),'KB')}).catch(e=>console.error(e.message))\""
     },

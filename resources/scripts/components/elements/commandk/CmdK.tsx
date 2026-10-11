@@ -1,3 +1,4 @@
+import { Command } from 'cmdk';
 import {
     Box,
     CloudUpload,
@@ -12,7 +13,6 @@ import {
     Terminal,
     Users,
 } from 'lucide-react';
-import { Command } from 'cmdk';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -128,9 +128,7 @@ const CommandMenu = () => {
                         </Command.Item>
                     </Can>
                     <Can action={['modrinth.*']} matchAny>
-                        <Command.Item onSelect={() => cmdkNavigate('/mods')}>
-                            {t('common:download')}
-                        </Command.Item>
+                        <Command.Item onSelect={() => cmdkNavigate('/mods')}>{t('common:download')}</Command.Item>
                     </Can>
                     <Can action={['software.*']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/shell')}>

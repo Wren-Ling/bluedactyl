@@ -1,16 +1,16 @@
-import { ExternalLink, Server } from 'lucide-react';
 import { useStoreState } from 'easy-peasy';
-import { useTranslation } from 'react-i18next';
+import { ExternalLink, Server } from 'lucide-react';
 import isEqual from 'react-fast-compare';
+import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import Label from '@/components/elements/Label';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import ReinstallServerBox from '@/components/server/settings/ReinstallServerBox';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { ip } from '@/lib/formatters';
 
@@ -30,9 +30,7 @@ const SettingsContainer = () => {
         <div className='mx-auto flex w-full max-w-[120rem] flex-1 flex-col gap-4 px-2 py-2 sm:px-14 sm:py-14'>
             <FlashMessageRender byKey={'settings'} />
             <MainPageHeader direction='column' title={t('title')}>
-                <p className='text-sm leading-relaxed text-muted-foreground'>
-                    {t('description')}
-                </p>
+                <p className='text-sm leading-relaxed text-muted-foreground'>{t('description')}</p>
             </MainPageHeader>
             <Can action={'settings.rename'}>
                 <div className={`mb-6 md:mb-10`}>
@@ -56,7 +54,9 @@ const SettingsContainer = () => {
                         <CopyOnClick text={uuid}>
                             <div className={`mt-2 flex items-center justify-between text-sm`}>
                                 <p className='text-muted-foreground'>{t('server_id')}</p>
-                                <code className={`rounded-sm bg-muted px-2 py-1 font-mono text-foreground`}>{uuid}</code>
+                                <code className={`rounded-sm bg-muted px-2 py-1 font-mono text-foreground`}>
+                                    {uuid}
+                                </code>
                             </div>
                         </CopyOnClick>
                     </CardContent>
@@ -64,7 +64,9 @@ const SettingsContainer = () => {
                 <Can action={'file.sftp'}>
                     <Card className={'mb-6 md:mb-10'}>
                         <CardHeader>
-                            <CardTitle className='text-xl font-extrabold tracking-tight'>{t('sftp_details_title')}</CardTitle>
+                            <CardTitle className='text-xl font-extrabold tracking-tight'>
+                                {t('sftp_details_title')}
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className={`flex items-center justify-between text-sm`}>
@@ -86,9 +88,7 @@ const SettingsContainer = () => {
                             <div className={`mt-6 flex items-center`}>
                                 <div className={`flex-1`}>
                                     <div className={`border-l-4 border-primary p-3`}>
-                                        <p className={`text-xs text-muted-foreground`}>
-                                            {t('sftp_password_note')}
-                                        </p>
+                                        <p className={`text-xs text-muted-foreground`}>{t('sftp_password_note')}</p>
                                     </div>
                                 </div>
                                 <div className={`ml-4`}>

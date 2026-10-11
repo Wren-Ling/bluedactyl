@@ -4,9 +4,9 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
-import { Button } from '@/components/ui/button';
 import Field from '@/components/elements/Field';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+import { Button } from '@/components/ui/button';
 
 import { httpErrorToHuman } from '@/api/http';
 
@@ -62,12 +62,15 @@ const UpdateEmailAddressForm = () => {
                     <Form className={`m-0`}>
                         <Field id={'current_email'} type={'email'} name={'email'} label={t('account:email_label')} />
                         <div className={`mt-6`}>
-                            <Field id={'confirm_password'} type={'password'} name={'password'} label={t('account:password_label')} />
+                            <Field
+                                id={'confirm_password'}
+                                type={'password'}
+                                name={'password'}
+                                label={t('account:password_label')}
+                            />
                         </div>
                         <div className={`mt-6`}>
-                            <Button disabled={isSubmitting || !isValid}>
-                                {t('account:update_email')}
-                            </Button>
+                            <Button disabled={isSubmitting || !isValid}>{t('account:update_email')}</Button>
                         </div>
                     </Form>
                 </Fragment>

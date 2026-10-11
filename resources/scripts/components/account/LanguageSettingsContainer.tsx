@@ -20,7 +20,9 @@ const LanguageSettingsContainer = () => {
             <div className='flex flex-col gap-6 mb-10 select-none'>
                 <div className='flex justify-between gap-4 flex-col sm:flex-row sm:items-start'>
                     <div className='flex items-center gap-3 min-w-0 flex-wrap flex-1'>
-                        <h1 className='text-2xl sm:text-3xl font-semibold tracking-tight'>{t('account:language_title')}</h1>
+                        <h1 className='text-2xl sm:text-3xl font-semibold tracking-tight'>
+                            {t('account:language_title')}
+                        </h1>
                     </div>
                 </div>
                 <div>
@@ -34,9 +36,7 @@ const LanguageSettingsContainer = () => {
                         <label
                             key={code}
                             className={`flex items-center gap-3 rounded-lg border p-4 cursor-pointer transition-colors hover:bg-muted/50 ${
-                                currentLanguage === code
-                                    ? 'border-primary bg-primary/5'
-                                    : 'border-border'
+                                currentLanguage === code ? 'border-primary bg-primary/5' : 'border-border'
                             }`}
                         >
                             <input

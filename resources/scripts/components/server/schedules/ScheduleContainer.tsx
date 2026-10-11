@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import { PageListContainer, PageListItem } from '@/components/elements/pages/PageList';
 import EditScheduleModal from '@/components/server/schedules/EditScheduleModal';
 import ScheduleRow from '@/components/server/schedules/ScheduleRow';
+import { Button } from '@/components/ui/button';
 
 import { httpErrorToHuman } from '@/api/http';
 import getServerSchedules from '@/api/server/schedules/getServerSchedules';
@@ -54,9 +54,7 @@ function ScheduleContainer() {
                     </Can>
                 }
             >
-                <p className='text-sm leading-relaxed text-muted-foreground'>
-                    {t('description')}
-                </p>
+                <p className='text-sm leading-relaxed text-muted-foreground'>{t('description')}</p>
             </MainPageHeader>
             <Can action={'schedule.create'}>
                 <EditScheduleModal visible={visible} onModalDismissed={() => setVisible(false)} />

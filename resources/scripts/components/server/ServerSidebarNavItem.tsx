@@ -4,10 +4,7 @@ import { NavLink } from 'react-router-dom';
 import type { FeatureLimitKey, ServerRouteDefinition } from '@/routers/routes';
 
 import Can from '@/components/elements/Can';
-import {
-    SidebarMenuButton,
-    SidebarMenuItem,
-} from '@/components/ui/sidebar';
+import { SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 
 import { getSubdomainInfo } from '@/api/server/network/subdomain';
 
@@ -76,7 +73,11 @@ const ServerSidebarNavItem = ({ route, serverId, onClick }: ServerSidebarNavItem
         return NavContent;
     }
 
-    return <Can action={permission} matchAny>{NavContent}</Can>;
+    return (
+        <Can action={permission} matchAny>
+            {NavContent}
+        </Can>
+    );
 };
 
 export default ServerSidebarNavItem;

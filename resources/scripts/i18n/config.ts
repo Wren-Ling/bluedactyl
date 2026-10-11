@@ -1,39 +1,38 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import enCommon from './locales/en/common.json';
-import enServer from './locales/en/server.json';
-import enConsole from './locales/en/console.json';
-import enFiles from './locales/en/files.json';
-import enDatabases from './locales/en/databases.json';
-import enSchedules from './locales/en/schedules.json';
+import enAccount from './locales/en/account.json';
+import enAi from './locales/en/ai.json';
+import enAuth from './locales/en/auth.json';
 import enBackups from './locales/en/backups.json';
+import enCommon from './locales/en/common.json';
+import enConsole from './locales/en/console.json';
+import enDashboard from './locales/en/dashboard.json';
+import enDatabases from './locales/en/databases.json';
+import enFiles from './locales/en/files.json';
 import enNetwork from './locales/en/network.json';
+import enSchedules from './locales/en/schedules.json';
+import enServer from './locales/en/server.json';
+import enSettings from './locales/en/settings.json';
+import enShell from './locales/en/shell.json';
 import enStartup from './locales/en/startup.json';
 import enUsers from './locales/en/users.json';
-import enSettings from './locales/en/settings.json';
-import enDashboard from './locales/en/dashboard.json';
-import enAccount from './locales/en/account.json';
-import enAuth from './locales/en/auth.json';
-import enShell from './locales/en/shell.json';
-
-import zhCommon from './locales/zh/common.json';
-import zhServer from './locales/zh/server.json';
-import zhConsole from './locales/zh/console.json';
-import zhFiles from './locales/zh/files.json';
-import zhDatabases from './locales/zh/databases.json';
-import zhSchedules from './locales/zh/schedules.json';
+import zhAccount from './locales/zh/account.json';
+import zhAi from './locales/zh/ai.json';
+import zhAuth from './locales/zh/auth.json';
 import zhBackups from './locales/zh/backups.json';
+import zhCommon from './locales/zh/common.json';
+import zhConsole from './locales/zh/console.json';
+import zhDashboard from './locales/zh/dashboard.json';
+import zhDatabases from './locales/zh/databases.json';
+import zhFiles from './locales/zh/files.json';
 import zhNetwork from './locales/zh/network.json';
+import zhSchedules from './locales/zh/schedules.json';
+import zhServer from './locales/zh/server.json';
+import zhSettings from './locales/zh/settings.json';
+import zhShell from './locales/zh/shell.json';
 import zhStartup from './locales/zh/startup.json';
 import zhUsers from './locales/zh/users.json';
-import zhSettings from './locales/zh/settings.json';
-import zhDashboard from './locales/zh/dashboard.json';
-import zhAccount from './locales/zh/account.json';
-import zhAuth from './locales/zh/auth.json';
-import zhShell from './locales/zh/shell.json';
-
-
 
 function getCookie(name: string): string | null {
     const match = document.cookie.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`));
@@ -78,6 +77,7 @@ i18n.use(initReactI18next).init({
             account: enAccount,
             auth: enAuth,
             shell: enShell,
+            ai: enAi,
         },
         zh: {
             common: zhCommon,
@@ -95,15 +95,27 @@ i18n.use(initReactI18next).init({
             account: zhAccount,
             auth: zhAuth,
             shell: zhShell,
+            ai: zhAi,
         },
-
     },
     lng: language,
     fallbackLng: 'zh',
     ns: [
-        'common', 'server', 'console', 'files', 'databases', 'schedules',
-        'backups', 'network', 'startup', 'users', 'settings',
-        'dashboard', 'account', 'auth', 'shell',
+        'common',
+        'server',
+        'console',
+        'files',
+        'databases',
+        'schedules',
+        'backups',
+        'network',
+        'startup',
+        'users',
+        'settings',
+        'dashboard',
+        'account',
+        'auth',
+        'shell',
     ],
     defaultNS: 'common',
     interpolation: {

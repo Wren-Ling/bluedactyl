@@ -1,14 +1,9 @@
 import { useEffect, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/ui/dialog';
 import { SocketEvent } from '@/components/server/events';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 import { ServerContext } from '@/state/server';
 
@@ -57,7 +52,16 @@ const HytaleOauthRequireFeature = () => {
     };
 
     return (
-        <Dialog open={visible} onOpenChange={(o) => { if (!o) { setVisible(false); setUserCode(''); setVerificationUri(''); } }}>
+        <Dialog
+            open={visible}
+            onOpenChange={(o) => {
+                if (!o) {
+                    setVisible(false);
+                    setUserCode('');
+                    setVerificationUri('');
+                }
+            }}
+        >
             <DialogContent className='sm:max-w-md'>
                 <DialogHeader>
                     <DialogTitle>Hytale Authentication</DialogTitle>

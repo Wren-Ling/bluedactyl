@@ -1,21 +1,9 @@
-import { Component, useCallback, useState, type ReactNode } from 'react';
 import i18n from '@/i18n/config';
-import {
-    AlertCircle,
-    ArrowLeft,
-    Check,
-    Copy,
-    RefreshCw,
-} from 'lucide-react';
+import { AlertCircle, ArrowLeft, Check, Copy, RefreshCw } from 'lucide-react';
+import { Component, type ReactNode, useCallback, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 function CopyButton({ text }: { text: string }) {
     const [copied, setCopied] = useState(false);
@@ -113,11 +101,7 @@ class ErrorBoundary extends Component<Props, State> {
                             )}
 
                             <div className='flex gap-3 pt-2'>
-                                <Button
-                                    variant='outline'
-                                    className='flex-1'
-                                    onClick={() => window.history.back()}
-                                >
+                                <Button variant='outline' className='flex-1' onClick={() => window.history.back()}>
                                     <ArrowLeft className='size-4 mr-2' />
                                     {i18n.t('common:go_back')}
                                 </Button>

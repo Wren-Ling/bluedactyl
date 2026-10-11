@@ -66,11 +66,11 @@
             <h3 class="text-lg font-semibold">@lang('admin/dashboard.get_help')</h3>
         </header>
         <section class="flex flex-wrap gap-2">
-            <a href="https://pyrodactyl.dev" class="btn" data-variant="outline" target="_blank" rel="noopener noreferrer">
+            <a href="https://bluedactyl.dev" class="btn" data-variant="outline" target="_blank" rel="noopener noreferrer">
                 <x-icon name="book-open" class="size-4" />
                 @lang('admin/dashboard.documentation')
             </a>
-            <a href="https://github.com/pyrodactyl-oss/pyrodactyl" class="btn" data-variant="outline" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/bluedactyl-oss/bluedactyl" class="btn" data-variant="outline" target="_blank" rel="noopener noreferrer">
                 <x-icon name="github" class="size-4" />
                 @lang('admin/dashboard.github')
             </a>

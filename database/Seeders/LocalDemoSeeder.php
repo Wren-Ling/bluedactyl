@@ -11,7 +11,7 @@ class LocalDemoSeeder extends Seeder
 {
     public function run(): void
     {
-        if (!app()->environment('local') || DB::connection()->getDatabaseName() !== 'pyrodactyl_test_0901') {
+        if (!app()->environment('local') || DB::connection()->getDatabaseName() !== 'bluedactyl_test_0901') {
             throw new \RuntimeException('Demo data is restricted to the local test database.');
         }
 

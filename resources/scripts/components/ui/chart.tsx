@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as RechartsPrimitive from 'recharts';
-import type { TooltipPayloadEntry, LegendPayload } from 'recharts';
+import type { LegendPayload, TooltipPayloadEntry } from 'recharts';
 
 import { cn } from '@/lib/utils';
 
@@ -10,10 +10,7 @@ export type ChartConfig = {
     [k in string]: {
         label?: React.ReactNode;
         icon?: React.ComponentType;
-    } & (
-        | { color?: string; theme?: never }
-        | { color?: never; theme: Record<keyof typeof THEMES, string> }
-    );
+    } & ({ color?: string; theme?: never } | { color?: never; theme: Record<keyof typeof THEMES, string> });
 };
 
 type ChartContextProps = {
@@ -91,8 +88,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 ${prefix} [data-chart="${id}"] {
 ${colorConfig
     .map(([key, itemConfig]) => {
-        const color =
-            itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
+        const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
         return color ? `  --color-${key}: ${color};` : null;
     })
     .join('\n')}
@@ -164,11 +160,7 @@ const ChartTooltipContent = React.forwardRef<
                     : itemConfig?.label;
 
             if (labelFormatter) {
-                return (
-                    <div className={cn('font-medium', labelClassName)}>
-                        {labelFormatter(value, payload)}
-                    </div>
-                );
+                return <div className={cn('font-medium', labelClassName)}>{labelFormatter(value, payload)}</div>;
             }
 
             if (!value) {
@@ -225,8 +217,7 @@ const ChartTooltipContent = React.forwardRef<
                                                                 'w-1': indicator === 'line',
                                                                 'w-0 border-[1.5px] border-dashed bg-transparent':
                                                                     indicator === 'dashed',
-                                                                'my-0.5':
-                                                                    nestLabel && indicator === 'dashed',
+                                                                'my-0.5': nestLabel && indicator === 'dashed',
                                                             },
                                                         )}
                                                         style={
@@ -348,9 +339,7 @@ function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key:
         configLabelKey = payloadPayload[key as keyof typeof payloadPayload] as string;
     }
 
-    return configLabelKey in config
-        ? config[configLabelKey]
-        : config[key as keyof typeof config];
+    return configLabelKey in config ? config[configLabelKey] : config[key as keyof typeof config];
 }
 
 export { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent, ChartStyle };

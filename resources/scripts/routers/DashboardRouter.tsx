@@ -16,6 +16,10 @@ import { Fragment, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 
+import routes from '@/routers/routes';
+
+import DashboardContainer from '@/components/dashboard/DashboardContainer';
+import { NotFound } from '@/components/elements/ScreenBlock';
 import { AnimatedThemeToggler as ModeToggle } from '@/components/ui/animated-theme-toggler';
 import {
     DropdownMenu,
@@ -42,11 +46,6 @@ import {
     useSidebar,
 } from '@/components/ui/sidebar';
 
-import routes from '@/routers/routes';
-
-import DashboardContainer from '@/components/dashboard/DashboardContainer';
-import { NotFound } from '@/components/elements/ScreenBlock';
-
 import http from '@/api/http';
 
 function AppSidebarHeader() {
@@ -64,7 +63,7 @@ function AppSidebarHeader() {
                             <Cuboid className='size-5' />
                         </div>
                         <div className='grid flex-1 text-left text-sm leading-tight'>
-                            <span className='truncate font-semibold'>{t('dashboard:pyrodactyl')}</span>
+                            <span className='truncate font-semibold'>{t('dashboard:bluedactyl')}</span>
                             <span className='truncate text-xs text-muted-foreground'>{t('dashboard:management')}</span>
                         </div>
                     </SidebarMenuButton>
@@ -152,7 +151,9 @@ function AppSidebarUser() {
                                     </div>
                                     <div className='grid flex-1 text-left text-sm leading-tight'>
                                         <span className='truncate font-medium'>{name}</span>
-                                        <span className='truncate text-xs'>{rootAdmin ? t('dashboard:role_admin') : t('dashboard:role_user')}</span>
+                                        <span className='truncate text-xs'>
+                                            {rootAdmin ? t('dashboard:role_admin') : t('dashboard:role_user')}
+                                        </span>
                                     </div>
                                 </div>
                             </DropdownMenuLabel>
@@ -240,7 +241,11 @@ function DashboardRouter() {
                                                 >
                                                     {crumb.title}
                                                 </NavLink>
-                                                <span role='presentation' aria-hidden='true' className='[&>svg]:size-3.5'>
+                                                <span
+                                                    role='presentation'
+                                                    aria-hidden='true'
+                                                    className='[&>svg]:size-3.5'
+                                                >
                                                     /
                                                 </span>
                                             </>
