@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
 import MessageBox from '@/components/MessageBox';
 import ConfigureTwoFactorForm from '@/components/dashboard/forms/ConfigureTwoFactorForm';
@@ -58,12 +58,10 @@ const AccountOverviewContainer = () => {
                     <CardTitle>{t('account:panel_version')}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p className='mb-4 text-sm text-muted-foreground'>
-                        {t('account:panel_version_desc')}
-                    </p>
+                    <p className='mb-4 text-sm text-muted-foreground'>{t('account:panel_version_desc')}</p>
                     <div className='flex flex-col gap-4'>
                         <code className='block rounded bg-muted px-4 py-2 text-sm'>
-                            {t('account:version')}: {import.meta.env.VITE_PYRODACTYL_VERSION} -{' '}
+                            {t('account:version')}: {import.meta.env.VITE_BLUEDACTYL_VERSION} -{' '}
                             {import.meta.env.VITE_BRANCH_NAME}
                         </code>
                         <code className='block rounded bg-muted px-4 py-2 text-sm'>

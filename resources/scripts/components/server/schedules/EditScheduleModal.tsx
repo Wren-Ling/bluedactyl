@@ -1,18 +1,18 @@
 import ModalContext from '@/context/ModalContext';
 import { TZDate } from '@date-fns/tz';
-import { Link, TriangleAlert } from 'lucide-react';
 import { toString } from 'cronstrue';
 import { format } from 'date-fns';
 import { useStoreState } from 'easy-peasy';
 import { Form, Formik, FormikHelpers } from 'formik';
+import { Link, TriangleAlert } from 'lucide-react';
 import { useContext, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import Field from '@/components/elements/Field';
 import FormikSwitchV2 from '@/components/elements/FormikSwitchV2';
 import ItemContainer from '@/components/elements/ItemContainer';
+import { Button } from '@/components/ui/button';
 
 import asModal from '@/hoc/asModal';
 
@@ -213,11 +213,7 @@ const EditScheduleModal = ({ schedule }: Props) => {
                 return (
                     <Form>
                         <FlashMessageRender byKey={'schedule:edit'} />
-                        <Field
-                            name={'name'}
-                            label={t('schedule_name')}
-                            description={t('schedule_name_description')}
-                        />
+                        <Field name={'name'} label={t('schedule_name')} description={t('schedule_name_description')} />
                         <div className={`grid grid-cols-2 sm:grid-cols-5 gap-4 mt-6`}>
                             <Field name={'minute'} label={t('minute')} />
                             <Field name={'hour'} label={t('hour')} />
@@ -230,17 +226,12 @@ const EditScheduleModal = ({ schedule }: Props) => {
                             <p className={`text-sm text-foreground font-medium`}>{cronDescription}</p>
                         </div>
 
-                        <p className={`text-muted-foreground text-xs mt-2`}>
-                            {t('cron_syntax_description')}
-                        </p>
+                        <p className={`text-muted-foreground text-xs mt-2`}>{t('cron_syntax_description')}</p>
 
                         {timezoneInfo.isDifferent && (
                             <div className={'bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 my-2'}>
                                 <div className={'flex items-start gap-3'}>
-                                    <TriangleAlert
-                                        size={22}
-                                        className={'text-blue-400 mt-0.5 flex-shrink-0 h-5 w-5'}
-                                    />
+                                    <TriangleAlert size={22} className={'text-blue-400 mt-0.5 flex-shrink-0 h-5 w-5'} />
                                     <div className={'text-sm'}>
                                         <p className={'text-blue-100 font-medium mb-1'}>{t('timezone_info_title')}</p>
                                         <p className={'text-blue-200/80 text-xs mb-2'}>
@@ -310,11 +301,7 @@ const EditScheduleModal = ({ schedule }: Props) => {
                             />
                         </div>
                         <div className={`mb-6 text-right`}>
-                            <Button
-                                className={'w-full sm:w-auto'}
-                                type={'submit'}
-                                disabled={isSubmitting}
-                            >
+                            <Button className={'w-full sm:w-auto'} type={'submit'} disabled={isSubmitting}>
                                 {schedule ? t('save_changes') : t('create_schedule')}
                             </Button>
                         </div>

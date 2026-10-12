@@ -1,16 +1,16 @@
-import { Trans, useTranslation } from 'react-i18next';
 import { encodePathSegments } from '@/helpers';
-import { File, FolderOpen } from 'lucide-react';
 import { differenceInHours, format, formatDistanceToNow } from 'date-fns';
+import { File, FolderOpen } from 'lucide-react';
 import { join } from 'pathe';
 import { ReactNode, memo, useCallback, useState } from 'react';
 import isEqual from 'react-fast-compare';
+import { Trans, useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
+import SelectFileCheckbox from '@/components/server/files/SelectFileCheckbox';
 import { Button } from '@/components/ui/button';
 import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import SelectFileCheckbox from '@/components/server/files/SelectFileCheckbox';
 
 import { bytesToString } from '@/lib/formatters';
 
@@ -33,7 +33,9 @@ function Clickable({ file, children }: { file: FileObject; children: ReactNode }
     const directory = ServerContext.useStoreState((state) => state.files.directory);
 
     return (file.isFile && (!file.isEditable() || !canReadContents)) || (!file.isFile && !canRead) ? (
-        <div className='flex flex-1 items-center truncate overflow-hidden px-4 py-2 text-foreground/80 no-underline not-[:is(a)]:cursor-default'>{children}</div>
+        <div className='flex flex-1 items-center truncate overflow-hidden px-4 py-2 text-foreground/80 no-underline not-[:is(a)]:cursor-default'>
+            {children}
+        </div>
     ) : (
         <NavLink
             className='flex flex-1 items-center truncate overflow-hidden px-4 py-2 text-foreground/80 no-underline not-[:is(a)]:cursor-default'
@@ -71,7 +73,10 @@ const FileObjectRow = ({ file }: { file: FileObject }) => {
         <>
             <ContextMenu>
                 <ContextMenuTrigger asChild>
-                    <div className='flex items-center border border-border bg-muted/30 p-1 text-sm no-underline transition first:rounded-t-sm last:rounded-b-sm hover:bg-muted/50 hover:duration-0 data-[state=open]:bg-muted/50 has-[button[data-state=checked]]:bg-destructive/20' key={file.name}>
+                    <div
+                        className='flex items-center border border-border bg-muted/30 p-1 text-sm no-underline transition first:rounded-t-sm last:rounded-b-sm hover:bg-muted/50 hover:duration-0 data-[state=open]:bg-muted/50 has-[button[data-state=checked]]:bg-destructive/20'
+                        key={file.name}
+                    >
                         <SelectFileCheckbox name={file.name} />
                         <MemoizedClickable file={file}>
                             <div className={`flex-none text-muted-foreground mr-4 text-lg pl-3 mb-0.5`}>
@@ -87,9 +92,14 @@ const FileObjectRow = ({ file }: { file: FileObject }) => {
                             </div>
                             <div className='flex-1 truncate font-bold text-sm'>{file.name}</div>
                             {file.isFile && (
-                                <div className='w-1/6 text-right mr-4 hidden sm:block text-xs'>{bytesToString(file.size)}</div>
+                                <div className='w-1/6 text-right mr-4 hidden sm:block text-xs'>
+                                    {bytesToString(file.size)}
+                                </div>
                             )}
-                            <div className='w-1/5 text-right mr-4 hidden md:block text-xs' title={file.modifiedAt.toString()}>
+                            <div
+                                className='w-1/5 text-right mr-4 hidden md:block text-xs'
+                                title={file.modifiedAt.toString()}
+                            >
                                 {Math.abs(differenceInHours(file.modifiedAt, new Date())) > 48
                                     ? format(file.modifiedAt, 'MMM do, yyyy h:mma')
                                     : formatDistanceToNow(file.modifiedAt, { addSuffix: true })}
@@ -101,14 +111,22 @@ const FileObjectRow = ({ file }: { file: FileObject }) => {
             </ContextMenu>
             <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
                 <DialogContent>
-                    <DialogHeader><DialogTitle>{file.isFile ? t('files:confirm_delete_file') : t('files:confirm_delete_directory')}</DialogTitle></DialogHeader>
+                    <DialogHeader>
+                        <DialogTitle>
+                            {file.isFile ? t('files:confirm_delete_file') : t('files:confirm_delete_directory')}
+                        </DialogTitle>
+                    </DialogHeader>
                     <Trans i18nKey='files:confirm_delete_message' values={{ name: file.name }}>
                         You will not be able to recover the contents of{' '}
                         <span className='font-semibold text-foreground'>{{ name: file.name }}</span> once deleted.
                     </Trans>
                     <DialogFooter>
-                        <Button variant='outline' onClick={() => setShowDeleteConfirm(false)}>{t('files:cancel')}</Button>
-                        <Button variant='destructive' onClick={doDeletion}>{t('files:confirm_delete')}</Button>
+                        <Button variant='outline' onClick={() => setShowDeleteConfirm(false)}>
+                            {t('files:cancel')}
+                        </Button>
+                        <Button variant='destructive' onClick={doDeletion}>
+                            {t('files:confirm_delete')}
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

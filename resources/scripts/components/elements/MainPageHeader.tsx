@@ -19,9 +19,7 @@ export const MainPageHeader: React.FC<MainPageHeaderProps> = ({
         <div
             className={cn(
                 'flex justify-between gap-4',
-                direction === 'row'
-                    ? 'flex-col sm:flex-row sm:items-center'
-                    : 'flex-col sm:flex-row sm:items-start',
+                direction === 'row' ? 'flex-col sm:flex-row sm:items-center' : 'flex-col sm:flex-row sm:items-start',
             )}
         >
             <div className='flex items-center gap-3 min-w-0 flex-wrap flex-1'>

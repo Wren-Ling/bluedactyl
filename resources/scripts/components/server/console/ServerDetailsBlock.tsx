@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import StatBlock from '@/components/server/console/StatBlock';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
-import { cn } from '@/lib/utils';
 
 import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
+import { cn } from '@/lib/utils';
 
 import { SubdomainInfo, getSubdomainInfo } from '@/api/server/network/subdomain';
 

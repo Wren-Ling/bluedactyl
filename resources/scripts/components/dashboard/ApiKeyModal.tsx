@@ -1,10 +1,10 @@
+import ModalContext from '@/context/ModalContext';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import { Button } from '@/components/ui/button';
-import ModalContext from '@/context/ModalContext';
 
 import asModal from '@/hoc/asModal';
 
@@ -20,9 +20,7 @@ const ApiKeyModal = ({ apiKey }: Props) => {
         <div className='mx-auto max-w-lg space-y-6 rounded-lg p-6 shadow-lg'>
             <FlashMessageRender byKey='account' />
 
-            <p className='mt-2 text-sm text-muted-foreground'>
-                {t('account:api_key_modal_description')}
-            </p>
+            <p className='mt-2 text-sm text-muted-foreground'>{t('account:api_key_modal_description')}</p>
 
             <div className='relative mt-6'>
                 <pre className='overflow-x-auto rounded-lg bg-muted p-4 font-mono text-foreground'>

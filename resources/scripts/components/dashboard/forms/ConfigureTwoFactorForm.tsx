@@ -34,18 +34,14 @@ const ConfigureTwoFactorForm = () => {
             <SetupTOTPDialog open={visible === 'enable'} onClose={() => setVisible(null)} onTokens={onTokens} />
             <RecoveryTokensDialog tokens={tokens} open={tokens.length > 0} onClose={() => setTokens([])} />
             <DisableTOTPDialog open={visible === 'disable'} onClose={() => setVisible(null)} />
-            <p className={`text-sm`}>
-                {isEnabled ? t('account:2fa_enabled') : t('account:2fa_disabled')}
-            </p>
+            <p className={`text-sm`}>{isEnabled ? t('account:2fa_enabled') : t('account:2fa_disabled')}</p>
             <div className={`mt-6`}>
                 {isEnabled ? (
                     <Button variant='destructive' onClick={() => setVisible('disable')}>
                         {t('account:remove_authenticator')}
                     </Button>
                 ) : (
-                    <Button onClick={() => setVisible('enable')}>
-                        {t('account:enable_authenticator')}
-                    </Button>
+                    <Button onClick={() => setVisible('enable')}>{t('account:enable_authenticator')}</Button>
                 )}
             </div>
         </div>

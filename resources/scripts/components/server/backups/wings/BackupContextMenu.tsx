@@ -1,19 +1,14 @@
-import {
-    ArrowDownToLine,
-    Menu,
-    CloudUpload,
-    Pencil,
-    Shield,
-    Trash2,
-    TriangleAlert,
-} from 'lucide-react';
 import { useStoreState } from 'easy-peasy';
+import { ArrowDownToLine, CloudUpload, Menu, Pencil, Shield, Trash2, TriangleAlert } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
+import Spinner from '@/components/elements/Spinner';
+import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -21,12 +16,10 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import Spinner from '@/components/elements/Spinner';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 
 import http, { httpErrorToHuman } from '@/api/http';
 import { getServerBackupDownloadUrl } from '@/api/server/backups';
+import { getGlobalDaemonType } from '@/api/server/getServer';
 import { ServerBackup } from '@/api/server/types';
 
 import { ApplicationStore } from '@/state';
@@ -35,7 +28,6 @@ import { ServerContext } from '@/state/server';
 import useFlash from '@/plugins/useFlash';
 
 import { useUnifiedBackups } from '../useUnifiedBackups';
-import { getGlobalDaemonType } from '@/api/server/getServer';
 
 interface Props {
     backup: ServerBackup;
@@ -213,12 +205,21 @@ const BackupContextMenu = ({ backup }: Props) => {
 
     return (
         <>
-            <Dialog open={modal === 'rename'} onOpenChange={(v) => { if (!v) setModal(''); }}>
+            <Dialog
+                open={modal === 'rename'}
+                onOpenChange={(v) => {
+                    if (!v) setModal('');
+                }}
+            >
                 <DialogContent>
-                    <DialogHeader><DialogTitle>{t('rename_title')}</DialogTitle></DialogHeader>
+                    <DialogHeader>
+                        <DialogTitle>{t('rename_title')}</DialogTitle>
+                    </DialogHeader>
                     <div className='space-y-4'>
                         <div>
-                            <label className='block text-sm font-medium text-foreground/90 mb-2'>{t('backup_name')}</label>
+                            <label className='block text-sm font-medium text-foreground/90 mb-2'>
+                                {t('backup_name')}
+                            </label>
                             <input
                                 type='text'
                                 value={newName}
@@ -233,22 +234,30 @@ const BackupContextMenu = ({ backup }: Props) => {
                         <Button variant='outline' onClick={() => setModal('')}>
                             {t('cancel')}
                         </Button>
-                        <Button
-                            onClick={doRename}
-                            disabled={!newName.trim() || newName.trim() === backup.name}
-                        >
+                        <Button onClick={doRename} disabled={!newName.trim() || newName.trim() === backup.name}>
                             {t('rename_button')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-            <Dialog open={modal === 'unlock'} onOpenChange={(v) => { if (!v) setModal(''); }}>
+            <Dialog
+                open={modal === 'unlock'}
+                onOpenChange={(v) => {
+                    if (!v) setModal('');
+                }}
+            >
                 <DialogContent>
-                    <DialogHeader><DialogTitle>{t('unlock_title', { name: backup.name })}</DialogTitle></DialogHeader>
+                    <DialogHeader>
+                        <DialogTitle>{t('unlock_title', { name: backup.name })}</DialogTitle>
+                    </DialogHeader>
                     {t('unlock_description')}
                     <DialogFooter>
-                        <Button variant='outline' onClick={() => setModal('')}>{t('cancel')}</Button>
-                        <Button variant='destructive' onClick={onLockToggle}>{t('unlock_button')}</Button>
+                        <Button variant='outline' onClick={() => setModal('')}>
+                            {t('cancel')}
+                        </Button>
+                        <Button variant='destructive' onClick={onLockToggle}>
+                            {t('unlock_button')}
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
@@ -263,36 +272,34 @@ const BackupContextMenu = ({ backup }: Props) => {
                 }}
             >
                 <DialogContent>
-                    <DialogHeader><DialogTitle>{t('restore_title')}</DialogTitle></DialogHeader>
+                    <DialogHeader>
+                        <DialogTitle>{t('restore_title')}</DialogTitle>
+                    </DialogHeader>
                     <FlashMessageRender byKey={'backup:restore'} />
                     <div className='space-y-4'>
                         <div className='space-y-2'>
                             <p className='text-sm font-medium text-foreground/90'>&quot;{backup.name}&quot;</p>
-                            <p className='text-sm text-muted-foreground'>
-                                {t('restore_description')}
-                            </p>
+                            <p className='text-sm text-muted-foreground'>{t('restore_description')}</p>
                         </div>
 
                         <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
                             <div className='flex items-start space-x-3'>
-                                <TriangleAlert
-                                    size={22}
-                                    className=' text-red-400 flex-shrink-0 mt-0.5'
-                                />
+                                <TriangleAlert size={22} className=' text-red-400 flex-shrink-0 mt-0.5' />
                                 <div className='space-y-1'>
                                     <h4 className='text-sm text-red-200 font-medium'>
                                         {t('restore_destructive_title')}
                                     </h4>
-                                    <p className='text-xs text-red-300'>
-                                        {t('restore_destructive_description')}
-                                    </p>
+                                    <p className='text-xs text-red-300'>{t('restore_destructive_description')}</p>
                                 </div>
                             </div>
                         </div>
 
                         <div className='space-y-3'>
                             <div>
-                                <label htmlFor='restore-password' className='block text-sm font-medium text-foreground/80 mb-1'>
+                                <label
+                                    htmlFor='restore-password'
+                                    className='block text-sm font-medium text-foreground/80 mb-1'
+                                >
                                     {t('password_label')}
                                 </label>
                                 <input
@@ -308,7 +315,10 @@ const BackupContextMenu = ({ backup }: Props) => {
 
                             {hasTwoFactor && (
                                 <div>
-                                    <label htmlFor='restore-totp' className='block text-sm font-medium text-foreground/80 mb-1'>
+                                    <label
+                                        htmlFor='restore-totp'
+                                        className='block text-sm font-medium text-foreground/80 mb-1'
+                                    >
                                         {t('totp_label')}
                                     </label>
                                     <input
@@ -347,8 +357,8 @@ const BackupContextMenu = ({ backup }: Props) => {
                             {loading
                                 ? t('restoring')
                                 : countdown > 0
-                                    ? t('restore_button_countdown', { count: countdown })
-                                    : t('restore_button')}
+                                  ? t('restore_button_countdown', { count: countdown })
+                                  : t('restore_button')}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -364,12 +374,12 @@ const BackupContextMenu = ({ backup }: Props) => {
                 }}
             >
                 <DialogContent>
-                    <DialogHeader><DialogTitle>{t('delete_title', { name: backup.name })}</DialogTitle></DialogHeader>
+                    <DialogHeader>
+                        <DialogTitle>{t('delete_title', { name: backup.name })}</DialogTitle>
+                    </DialogHeader>
                     <FlashMessageRender byKey={'backup:delete'} />
                     <div className='space-y-4'>
-                        <p className='text-sm text-foreground/80'>
-                            {t('delete_permanent')}
-                        </p>
+                        <p className='text-sm text-foreground/80'>{t('delete_permanent')}</p>
 
                         <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
                             <div className='flex items-start gap-3'>
@@ -388,16 +398,17 @@ const BackupContextMenu = ({ backup }: Props) => {
                                 </svg>
                                 <div className='text-sm'>
                                     <p className='font-medium text-red-300'>{t('delete_warning_title')}</p>
-                                    <p className='text-red-400 mt-1'>
-                                        {t('delete_warning_description')}
-                                    </p>
+                                    <p className='text-red-400 mt-1'>{t('delete_warning_description')}</p>
                                 </div>
                             </div>
                         </div>
 
                         <div className='space-y-3'>
                             <div>
-                                <label htmlFor='delete-password' className='block text-sm font-medium text-foreground/80 mb-1'>
+                                <label
+                                    htmlFor='delete-password'
+                                    className='block text-sm font-medium text-foreground/80 mb-1'
+                                >
                                     {t('password_label')}
                                 </label>
                                 <input
@@ -413,7 +424,10 @@ const BackupContextMenu = ({ backup }: Props) => {
 
                             {hasTwoFactor && (
                                 <div>
-                                    <label htmlFor='delete-totp' className='block text-sm font-medium text-foreground/80 mb-1'>
+                                    <label
+                                        htmlFor='delete-totp'
+                                        className='block text-sm font-medium text-foreground/80 mb-1'
+                                    >
                                         {t('totp_label')}
                                     </label>
                                     <input
@@ -504,7 +518,7 @@ const BackupContextMenu = ({ backup }: Props) => {
                     </DropdownMenuContent>
                 </DropdownMenu>
             ) : (
-<Button
+                <Button
                     variant='destructive'
                     size='sm'
                     onClick={() => setModal('delete')}

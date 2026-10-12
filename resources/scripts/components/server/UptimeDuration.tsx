@@ -12,14 +12,20 @@ const UptimeDuration = ({ uptime }: { uptime: number }) => {
     if (days > 0) {
         return (
             <>
-                {days}{t('server:day')} {hours}{t('server:hour')} {minutes}{t('server:minute')}
+                {days}
+                {t('server:day')} {hours}
+                {t('server:hour')} {minutes}
+                {t('server:minute')}
             </>
         );
     }
 
     return (
         <>
-            {hours}{t('server:hour')} {minutes}{t('server:minute')} {seconds}{t('server:second')}
+            {hours}
+            {t('server:hour')} {minutes}
+            {t('server:minute')} {seconds}
+            {t('server:second')}
         </>
     );
 };

@@ -1,0 +1,22 @@
+{
+    "title": "AI Assistant",
+    "open": "Open AI assistant",
+    "clear": "Clear conversation",
+    "stop": "Stop generating",
+    "send": "Send message",
+    "thinking": "Thinking...",
+    "empty_state": "Ask anything about {{server}}. The assistant can read the console output and your server files.",
+    "placeholder": "Ask about your server, or ask it to explain an error...",
+    "attach_root": "Attach file list",
+    "attached_file": "Attached {{file}}",
+    "attached_directory": "Attached listing for {{directory}}",
+    "analyze_crash": "Analyze the crash",
+    "crash_prompt": "My server stopped unexpectedly. Please analyze the console output and log files and tell me what went wrong and how to fix it.",
+    "follow_up_files": "Fetch referenced files",
+    "no_directives": "No file paths found in that reply.",
+    "unavailable": "The AI assistant is not available for this server.",
+    "crash_hint": "Crash indicators were detected in the console. Let the assistant work out what happened.",
+    "crash_hint_generic": "The server is offline. Ask the assistant to look at the console output and logs.",
+    "crash_title": "Crash analysis",
+    "crash_description": "The assistant reads the recent console output and any log files the server keeps on disk."
+}

@@ -1,25 +1,25 @@
-import { AlertTriangle, ArrowDownToLine, Download, Trash2 } from 'lucide-react';
 import { useStoreState } from 'easy-peasy';
 import { Form, Formik, Field as FormikField, FormikHelpers, useFormikContext } from 'formik';
+import { AlertTriangle, ArrowDownToLine, Download, Trash2 } from 'lucide-react';
 import { createContext, lazy, useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { boolean, object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
-import { Checkbox } from '@/components/ui/checkbox';
 import Field from '@/components/elements/Field';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import FormikSwitchV2 from '@/components/elements/FormikSwitchV2';
-import { Textarea } from '@/components/ui/textarea';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
 import Pagination from '@/components/elements/Pagination';
 import Spinner from '@/components/elements/Spinner';
 import { PageListContainer } from '@/components/elements/pages/PageList';
 import { SocketEvent } from '@/components/server/events';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Textarea } from '@/components/ui/textarea';
 
 import { httpErrorToHuman } from '@/api/http';
 import deleteAllServerBackups from '@/api/server/backups/deleteAllServerBackups';
@@ -38,7 +38,21 @@ import { useUnifiedBackups } from './useUnifiedBackups';
 const BackupItemElytra = lazy(() => import('./elytra/BackupItem'));
 const BackupItemWings = lazy(() => import('./wings/BackupItem'));
 
-export const LiveProgressContext = createContext<Record<string, { status: string; progress: number; message: string; canRetry: boolean; lastUpdated: string; completed: boolean; isDeletion: boolean; backupName?: string }>>({});
+export const LiveProgressContext = createContext<
+    Record<
+        string,
+        {
+            status: string;
+            progress: number;
+            message: string;
+            canRetry: boolean;
+            lastUpdated: string;
+            completed: boolean;
+            isDeletion: boolean;
+            backupName?: string;
+        }
+    >
+>({});
 
 const formatStorage = (mb: number | undefined | null): string => {
     if (mb === null || mb === undefined) return '0MB';
@@ -60,11 +74,7 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
         <Modal {...props} showSpinnerOverlay={isSubmitting} title={t('create_modal_title')}>
             <Form>
                 <FlashMessageRender byKey={'backups:create'} />
-                <Field
-                    name={'name'}
-                    label={t('backup_name_label')}
-                    description={t('backup_name_description')}
-                />
+                <Field name={'name'} label={t('backup_name_label')} description={t('backup_name_description')} />
                 <div className={`mt-6 flex flex-col`}>
                     <FormikFieldWrapper
                         className='flex flex-col gap-2'
@@ -72,11 +82,7 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
                         label={t('ignored_files_label')}
                         description={t('ignored_files_modal_description')}
                     >
-                        <FormikField
-                            as={Textarea}
-                            name={'ignored'}
-                            rows={6}
-                        />
+                        <FormikField as={Textarea} name={'ignored'} rows={6} />
                     </FormikFieldWrapper>
                 </div>
                 <Can action={'backup.delete'}>
@@ -212,7 +218,11 @@ const BackupContainer = () => {
                 password: bulkDeletePassword,
                 ...(hasTwoFactor ? { totp_code: bulkDeleteTotpCode } : {}),
             });
-            addFlash({ key: 'backups', type: 'success', message: t('bulk_delete_success', { count: selectedBackups.size }) });
+            addFlash({
+                key: 'backups',
+                type: 'success',
+                message: t('bulk_delete_success', { count: selectedBackups.size }),
+            });
             setBulkDeleteModalVisible(false);
             setBulkDeletePassword('');
             setBulkDeleteTotpCode('');
@@ -244,14 +254,12 @@ const BackupContainer = () => {
         return pageLayout(
             <>
                 <MainPageHeader direction='column' title={t('title')}>
-                    <p className='text-sm leading-relaxed text-muted-foreground'>
-                        {t('description')}
-                    </p>
+                    <p className='text-sm leading-relaxed text-muted-foreground'>{t('description')}</p>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
                     <div className='size-8 animate-spin rounded-full border-b-2 border-primary' />
                 </div>
-            </>
+            </>,
         );
     }
 
@@ -264,7 +272,11 @@ const BackupContainer = () => {
                     <Can action={'backup.create'}>
                         <div className='flex flex-col items-center justify-end gap-4 sm:flex-row'>
                             <div className='flex flex-col gap-1 text-center sm:text-right'>
-                                {backupLimit === null && <p className='text-sm text-muted-foreground'>{t('count', { count: backupCount })}</p>}
+                                {backupLimit === null && (
+                                    <p className='text-sm text-muted-foreground'>
+                                        {t('count', { count: backupCount })}
+                                    </p>
+                                )}
                                 {backupLimit > 0 && (
                                     <p className='text-sm text-muted-foreground'>
                                         {t('count_of', { count: backupCount, max: backupLimit })}
@@ -276,27 +288,47 @@ const BackupContainer = () => {
                                     <div className='flex flex-col gap-0.5'>
                                         {backupStorageLimit === null ? (
                                             <>
-                                                <p className='cursor-help text-sm text-muted-foreground' title={`${storage.used_mb?.toFixed(2) || 0}MB total`}>
-                                                    <span className='font-medium'>{formatStorage(storage.used_mb)}</span> {t('storage_used')}
+                                                <p
+                                                    className='cursor-help text-sm text-muted-foreground'
+                                                    title={`${storage.used_mb?.toFixed(2) || 0}MB total`}
+                                                >
+                                                    <span className='font-medium'>
+                                                        {formatStorage(storage.used_mb)}
+                                                    </span>{' '}
+                                                    {t('storage_used')}
                                                 </p>
-                                                {(storage.repository_usage_mb > 0 && storage.legacy_usage_mb > 0) && (
+                                                {storage.repository_usage_mb > 0 && storage.legacy_usage_mb > 0 && (
                                                     <p className='text-xs text-muted-foreground/60'>
-                                                        {storage.repository_usage_mb > 0 && `${formatStorage(storage.repository_usage_mb)} ${t('deduplicated')}`}
-                                                        {storage.repository_usage_mb > 0 && storage.legacy_usage_mb > 0 && ' + '}
-                                                        {storage.legacy_usage_mb > 0 && `${formatStorage(storage.legacy_usage_mb)} ${t('legacy')}`}
+                                                        {storage.repository_usage_mb > 0 &&
+                                                            `${formatStorage(storage.repository_usage_mb)} ${t('deduplicated')}`}
+                                                        {storage.repository_usage_mb > 0 &&
+                                                            storage.legacy_usage_mb > 0 &&
+                                                            ' + '}
+                                                        {storage.legacy_usage_mb > 0 &&
+                                                            `${formatStorage(storage.legacy_usage_mb)} ${t('legacy')}`}
                                                     </p>
                                                 )}
                                             </>
                                         ) : (
                                             <>
-                                                <p className='cursor-help text-sm text-muted-foreground' title={`${storage.used_mb?.toFixed(2) || 0}MB used of ${backupStorageLimit}MB`}>
-                                                    <span className='font-medium'>{formatStorage(storage.used_mb)}</span> {t('of_storage_used', { max: formatStorage(backupStorageLimit) })}
+                                                <p
+                                                    className='cursor-help text-sm text-muted-foreground'
+                                                    title={`${storage.used_mb?.toFixed(2) || 0}MB used of ${backupStorageLimit}MB`}
+                                                >
+                                                    <span className='font-medium'>
+                                                        {formatStorage(storage.used_mb)}
+                                                    </span>{' '}
+                                                    {t('of_storage_used', { max: formatStorage(backupStorageLimit) })}
                                                 </p>
-                                                {(storage.repository_usage_mb > 0 && storage.legacy_usage_mb > 0) && (
+                                                {storage.repository_usage_mb > 0 && storage.legacy_usage_mb > 0 && (
                                                     <p className='text-xs text-muted-foreground/60'>
-                                                        {storage.repository_usage_mb > 0 && `${formatStorage(storage.repository_usage_mb)} ${t('deduplicated')}`}
-                                                        {storage.repository_usage_mb > 0 && storage.legacy_usage_mb > 0 && ' + '}
-                                                        {storage.legacy_usage_mb > 0 && `${formatStorage(storage.legacy_usage_mb)} ${t('legacy')}`}
+                                                        {storage.repository_usage_mb > 0 &&
+                                                            `${formatStorage(storage.repository_usage_mb)} ${t('deduplicated')}`}
+                                                        {storage.repository_usage_mb > 0 &&
+                                                            storage.legacy_usage_mb > 0 &&
+                                                            ' + '}
+                                                        {storage.legacy_usage_mb > 0 &&
+                                                            `${formatStorage(storage.legacy_usage_mb)} ${t('legacy')}`}
                                                     </p>
                                                 )}
                                             </>
@@ -306,14 +338,22 @@ const BackupContainer = () => {
                             </div>
                             <div className='flex gap-2'>
                                 {backupCount > 0 && (
-                                    <Button variant='destructive' onClick={() => setDeleteAllModalVisible(true)} disabled={hasActiveOperation}>
+                                    <Button
+                                        variant='destructive'
+                                        onClick={() => setDeleteAllModalVisible(true)}
+                                        disabled={hasActiveOperation}
+                                    >
                                         <Trash2 className='mr-2 size-4' />
                                         {t('delete_all_backups')}
                                     </Button>
                                 )}
                                 {(backupLimit === null || backupLimit > backupCount) &&
                                     (!backupStorageLimit || !storage?.is_over_limit) && (
-                                        <Button variant='default' onClick={() => setCreateModalVisible(true)} disabled={hasActiveOperation}>
+                                        <Button
+                                            variant='default'
+                                            onClick={() => setCreateModalVisible(true)}
+                                            disabled={hasActiveOperation}
+                                        >
                                             {t('new_backup')}
                                         </Button>
                                     )}
@@ -322,9 +362,7 @@ const BackupContainer = () => {
                     </Can>
                 }
             >
-                <p className='text-sm leading-relaxed text-muted-foreground'>
-                    {t('description_extended')}
-                </p>
+                <p className='text-sm leading-relaxed text-muted-foreground'>{t('description_extended')}</p>
             </MainPageHeader>
 
             {createModalVisible && (
@@ -344,7 +382,11 @@ const BackupContainer = () => {
             {deleteAllModalVisible && (
                 <Modal
                     visible={deleteAllModalVisible}
-                    onDismissed={() => { setDeleteAllModalVisible(false); setDeleteAllPassword(''); setDeleteAllTotpCode(''); }}
+                    onDismissed={() => {
+                        setDeleteAllModalVisible(false);
+                        setDeleteAllPassword('');
+                        setDeleteAllTotpCode('');
+                    }}
                     title={t('delete_all_title')}
                 >
                     <div className='space-y-4'>
@@ -370,19 +412,56 @@ const BackupContainer = () => {
 
                         <div className='space-y-3'>
                             <div>
-                                <label htmlFor='password' className='mb-1 block text-sm font-medium text-muted-foreground'>{t('password_label')}</label>
-                                <input id='password' type='password' className='w-full rounded-lg border border-border bg-transparent px-4 py-2 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/50' placeholder={t('password_placeholder')} value={deleteAllPassword} onChange={(e) => setDeleteAllPassword(e.target.value)} disabled={isDeleting} />
+                                <label
+                                    htmlFor='password'
+                                    className='mb-1 block text-sm font-medium text-muted-foreground'
+                                >
+                                    {t('password_label')}
+                                </label>
+                                <input
+                                    id='password'
+                                    type='password'
+                                    className='w-full rounded-lg border border-border bg-transparent px-4 py-2 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/50'
+                                    placeholder={t('password_placeholder')}
+                                    value={deleteAllPassword}
+                                    onChange={(e) => setDeleteAllPassword(e.target.value)}
+                                    disabled={isDeleting}
+                                />
                             </div>
                             {hasTwoFactor && (
                                 <div>
-                                    <label htmlFor='totp_code' className='mb-1 block text-sm font-medium text-muted-foreground'>{t('totp_label')}</label>
-                                    <input id='totp_code' type='text' className='w-full rounded-lg border border-border bg-transparent px-4 py-2 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/50' placeholder={t('totp_placeholder')} maxLength={6} value={deleteAllTotpCode} onChange={(e) => setDeleteAllTotpCode(e.target.value.replace(/[^0-9]/g, ''))} disabled={isDeleting} />
+                                    <label
+                                        htmlFor='totp_code'
+                                        className='mb-1 block text-sm font-medium text-muted-foreground'
+                                    >
+                                        {t('totp_label')}
+                                    </label>
+                                    <input
+                                        id='totp_code'
+                                        type='text'
+                                        className='w-full rounded-lg border border-border bg-transparent px-4 py-2 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/50'
+                                        placeholder={t('totp_placeholder')}
+                                        maxLength={6}
+                                        value={deleteAllTotpCode}
+                                        onChange={(e) => setDeleteAllTotpCode(e.target.value.replace(/[^0-9]/g, ''))}
+                                        disabled={isDeleting}
+                                    />
                                 </div>
                             )}
                         </div>
 
                         <div className='flex justify-end gap-3 pb-6 pt-2'>
-                            <Button variant='outline' onClick={() => { setDeleteAllModalVisible(false); setDeleteAllPassword(''); setDeleteAllTotpCode(''); }} disabled={isDeleting}>{t('cancel')}</Button>
+                            <Button
+                                variant='outline'
+                                onClick={() => {
+                                    setDeleteAllModalVisible(false);
+                                    setDeleteAllPassword('');
+                                    setDeleteAllTotpCode('');
+                                }}
+                                disabled={isDeleting}
+                            >
+                                {t('cancel')}
+                            </Button>
                             <Button variant='destructive' onClick={handleDeleteAll} disabled={isDeleting}>
                                 {isDeleting ? t('deleting') : t('delete_all_backups')}
                             </Button>
@@ -394,7 +473,11 @@ const BackupContainer = () => {
             {bulkDeleteModalVisible && (
                 <Modal
                     visible={bulkDeleteModalVisible}
-                    onDismissed={() => { setBulkDeleteModalVisible(false); setBulkDeletePassword(''); setBulkDeleteTotpCode(''); }}
+                    onDismissed={() => {
+                        setBulkDeleteModalVisible(false);
+                        setBulkDeletePassword('');
+                        setBulkDeleteTotpCode('');
+                    }}
                     title={t('delete_selected_title')}
                 >
                     <FlashMessageRender byKey={'backups:bulk_delete'} />
@@ -413,20 +496,59 @@ const BackupContainer = () => {
                         </div>
                         <div className='space-y-3'>
                             <div>
-                                <label htmlFor='bulk-password' className='mb-1 block text-sm font-medium text-muted-foreground'>{t('password_label')}</label>
-                                <input id='bulk-password' type='password' className='w-full rounded-lg border border-border bg-transparent px-4 py-2 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/50' placeholder={t('password_placeholder')} value={bulkDeletePassword} onChange={(e) => setBulkDeletePassword(e.target.value)} disabled={isBulkDeleting} />
+                                <label
+                                    htmlFor='bulk-password'
+                                    className='mb-1 block text-sm font-medium text-muted-foreground'
+                                >
+                                    {t('password_label')}
+                                </label>
+                                <input
+                                    id='bulk-password'
+                                    type='password'
+                                    className='w-full rounded-lg border border-border bg-transparent px-4 py-2 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/50'
+                                    placeholder={t('password_placeholder')}
+                                    value={bulkDeletePassword}
+                                    onChange={(e) => setBulkDeletePassword(e.target.value)}
+                                    disabled={isBulkDeleting}
+                                />
                             </div>
                             {hasTwoFactor && (
                                 <div>
-                                    <label htmlFor='bulk-totp' className='mb-1 block text-sm font-medium text-muted-foreground'>{t('totp_label')}</label>
-                                    <input id='bulk-totp' type='text' className='w-full rounded-lg border border-border bg-transparent px-4 py-2 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/50' placeholder={t('totp_placeholder')} maxLength={6} value={bulkDeleteTotpCode} onChange={(e) => setBulkDeleteTotpCode(e.target.value.replace(/[^0-9]/g, ''))} disabled={isBulkDeleting} />
+                                    <label
+                                        htmlFor='bulk-totp'
+                                        className='mb-1 block text-sm font-medium text-muted-foreground'
+                                    >
+                                        {t('totp_label')}
+                                    </label>
+                                    <input
+                                        id='bulk-totp'
+                                        type='text'
+                                        className='w-full rounded-lg border border-border bg-transparent px-4 py-2 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/50'
+                                        placeholder={t('totp_placeholder')}
+                                        maxLength={6}
+                                        value={bulkDeleteTotpCode}
+                                        onChange={(e) => setBulkDeleteTotpCode(e.target.value.replace(/[^0-9]/g, ''))}
+                                        disabled={isBulkDeleting}
+                                    />
                                 </div>
                             )}
                         </div>
                         <div className='flex justify-end gap-3 pb-6 pt-2'>
-                            <Button variant='outline' onClick={() => { setBulkDeleteModalVisible(false); setBulkDeletePassword(''); setBulkDeleteTotpCode(''); }} disabled={isBulkDeleting}>{t('cancel')}</Button>
+                            <Button
+                                variant='outline'
+                                onClick={() => {
+                                    setBulkDeleteModalVisible(false);
+                                    setBulkDeletePassword('');
+                                    setBulkDeleteTotpCode('');
+                                }}
+                                disabled={isBulkDeleting}
+                            >
+                                {t('cancel')}
+                            </Button>
                             <Button variant='destructive' onClick={handleBulkDelete} disabled={isBulkDeleting}>
-                                {isBulkDeleting ? t('deleting') : t('delete_selected_button', { count: selectedBackups.size })}
+                                {isBulkDeleting
+                                    ? t('deleting')
+                                    : t('delete_selected_button', { count: selectedBackups.size })}
                             </Button>
                         </div>
                     </div>
@@ -443,9 +565,7 @@ const BackupContainer = () => {
                             {backupLimit === 0 ? t('unavailable') : t('no_backups')}
                         </h3>
                         <p className='max-w-sm text-sm text-muted-foreground'>
-                            {backupLimit === 0
-                                ? t('cannot_create')
-                                : t('create_one_to_start')}
+                            {backupLimit === 0 ? t('cannot_create') : t('create_one_to_start')}
                         </p>
                     </div>
                 </div>
@@ -455,17 +575,28 @@ const BackupContainer = () => {
                         <div className='mb-8 flex items-center justify-between rounded-xl border border-border bg-muted/30 px-4 py-3.5'>
                             <div className='flex items-center gap-4'>
                                 <Checkbox
-                                    checked={selectedBackups.size === selectableBackups.length && selectableBackups.length > 0}
+                                    checked={
+                                        selectedBackups.size === selectableBackups.length &&
+                                        selectableBackups.length > 0
+                                    }
                                     onCheckedChange={toggleSelectAll}
                                 />
                                 <span className='text-sm text-muted-foreground'>
                                     {selectedBackups.size > 0 ? (
-                                        <><span className='font-medium'>{selectedBackups.size}</span> {t('selected')}</>
-                                    ) : t('select_backups')}
+                                        <>
+                                            <span className='font-medium'>{selectedBackups.size}</span> {t('selected')}
+                                        </>
+                                    ) : (
+                                        t('select_backups')
+                                    )}
                                 </span>
                             </div>
-                            <div className={`flex items-center gap-3 transition-opacity ${selectedBackups.size > 0 ? 'opacity-100' : 'pointer-events-none opacity-0'}`}>
-                                <Button variant='outline' onClick={clearSelection}>{t('clear')}</Button>
+                            <div
+                                className={`flex items-center gap-3 transition-opacity ${selectedBackups.size > 0 ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+                            >
+                                <Button variant='outline' onClick={clearSelection}>
+                                    {t('clear')}
+                                </Button>
                                 <Can action='backup.delete'>
                                     <Button variant='destructive' onClick={() => setBulkDeleteModalVisible(true)}>
                                         {t('delete_selected', { count: selectedBackups.size })}
@@ -499,54 +630,118 @@ const BackupContainer = () => {
                     )}
                 </>
             )}
-        </>
+        </>,
     );
 };
 
 const BackupContainerWrapper = () => {
     const [page, setPage] = useState<number>(1);
     const { mutate } = getServerBackups();
-    const [liveProgress, setLiveProgress] = useState<Record<string, { status: string; progress: number; message: string; canRetry: boolean; lastUpdated: string; completed: boolean; isDeletion: boolean; backupName?: string }>>({});
-
-    const handleBackupStatus = useCallback((rawData: any) => {
-        let data;
-        try {
-            data = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
-        } catch { return; }
-        const backup_uuid = data?.backup_uuid;
-        if (!backup_uuid) return;
-        const { status, progress, message, timestamp, operation, error: errorMsg, name } = data;
-        const can_retry = status === 'failed' && operation === 'create';
-        const last_updated_at = timestamp ? new Date(timestamp * 1000).toISOString() : new Date().toISOString();
-        const isDeletionOperation = operation === 'delete' || data.deleted === true;
-
-        setLiveProgress((prevProgress) => {
-            const currentState = prevProgress[backup_uuid];
-            const newProgress = progress || 0;
-            const isCompleted = status === 'completed' && newProgress === 100;
-            const displayMessage = errorMsg ? `${message || 'Operation failed'}: ${errorMsg}` : message || '';
-            if (currentState?.completed && !isCompleted) return prevProgress;
-            if (currentState && !isCompleted && currentState.lastUpdated >= last_updated_at && currentState.progress >= newProgress) return prevProgress;
-            return { ...prevProgress, [backup_uuid]: { status, progress: newProgress, message: displayMessage, canRetry: can_retry || false, lastUpdated: last_updated_at, completed: isCompleted, isDeletion: isDeletionOperation, backupName: name || currentState?.backupName } };
-        });
-
-        if (status === 'completed' && progress === 100) {
-            if (isDeletionOperation) {
-                mutate((currentData) => { if (!currentData) return currentData; return { ...currentData, items: currentData.items.filter((b) => b.uuid !== backup_uuid), backupCount: Math.max(0, (currentData.backupCount || 0) - 1) }; }, { revalidate: false });
-                setLiveProgress((prev) => { const updated = { ...prev }; delete updated[backup_uuid]; return updated; });
-            } else {
-                mutate();
-                const checkForBackup = async (attempts = 0) => {
-                    if (attempts > 10) { setLiveProgress((prev) => { const updated = { ...prev }; delete updated[backup_uuid]; return updated; }); return; }
-                    const currentBackups = await mutate();
-                    if (currentBackups?.items?.some((b) => b.uuid === backup_uuid)) {
-                        setLiveProgress((prev) => { const updated = { ...prev }; delete updated[backup_uuid]; return updated; });
-                    } else { setTimeout(() => checkForBackup(attempts + 1), 1000); }
-                };
-                setTimeout(() => checkForBackup(), 1000);
+    const [liveProgress, setLiveProgress] = useState<
+        Record<
+            string,
+            {
+                status: string;
+                progress: number;
+                message: string;
+                canRetry: boolean;
+                lastUpdated: string;
+                completed: boolean;
+                isDeletion: boolean;
+                backupName?: string;
             }
-        }
-    }, [mutate]);
+        >
+    >({});
+
+    const handleBackupStatus = useCallback(
+        (rawData: any) => {
+            let data;
+            try {
+                data = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
+            } catch {
+                return;
+            }
+            const backup_uuid = data?.backup_uuid;
+            if (!backup_uuid) return;
+            const { status, progress, message, timestamp, operation, error: errorMsg, name } = data;
+            const can_retry = status === 'failed' && operation === 'create';
+            const last_updated_at = timestamp ? new Date(timestamp * 1000).toISOString() : new Date().toISOString();
+            const isDeletionOperation = operation === 'delete' || data.deleted === true;
+
+            setLiveProgress((prevProgress) => {
+                const currentState = prevProgress[backup_uuid];
+                const newProgress = progress || 0;
+                const isCompleted = status === 'completed' && newProgress === 100;
+                const displayMessage = errorMsg ? `${message || 'Operation failed'}: ${errorMsg}` : message || '';
+                if (currentState?.completed && !isCompleted) return prevProgress;
+                if (
+                    currentState &&
+                    !isCompleted &&
+                    currentState.lastUpdated >= last_updated_at &&
+                    currentState.progress >= newProgress
+                )
+                    return prevProgress;
+                return {
+                    ...prevProgress,
+                    [backup_uuid]: {
+                        status,
+                        progress: newProgress,
+                        message: displayMessage,
+                        canRetry: can_retry || false,
+                        lastUpdated: last_updated_at,
+                        completed: isCompleted,
+                        isDeletion: isDeletionOperation,
+                        backupName: name || currentState?.backupName,
+                    },
+                };
+            });
+
+            if (status === 'completed' && progress === 100) {
+                if (isDeletionOperation) {
+                    mutate(
+                        (currentData) => {
+                            if (!currentData) return currentData;
+                            return {
+                                ...currentData,
+                                items: currentData.items.filter((b) => b.uuid !== backup_uuid),
+                                backupCount: Math.max(0, (currentData.backupCount || 0) - 1),
+                            };
+                        },
+                        { revalidate: false },
+                    );
+                    setLiveProgress((prev) => {
+                        const updated = { ...prev };
+                        delete updated[backup_uuid];
+                        return updated;
+                    });
+                } else {
+                    mutate();
+                    const checkForBackup = async (attempts = 0) => {
+                        if (attempts > 10) {
+                            setLiveProgress((prev) => {
+                                const updated = { ...prev };
+                                delete updated[backup_uuid];
+                                return updated;
+                            });
+                            return;
+                        }
+                        const currentBackups = await mutate();
+                        if (currentBackups?.items?.some((b) => b.uuid === backup_uuid)) {
+                            setLiveProgress((prev) => {
+                                const updated = { ...prev };
+                                delete updated[backup_uuid];
+                                return updated;
+                            });
+                        } else {
+                            setTimeout(() => checkForBackup(attempts + 1), 1000);
+                        }
+                    };
+                    setTimeout(() => checkForBackup(), 1000);
+                }
+            }
+        },
+        [mutate],
+    );
 
     useWebsocketEvent(SocketEvent.BACKUP_STATUS, handleBackupStatus);
 

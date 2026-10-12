@@ -1,15 +1,15 @@
-import { Calendar, Copy, Crown, Database, FolderOpen, Settings, Shield, User, Wifi } from 'lucide-react';
 import { Actions, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik } from 'formik';
+import { Calendar, Copy, Crown, Database, FolderOpen, Settings, Shield, User, Wifi } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { array, object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import Field from '@/components/elements/Field';
 import PermissionRow from '@/components/server/users/PermissionRow';
+import { Button } from '@/components/ui/button';
 
 import createOrUpdateSubuser from '@/api/server/users/createOrUpdateSubuser';
 
@@ -135,18 +135,11 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                             <div className='bg-muted/30 border border-border rounded-xl p-6'>
                                 <div className='flex items-center gap-3 mb-6'>
                                     <div className='w-10 h-10 rounded-lg bg-secondary flex items-center justify-center'>
-                                        <User
-                                            size={22}
-className='size-5 text-foreground'
-                                                        />
-                                                    </div>
-                                                    <h3 className='text-xl font-semibold text-foreground'>{t('user_information')}</h3>
-                                                                </div>
-                                                                <Field
-                                                                    name={'email'}
-                                                                    label={t('email_address')}
-                                                                    description={t('email_description')}
-                                                                />
+                                        <User size={22} className='size-5 text-foreground' />
+                                    </div>
+                                    <h3 className='text-xl font-semibold text-foreground'>{t('user_information')}</h3>
+                                </div>
+                                <Field name={'email'} label={t('email_address')} description={t('email_description')} />
                             </div>
                         )}
 
@@ -155,48 +148,46 @@ className='size-5 text-foreground'
                             <div className='flex items-center justify-between mb-6'>
                                 <div className='flex items-center gap-3'>
                                     <div className='w-10 h-10 rounded-lg bg-secondary flex items-center justify-center'>
-                                        <Settings
-                                            size={22}
-className='size-5 text-foreground'
-                                                        />
-                                                    </div>
-                                                    <h3 className='text-xl font-semibold text-foreground'>{t('detailed_permissions')}</h3>
-                                                                </div>
-                                                                {canEditUser && (
-                                                                    <button
-                                                                        type='button'
-                                                                        onClick={() => {
-                                                                            const allPermissions = editablePermissions;
-                                                                            const allSelected = allPermissions.every((p) =>
-                                                                                values.permissions.includes(p),
-                                                                            );
-                                                                            if (allSelected) {
-                                                                                setFieldValue('permissions', []);
-                                                                            } else {
-                                                                                setFieldValue('permissions', [...allPermissions]);
-                                                                            }
-                                                                        }}
-                                                                        className='text-sm px-4 py-2 rounded-lg bg-secondary hover:bg-accent text-secondary-foreground border border-border hover:border-foreground/20 transition-colors font-medium'
-                                                                    >
-                                                                        {editablePermissions.every((p) => values.permissions.includes(p))
-                                                                            ? t('deselect_all')
-                                                                            : t('select_all')}
-                                                                    </button>
-                                                                )}
-                                                            </div>
+                                        <Settings size={22} className='size-5 text-foreground' />
+                                    </div>
+                                    <h3 className='text-xl font-semibold text-foreground'>
+                                        {t('detailed_permissions')}
+                                    </h3>
+                                </div>
+                                {canEditUser && (
+                                    <button
+                                        type='button'
+                                        onClick={() => {
+                                            const allPermissions = editablePermissions;
+                                            const allSelected = allPermissions.every((p) =>
+                                                values.permissions.includes(p),
+                                            );
+                                            if (allSelected) {
+                                                setFieldValue('permissions', []);
+                                            } else {
+                                                setFieldValue('permissions', [...allPermissions]);
+                                            }
+                                        }}
+                                        className='text-sm px-4 py-2 rounded-lg bg-secondary hover:bg-accent text-secondary-foreground border border-border hover:border-foreground/20 transition-colors font-medium'
+                                    >
+                                        {editablePermissions.every((p) => values.permissions.includes(p))
+                                            ? t('deselect_all')
+                                            : t('select_all')}
+                                    </button>
+                                )}
+                            </div>
 
-                                                            {!isRootAdmin && loggedInPermissions[0] !== '*' && (
-                                                                <div className='mb-6 p-4 bg-secondary border-border rounded-lg'>
-                                                                    <div className='flex items-center gap-3 mb-2'>
-                                                                        <Shield
-                                                                            size={22}
-                className='size-5 text-foreground'
-                                                                                        />
-                                                                                        <span className='text-sm font-semibold text-foreground'>{t('permission_restriction')}</span>
-                                                                </div>
-                                                                <p className='text-sm text-foreground/80 leading-relaxed'>
-                                                                    {t('permission_restriction_description')}
-                                                                </p>
+                            {!isRootAdmin && loggedInPermissions[0] !== '*' && (
+                                <div className='mb-6 p-4 bg-secondary border-border rounded-lg'>
+                                    <div className='flex items-center gap-3 mb-2'>
+                                        <Shield size={22} className='size-5 text-foreground' />
+                                        <span className='text-sm font-semibold text-foreground'>
+                                            {t('permission_restriction')}
+                                        </span>
+                                    </div>
+                                    <p className='text-sm text-foreground/80 leading-relaxed'>
+                                        {t('permission_restriction_description')}
+                                    </p>
                                 </div>
                             )}
 
@@ -217,7 +208,9 @@ className='size-5 text-foreground'
                                                         );
                                                     })()}
                                                     <div className='flex-1 min-w-0'>
-                                                        <h4 className='font-medium text-foreground/90 capitalize'>{key}</h4>
+                                                        <h4 className='font-medium text-foreground/90 capitalize'>
+                                                            {key}
+                                                        </h4>
                                                         <p className='text-xs text-muted-foreground mt-1 break-words'>
                                                             {permissions[key]?.description}
                                                         </p>

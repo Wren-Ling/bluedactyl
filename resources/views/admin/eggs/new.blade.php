@@ -147,7 +147,7 @@
     });
     $('#pNestId').on('change', function (event) {
         $('#pConfigFrom').html('<option value="">@lang('admin/nests.egg_new.copy_from_none')</option>');
-        var eggs = _.get(Pyrodactyl.nests, $(this).val() + '.eggs', []);
+        var eggs = _.get(Bluedactyl.nests, $(this).val() + '.eggs', []);
         eggs.forEach(function (item) {
             $('#pConfigFrom').append($('<option>', {
                 value: item.id,

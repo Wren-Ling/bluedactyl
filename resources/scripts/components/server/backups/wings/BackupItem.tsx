@@ -1,13 +1,12 @@
-import { Cloud, Lock } from 'lucide-react';
-
 import { format, formatDistanceToNow } from 'date-fns';
+import { Cloud, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import Can from '@/components/elements/Can';
-import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 import Spinner from '@/components/elements/Spinner';
 import { PageListItem } from '@/components/elements/pages/PageList';
 import { SocketEvent } from '@/components/server/events';
+import { ContextMenu, ContextMenuTrigger } from '@/components/ui/context-menu';
 
 import { bytesToString } from '@/lib/formatters';
 
@@ -38,12 +37,12 @@ const BackupItem = ({ backup }: Props) => {
                         b.uuid !== backup.uuid
                             ? b
                             : {
-                                ...b,
-                                isSuccessful: parsed.is_successful || true,
-                                checksum: (parsed.checksum_type || '') + ':' + (parsed.checksum || ''),
-                                bytes: parsed.file_size || 0,
-                                completedAt: new Date(),
-                            },
+                                  ...b,
+                                  isSuccessful: parsed.is_successful || true,
+                                  checksum: (parsed.checksum_type || '') + ':' + (parsed.checksum || ''),
+                                  bytes: parsed.file_size || 0,
+                                  completedAt: new Date(),
+                              },
                     ),
                 }),
                 false,
@@ -92,7 +91,11 @@ const BackupItem = ({ backup }: Props) => {
                                         </span>
                                     )}
                                 </div>
-                                {backup.checksum && <p className='text-xs text-muted-foreground font-mono truncate'>{backup.checksum}</p>}
+                                {backup.checksum && (
+                                    <p className='text-xs text-muted-foreground font-mono truncate'>
+                                        {backup.checksum}
+                                    </p>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -120,9 +123,6 @@ const BackupItem = ({ backup }: Props) => {
                             {formatDistanceToNow(backup.createdAt, { includeSeconds: true, addSuffix: true })}
                         </p>
                     </div>
-
-
-
 
                     <Can action={['backup.download', 'backup.restore', 'backup.delete']} matchAny>
                         {!backup.completedAt ? <></> : <BackupContextMenu backup={backup} />}

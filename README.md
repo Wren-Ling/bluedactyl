@@ -69,7 +69,7 @@ APP_LOCALE=zh
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=panel
-DB_USERNAME=pyrodactyl
+DB_USERNAME=bluedactyl
 DB_PASSWORD=your-database-password
 
 REDIS_HOST=127.0.0.1
@@ -143,7 +143,7 @@ php artisan queue:work --queue=high,standard,low --sleep=3 --tries=3
 Crontab 示例：
 
 ```cron
-* * * * * cd /path/to/pyrodactyl && php artisan schedule:run >> /dev/null 2>&1
+* * * * * cd /path/to/bluedactyl && php artisan schedule:run >> /dev/null 2>&1
 ```
 
 建议使用 systemd 或 Supervisor 管理队列进程，并确保 Web 服务用户可写入 `storage/` 与 `bootstrap/cache/`。站点根目录应指向项目的 `public/`，不要暴露项目根目录或 `.env`。
@@ -221,4 +221,4 @@ storage/                日志、缓存和运行时文件
 
 `composer.json` 将本项目声明为 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)。当前仓库根目录未包含独立许可证文件；分发或部署前请向项目维护者确认完整许可文本及上游 Pterodactyl 代码的适用条款。
 
-Pyrodactyl 是基于 Pterodactyl 的衍生项目，与 Pterodactyl Software 官方无隶属关系。
+Bluedactyl 是基于 Pterodactyl 的衍生项目，与 Pterodactyl Software 官方无隶属关系。

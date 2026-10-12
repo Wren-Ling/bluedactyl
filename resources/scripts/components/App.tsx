@@ -3,24 +3,24 @@
 // in the root first. The github issue for this is still open. Stupid.
 // https://github.com/preactjs/signals/issues/414
 import '@/assets/tailwind.css';
-import '@preact/signals-react';
 import '@/i18n/config';
+import '@preact/signals-react';
 import { StoreProvider } from 'easy-peasy';
 import { lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Toaster } from '@/components/ui/sonner';
-import { ThemeProvider } from '@/components/ui/theme-provider';
-import { TooltipProvider } from '@/components/ui/tooltip';
 
 import AuthenticatedRoute from '@/components/elements/AuthenticatedRoute';
 import { NotFound } from '@/components/elements/ScreenBlock';
 import Spinner from '@/components/elements/Spinner';
+import { Toaster } from '@/components/ui/sonner';
+import { ThemeProvider } from '@/components/ui/theme-provider';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 import { store } from '@/state';
 import { ServerContext } from '@/state/server';
 import { SiteSettings } from '@/state/settings';
 
-import PyrodactylProvider from './PyrodactylProvider';
+import BluedactylProvider from './BluedactylProvider';
 
 const DashboardRouter = lazy(() => import('@/routers/DashboardRouter'));
 const ServerRouter = lazy(() => import('@/routers/ServerRouter'));
@@ -65,47 +65,47 @@ const App = () => {
             <StoreProvider store={store}>
                 <ThemeProvider defaultTheme='dark'>
                     <TooltipProvider>
-                    <PyrodactylProvider>
-                        <Toaster />
-                        <BrowserRouter>
-                            <Routes>
-                                <Route
-                                    path='/auth/*'
-                                    element={
-                                        <Spinner.Suspense>
-                                            <AuthenticationRouter />
-                                        </Spinner.Suspense>
-                                    }
-                                />
-
-                                <Route
-                                    path='/server/:id/*'
-                                    element={
-                                        <AuthenticatedRoute>
+                        <BluedactylProvider>
+                            <Toaster />
+                            <BrowserRouter>
+                                <Routes>
+                                    <Route
+                                        path='/auth/*'
+                                        element={
                                             <Spinner.Suspense>
-                                                <ServerContext.Provider>
-                                                    <ServerRouter />
-                                                </ServerContext.Provider>
+                                                <AuthenticationRouter />
                                             </Spinner.Suspense>
-                                        </AuthenticatedRoute>
-                                    }
-                                />
+                                        }
+                                    />
 
-                                <Route
-                                    path='/*'
-                                    element={
-                                        <AuthenticatedRoute>
-                                            <Spinner.Suspense>
-                                                <DashboardRouter />
-                                            </Spinner.Suspense>
-                                        </AuthenticatedRoute>
-                                    }
-                                />
+                                    <Route
+                                        path='/server/:id/*'
+                                        element={
+                                            <AuthenticatedRoute>
+                                                <Spinner.Suspense>
+                                                    <ServerContext.Provider>
+                                                        <ServerRouter />
+                                                    </ServerContext.Provider>
+                                                </Spinner.Suspense>
+                                            </AuthenticatedRoute>
+                                        }
+                                    />
 
-                                <Route path='*' element={<NotFound />} />
-                            </Routes>
-                        </BrowserRouter>
-                    </PyrodactylProvider>
+                                    <Route
+                                        path='/*'
+                                        element={
+                                            <AuthenticatedRoute>
+                                                <Spinner.Suspense>
+                                                    <DashboardRouter />
+                                                </Spinner.Suspense>
+                                            </AuthenticatedRoute>
+                                        }
+                                    />
+
+                                    <Route path='*' element={<NotFound />} />
+                                </Routes>
+                            </BrowserRouter>
+                        </BluedactylProvider>
                     </TooltipProvider>
                 </ThemeProvider>
             </StoreProvider>

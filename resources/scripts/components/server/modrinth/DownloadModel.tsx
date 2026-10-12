@@ -144,7 +144,9 @@ const DropdownButton = ({ versions, onVersionSelect, className = '' }: DropdownB
                                 role='option'
                                 aria-selected={version.id === selectedVersion?.id}
                                 className={`px-4 py-3 cursor-pointer transition-colors ${
-                                    version.id === selectedVersion?.id ? 'bg-foreground text-background' : 'hover:bg-gray-700'
+                                    version.id === selectedVersion?.id
+                                        ? 'bg-foreground text-background'
+                                        : 'hover:bg-gray-700'
                                 } focus:outline-none focus:bg-gray-700`}
                                 onClick={() => handleSelect(version)}
                                 onKeyDown={(e) => {

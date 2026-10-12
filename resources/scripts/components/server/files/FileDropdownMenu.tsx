@@ -1,14 +1,14 @@
-import { useTranslation } from 'react-i18next';
-import { Play, Copy, FileDown, FileArchive, PencilLine, Shield, Trash2 } from 'lucide-react';
+import { Copy, FileArchive, FileDown, PencilLine, Play, Shield, Trash2 } from 'lucide-react';
 import { join } from 'pathe';
 import { memo, useState } from 'react';
 import isEqual from 'react-fast-compare';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import Can from '@/components/elements/Can';
-import { ContextMenuContent, ContextMenuItem } from '@/components/ui/context-menu';
 import ChmodFileModal from '@/components/server/files/ChmodFileModal';
 import RenameFileModal from '@/components/server/files/RenameFileModal';
+import { ContextMenuContent, ContextMenuItem } from '@/components/ui/context-menu';
 
 import compressFiles from '@/api/server/files/compressFiles';
 import copyFile from '@/api/server/files/copyFile';

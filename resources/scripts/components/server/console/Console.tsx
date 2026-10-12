@@ -4,14 +4,18 @@ import { WebLinksAddon } from '@xterm/addon-web-links';
 import { ITerminalOptions, Terminal } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 import debounce from 'debounce';
-
+import { useStoreState } from 'easy-peasy';
+import { Sparkles } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+import AiAssistantPanel from '@/components/server/ai/AiAssistantPanel';
+import { SocketEvent, SocketRequest } from '@/components/server/events';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { SocketEvent, SocketRequest } from '@/components/server/events';
+
+import { pushConsoleChunk } from '@/lib/ai/consoleBuffer';
 
 import { ServerContext } from '@/state/server';
 
@@ -53,7 +57,7 @@ const terminalProps: ITerminalOptions = {
 
 const Console = () => {
     const { t } = useTranslation();
-    const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@pyrodactyl~ \u001b[0m';
+    const TERMINAL_PRELUDE = '\u001b[1m\u001b[33mcontainer@bluedactyl~ \u001b[0m';
     const ref = useRef<HTMLDivElement>(null);
     const terminal = useMemo(
         () =>
@@ -72,10 +76,19 @@ const Console = () => {
     const isTransferring = ServerContext.useStoreState((state) => state.server.data!.isTransferring);
     const [history, setHistory] = usePersistedState<string[]>(`${serverId}:command_history`, []);
     const [historyIndex, setHistoryIndex] = useState(-1);
+    const [assistantOpen, setAssistantOpen] = useState(false);
 
-    const handleConsoleOutput = (line: string, prelude = false) =>
+    // The assistant is only rendered when an administrator has enabled it and
+    // finished configuring a provider, so a disabled install shows no trace of
+    // the feature in the console.
+    const ai = useStoreState((state) => state.settings.data?.ai);
+
+    const handleConsoleOutput = (line: string, prelude = false) => {
         terminal.writeln((prelude ? TERMINAL_PRELUDE : '') + line.replace(/(?:\r\n|\r|\n)$/im, '') + '\u001b[0m');
 
+        // Feed the shared buffer so the assistant sees exactly what the user sees.
+        pushConsoleChunk(line);
+    };
     const handleTransferStatus = (status: string) => {
         switch (status) {
             // Sent by either the source or target node if a failure occurs.
@@ -106,21 +119,24 @@ const Console = () => {
         input.value = '';
     }, [instance]);
 
-    const handleCommandKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-        const input = e.currentTarget;
-        if (e.key === 'ArrowUp') {
-            const newIndex = Math.min(historyIndex + 1, history!.length - 1);
-            setHistoryIndex(newIndex);
-            input.value = history![newIndex] || '';
-            e.preventDefault();
-        } else if (e.key === 'ArrowDown') {
-            const newIndex = Math.max(historyIndex - 1, -1);
-            setHistoryIndex(newIndex);
-            input.value = history![newIndex] || '';
-        } else if (e.key === 'Enter' && input.value.length > 0) {
-            sendCommand();
-        }
-    }, [historyIndex, history, sendCommand]);
+    const handleCommandKeyDown = useCallback(
+        (e: React.KeyboardEvent<HTMLInputElement>) => {
+            const input = e.currentTarget;
+            if (e.key === 'ArrowUp') {
+                const newIndex = Math.min(historyIndex + 1, history!.length - 1);
+                setHistoryIndex(newIndex);
+                input.value = history![newIndex] || '';
+                e.preventDefault();
+            } else if (e.key === 'ArrowDown') {
+                const newIndex = Math.max(historyIndex - 1, -1);
+                setHistoryIndex(newIndex);
+                input.value = history![newIndex] || '';
+            } else if (e.key === 'Enter' && input.value.length > 0) {
+                sendCommand();
+            }
+        },
+        [historyIndex, history, sendCommand],
+    );
 
     useEffect(() => {
         if (connected && ref.current && !terminal.element) {
@@ -205,35 +221,51 @@ const Console = () => {
 
     return (
         <div className='bg-muted/30 border border-border rounded-xl hover:border-border/40 transition-all duration-150 overflow-hidden'>
-            <div className='relative'>
-                <SpinnerOverlay visible={!connected} size={'large'} />
-                <div className='bg-[#131313] min-h-[280px] sm:min-h-[380px] p-3 sm:p-4 font-mono overflow-hidden'>
-                    <div className='h-full w-full'>
-                        <div ref={ref} className='h-full w-full' />
-                    </div>
-                </div>
-                {canSendCommands && (
-                    <div className='relative flex items-center gap-2 border-t border-border p-2'>
-                        <Input
-                            ref={inputRef}
-                            className='w-full rounded-lg bg-muted/30 font-mono text-xs sm:text-sm h-9 focus-visible:ring-0'
-                            type='text'
-                            placeholder={t('console:enter_command')}
-                            aria-label={t('console:console_command_input')}
-                            disabled={!instance || !connected}
-                            onKeyDown={handleCommandKeyDown}
-                            autoCorrect='off'
-                            autoCapitalize='none'
-                        />
+            <div className='relative flex'>
+                {ai?.enabled && ai.allow_console && (
+                    <div className='flex flex-col items-center gap-1 border-r border-border bg-muted/20 p-1.5'>
                         <Button
-                            disabled={!instance || !connected}
-                            onClick={sendCommand}
+                            variant='ghost'
+                            size='icon-sm'
+                            onClick={() => setAssistantOpen(true)}
+                            aria-label={t('ai:open')}
+                            title={t('ai:open')}
                         >
-                            {t('console:execute')}
+                            <Sparkles className='size-4' />
                         </Button>
                     </div>
                 )}
+                <div className='relative min-w-0 flex-1'>
+                    <SpinnerOverlay visible={!connected} size={'large'} />
+                    <div className='bg-[#131313] min-h-[280px] sm:min-h-[380px] p-3 sm:p-4 font-mono overflow-hidden'>
+                        <div className='h-full w-full'>
+                            <div ref={ref} className='h-full w-full' />
+                        </div>
+                    </div>
+                    {canSendCommands && (
+                        <div className='relative flex items-center gap-2 border-t border-border p-2'>
+                            <Input
+                                ref={inputRef}
+                                className='w-full rounded-lg bg-muted/30 font-mono text-xs sm:text-sm h-9 focus-visible:ring-0'
+                                type='text'
+                                placeholder={t('console:enter_command')}
+                                aria-label={t('console:console_command_input')}
+                                disabled={!instance || !connected}
+                                onKeyDown={handleCommandKeyDown}
+                                autoCorrect='off'
+                                autoCapitalize='none'
+                            />
+                            <Button disabled={!instance || !connected} onClick={sendCommand}>
+                                {t('console:execute')}
+                            </Button>
+                        </div>
+                    )}
+                </div>
             </div>
+
+            {ai?.enabled && ai.allow_console && (
+                <AiAssistantPanel visible={assistantOpen} onClose={() => setAssistantOpen(false)} />
+            )}
         </div>
     );
 };

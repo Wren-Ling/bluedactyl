@@ -1,19 +1,19 @@
-import { Database, Eye, Trash2 } from 'lucide-react';
 import { Form, Formik, FormikHelpers } from 'formik';
+import { Database, Eye, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import Field from '@/components/elements/Field';
-import { Input } from '@/components/ui/input';
 import Modal from '@/components/elements/Modal';
 import Spinner from '@/components/elements/Spinner';
 import { PageListItem } from '@/components/elements/pages/PageList';
 import RotatePasswordButton from '@/components/server/databases/RotatePasswordButton';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 import { httpErrorToHuman } from '@/api/http';
 import deleteServerDatabase from '@/api/server/databases/deleteServerDatabase';
@@ -121,7 +121,9 @@ const DatabaseRow = ({ database }: Props) => {
                             </CopyOnClick>
                         </div>
                         <div className='flex flex-col'>
-                            <label className='inline-block text-muted-foreground text-sm pb-2'>{t('connections_from')}</label>
+                            <label className='inline-block text-muted-foreground text-sm pb-2'>
+                                {t('connections_from')}
+                            </label>
                             <CopyOnClick text={database.allowConnectionsFrom}>
                                 <Input type={'text'} readOnly value={database.allowConnectionsFrom} />
                             </CopyOnClick>
@@ -134,7 +136,9 @@ const DatabaseRow = ({ database }: Props) => {
                         </div>
                         <Can action={'database.view_password'}>
                             <div className='flex flex-col'>
-                                <label className='inline-block text-muted-foreground text-sm pb-2'>{t('password')}</label>
+                                <label className='inline-block text-muted-foreground text-sm pb-2'>
+                                    {t('password')}
+                                </label>
                                 <div className='flex flex-row min-w-full gap-2'>
                                     <CopyOnClick text={database.password} showInNotification={false}>
                                         <Input
@@ -153,7 +157,9 @@ const DatabaseRow = ({ database }: Props) => {
                     </div>
                     <div className='flex flex-col'>
                         <div className='flex flex-row gap-2 align-middle items-center'>
-                            <label className='inline-block text-muted-foreground text-sm pb-2'>{t('jdbc_connection_string')}</label>
+                            <label className='inline-block text-muted-foreground text-sm pb-2'>
+                                {t('jdbc_connection_string')}
+                            </label>
                         </div>
                         <CopyOnClick text={jdbcConnectionString} showInNotification={false}>
                             <Input type={'password'} readOnly value={jdbcConnectionString} />
@@ -184,9 +190,13 @@ const DatabaseRow = ({ database }: Props) => {
                                 </CopyOnClick>
                             </div>
                             <div>
-                                <p className='text-xs text-foreground0 uppercase tracking-wide mb-1'>{t('from_short')}</p>
+                                <p className='text-xs text-foreground0 uppercase tracking-wide mb-1'>
+                                    {t('from_short')}
+                                </p>
                                 <CopyOnClick text={database.allowConnectionsFrom}>
-                                    <p className='text-foreground/80 font-mono truncate'>{database.allowConnectionsFrom}</p>
+                                    <p className='text-foreground/80 font-mono truncate'>
+                                        {database.allowConnectionsFrom}
+                                    </p>
                                 </CopyOnClick>
                             </div>
                             <div>

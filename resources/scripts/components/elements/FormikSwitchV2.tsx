@@ -13,7 +13,15 @@ interface SwitchProps {
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const FormikSwitch = ({ name, label, description, defaultChecked, readOnly, onChange: onChangeProp, ...props }: SwitchProps) => {
+const FormikSwitch = ({
+    name,
+    label,
+    description,
+    defaultChecked,
+    readOnly,
+    onChange: onChangeProp,
+    ...props
+}: SwitchProps) => {
     return (
         <FormikFieldWrapper name={name}>
             <Field name={name}>

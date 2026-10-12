@@ -1,10 +1,10 @@
-import { useTranslation } from 'react-i18next';
 import { fileBitsToString } from '@/helpers';
 import { Form, Formik, FormikHelpers } from 'formik';
+import { useTranslation } from 'react-i18next';
 
-import { Button } from '@/components/ui/button';
 import Field from '@/components/elements/Field';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
+import { Button } from '@/components/ui/button';
 
 import chmodFiles from '@/api/server/files/chmodFiles';
 
@@ -79,9 +79,7 @@ const ChmodFileModal = ({ files, ...props }: OwnProps) => {
                                 />
                             </div>
                             <div className={`flex justify-end w-full my-6`}>
-                                <Button type='submit'>
-                                    {t('files:update')}
-                                </Button>
+                                <Button type='submit'>{t('files:update')}</Button>
                             </div>
                         </div>
                     </Form>

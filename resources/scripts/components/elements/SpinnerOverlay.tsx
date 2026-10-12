@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils';
-
 import Spinner, { SpinnerSize } from '@/components/elements/Spinner';
+
+import { cn } from '@/lib/utils';
 
 interface Props {
     visible: boolean;
@@ -15,10 +15,7 @@ const SpinnerOverlay: React.FC<Props> = ({ visible, fixed, size, backgroundOpaci
 
     return (
         <div
-            className={cn(
-                'inset-0 z-50 flex items-center justify-center',
-                fixed ? 'fixed' : 'absolute',
-            )}
+            className={cn('inset-0 z-50 flex items-center justify-center', fixed ? 'fixed' : 'absolute')}
             style={{ backgroundColor: `rgba(0, 0, 0, ${backgroundOpacity / 100})` }}
         >
             <Spinner size={size} />

@@ -121,9 +121,9 @@
 @section('footer-scripts')
     @parent
     <script>
-    const nests = window.Pyrodactyl?.nests || {};
-    const server = window.Pyrodactyl?.server || {};
-    const serverVariables = window.Pyrodactyl?.server_variables || {};
+    const nests = window.Bluedactyl?.nests || {};
+    const server = window.Bluedactyl?.server || {};
+    const serverVariables = window.Bluedactyl?.server_variables || {};
     const previous = {
         nest: String(@json(old('nest_id', $server->nest_id))),
         egg: String(@json(old('egg_id', $server->egg_id))),

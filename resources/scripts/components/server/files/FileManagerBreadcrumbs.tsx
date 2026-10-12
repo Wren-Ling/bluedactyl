@@ -1,7 +1,7 @@
-import { useTranslation } from 'react-i18next';
 import { encodePathSegments } from '@/helpers';
 import type { ReactNode } from 'react';
 import { Fragment, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink, useParams } from 'react-router-dom';
 
 import { ServerContext } from '@/state/server';
@@ -52,7 +52,10 @@ const FileManagerBreadcrumbs = ({ renderLeft, withinFileEditor, isNewFile }: Pro
     return (
         <div className={`group select-none flex grow-0 items-center text-sm overflow-x-hidden`}>
             {renderLeft || <div className={`w-12`} />}
-            <NavLink to={`/server/${id}/files`} className={`px-1 text-foreground/80 no-underline hover:text-foreground`}>
+            <NavLink
+                to={`/server/${id}/files`}
+                className={`px-1 text-foreground/80 no-underline hover:text-foreground`}
+            >
                 {t('files:root')}
             </NavLink>
             <svg

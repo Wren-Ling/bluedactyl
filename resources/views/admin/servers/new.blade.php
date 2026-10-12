@@ -408,9 +408,9 @@
     @parent
 
     <script>
-    window.Pyrodactyl = window.Pyrodactyl || {};
-    Pyrodactyl.nodeData = {!! $nodeDataJson !!};
-    Pyrodactyl.nests = {!! $nestsDataJson !!};
+    window.Bluedactyl = window.Bluedactyl || {};
+    Bluedactyl.nodeData = {!! $nodeDataJson !!};
+    Bluedactyl.nests = {!! $nestsDataJson !!};
     </script>
 
     <script type="application/javascript">
@@ -481,7 +481,7 @@
             document.getElementById('pNodeId').dispatchEvent(new Event('change'));
 
             @if (old('allocation_id') || old('allocation_additional'))
-                var node = Pyrodactyl.nodeData.find(function (item) {
+                var node = Bluedactyl.nodeData.find(function (item) {
                     return String(item.id) === String(@json(old('node_id')));
                 });
                 if (node) {

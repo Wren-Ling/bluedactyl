@@ -1,10 +1,10 @@
-import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { Button } from '@/components/ui/button';
 import Code from '@/components/elements/Code';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 import { ServerContext } from '@/state/server';
@@ -56,7 +56,10 @@ const FileUploadList = ({ onClose }: { onClose: () => void }) => {
         <TooltipProvider>
             <div className={'space-y-2 mt-6'}>
                 {uploads.map(([name, file]) => (
-                    <div key={name} className={'flex items-center space-x-3 bg-card p-3 rounded-sm border border-border'}>
+                    <div
+                        key={name}
+                        className={'flex items-center space-x-3 bg-card p-3 rounded-sm border border-border'}
+                    >
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <div className={'shrink-0'}>
@@ -154,7 +157,9 @@ const FileManagerStatus = () => {
                 )}
                 <Dialog open={open} onOpenChange={setOpen}>
                     <DialogContent>
-                        <DialogHeader><DialogTitle>{t('files:file_uploads_title')}</DialogTitle></DialogHeader>
+                        <DialogHeader>
+                            <DialogTitle>{t('files:file_uploads_title')}</DialogTitle>
+                        </DialogHeader>
                         <p className='text-sm text-muted-foreground'>{t('files:file_uploads_description')}</p>
                         <FileUploadList onClose={() => setOpen(false)} />
                     </DialogContent>

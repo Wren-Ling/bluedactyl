@@ -1,12 +1,12 @@
 import { Actions, useStoreActions } from 'easy-peasy';
 import { Form, Formik } from 'formik';
-import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 import { object, string } from 'yup';
 
-import { Button } from '@/components/ui/button';
 import Field from '@/components/elements/Field';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { httpErrorToHuman } from '@/api/http';
 import renameServer from '@/api/server/renameServer';
@@ -31,9 +31,7 @@ const RenameServerForm = () => {
                     <Field id={'name'} name={'name'} label={t('server_name')} type={'text'} />
                     <Field id={'description'} name={'description'} label={t('server_description')} type={'text'} />
                     <div className={`mt-6 text-right`}>
-                        <Button type={'submit'}>
-                            {t('save')}
-                        </Button>
+                        <Button type={'submit'}>{t('save')}</Button>
                     </div>
                 </Form>
             </CardContent>

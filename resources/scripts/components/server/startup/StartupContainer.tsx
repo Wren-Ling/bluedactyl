@@ -1,23 +1,17 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import isEqual from 'react-fast-compare';
+import { useTranslation } from 'react-i18next';
 
-import { Button } from '@/components/ui/button';
-import CopyOnClick from '@/components/elements/CopyOnClick';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import FlashMessageRender from '@/components/FlashMessageRender';
+import CopyOnClick from '@/components/elements/CopyOnClick';
 import InputSpinner from '@/components/elements/InputSpinner';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Pagination from '@/components/elements/Pagination';
 import { ServerError } from '@/components/elements/ScreenBlock';
 import Spinner from '@/components/elements/Spinner';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import VariableBox from '@/components/server/startup/VariableBox';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Dialog,
     DialogContent,
@@ -26,7 +20,13 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import VariableBox from '@/components/server/startup/VariableBox';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 import { httpErrorToHuman } from '@/api/http';
 import processStartupCommand from '@/api/server/processStartupCommand';
@@ -99,7 +99,10 @@ const StartupContainer = () => {
         clearFlashes('startup:image');
         setSelectedDockerImage(uuid, image)
             .then(() => setServerFromState((s) => ({ ...s, dockerImage: image })))
-            .catch((error) => { console.error(error); clearAndAddHttpError({ key: 'startup:image', error }); })
+            .catch((error) => {
+                console.error(error);
+                clearAndAddHttpError({ key: 'startup:image', error });
+            })
             .then(() => setLoading(false));
     };
 
@@ -112,7 +115,10 @@ const StartupContainer = () => {
                 setServerFromState((s) => ({ ...s, dockerImage: defaultImage }));
                 setRevertModalVisible(false);
             })
-            .catch((error) => { console.error(error); clearAndAddHttpError({ key: 'startup:image', error }); })
+            .catch((error) => {
+                console.error(error);
+                clearAndAddHttpError({ key: 'startup:image', error });
+            })
             .then(() => setLoading(false));
     };
 
@@ -124,7 +130,10 @@ const StartupContainer = () => {
                 mutate((data) => ({ ...data!, invocation, rawStartupCommand: commandValue }), false);
                 setEditingCommand(false);
             })
-            .catch((error) => { console.error(error); clearAndAddHttpError({ key: 'startup:command', error }); })
+            .catch((error) => {
+                console.error(error);
+                clearAndAddHttpError({ key: 'startup:command', error });
+            })
             .then(() => setCommandLoading(false));
     };
 
@@ -134,12 +143,18 @@ const StartupContainer = () => {
             setCommandValue(defaultCommand);
             const processed = await processCommandLive(defaultCommand);
             setLiveProcessedCommand(processed);
-        } catch (error) { console.error('Failed to load default command:', error); }
+        } catch (error) {
+            console.error('Failed to load default command:', error);
+        }
     };
 
     const processCommandLive = async (rawCommand: string): Promise<string> => {
-        try { return await processStartupCommand(uuid, rawCommand); }
-        catch (error) { console.error('Failed to process command:', error); return rawCommand; }
+        try {
+            return await processStartupCommand(uuid, rawCommand);
+        } catch (error) {
+            console.error('Failed to process command:', error);
+            return rawCommand;
+        }
     };
 
     const startEditingCommand = async () => {
@@ -187,9 +202,7 @@ const StartupContainer = () => {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>{t('revert_title')}</DialogTitle>
-                        <DialogDescription>
-                            {t('revert_description')}
-                        </DialogDescription>
+                        <DialogDescription>{t('revert_description')}</DialogDescription>
                     </DialogHeader>
                     <div className='rounded-xl border border-amber-500/20 bg-linear-to-b from-amber-500/10 to-amber-600/5 p-3'>
                         <p className='text-sm text-amber-200'>
@@ -198,7 +211,9 @@ const StartupContainer = () => {
                     </div>
                     <p className='text-sm text-muted-foreground'>{t('revert_confirm')}</p>
                     <DialogFooter>
-                        <Button variant='outline' onClick={() => setRevertModalVisible(false)}>{t('cancel')}</Button>
+                        <Button variant='outline' onClick={() => setRevertModalVisible(false)}>
+                            {t('cancel')}
+                        </Button>
                         <Button variant='default' onClick={revertToEggDefault} disabled={loading}>
                             {t('revert_yes')}
                         </Button>
@@ -217,7 +232,9 @@ const StartupContainer = () => {
                 <div className='space-y-6'>
                     <Card className='p-6'>
                         <CardHeader>
-                            <CardTitle className='text-xl font-extrabold tracking-tight'>{t('startup_command_title')}</CardTitle>
+                            <CardTitle className='text-xl font-extrabold tracking-tight'>
+                                {t('startup_command_title')}
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className='mb-6 space-y-4'>
@@ -229,7 +246,9 @@ const StartupContainer = () => {
                                 <div className='space-y-4'>
                                     <div className='grid grid-cols-1 gap-4 md:gap-6 xl:grid-cols-2'>
                                         <div>
-                                            <label className='mb-3 block text-sm font-medium text-foreground'>{t('raw_command_label')}</label>
+                                            <label className='mb-3 block text-sm font-medium text-foreground'>
+                                                {t('raw_command_label')}
+                                            </label>
                                             <textarea
                                                 className='h-32 w-full resize-none rounded-xl border-2 border-blue-500/30 bg-linear-to-b from-muted/30 to-muted/10 px-3 py-3 font-mono text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-blue-500/60 focus:outline-none focus:ring-2 focus:ring-blue-500/50 sm:h-36 sm:px-4 sm:py-4 sm:text-base md:h-40'
                                                 value={commandValue}
@@ -238,7 +257,9 @@ const StartupContainer = () => {
                                             />
                                         </div>
                                         <div>
-                                            <label className='mb-3 block text-sm font-medium text-foreground'>{t('live_preview_label')}</label>
+                                            <label className='mb-3 block text-sm font-medium text-foreground'>
+                                                {t('live_preview_label')}
+                                            </label>
                                             <CopyOnClick text={liveProcessedCommand}>
                                                 <div className='group cursor-pointer'>
                                                     <div className='h-32 w-full overflow-auto rounded-xl border-2 border-green-500/20 bg-linear-to-b from-muted/10 to-muted/5 px-3 py-3 font-mono text-sm text-green-200 transition-all group-hover:border-green-500/40 sm:h-36 sm:px-4 sm:py-4 sm:text-base md:h-40'>
@@ -250,14 +271,29 @@ const StartupContainer = () => {
                                     </div>
                                     <div className='flex flex-col gap-3 border-t border-border/30 pt-4 sm:flex-row sm:gap-4'>
                                         <InputSpinner visible={commandLoading}>
-                                            <Button variant='default' size='default' onClick={updateCommand} disabled={commandLoading || !commandValue.trim()}>
+                                            <Button
+                                                variant='default'
+                                                size='default'
+                                                onClick={updateCommand}
+                                                disabled={commandLoading || !commandValue.trim()}
+                                            >
                                                 {commandLoading ? t('saving') : t('save_command')}
                                             </Button>
                                         </InputSpinner>
-                                        <Button variant='outline' size='default' onClick={loadDefaultCommand} disabled={commandLoading}>
+                                        <Button
+                                            variant='outline'
+                                            size='default'
+                                            onClick={loadDefaultCommand}
+                                            disabled={commandLoading}
+                                        >
                                             {t('load_default')}
                                         </Button>
-                                        <Button variant='outline' size='default' onClick={cancelEditingCommand} disabled={commandLoading}>
+                                        <Button
+                                            variant='outline'
+                                            size='default'
+                                            onClick={cancelEditingCommand}
+                                            disabled={commandLoading}
+                                        >
                                             {t('cancel')}
                                         </Button>
                                     </div>
@@ -267,7 +303,9 @@ const StartupContainer = () => {
                                     {data.rawStartupCommand && (
                                         <div className='space-y-3'>
                                             <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
-                                                <label className='text-sm font-medium text-foreground'>{t('raw_command_label')}</label>
+                                                <label className='text-sm font-medium text-foreground'>
+                                                    {t('raw_command_label')}
+                                                </label>
                                                 {canEditCommand && (
                                                     <Button variant='outline' size='sm' onClick={startEditingCommand}>
                                                         {t('edit_command')}
@@ -285,8 +323,12 @@ const StartupContainer = () => {
                                     )}
                                     <div className='space-y-3'>
                                         <div className='flex flex-col items-center gap-2 sm:flex-row'>
-                                            <label className='text-sm font-medium text-foreground'>{t('processed_command_label')}</label>
-                                            <span className='w-fit rounded text-xs text-muted-foreground'>{t('read_only')}</span>
+                                            <label className='text-sm font-medium text-foreground'>
+                                                {t('processed_command_label')}
+                                            </label>
+                                            <span className='w-fit rounded text-xs text-muted-foreground'>
+                                                {t('read_only')}
+                                            </span>
                                         </div>
                                         <CopyOnClick text={data.invocation}>
                                             <div className='group cursor-pointer'>
@@ -303,7 +345,9 @@ const StartupContainer = () => {
 
                     <Card className='p-6'>
                         <CardHeader>
-                            <CardTitle className='text-xl font-extrabold tracking-tight'>{t('docker_image_title')}</CardTitle>
+                            <CardTitle className='text-xl font-extrabold tracking-tight'>
+                                {t('docker_image_title')}
+                            </CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className='mb-6 space-y-4'>
@@ -322,8 +366,18 @@ const StartupContainer = () => {
                                                             (key) => data.dockerImages[key] === variables.dockerImage,
                                                         ) || variables.dockerImage}
                                                     </span>
-                                                    <svg width='16' height='16' viewBox='0 0 13 13' fill='none' className='shrink-0 opacity-60'>
-                                                        <path d='M3.39257 5.3429C3.48398 5.25161 3.60788 5.20033 3.73707 5.20033C3.86626 5.20033 3.99016 5.25161 4.08157 5.3429L6.49957 7.7609L8.91757 5.3429C8.9622 5.29501 9.01602 5.25659 9.07582 5.22995C9.13562 5.2033 9.20017 5.18897 9.26563 5.18782C9.33109 5.18667 9.39611 5.19871 9.45681 5.22322C9.51751 5.24774 9.57265 5.28424 9.61895 5.33053C9.66524 5.37682 9.70173 5.43196 9.72625 5.49267C9.75077 5.55337 9.76281 5.61839 9.76166 5.68384C9.7605 5.7493 9.74617 5.81385 9.71953 5.87365C9.69288 5.93345 9.65447 5.98727 9.60657 6.0319L6.84407 8.7944C6.75266 8.8857 6.62876 8.93698 6.49957 8.93698C6.37038 8.93698 6.24648 8.8857 6.15507 8.7944L3.39257 6.0319C3.30128 5.9405 3.25 5.81659 3.25 5.6874C3.25 5.55822 3.30128 5.43431 3.39257 5.3429Z' fill='currentColor' fillOpacity='0.6'/>
+                                                    <svg
+                                                        width='16'
+                                                        height='16'
+                                                        viewBox='0 0 13 13'
+                                                        fill='none'
+                                                        className='shrink-0 opacity-60'
+                                                    >
+                                                        <path
+                                                            d='M3.39257 5.3429C3.48398 5.25161 3.60788 5.20033 3.73707 5.20033C3.86626 5.20033 3.99016 5.25161 4.08157 5.3429L6.49957 7.7609L8.91757 5.3429C8.9622 5.29501 9.01602 5.25659 9.07582 5.22995C9.13562 5.2033 9.20017 5.18897 9.26563 5.18782C9.33109 5.18667 9.39611 5.19871 9.45681 5.22322C9.51751 5.24774 9.57265 5.28424 9.61895 5.33053C9.66524 5.37682 9.70173 5.43196 9.72625 5.49267C9.75077 5.55337 9.76281 5.61839 9.76166 5.68384C9.7605 5.7493 9.74617 5.81385 9.71953 5.87365C9.69288 5.93345 9.65447 5.98727 9.60657 6.0319L6.84407 8.7944C6.75266 8.8857 6.62876 8.93698 6.49957 8.93698C6.37038 8.93698 6.24648 8.8857 6.15507 8.7944L3.39257 6.0319C3.30128 5.9405 3.25 5.81659 3.25 5.6874C3.25 5.55822 3.30128 5.43431 3.39257 5.3429Z'
+                                                            fill='currentColor'
+                                                            fillOpacity='0.6'
+                                                        />
                                                     </svg>
                                                 </button>
                                             </DropdownMenuTrigger>
@@ -359,7 +413,8 @@ const StartupContainer = () => {
                                             <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
                                                 <div className='flex-1'>
                                                     <p className='text-sm text-amber-200'>
-                                                        <span className='font-medium'>{t('notice_label')}:</span> {t('custom_image_notice')}
+                                                        <span className='font-medium'>{t('notice_label')}:</span>{' '}
+                                                        {t('custom_image_notice')}
                                                     </p>
                                                     {canEditDockerImage && (
                                                         <p className='mt-2 text-xs text-amber-300/80'>
@@ -405,13 +460,22 @@ const StartupContainer = () => {
                                 <div className='grid grid-cols-1 gap-3 text-xs sm:grid-cols-2 lg:grid-cols-3'>
                                     {[
                                         { label: 'SERVER_MEMORY', value: server?.limits?.memory || 'null' },
-                                        { label: 'SERVER_IP', value: server?.allocations?.find((a) => a.isDefault)?.ip || 'null' },
-                                        { label: 'SERVER_PORT', value: server?.allocations?.find((a) => a.isDefault)?.port || 'null' },
+                                        {
+                                            label: 'SERVER_IP',
+                                            value: server?.allocations?.find((a) => a.isDefault)?.ip || 'null',
+                                        },
+                                        {
+                                            label: 'SERVER_PORT',
+                                            value: server?.allocations?.find((a) => a.isDefault)?.port || 'null',
+                                        },
                                         { label: 'SERVER_UUID', value: uuid },
                                         { label: 'SERVER_NAME', value: server?.name || 'null' },
                                         { label: 'SERVER_CPU', value: server?.limits?.cpu || 'null' },
                                     ].map(({ label, value }) => (
-                                        <div key={label} className='flex items-center justify-between gap-2 rounded border border-border/10 bg-muted/20 px-3 py-2'>
+                                        <div
+                                            key={label}
+                                            className='flex items-center justify-between gap-2 rounded border border-border/10 bg-muted/20 px-3 py-2'
+                                        >
                                             <span className='font-mono text-muted-foreground'>{label}</span>
                                             <CopyOnClick text={value}>
                                                 <span className='font-mono text-foreground'>{value}</span>

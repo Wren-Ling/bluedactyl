@@ -1,6 +1,7 @@
 import { ShieldAlert } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import { useContext, useEffect } from 'react';
+
+import { cn } from '@/lib/utils';
 
 import { DialogContext, DialogIconProps } from './';
 
@@ -16,7 +17,13 @@ export default ({ type, position, className }: DialogIconProps) => {
         };
 
         setIcon(
-            <div className={cn('mr-4 flex h-10 w-10 items-center justify-center rounded-full', typeStyles[type], className)}>
+            <div
+                className={cn(
+                    'mr-4 flex h-10 w-10 items-center justify-center rounded-full',
+                    typeStyles[type],
+                    className,
+                )}
+            >
                 <ShieldAlert className='size-5' />
             </div>,
         );

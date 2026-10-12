@@ -1,10 +1,10 @@
-import { RotateCcw } from 'lucide-react';
 import { Actions, useStoreActions } from 'easy-peasy';
+import { RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@/components/ui/button';
 import Spinner from '@/components/elements/Spinner';
+import { Button } from '@/components/ui/button';
 
 import { httpErrorToHuman } from '@/api/http';
 import { ServerDatabase } from '@/api/server/databases/getServerDatabases';

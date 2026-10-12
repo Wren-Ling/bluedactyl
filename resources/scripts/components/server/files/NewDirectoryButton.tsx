@@ -1,14 +1,14 @@
-import { useTranslation } from 'react-i18next';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { join } from 'pathe';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import Code from '@/components/elements/Code';
 import Field from '@/components/elements/Field';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 import createDirectory from '@/api/server/files/createDirectory';
 
@@ -74,7 +74,9 @@ const NewDirectoryDialog = ({ open, onClose }: { open: boolean; onClose: (v: boo
             {({ submitForm, values }) => (
                 <Dialog open={open} onOpenChange={onClose}>
                     <DialogContent>
-                        <DialogHeader><DialogTitle>{t('files:new_folder')}</DialogTitle></DialogHeader>
+                        <DialogHeader>
+                            <DialogTitle>{t('files:new_folder')}</DialogTitle>
+                        </DialogHeader>
                         <FlashMessageRender byKey='files:directory-modal' />
                         <Form className={`m-0`}>
                             <Field autoFocus id={'directoryName'} name={'directoryName'} label={t('files:name')} />

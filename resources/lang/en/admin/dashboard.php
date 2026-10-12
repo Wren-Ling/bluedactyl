@@ -7,7 +7,7 @@ return [
     'breadcrumb_admin' => 'Admin',
     'breadcrumb_index' => 'Index',
     'system_info' => 'System Information',
-    'system_info_text' => 'You are running Pyrodactyl panel version :version.',
+    'system_info_text' => 'You are running Bluedactyl panel version :version.',
     'get_help' => 'Get Help',
     'via_discord' => '(via Discord)',
     'documentation' => 'Documentation',

@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
 
@@ -61,10 +61,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
 
     return (
         <Link to={`/server/${server.id}`} className={`${className || ''} block`}>
-            <Card
-                size='sm'
-                className='transition-all hover:bg-accent hover:ring-accent'
-            >
+            <Card size='sm' className='transition-all hover:bg-accent hover:ring-accent'>
                 <CardContent className='flex items-center justify-between gap-4 py-3'>
                     <div className='flex items-center gap-3 min-w-0'>
                         <div className={`h-2.5 w-2.5 shrink-0 rounded-full ${getStatusColor(stats?.status)}`} />
@@ -105,12 +102,16 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                             <>
                                 {(['cpu', 'memory', 'disk'] as const).map((key) => (
                                     <div key={key} className='hidden sm:block text-right'>
-                                        <p className='text-[11px] uppercase text-muted-foreground'>{t(`dashboard:stats_${key}`)}</p>
+                                        <p className='text-[11px] uppercase text-muted-foreground'>
+                                            {t(`dashboard:stats_${key}`)}
+                                        </p>
                                         <p className={`text-xs font-medium ${alarms[key] ? 'text-destructive' : ''}`}>
                                             {key === 'cpu'
                                                 ? `${stats.cpuUsagePercent.toFixed(1)}%`
                                                 : bytesToString(
-                                                      key === 'memory' ? stats.memoryUsageInBytes : stats.diskUsageInBytes,
+                                                      key === 'memory'
+                                                          ? stats.memoryUsageInBytes
+                                                          : stats.diskUsageInBytes,
                                                       0,
                                                   )}
                                         </p>

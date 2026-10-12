@@ -5,10 +5,10 @@ import { Link, useParams } from 'react-router-dom';
 import { object, ref, string } from 'yup';
 
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
-import { Button } from '@/components/ui/button';
 import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
-import { Card, CardContent } from '@/components/ui/card';
 import Field from '@/components/elements/Field';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 
 import CaptchaManager from '@/lib/captcha';
@@ -125,7 +125,11 @@ function ResetPasswordContainer() {
                                     description={t('auth:password_length_hint')}
                                 />
 
-                                <Field label={t('auth:confirm_new_password')} name='password_confirmation' type='password' />
+                                <Field
+                                    label={t('auth:confirm_new_password')}
+                                    name='password_confirmation'
+                                    type='password'
+                                />
 
                                 <Captcha
                                     onError={(error) => {

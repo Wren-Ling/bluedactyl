@@ -1,12 +1,12 @@
-import { Pencil } from 'lucide-react';
 import { useStoreState } from 'easy-peasy';
+import { Pencil } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import { PageListItem } from '@/components/elements/pages/PageList';
 import RemoveSubuserButton from '@/components/server/users/RemoveSubuserButton';
+import { Button } from '@/components/ui/button';
 
 import { ServerContext } from '@/state/server';
 import { Subuser } from '@/state/server/subusers';

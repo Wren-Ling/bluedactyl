@@ -1,15 +1,23 @@
 'use client';
 
-import { Cuboid, Home, Server } from 'lucide-react';
 import { useStoreState } from 'easy-peasy';
+import { Cuboid, Home, Server } from 'lucide-react';
 import { Fragment, Suspense, useEffect, useMemo, useState } from 'react';
-import { Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Route, Routes, useLocation, useParams } from 'react-router-dom';
 
 import routes, { getServerNavRoutes } from '@/routers/routes';
 
+import ErrorBoundary from '@/components/elements/ErrorBoundary';
+import PermissionRoute from '@/components/elements/PermissionRoute';
+import { NotFound, ServerError } from '@/components/elements/ScreenBlock';
+import CommandMenu from '@/components/elements/commandk/CmdK';
+import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
+import InstallListener from '@/components/server/InstallListener';
+import ServerSidebarNavItem from '@/components/server/ServerSidebarNavItem';
+import TransferListener from '@/components/server/TransferListener';
+import WebsocketHandler from '@/components/server/WebsocketHandler';
 import { AnimatedThemeToggler as ModeToggle } from '@/components/ui/animated-theme-toggler';
-
 import {
     Sidebar,
     SidebarContent,
@@ -23,16 +31,6 @@ import {
     SidebarRail,
     SidebarTrigger,
 } from '@/components/ui/sidebar';
-import ErrorBoundary from '@/components/elements/ErrorBoundary';
-
-import PermissionRoute from '@/components/elements/PermissionRoute';
-import { NotFound, ServerError } from '@/components/elements/ScreenBlock';
-import CommandMenu from '@/components/elements/commandk/CmdK';
-import ConflictStateRenderer from '@/components/server/ConflictStateRenderer';
-import InstallListener from '@/components/server/InstallListener';
-import ServerSidebarNavItem from '@/components/server/ServerSidebarNavItem';
-import TransferListener from '@/components/server/TransferListener';
-import WebsocketHandler from '@/components/server/WebsocketHandler';
 
 import { httpErrorToHuman } from '@/api/http';
 import http from '@/api/http';
@@ -107,7 +105,6 @@ const ServerRouter = () => {
                 ) : null
             ) : (
                 <SidebarProvider>
-
                     <Sidebar variant='sidebar' collapsible='offcanvas'>
                         <SidebarHeader className='border-b border-border/50'>
                             <SidebarMenu>
@@ -121,8 +118,10 @@ const ServerRouter = () => {
                                             <Cuboid className='size-5' />
                                         </div>
                                         <div className='grid flex-1 text-left text-sm leading-tight'>
-                                            <span className='truncate font-semibold'>{t('server:pyrodactyl')}</span>
-                                            <span className='truncate text-xs text-muted-foreground'>{t('server:management')}</span>
+                                            <span className='truncate font-semibold'>{t('server:bluedactyl')}</span>
+                                            <span className='truncate text-xs text-muted-foreground'>
+                                                {t('server:management')}
+                                            </span>
                                         </div>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
@@ -147,7 +146,9 @@ const ServerRouter = () => {
                                 <SidebarMenuItem>
                                     <SidebarMenuButton className='cursor-default hover:bg-transparent'>
                                         <Server className='size-4 shrink-0 text-sidebar-foreground/60' />
-                                        <span className='truncate text-xs text-sidebar-foreground/60'>{serverName}</span>
+                                        <span className='truncate text-xs text-sidebar-foreground/60'>
+                                            {serverName}
+                                        </span>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             </SidebarMenu>

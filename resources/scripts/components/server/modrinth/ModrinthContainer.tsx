@@ -1,11 +1,10 @@
-import { Search } from 'lucide-react';
 import debounce from 'debounce';
+import { Search } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import Can from '@/components/elements/Can';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
 import { Input } from '@/components/ui/input';
 
 import LoaderSelector from './LoaderSelector';
@@ -98,7 +97,11 @@ const ModrinthContainerInner = () => {
                             <div className='mb-4 w-full text-nowrap select-none'>
                                 <div>
                                     <CardTitle className='mb-4'>Loader</CardTitle>
-                                    {isLoadingLoader ? <p className='text-sm text-muted-foreground'>Loading loaders...</p> : <LoaderSelector />}
+                                    {isLoadingLoader ? (
+                                        <p className='text-sm text-muted-foreground'>Loading loaders...</p>
+                                    ) : (
+                                        <LoaderSelector />
+                                    )}
                                 </div>
                             </div>
                         </Can>
@@ -106,7 +109,11 @@ const ModrinthContainerInner = () => {
                             <div className='mb-4 w-full text-nowrap select-none'>
                                 <div>
                                     <CardTitle className='mb-4 mt-6'>Version</CardTitle>
-                                    {isLoadingVersion ? <p className='text-sm text-muted-foreground'>Loading versions...</p> : <GameVersionSelector />}
+                                    {isLoadingVersion ? (
+                                        <p className='text-sm text-muted-foreground'>Loading versions...</p>
+                                    ) : (
+                                        <GameVersionSelector />
+                                    )}
                                 </div>
                             </div>
                         </Can>

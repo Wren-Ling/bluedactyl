@@ -1,11 +1,13 @@
-import { ChevronDown, House, LayoutGrid, Menu, SlidersVertical } from 'lucide-react';
 import { useStoreState } from 'easy-peasy';
+import { ChevronDown, House, LayoutGrid, Menu, SlidersVertical } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import useSWR from 'swr';
 
 import ServerRow from '@/components/dashboard/ServerRow';
+import PageContentBlock from '@/components/elements/PageContentBlock';
+import Pagination from '@/components/elements/Pagination';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -13,8 +15,6 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Spinner } from '@/components/ui/spinner';
-import PageContentBlock from '@/components/elements/PageContentBlock';
-import Pagination from '@/components/elements/Pagination';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import getServers from '@/api/getServers';
@@ -93,7 +93,9 @@ const DashboardContainer = () => {
                     <House className='size-6 text-muted-foreground' />
                 </div>
                 <h3 className='mb-1 text-base font-medium text-foreground'>
-                    {serverViewMode === 'admin-all' ? t('dashboard:no_other_servers_found') : t('dashboard:no_servers_found')}
+                    {serverViewMode === 'admin-all'
+                        ? t('dashboard:no_other_servers_found')
+                        : t('dashboard:no_servers_found')}
                 </h3>
                 <p className='max-w-sm text-sm text-muted-foreground'>
                     {serverViewMode === 'admin-all'
@@ -135,7 +137,7 @@ const DashboardContainer = () => {
                                         {rootAdmin && (
                                             <DropdownMenuItem
                                                 onClick={() => setServerViewMode('admin-all')}
-                className={serverViewMode === 'admin-all' ? 'bg-accent' : ''}
+                                                className={serverViewMode === 'admin-all' ? 'bg-accent' : ''}
                                             >
                                                 {t('dashboard:all_servers_admin')}
                                             </DropdownMenuItem>

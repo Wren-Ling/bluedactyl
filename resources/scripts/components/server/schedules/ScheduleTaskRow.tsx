@@ -2,12 +2,12 @@ import { CircleHelp, CloudUpload, PencilLine, Power, Terminal, Trash2 } from 'lu
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import ItemContainer from '@/components/elements/ItemContainer';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 import { httpErrorToHuman } from '@/api/http';
 import deleteScheduleTask from '@/api/server/schedules/deleteScheduleTask';
@@ -81,15 +81,24 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                 visible={isEditing}
                 onModalDismissed={() => setIsEditing(false)}
             />
-            <Dialog open={visible} onOpenChange={(o) => { if (!o) setVisible(false); }}>
+            <Dialog
+                open={visible}
+                onOpenChange={(o) => {
+                    if (!o) setVisible(false);
+                }}
+            >
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>{t('confirm_task_deletion')}</DialogTitle>
                     </DialogHeader>
                     {t('confirm_task_deletion_description')}
                     <DialogFooter>
-                        <Button variant='outline' onClick={() => setVisible(false)}>{t('cancel')}</Button>
-                        <Button variant='destructive' onClick={onConfirmDeletion}>{t('delete_task')}</Button>
+                        <Button variant='outline' onClick={() => setVisible(false)}>
+                            {t('cancel')}
+                        </Button>
+                        <Button variant='destructive' onClick={onConfirmDeletion}>
+                            {t('delete_task')}
+                        </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

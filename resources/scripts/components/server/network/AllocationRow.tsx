@@ -1,18 +1,18 @@
-import { Check, Copy, Crown, Trash2, Wifi, X } from 'lucide-react';
 import debounce from 'debounce';
+import { Check, Copy, Crown, Trash2, Wifi, X } from 'lucide-react';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import isEqual from 'react-fast-compare';
+import { useTranslation } from 'react-i18next';
 
-import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import Code from '@/components/elements/Code';
 import CopyOnClick from '@/components/elements/CopyOnClick';
-import { Textarea } from '@/components/ui/textarea';
 import InputSpinner from '@/components/elements/InputSpinner';
 import Spinner from '@/components/elements/Spinner';
 import { Dialog } from '@/components/elements/dialog';
 import { PageListItem } from '@/components/elements/pages/PageList';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 import { ip } from '@/lib/formatters';
 
@@ -153,11 +153,7 @@ const AllocationRow = ({ allocation }: Props) => {
                                 </InputSpinner>
                                 <div className='flex items-center gap-2'>
                                     <Button size='sm' onClick={saveNotes} disabled={loading}>
-                                        {loading ? (
-                                            <Spinner size='small' />
-                                        ) : (
-                                            <Check className='mr-1 size-3' />
-                                        )}
+                                        {loading ? <Spinner size='small' /> : <Check className='mr-1 size-3' />}
                                         {t('save')}
                                     </Button>
                                     <Button variant='secondary' size='sm' onClick={cancelEdit} disabled={loading}>
@@ -186,11 +182,7 @@ const AllocationRow = ({ allocation }: Props) => {
                             size='sm'
                             onClick={setPrimaryAllocation}
                             disabled={allocation.isDefault}
-                            title={
-                                allocation.isDefault
-                                    ? t('already_primary_title')
-                                    : t('make_primary_title')
-                            }
+                            title={allocation.isDefault ? t('already_primary_title') : t('make_primary_title')}
                         >
                             <Crown size={22} className='mr-1' />
                             <span className='hidden sm:inline'>{t('make_primary')}</span>
@@ -203,15 +195,9 @@ const AllocationRow = ({ allocation }: Props) => {
                             size='sm'
                             onClick={() => setShowDeleteDialog(true)}
                             disabled={allocation.isDefault || deleteLoading}
-                            title={
-                                allocation.isDefault ? t('cannot_delete_primary') : t('delete_allocation_title')
-                            }
+                            title={allocation.isDefault ? t('cannot_delete_primary') : t('delete_allocation_title')}
                         >
-                            {deleteLoading ? (
-                                <Spinner size='small' />
-                            ) : (
-                                <Trash2 size={22} className='mr-1' />
-                            )}
+                            {deleteLoading ? <Spinner size='small' /> : <Trash2 size={22} className='mr-1' />}
                             <span className='hidden sm:inline'>{t('delete')}</span>
                         </Button>
                     </Can>

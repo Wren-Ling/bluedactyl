@@ -2,8 +2,8 @@ import { Code, Copy } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@/components/ui/button';
 import { Dialog } from '@/components/elements/dialog';
+import { Button } from '@/components/ui/button';
 
 import { formatObjectToIdentString } from '@/lib/objects';
 

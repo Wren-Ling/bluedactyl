@@ -1,16 +1,10 @@
-import { Trash2 } from 'lucide-react';
 import { Actions, useStoreActions } from 'easy-peasy';
+import { Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
-import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 import { httpErrorToHuman } from '@/api/http';
 import deleteSubuser from '@/api/server/users/deleteSubuser';
@@ -53,7 +47,9 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
                     </DialogHeader>
                     {t('remove_description')}
                     <DialogFooter>
-                        <Button variant='outline' onClick={() => setShowConfirmation(false)}>{t('cancel')}</Button>
+                        <Button variant='outline' onClick={() => setShowConfirmation(false)}>
+                            {t('cancel')}
+                        </Button>
                         <Button variant='destructive' onClick={doDeletion} disabled={loading}>
                             {loading ? t('removing') : t('remove_button', { username: subuser.username })}
                         </Button>

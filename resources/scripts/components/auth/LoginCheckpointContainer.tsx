@@ -6,9 +6,9 @@ import type { Location, RouteProps } from 'react-router-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
+import Field from '@/components/elements/Field';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import Field from '@/components/elements/Field';
 
 import loginCheckpoint from '@/api/auth/loginCheckpoint';
 
@@ -50,23 +50,13 @@ function LoginCheckpointForm() {
                         name={isMissingDevice ? 'recoveryCode' : 'code'}
                         title={isMissingDevice ? t('auth:recovery_code') : t('auth:auth_code')}
                         placeholder='000000'
-                        description={
-                            isMissingDevice
-                                ? t('auth:recovery_code_desc')
-                                : t('auth:two_factor_desc')
-                        }
+                        description={isMissingDevice ? t('auth:recovery_code_desc') : t('auth:two_factor_desc')}
                         type='text'
                         autoComplete='one-time-code'
                         autoFocus
                     />
 
-                    <Button
-                        className='w-full'
-                        size='lg'
-                        type='submit'
-                        disabled={isSubmitting}
-                        isLoading={isSubmitting}
-                    >
+                    <Button className='w-full' size='lg' type='submit' disabled={isSubmitting} isLoading={isSubmitting}>
                         {t('auth:login')}
                     </Button>
 

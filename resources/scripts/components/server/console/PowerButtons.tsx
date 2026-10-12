@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
 import Can from '@/components/elements/Can';
 import { Dialog } from '@/components/elements/dialog';

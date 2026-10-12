@@ -1,11 +1,10 @@
 import { format } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import isEqual from 'react-fast-compare';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import ItemContainer from '@/components/elements/ItemContainer';
 import PageContentBlock from '@/components/elements/PageContentBlock';
@@ -15,6 +14,7 @@ import DeleteScheduleButton from '@/components/server/schedules/DeleteScheduleBu
 import EditScheduleModal from '@/components/server/schedules/EditScheduleModal';
 import ScheduleTaskRow from '@/components/server/schedules/ScheduleTaskRow';
 import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
+import { Button } from '@/components/ui/button';
 
 import getServerSchedule from '@/api/server/schedules/getServerSchedule';
 import triggerScheduleExecution from '@/api/server/schedules/triggerScheduleExecution';
@@ -95,9 +95,7 @@ const ScheduleEditContainer = () => {
                 <Spinner size={'large'} centered />
             ) : (
                 <div className={`rounded-sm shadow-sm flex flex-col gap-6`}>
-                    <div
-                        className='bg-muted/30 border border-border flex items-center place-content-between flex-col md:flex-row gap-6 p-6 rounded-2xl overflow-hidden'
-                    >
+                    <div className='bg-muted/30 border border-border flex items-center place-content-between flex-col md:flex-row gap-6 p-6 rounded-2xl overflow-hidden'>
                         <div className={`flex-none self-start`}>
                             <h3 className={`flex items-center text-neutral-100 text-2xl`}>
                                 {schedule.name}
@@ -132,17 +130,10 @@ const ScheduleEditContainer = () => {
                         </div>
                         <div className={`flex gap-2 flex-col md:flex-row md:min-w-0 min-w-full`}>
                             <Can action={'schedule.update'}>
-                                <Button
-                                    variant='secondary'
-                                    onClick={toggleEditModal}
-                                    className={'flex-1 min-w-max'}
-                                >
+                                <Button variant='secondary' onClick={toggleEditModal} className={'flex-1 min-w-max'}>
                                     {t('edit')}
                                 </Button>
-                                <Button
-                                    onClick={() => setShowTaskModal(true)}
-                                    className={'flex-1 min-w-max'}
-                                >
+                                <Button onClick={() => setShowTaskModal(true)} className={'flex-1 min-w-max'}>
                                     {t('new_task')}
                                 </Button>
                             </Can>

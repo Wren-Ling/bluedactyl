@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { boolean, number, object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import Field from '@/components/elements/Field';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import FormikSwitchV2 from '@/components/elements/FormikSwitchV2';
-import { Textarea } from '@/components/ui/textarea';
 import Select from '@/components/elements/Select';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 import asModal from '@/hoc/asModal';
 
@@ -135,7 +135,9 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                         <FlashMessageRender byKey={'schedule:task'} />
                         <div className={`flex flex-col gap-3`}>
                             <div>
-                                <label className='inline-block text-muted-foreground text-sm pb-2'>{t('action_label')}</label>
+                                <label className='inline-block text-muted-foreground text-sm pb-2'>
+                                    {t('action_label')}
+                                </label>
                                 <ActionListener />
                                 <FormikFieldWrapper name={'action'}>
                                     <FormikField
@@ -166,7 +168,9 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                         <div className={`my-6`}>
                             {values.action === 'command' ? (
                                 <div>
-                                    <label className='inline-block text-muted-foreground text-sm pb-2'>{t('payload_label')}</label>
+                                    <label className='inline-block text-muted-foreground text-sm pb-2'>
+                                        {t('payload_label')}
+                                    </label>
                                     <FormikFieldWrapper name={'payload'}>
                                         <FormikField
                                             className='w-full rounded-xl p-2 bg-muted/30'
@@ -178,7 +182,9 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                                 </div>
                             ) : values.action === 'power' ? (
                                 <div>
-                                    <label className='inline-block text-muted-foreground text-sm pb-2'>{t('payload_label')}</label>
+                                    <label className='inline-block text-muted-foreground text-sm pb-2'>
+                                        {t('payload_label')}
+                                    </label>
                                     <FormikFieldWrapper name={'payload'}>
                                         <FormikField
                                             className='px-4 py-2 bg-muted/30 rounded-lg min-w-full'
@@ -202,11 +208,10 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                                 </div>
                             ) : (
                                 <div>
-                                    <label className='inline-block text-muted-foreground text-sm pb-2'>{t('ignored_files_label')}</label>
-                                    <FormikFieldWrapper
-                                        name={'payload'}
-                                        description={t('ignored_files_description')}
-                                    >
+                                    <label className='inline-block text-muted-foreground text-sm pb-2'>
+                                        {t('ignored_files_label')}
+                                    </label>
+                                    <FormikFieldWrapper name={'payload'} description={t('ignored_files_description')}>
                                         <FormikField
                                             className='w-full rounded-xl bg-muted/30'
                                             as={Textarea}

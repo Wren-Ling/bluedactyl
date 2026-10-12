@@ -76,7 +76,7 @@ export const MODRINTH_CONFIG = {
     getHeaders(appVersion: string): Record<string, string> {
         return {
             'Content-Type': 'application/json',
-            'User-Agent': `pyrodactyl/${appVersion} (pyrodactyl.dev)`,
+            'User-Agent': `bluedactyl/${appVersion} (bluedactyl.dev)`,
             Accept: 'application/json',
         };
     },

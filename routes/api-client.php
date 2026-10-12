@@ -7,6 +7,7 @@ use Pterodactyl\Http\Middleware\Activity\ServerSubject;
 use Pterodactyl\Http\Middleware\Activity\AccountSubject;
 use Pterodactyl\Http\Controllers\Api\Client\Servers\Elytra;
 use Pterodactyl\Http\Middleware\RequireTwoFactorAuthentication;
+use Pterodactyl\Http\Middleware\Api\Client\Server\AiAssistantAccess;
 use Pterodactyl\Http\Middleware\Api\Client\Server\ResourceBelongsToServer;
 use Pterodactyl\Http\Middleware\Api\Client\Server\AuthenticateServerAccess;
 
@@ -73,6 +74,39 @@ Route::group([
 ], function () {
     Route::get('/', [Client\ServerController::class, 'index'])->name('api.client.servers.daemonType');
     Route::get('/resources', [Client\ServerController::class, 'resources'])->name('api.client.servers.resources');
+
+    /*
+     * The AI assistant works against both daemons (they share the same file
+     * repository and console protocol), so it is registered here rather than
+     * inside the per-daemon route files.
+     *
+     * Every route carries the access middleware: it refuses API-key requests
+     * so the assistant cannot be used as a relay for outsiders, applies the
+     * per-user daily ceiling and serializes streaming turns. The per-minute
+     * throttle sits alongside it as the burst limit.
+     */
+    Route::group([
+        'prefix' => '/ai',
+        'middleware' => [AiAssistantAccess::class],
+    ], function () {
+        Route::get('/config', [Client\Servers\AiAssistantController::class, 'config'])
+            ->name('api:client.servers.ai.config');
+        Route::post('/chat', [Client\Servers\AiAssistantController::class, 'chat'])
+            ->middleware('throttle:ai-assistant')
+            ->name('api:client.servers.ai.chat');
+        Route::post('/stream', [Client\Servers\AiAssistantController::class, 'stream'])
+            ->middleware('throttle:ai-assistant')
+            ->name('api:client.servers.ai.stream');
+        Route::post('/crash-analysis', [Client\Servers\AiAssistantController::class, 'crashAnalysis'])
+            ->middleware('throttle:ai-assistant')
+            ->name('api:client.servers.ai.crash-analysis');
+        Route::get('/files', [Client\Servers\AiAssistantController::class, 'directory'])
+            ->middleware('throttle:ai-assistant')
+            ->name('api:client.servers.ai.files');
+        Route::get('/file', [Client\Servers\AiAssistantController::class, 'readFile'])
+            ->middleware('throttle:ai-assistant')
+            ->name('api:client.servers.ai.file');
+    });
 
     Route::group(['prefix' => '/subdomain'], function () {
         Route::get('/', [Elytra\SubdomainController::class, 'index']);

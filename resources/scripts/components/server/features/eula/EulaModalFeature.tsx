@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import Modal from '@/components/elements/Modal';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
+import { Button } from '@/components/ui/button';
 
 import saveFileContents from '@/api/server/files/saveFileContents';
 
@@ -86,9 +86,7 @@ const EulaModalFeature = () => {
                     <Button variant='secondary' onClick={() => setVisible(false)}>
                         I don&apos;t accept
                     </Button>
-                    <Button onClick={onAcceptEULA}>
-                        I accept
-                    </Button>
+                    <Button onClick={onAcceptEULA}>I accept</Button>
                 </div>
             </div>
         </Modal>

@@ -1,24 +1,15 @@
-import {
-    ArrowDownToLine,
-    Filter,
-    RefreshCw,
-    RefreshCwOff,
-    RotateCcw,
-    Search,
-    SearchX,
-    X,
-} from 'lucide-react';
+import { ArrowDownToLine, Filter, RefreshCw, RefreshCwOff, RotateCcw, Search, SearchX, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Select from '@/components/elements/Select';
 import Spinner from '@/components/elements/Spinner';
 import ActivityLogEntry from '@/components/elements/activity/ActivityLogEntry';
-import { Input } from '@/components/ui/input';
 import PaginationFooter from '@/components/elements/table/PaginationFooter';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 import { ActivityLogFilters, useActivityLogs } from '@/api/account/activity';
 
@@ -96,7 +87,13 @@ const ActivityLogContainer = () => {
         if (!filteredData?.items) return;
 
         const csvContent = [
-            [t('account:csv_timestamp'), t('account:csv_event'), t('account:csv_actor'), t('account:csv_ip_address'), t('account:csv_properties')].join(','),
+            [
+                t('account:csv_timestamp'),
+                t('account:csv_event'),
+                t('account:csv_actor'),
+                t('account:csv_ip_address'),
+                t('account:csv_properties'),
+            ].join(','),
             ...filteredData.items.map((item) =>
                 [
                     new Date(item.timestamp).toISOString(),
@@ -210,7 +207,9 @@ const ActivityLogContainer = () => {
 
                     <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
                         <div>
-                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>{t('account:search')}</label>
+                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>
+                                {t('account:search')}
+                            </label>
                             <div className='relative'>
                                 <Search className='pointer-events-none absolute left-3 top-1/2 z-10 size-4 -translate-y-1/2 text-muted-foreground' />
                                 <Input
@@ -224,11 +223,10 @@ const ActivityLogContainer = () => {
                         </div>
 
                         <div>
-                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>{t('account:event_type')}</label>
-                            <Select
-                                value={selectedEventType}
-                                onChange={(e) => setSelectedEventType(e.target.value)}
-                            >
+                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>
+                                {t('account:event_type')}
+                            </label>
+                            <Select value={selectedEventType} onChange={(e) => setSelectedEventType(e.target.value)}>
                                 <option value=''>{t('account:all_events')}</option>
                                 {eventTypes.map((type) => (
                                     <option key={type} value={type}>
@@ -239,11 +237,10 @@ const ActivityLogContainer = () => {
                         </div>
 
                         <div>
-                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>{t('account:time_range')}</label>
-                            <Select
-                                value={dateRange}
-                                onChange={(e) => setDateRange(e.target.value)}
-                            >
+                            <label className='mb-2 block text-sm font-medium text-muted-foreground'>
+                                {t('account:time_range')}
+                            </label>
+                            <Select value={dateRange} onChange={(e) => setDateRange(e.target.value)}>
                                 <option value='all'>{t('account:all_time')}</option>
                                 <option value='1h'>{t('account:last_hour')}</option>
                                 <option value='24h'>{t('account:last_24_hours')}</option>
@@ -276,7 +273,8 @@ const ActivityLogContainer = () => {
                     <h3 className='text-base font-semibold text-foreground'>{t('account:activity_events')}</h3>
                     {filteredData?.items && (
                         <span className='text-sm text-muted-foreground'>
-                            ({filteredData.items.length} {filteredData.items.length === 1 ? t('account:event') : t('account:events')})
+                            ({filteredData.items.length}{' '}
+                            {filteredData.items.length === 1 ? t('account:event') : t('account:events')})
                         </span>
                     )}
                 </div>

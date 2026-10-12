@@ -2,8 +2,8 @@ import { useField } from 'formik';
 import { memo, useCallback } from 'react';
 import isEqual from 'react-fast-compare';
 
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Card, CardHeader, CardContent } from '@/components/ui/card';
 
 interface Props {
     isEditable?: boolean;
@@ -41,9 +41,7 @@ const PermissionTitleBox: React.FC<Props> = memo(({ isEditable, title, permissio
                     )}
                 </div>
             </CardHeader>
-            <CardContent>
-                {children}
-            </CardContent>
+            <CardContent>{children}</CardContent>
         </Card>
     );
 }, isEqual);

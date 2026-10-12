@@ -1,16 +1,16 @@
 import { GitBranch, Plus } from 'lucide-react';
 import { For } from 'million/react';
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import isEqual from 'react-fast-compare';
+import { useTranslation } from 'react-i18next';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import { Button } from '@/components/ui/button';
 import Can from '@/components/elements/Can';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import { PageListContainer } from '@/components/elements/pages/PageList';
 import AllocationRow from '@/components/server/network/AllocationRow';
 import SubdomainManagement from '@/components/server/network/SubdomainManagement';
+import { Button } from '@/components/ui/button';
 
 import createServerAllocation from '@/api/server/network/createServerAllocation';
 import getServerAllocations from '@/api/swr/getServerAllocations';
@@ -61,9 +61,7 @@ const NetworkContainer = () => {
             <FlashMessageRender byKey={'server:network'} />
 
             <MainPageHeader direction='column' title={t('title')}>
-                <p className='text-sm leading-relaxed text-muted-foreground'>
-                    {t('description')}
-                </p>
+                <p className='text-sm leading-relaxed text-muted-foreground'>{t('description')}</p>
             </MainPageHeader>
 
             <div className='space-y-12'>
@@ -130,9 +128,7 @@ const NetworkContainer = () => {
                                     {allocationLimit === 0 ? t('unavailable') : t('no_allocations')}
                                 </h4>
                                 <p className='max-w-sm text-center text-sm text-muted-foreground'>
-                                    {allocationLimit === 0
-                                        ? t('cannot_create')
-                                        : t('create_first')}
+                                    {allocationLimit === 0 ? t('cannot_create') : t('create_first')}
                                 </p>
                             </div>
                         </div>

@@ -35,6 +35,23 @@ class SettingsServiceProvider extends ServiceProvider
     'pterodactyl:captcha:hcaptcha:secret_key',
     'pterodactyl:captcha:recaptcha:site_key',
     'pterodactyl:captcha:recaptcha:secret_key',
+    'pterodactyl:ai:enabled',
+    'pterodactyl:ai:provider',
+    'pterodactyl:ai:api_key',
+    'pterodactyl:ai:base_url',
+    'pterodactyl:ai:endpoint_override',
+    'pterodactyl:ai:model',
+    'pterodactyl:ai:model_small',
+    'pterodactyl:ai:system_prompt',
+    'pterodactyl:ai:temperature',
+    'pterodactyl:ai:max_tokens',
+    'pterodactyl:ai:timeout',
+    'pterodactyl:ai:allow_console',
+    'pterodactyl:ai:allow_crash_analysis',
+    'pterodactyl:ai:console_buffer_lines',
+    'pterodactyl:ai:file_listing_limit',
+    'pterodactyl:ai:rate_limit',
+    'pterodactyl:ai:daily_limit_per_user',
   ];
 
 
@@ -61,6 +78,7 @@ class SettingsServiceProvider extends ServiceProvider
     'pterodactyl:captcha:turnstile:secret_key',
     'pterodactyl:captcha:hcaptcha:secret_key',
     'pterodactyl:captcha:recaptcha:secret_key',
+    'pterodactyl:ai:api_key',
   ];
 
   /**

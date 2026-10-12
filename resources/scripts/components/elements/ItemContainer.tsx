@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { v4 } from 'uuid';
+
 import { cn } from '@/lib/utils';
 
 import CopyOnClick from './CopyOnClick';
@@ -30,7 +31,12 @@ const ItemContainer = ({
     const uuid = useMemo(() => v4(), []);
 
     return (
-        <div className={cn('flex items-center justify-between gap-2 bg-white/5 border border-white/10 p-4 rounded-lg', divClasses)}>
+        <div
+            className={cn(
+                'flex items-center justify-between gap-2 bg-white/5 border border-white/10 p-4 rounded-lg',
+                divClasses,
+            )}
+        >
             {icon && (
                 <div className='w-10 h-10 items-center justify-center hidden sm:flex'>
                     {React.createElement(icon, { className: 'w-6 h-6', fill: 'currentColor' })}
@@ -45,7 +51,11 @@ const ItemContainer = ({
                     <CopyOnClick text={description}>
                         <label
                             htmlFor={uuid}
-                            className={cn('text-muted-foreground text-sm font-semibold', descriptionClasses, labelClasses)}
+                            className={cn(
+                                'text-muted-foreground text-sm font-semibold',
+                                descriptionClasses,
+                                labelClasses,
+                            )}
                         >
                             {description}
                         </label>

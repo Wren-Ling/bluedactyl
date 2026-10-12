@@ -1,0 +1,22 @@
+{
+    "title": "AI 助手",
+    "open": "打开 AI 助手",
+    "clear": "清空对话",
+    "stop": "停止生成",
+    "send": "发送消息",
+    "thinking": "思考中...",
+    "empty_state": "可以询问关于 {{server}} 的任何问题。助手可以读取控制台输出和服务器文件。",
+    "placeholder": "询问服务器相关问题，或让它解释某个报错...",
+    "attach_root": "附加文件列表",
+    "attached_file": "已附加 {{file}}",
+    "attached_directory": "已附加 {{directory}} 的列表",
+    "analyze_crash": "分析崩溃原因",
+    "crash_prompt": "我的服务器意外停止了。请分析控制台输出和日志文件，告诉我出了什么问题以及如何修复。",
+    "follow_up_files": "获取引用的文件",
+    "no_directives": "该回复中没有找到文件路径。",
+    "unavailable": "此服务器无法使用 AI 助手。",
+    "crash_hint": "控制台中检测到崩溃特征。可以让助手分析具体原因。",
+    "crash_hint_generic": "服务器已离线。可以让助手查看控制台输出与日志。",
+    "crash_title": "崩溃分析",
+    "crash_description": "助手会读取最近的控制台输出以及服务器磁盘上的日志文件。"
+}

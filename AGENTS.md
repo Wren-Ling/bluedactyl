@@ -1,6 +1,6 @@
-# Pyrodactyl
+# Bluedactyl
 
-Pyrodactyl 是基于 Pterodactyl 的游戏服务器管理面板（PHP + React）。
+Bluedactyl 是基于 Pterodactyl 的游戏服务器管理面板（PHP + React）。
 
 ## 技术栈
 
@@ -31,16 +31,16 @@ vendor/bin/phpstan analyse  # PHPStan level 4
 - `agent/` - 智能体工作区，分为`docs`文档等，结构为`agent/docs/文档名称/*`
 
 ## 项目结构
-- `app/` - Laravel 后端 (命名空间 `Pterodactyl\` 和 `Pyrodactyl\`)
+- `app/` - Laravel 后端 (命名空间 `Pterodactyl\` 和 `Bluedactyl\`)
 - `routes/` - 按域划分: `admin.php`, `api-client.php`, `api-application.php`, `auth.php`, `servers/`
 - `config/` - Laravel 配置
 - `tests/` - PHPUnit 测试 (`Unit/`, `Integration/`)
-- 前端源码在 `example/pyrodactyl/resources/scripts/`，入口 `index.tsx`
+- 前端源码在 `example/bluedactyl/resources/scripts/`，入口 `index.tsx`
 
 ## 构建/前端注意
 
 - 前端路径别名: `@/` → `resources/scripts/`, `@definitions/` → `api/definitions/`, `@feature/` → `components/server/features/`
-- SWC 编译 (非 Babel)，styled-components 插件命名空间 `pyrodactyl`
+- SWC 编译 (非 Babel)，styled-components 插件命名空间 `bluedactyl`
 - million.js 编译器做 React 优化 (阈值 0.01)
 - 构建输出 SRI manifest
 - 导入排序规则: `@/routers/` → `@/components/` → `@/hoc/` → `@/lib/` → `@/api/` → `@/state` → `@/plugins/` → `@feature/` → `./`
@@ -81,7 +81,7 @@ vendor/bin/phpstan analyse  # PHPStan level 4
 - `@preact/signals-react` 必须在 App 根级别 import，否则会报水合不匹配错误
 - 用户数据通过 `window.PterodactylUser` 和 `window.SiteConfiguration` 注入（服务端渲染），不是 API 获取
 - Vite 配置中 `process.env` 被置为 `{}`，`process.platform/version/versions` 被置为 `null`，不要依赖它们
-- `resources/scripts/` 目录仅存在于 `example/pyrodactyl/`，根级别缺失；开发时需要确认前端源码位置
+- `resources/scripts/` 目录仅存在于 `example/bluedactyl/`，根级别缺失；开发时需要确认前端源码位置
 
 ## UI 迁移状态 (2026-07-26)
 

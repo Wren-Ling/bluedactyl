@@ -195,8 +195,8 @@
 
     @if($canTransfer)
         <script>
-            window.Pyrodactyl = window.Pyrodactyl || {};
-            window.Pyrodactyl.nodeData = @json($nodeData);
+            window.Bluedactyl = window.Bluedactyl || {};
+            window.Bluedactyl.nodeData = @json($nodeData);
         </script>
         {!! Theme::js('js/admin/server/transfer.js?v=20260917') !!}
     @endif

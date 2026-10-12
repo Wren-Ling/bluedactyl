@@ -1,5 +1,11 @@
 import { Action, action } from 'easy-peasy';
 
+export interface AiSiteSettings {
+    enabled: boolean;
+    allow_console: boolean;
+    allow_crash_analysis: boolean;
+}
+
 export interface SiteSettings {
     name: string;
     locale: string;
@@ -10,6 +16,7 @@ export interface SiteSettings {
         siteKey: string;
         scriptIncludes: string[];
     };
+    ai?: AiSiteSettings;
 }
 
 export interface SettingsStore {
