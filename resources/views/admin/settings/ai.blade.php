@@ -282,7 +282,7 @@
       document.getElementById('ai-test-button').addEventListener('click', async function () {
         const button = this;
         button.disabled = true;
-        describeResult(true, @lang('admin/settings.ai.testing'));
+        describeResult(true, @json(__('admin/settings.ai.testing')));
 
         try {
           const response = await fetch('{{ route('admin.settings.ai.test') }}', {
@@ -332,7 +332,7 @@
           });
 
           describeResult(true, (data.models || []).length
-            ? @lang('admin/settings.ai.models_loaded') + ' (' + data.models.length + ')'
+            ? @json(__('admin/settings.ai.models_loaded')) + ' (' + data.models.length + ')'
             : data.message);
         } catch (error) {
           describeResult(false, error.message);

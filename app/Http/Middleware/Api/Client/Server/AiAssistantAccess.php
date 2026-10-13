@@ -21,6 +21,10 @@ use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
  *    someone is driving the assistant from a script, cron job or reverse proxy.
  *    Client API keys are self-service here, so without this anyone who can log
  *    in once could mint a key and resell the upstream as their own endpoint.
+ *  - A request that the browser itself flags as cross-site is refused as well,
+ *    so a page on another site cannot spend a signed-in user's budget through
+ *    them. The api group carries no CSRF middleware, so this is what keeps
+ *    foreign pages away from these endpoints.
  *  - A per-user daily ceiling sits on top of the per-minute throttle so a slow
  *    trickle cannot spend the budget overnight while staying under the burst.
  *  - One in-flight streaming turn per user, so a client cannot fan out dozens
@@ -52,6 +56,10 @@ class AiAssistantAccess
 
         if ($this->usedApiKey($request)) {
             throw new HttpForbiddenException('The AI assistant is only available from the panel interface and cannot be used with an API key.');
+        }
+
+        if ($this->isCrossSite($request)) {
+            throw new HttpForbiddenException('The AI assistant can only be used from the panel itself.');
         }
 
         // Only the routes that actually reach the upstream are metered. Listing
@@ -111,6 +119,37 @@ class AiAssistantAccess
         // Defensive: nothing here should ever see a raw token in the query
         // string, but refuse it if one shows up rather than spending on it.
         return $request->query('api_key') !== null || $request->query('token') !== null;
+    }
+
+    /**
+     * True when the request itself declares it came from another site.
+     *
+     * Browsers attach Sec-Fetch-Site and Origin to their requests, values a
+     * signed-in user's cookies cannot forge, and the panel only ever calls
+     * these endpoints from its own pages, so anything declared cross-site is
+     * another page trying to spend this account's budget. The headers are
+     * absent from older browsers and plain HTTP clients; those pass through
+     * here because the API-key refusal above is what keeps those clients out.
+     */
+    private function isCrossSite(Request $request): bool
+    {
+        $fetchSite = $request->headers->get('Sec-Fetch-Site');
+
+        if ($fetchSite !== null && !in_array($fetchSite, ['same-origin', 'none'], true)) {
+            return true;
+        }
+
+        $origin = $request->headers->get('Origin');
+
+        if ($origin !== null) {
+            $host = parse_url($origin, PHP_URL_HOST);
+
+            if (is_string($host) && $host !== '' && strcasecmp($host, $request->getHost()) !== 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
